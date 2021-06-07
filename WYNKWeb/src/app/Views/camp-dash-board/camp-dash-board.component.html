@@ -1,0 +1,153 @@
+<div class="col-sm-12">
+  <div class="row">
+    <h6>Camp Management Dashboard</h6>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 ui-state-default height-400px">
+      <h6 style="font-size:15px;font-family: 'Roboto', sans-serif;">Camp Patient Population</h6>
+      <div class="row">
+        <div class="row ml-1p">
+          <div class="col-sm-4 ">
+            <div class='input-group date'>
+              <input [(ngModel)]="MFromDate" name="FromDate" placeholder="Month"
+                     class="form-control"
+                     #dpM="bsDatepicker"
+                     [maxDate]="maxDatef"
+                     bsDatepicker
+                     autocomplete="off"
+                     [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                     (onShown)="onOpenCalendar($event)">
+              <span class="input-group-addon">
+                <span class="fa fa-calendar grab" (click)="dpM.toggle()" [attr.aria-expanded]="dpM.isOpen"></span>
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <button (click)="PeriodSearch()" class="success btn btn-primary">Submit</button>
+          </div>
+        </div>
+        <div class="row mt-1p ml-1p">
+          <div class="col-sm-11 heightAuto-300px">
+            <table id="table" mat-table [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+              <ng-container matColumnDef="Sno">
+                <th mat-header-cell *matHeaderCellDef>S.No</th>
+                <td mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="CampDescription">
+                <th mat-header-cell *matHeaderCellDef class="width-30p">Camp Description</th>
+                <td mat-cell *matCellDef="let element"> {{element.CampDescription}} </td>
+              </ng-container>
+              <ng-container matColumnDef="PatientsScreened">
+                <th mat-header-cell *matHeaderCellDef>Patients Screened</th>
+                <td mat-cell *matCellDef="let element">{{element.PatientsScreened}}  </td>
+              </ng-container>
+              <ng-container matColumnDef="SurgeryAdvised">
+                <th mat-header-cell *matHeaderCellDef>Surgery Advised</th>
+                <td mat-cell *matCellDef="let element"> {{element.SurgeryAdvised}} </td>
+              </ng-container>
+              <ng-container matColumnDef="SurgeryUnderwent">
+                <th mat-header-cell *matHeaderCellDef>Surgery Underwent</th>
+                <td mat-cell *matCellDef="let element"  matTooltip="View Camp Surgery breakup" class="cursor" (click)="element.SurgeryUnderwent != 0 ? ShowSurgeryWent(element) : null"><a>{{element.SurgeryUnderwent}}</a></td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6  ui-state-default height-400px">
+      <h6 style="font-size:15px;font-family: 'Roboto', sans-serif;">Camp Surgery breakup for the period {{SelectedMonth}}</h6>
+      <div class="row">
+          <div class="col-sm-4">
+            <label><b>Camp Description :</b></label>
+          </div>
+          <div class="col-sm-4 ml-n9p">
+            <label>{{SelectedCampDescription}}</label>
+          </div>
+          <div class="col-sm-3">
+            <label><b>Surgery Done :</b></label>
+          </div>
+          <div class="col-sm-1 ml-n4p">
+            <label>{{SelectedCampSurgeryCount}}</label>
+          </div>
+      </div>
+      <div class="row mt-1p">
+        <div class="col-sm-11 heightAuto-300px">
+          <table mat-table [dataSource]="CampSurgerybreakupSource" class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+            <ng-container matColumnDef="Surgery">
+              <th mat-header-cell *matHeaderCellDef>Surgery</th>
+              <td mat-cell *matCellDef="let element"> {{element.SurgeryDescription}} </td>
+            </ng-container>
+            <ng-container matColumnDef="SurgeryDone">
+              <th mat-header-cell *matHeaderCellDef>Surgery Done</th>
+              <td mat-cell *matCellDef="let element" matTooltip="View Camp Doctor breakup" class="cursor" (click)="ViewDoctorBreakup(element)"><a>{{element.SurgeryCount}}</a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="CampSurgerybreakupColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row;  columns: CampSurgerybreakupColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-1p">
+    <div class="col-sm-6  ui-state-default height-400px">
+      <h6 style="font-size:15px;font-family: 'Roboto', sans-serif;">Doctorwise Camp Surgery breakup for the period {{SelectedMonth}}</h6>
+      <div class="row">
+        <div class="col-sm-4">
+          <label><b>Camp Description :</b></label>
+        </div>
+        <div class="col-sm-4 ml-n9p">
+          <label>{{SelectedCampDescription}}</label>
+        </div>
+      </div>
+      <div class="row mt-1p">
+        <div class="col-sm-10 heightAuto-300px">
+          <table mat-table [dataSource]="CampSurgeryDoctorbreakupSource" class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+            <ng-container matColumnDef="DoctorName">
+              <th mat-header-cell *matHeaderCellDef class="width-50p">Doctor</th>
+              <td mat-cell *matCellDef="let element"> {{element.DoctorName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="SurgeryDescription">
+              <th mat-header-cell *matHeaderCellDef>{{CampDocSurgeryDesc}}</th>
+              <td mat-cell *matCellDef="let element" matTooltip="View Patient Breakup" class="cursor" (click)="ViewPatientBreakup(element)"><a>{{element.DoctorCount}}</a></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="CampSurgeryDoctorbreakupColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row;  columns: CampSurgeryDoctorbreakupColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6  ui-state-default height-400px">
+      <h6 style="font-size:15px;font-family: 'Roboto', sans-serif;">Patient breakup for the period {{SelectedMonth}}</h6>
+      <div class="row">
+        <div class="col-sm-4">
+          <label><b>Doctor Name :</b></label>
+        </div>
+        <div class="col-sm-4 ml-n9p">
+          <label>{{CampDocPatientDesc}}</label>
+        </div>
+      </div>
+      <div class="row mt-1p">
+        <div class="col-sm-10 heightAuto-300px">
+          <table mat-table [dataSource]="PatientbreakupSource" class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+            <ng-container matColumnDef="PatientName">
+              <th mat-header-cell *matHeaderCellDef>Patient Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.PatientName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Age">
+              <th mat-header-cell *matHeaderCellDef>Age</th>
+              <td mat-cell *matCellDef="let element">{{element.Age}}</td>
+            </ng-container>
+            <ng-container matColumnDef="SurgeryDate">
+              <th mat-header-cell *matHeaderCellDef>Surgery date</th>
+              <td mat-cell *matCellDef="let element">{{element.SurgeryDate| date:"dd-MMM-y"}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="PatientbreakupColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row;  columns: PatientbreakupColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

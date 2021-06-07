@@ -1,0 +1,901 @@
+
+<div class="col-sm-12">
+  <div class="row">
+    <!--<h6>Common Complaints</h6>-->
+  </div>
+  <div class="col-sm-12 mph-0">
+    <div class="row mph-0">
+      <div class="col-sm-12 mph-0">
+        <div class="col-sm-6 mph-0 pb20">
+          <span class="uinborder">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+          <!--<label>Allergy&nbsp;:<span class="uinborder">{{allergys}}</span></label>-->
+        </div>
+        <div class="col-sm-4 mph-0 f-r content-right pb20">
+          <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="dtails-wrap">
+      <ul class="nav nav-tabs">
+        <li (click)="ocularcomplaintsdata()">
+          <a class="active show" data-toggle="tab" href="#ocular" animationDuration="1s">
+            <span><i class="fas fa-user"></i></span>
+            Ocular Complaints
+          </a>
+        </li>
+        <li (click)="systemicconditionsdata()">
+          <a data-toggle="tab" href="#systemic" animationDuration="2ms">
+            <span><i class="far fa-envelope"></i></span>
+            Systemic Conditions
+          </a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#medicationDetails">
+            <span><i class="fas fa-map-marker-alt"></i></span>
+            Current Medication
+          </a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#familyhistorydata">
+            <span><i class="fas fa-users"></i></span>
+            General
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content tab-wrap">
+        <div id="ocular" class="tab-pane fade in active">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card mb-3">
+                <h5 class="card-header">
+                  Ocular Complaints <span *ngIf="Hideremovedgrid" class="sidemargin"> - Removed List</span>   
+                  <label class="labelfloat">
+                    <button [disabled]="isNextButton" (click)="AddoccularcomplaintsNewingrid();" matTooltip="Add Ocular Complaints" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">Add Ocular Complaints</button>
+                    <button [disabled]="isNextButton" (click)="NewComplaintsmaster();" matTooltip="Ocular Master" class="btn btn-primary-default btn-Excel buttonsfloat">Add Ocular Master</button>
+                    <button (click)="toggle();" matTooltip="Ocular Complaints" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">{{togglecomplaints}}</button>
+                  </label>
+
+
+                </h5>
+                <div class="card-body">
+                  <div class="row">
+
+                    <table class="custom-table withoutbackgroung search-table table-bordered" *ngIf="HideAddcompanitsgrid" #sampleTable>
+                      <thead>
+                        <tr>
+                          <th>SNo</th>
+                          <th>Description</th>
+                          <th>Remarks</th>
+                          <th>OD</th>
+                          <th>OS</th>
+                          <th>OU</th>
+                          <th class="Dayswidth">Duration</th>
+                          <th class="Periodwidth">Period</th>
+                          <th>Since</th>
+
+                          <th class="actionwidth">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of Oculardata; let i = index">
+                          <td>{{i+1}}</td>
+                          <td #name [contentEditable]="data.Disabled != true">
+                            <input type="text" value="{{data.Description}}" matInput (input)="FIlterdata($event.target.value)" [disabled]="data.Disabled === true"
+                                   [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="DetailsSearch($event,i,data)" [disabled]="data.Disabled === true">
+                              <mat-option *ngFor="let option of Descs" [value]="option.Text">
+                                {{option.Text}}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </td>
+                          <td>
+                            <input value="{{data.Remarks}}" [contentEditable]="data.Disabled != true" type="text" matInput placeholder="Enter Value" (keyup)="ENterremarksforocularcomplaints($event,i,data);" [disabled]="data.Disabled === true">
+                          </td>
+                          <td [contentEditable]="data.Disabled != true"><mat-checkbox [disabled]="data.Disabled === true" [(checked)]="data.ISOD" (change)="selecODType($event,data,i)"></mat-checkbox></td>
+                          <td [contentEditable]="data.Disabled != true"> <mat-checkbox [disabled]="data.Disabled === true" [(checked)]="data.ISOS" (change)="selecOSType($event,data,i)"></mat-checkbox></td>
+                          <td [contentEditable]="data.Disabled != true"><mat-checkbox [disabled]="data.Disabled === true" [(checked)]="data.ISOU" (change)="selecOUType($event,data,i)"></mat-checkbox></td>
+                          <td [contentEditable]="data.Disabled != true">
+                            <input type="text"
+                                   matInput
+                                   [matAutocomplete]="autos" [disabled]="data.Disabled === true">
+                            <mat-autocomplete #autos="matAutocomplete" (optionSelected)="NewgetPeriodvalue(i,$event,data)" [disabled]="data.Disabled === true">
+                              <mat-option value="Day">Day</mat-option>
+                              <mat-option value="Week">Week</mat-option>
+                              <mat-option value="Month">Month</mat-option>
+                              <mat-option value="Year">Year</mat-option>
+                            </mat-autocomplete>
+
+                          </td>
+                          <td>
+
+                            <input [contentEditable]="data.Disabled != true" type="text" matInput placeholder="Enter Value" (keypress)="RestrictNegativeValues($event)" (keyup)="Getdatevalueindex($event,i,data);" [disabled]="data.Disabled === true">
+
+                          </td>
+
+                          <td>
+                            {{data.Fromdate | date:'dd-MMM-yyyy'}}
+                          </td>
+
+                          <td>
+                            <button type="button" [disabled]="isNextDelete" (click)="DropNewComplaints(data,i)" class="btn btn-dangeredit"><i class="far fa-trash-alt"></i></button>
+                          </td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+
+                    <table class="custom-table withoutbackgroung search-table table-bordered" *ngIf="Hideremovedgrid" id="mycell">
+                      <thead>
+                        <tr>
+                          <th>Day</th>
+                          <th>Description</th>
+                          <th>OD</th>
+                          <th>OS</th>
+                          <th>OU</th>
+                          <th>Date</th>
+                          <th>Reasons</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let datas of Removedlistdata; let i = index">
+                          <td>{{i+1}}</td>
+                          <td>{{datas.Description}}</td>
+                          <td><mat-checkbox [(checked)]="datas.ISOD" disabled></mat-checkbox></td>
+                          <td> <mat-checkbox [(checked)]="datas.ISOS" disabled></mat-checkbox></td>
+                          <td><mat-checkbox [(checked)]="datas.ISOU" disabled></mat-checkbox></td>
+                          <td>{{datas.DeletedDate | date:'dd-MMM-yyyy'}}</td>
+                          <td>{{datas.Reasons}}</td>
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                  </div>
+                  <ng-shortcut></ng-shortcut>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="systemic" class="tab-pane fade">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card mb-3">
+                <h5 class="card-header">
+                  Systemic Conditions<span *ngIf="Hidesystemicremovedgrid" class="sidemargin"> - Removed List</span>
+                  <!--<mat-button-toggle matTooltip="View Removed Complaints" [checked]="useDefault" (change)="togglesystemic($event)" style="margin-top:-4px" class="toggleuserdefined">{{Togglebuttondata}}</mat-button-toggle>-->
+                  <!--<button [disabled]="isNextButton" (click)="Addsystemicsconditionsingrid();" class="btnuserdefined btn-dark"><i matTooltip="Add Systemic Conditions" class="fa fa-plus"></i></button>
+                  <button [disabled]="isNextButton" (click)="Newsystemicmaster();" class="btnuserdefinedmaster btn-dark"><i matTooltip="Systemic Conditions" class="fa fa-plus"></i></button>-->
+                  <label class="labelfloat">
+                    <button [disabled]="isNextButton" (click)="Addsystemicsconditionsingrid();" matTooltip="Add Ocular Complaints" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">Add Systemic conditions</button>
+                    <button [disabled]="isNextButton" (click)="Newsystemicmaster();" matTooltip="Ocular Master" class="btn btn-primary-default btn-Excel buttonsfloat">Add Systemic Master</button>
+                    <button (click)="togglesystemic();" matTooltip="Systemic COnditions" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">{{Togglebuttondata}}</button>
+                  </label>
+                </h5>
+                <div class="card-body">
+                  <div class="row">
+
+                    <table class="custom-table withoutbackgroung search-table table-bordered" *ngIf="HideAddcompanitssystemicgrid">
+                      <thead>
+                        <tr>
+                          <th>SNo</th>
+                          <th>Description</th>
+                          <th>Remarks</th>
+                          <th class="Dayswidth">Duration</th>
+                          <th class="Periodwidth">Period</th>
+                          <th>Since</th>
+
+                          <th class="actionwidth">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of systemiccondiions; let i = index">
+                          <td>{{i+1}}</td>
+                          <td #names [contentEditable]="data.Disabled != true">
+                            <input type="text" value="{{data.Description}}" (input)="FIltersystemicdata($event.target.value)" [disabled]="data.Disabled === true"
+                                   matInput
+                                   [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="DetailsSearchsystemic($event,i,data)" [disabled]="data.Disabled === true">
+                              <mat-option *ngFor="let option of Descss" [value]="option.Text">
+                                {{option.Text}}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </td>
+                          <td>
+                            <input value="{{data.Remarks}}" [contentEditable]="data.Disabled != true" type="text" matInput placeholder="Enter Remarks" (keyup)="ENterremarksforsystemic($event,i,data);" [disabled]="data.Disabled === true">
+                          </td>
+                          <td>
+                            <input type="text"
+                                   matInput
+                                   [matAutocomplete]="autos" contenteditable='true' [disabled]="data.Disabled === true">
+                            <mat-autocomplete #autos="matAutocomplete" (optionSelected)="NewgetPeriodvaluesystemic(i,$event,data)" [disabled]="data.Disabled === true">
+                              <mat-option value="Day">Day</mat-option>
+                              <mat-option value="Week">Week</mat-option>
+                              <mat-option value="Month">Month</mat-option>
+                              <mat-option value="Year">Year</mat-option>
+                            </mat-autocomplete>
+                          </td>
+                          <td>
+                            <input type="text" (blur)="SelectedIndex($event.target.value,data);" [disabled]="(data.Disabled === true) || (Inputdisabled)" [contentEditable]="data.Disabled != true" matInput placeholder="Enter Value" (keypress)="RestrictNegativeValues($event)" (keyup)="Getdatevalueindexsystemic($event,i,data);">
+                          </td>
+
+                          <td>
+                            {{data.FromUTC | date:'dd-MMM-yyyy'}}
+                          </td>
+
+                          <td>
+                            <button type="button" [disabled]="isNextDelete" (click)="DropNewsystemic(data,i)" class="btn btn-dangeredit"><i class="far fa-trash-alt"></i></button>
+                          </td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+
+                    <table class="custom-table withoutbackgroung search-table table-bordered" *ngIf="Hidesystemicremovedgrid">
+                      <thead>
+                        <tr>
+                          <th>Day</th>
+                          <th>Description</th>
+
+                          <th>Date</th>
+                          <th>Reasons</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let datas of Removedlistdatasystemic; let i = index">
+                          <td>{{i+1}}</td>
+                          <td>{{datas.Description}}</td>
+
+                          <td>{{datas.DeletedDate | date:'dd-MMM-yyyy'}}</td>
+                          <td>{{datas.Reasons}}</td>
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="medicationDetails" class="tab-pane fade mt-n2p">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card mb-3">
+                <h5 class="card-header">
+                  Current Medications
+                  <button style="float:right" (click)="AddItemDetails();" class="btn btn-primary-default btn-Excel buttonsfloat" matTooltip="Add Patient Current Medications">Add Current Medications</button>
+                </h5>
+
+              </div>
+            </div>
+          </div>
+          <div class="heightAuto-250px">
+            <table mat-table [dataSource]="CurrentMedicationdataSource" class="custom-table withoutbackgroung search-table table-bordered">
+              <ng-container matColumnDef="Sno">
+                <th mat-header-cell *matHeaderCellDef>S.no</th>
+                <td mat-cell *matCellDef="let element ;let i = index;"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="GenericsDescription">
+                <th mat-header-cell *matHeaderCellDef class="width-15p">Generic Medicine</th>
+                <td mat-cell *matCellDef="let element; let id = index;" [attr.contenteditable]="element.FromDB != true && !element.Disabled != true">
+                  <div *ngIf="element.FromDB != true">
+                    <input class="width-100p height-39px border-none CM-Inputblue" type="text" value="{{element.GenericDescription}}" (keyup)="CheckDescription(id,'GenericsDescription',$event)" (blur)="EmptySpace(element,$event)">
+                  </div>
+                  <div *ngIf="element.FromDB == true">
+                    {{element.GenericDescription}}
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Eye">
+                <th mat-header-cell *matHeaderCellDef class="width-13p">Eye</th>
+                <td mat-cell *matCellDef="let element" [attr.contenteditable]="element.FromDB != true && !element.Disabled != true">
+                  <mat-select (selectionChange)="changeEye($event,element)" value="{{element.Eye}}" placeholder="Select" [disabled]="element.FromDB != true && element.Disabled != true">
+                    <mat-option value="OD" [disabled]="ocuod">Oculus Dexter [OD]</mat-option>
+                    <mat-option value="OS" [disabled]="ocuos">Oculus Sinister[OS]</mat-option>
+                    <mat-option value="OU" [disabled]="ocuod || ocuos">Oculus Uterque [OU]</mat-option>
+                  </mat-select>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Period">
+                <th mat-header-cell *matHeaderCellDef class="width-9p">Period</th>
+                <td mat-cell *matCellDef="let element; let id = index;" [attr.contenteditable]="element.FromDB != true">
+                  <mat-select required name="Period" placeholder="Period" value="{{element.Period}}" [disabled]="element.FromDB == true" (selectionChange)="getPeriodvalue($event,element)">
+                    <mat-option value="Day">Day</mat-option>
+                    <mat-option value="Week">Week</mat-option>
+                    <mat-option value="Month">Month</mat-option>
+                    <mat-option value="Year">Year</mat-option>
+                  </mat-select>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Since">
+                <th mat-header-cell *matHeaderCellDef class="width-9p">Since</th>
+                <td mat-cell *matCellDef="let element; let id = index;" [attr.contenteditable]="element.FromDB != true">
+                  <div *ngIf="element.FromDB != true">
+                    <input class="height-39px border-none CM-Inputblue" value="{{element.Since}}" (keypress)="RestrictNegativeValues($event)" (keyup)="Getdatevalue($event,element);">
+                  </div>
+                  <div *ngIf="element.FromDB == true">
+                    {{element.Since}}
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Remarks">
+                <th mat-header-cell *matHeaderCellDef class="width-9p">Remarks</th>
+                <td mat-cell *matCellDef="let element; let id = index;" [attr.contenteditable]="element.FromDB != true">
+                  <div *ngIf="element.FromDB != true">
+                    <input class="height-39px border-none CM-Inputblue" value="{{element.Remarks}}"  (keypress)="nameField($event)" (keyup)="changeRemarks(id,'Remarks',$event);">
+                  </div>
+                  <div *ngIf="element.FromDB == true">
+                    {{element.Remarks}}
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Years">
+                <th mat-header-cell *matHeaderCellDef>Month(s) / Year(s)</th>
+                <td mat-cell *matCellDef="let element"> {{element.YearMonths}} </td>
+              </ng-container>
+              <ng-container matColumnDef="PrescribedDoctor">
+                <th mat-header-cell *matHeaderCellDef>Prescribed Doctor</th>
+                <td mat-cell *matCellDef="let element;let i = index;" [attr.contenteditable]="element.FromDB != true">
+                  <div *ngIf="element.FromDB != true">
+                    <input class="height-39px border-none CM-Inputblue" type="text" value="{{element.PrescribedDoctor}}" (keypress)="nameField($event)" (keyup)="changePrescribedDoctor(i,'PrescribedDoctor',$event);">
+                  </div>
+                  <div *ngIf="element.FromDB == true">
+                    {{element.PrescribedDoctor}}
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Frequency">
+                <th mat-header-cell *matHeaderCellDef>Frequency</th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-select name="frequencyname" value="{{element.Frequency}}" (selectionChange)="frequencyChange($event,element)" [disabled]="element.FromDB == true">
+                    <mat-option *ngFor="let Frequency of FrequencyName" [value]="Frequency.Value">{{Frequency.Text}}</mat-option>
+                  </mat-select>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Status">
+                <th mat-header-cell *matHeaderCellDef class="width-9p">Status</th>
+                <td mat-cell *matCellDef="let element; let id = index;">
+                  <mat-select (selectionChange)="changeStatus($event,element,id)" value="{{element.Status}}" placeholder="Select" [disabled]="element.FromDB != true && element.Disabled != true">
+                    <mat-option value="1">Progress</mat-option>
+                    <mat-option value="2">Stopped</mat-option>
+                  </mat-select>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef class="width-1p"> Action </th>
+                <td mat-cell *matCellDef="let element; let i = index;">
+                  <div>
+                    <div class="col-sm-6 mt-8p">
+                      <mat-icon data-toggle="tooltip" title="Edit" class="cursor" (click)="update(i,element)">create</mat-icon>
+                    </div>
+                    <div class="col-sm-6">
+                      <button mat-icon-button [disabled]="element.FromDB == true"><mat-icon data-toggle="tooltip" class="cursor" title="Remove" (click)="element.FromDB != true ? removeDrug(i):null" [ngClass]="{'warn': element.FromDB != true}">delete</mat-icon> </button>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="CurrentMedicationColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: CurrentMedicationColumns;"></tr>
+            </table>
+          </div>
+        </div>
+
+        <div id="familyhistorydata" class="tab-pane fade">
+          <div class="row">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <mat-label>Family history</mat-label>
+              <textarea [(ngModel)]="familyhistory" name="fhistorys" #messageFH maxlength="250" rows="10" cols="50" matInput placeholder="Enter details"></textarea>
+
+
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--accesskey="{{accessk}}"-->
+
+  <div class="col-sm-12 pb25" style="margin-top:1%">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <div class="content-right sub-section btn-wrap">
+        <!--<button accesskey="R" type="button" class="btn btn-warning" (click)="Refreshpatienthistory()"> Refresh </button>-->
+        <button type="button" class="uccess btn btn-primary" (click)="Viewshortcuts()" matTooltip="help"> Shortcuts </button>
+        <button type="button" class="btn btn-warning-default" (click)="CancelOCular()"> Cancel </button>
+        <button *ngIf="HideAddcompanitsgrid" class="success btn btn-primary" (click)="onsubmitocular()">
+          Submit
+        </button>
+        <!--<marquee>Press alt+h for Shortcut Keys</marquee>-->
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':COmplaintsmaster}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="COmplaintsmasterOk()">&times;</button>
+        <h6>Ocular Complaints Master</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Ocular Complaints</mat-label>
+              <input [(ngModel)]="M_OcularComplaints" name="Ocular" matInput placeholder="Ocular" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <mat-icon style="cursor:pointer" (click)="ClickComplaints()" data-toggle="tooltip" title="Ocular Details">search</mat-icon>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeis">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <button type="button" class="success btn btn-primary" (click)="Viewocularshortcuts()" matTooltip="help"> Shortcuts </button>
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-warning-default ml-2p" (click)="COmplaintsmasterOk()">Cancel</button>
+          </div>
+
+          <div class="col-sm-1 ml-2p" *ngIf="hiddenUpdate">
+            <button type="submit" (click)="onupdatenewcomplaints()" class="success btn btn-primary ml-2p">Submit</button>
+          </div>
+
+          <div class="col-sm-1 ml-2p" *ngIf="hiddenSubmit">
+            <button id="submit" (click)="onSubmitnewcomplaints()" class="success btn btn-primary  ml-2p">Submit</button>
+          </div>
+
+          <div class="col-sm-1 ml-2p" *ngIf="hiddenDelete">
+            <button mat-raised-button color="warn" class="ml-2p" (click)="onDeletenewcomplaints()">Delete</button>
+          </div>
+
+          <div class="col-sm-1"></div>
+
+          <div class="col-sm-5 heightAuto-300px" *ngIf="tablecategory">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" #input>
+            </mat-form-field>
+
+            <div class="row">
+              <table mat-table [dataSource]="dataSourcesqc" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttype(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqc"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqc;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':SystemicMaster}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="systemicmasterOk()">&times;</button>
+        <h6>Systemic Conditions</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Systemic Conditions</mat-label>
+              <input [(ngModel)]="M_SYstemicconditions" name="Systemconditions" matInput placeholder="Systemic" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <mat-icon style="cursor:pointer" (click)="Clicksystemicconditions()" data-toggle="tooltip" title="Systemic Details">search</mat-icon>
+          </div>
+
+          <div class="col-sm-2" *ngIf="SystemicActiveis">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="SYstemicIsActive" name="isActive">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <button type="button" class="success btn btn-primary" (click)="Viewocularshortcuts()" matTooltip="help"> Shortcuts </button>
+          </div>
+          <div class="col-sm-1">
+            <button class="btn btn-warning-default ml-2p" (click)="systemicmasterOk()">Cancel</button>
+          </div>
+
+          <div class="col-sm-1 ml-2p" *ngIf="SystemichiddenUpdate">
+            <button type="submit" (click)="onupdatenewsystemicconditions()" class="success btn btn-primary ml-2p">Submit</button>
+          </div>
+
+          <div class="col-sm-1 ml-2p" *ngIf="SystemichiddenSubmit">
+            <button id="submit" (click)="onSubmitnewcconditions()" class="success btn btn-primary  ml-2p">Submit</button>
+          </div>
+
+          <div class="col-sm-1 ml-2p" *ngIf="SystemichiddenDelete">
+            <button mat-raised-button color="warn" class="ml-2p" (click)="onDeletenewcconditions()">Delete</button>
+          </div>
+
+          <div class="col-sm-1"></div>
+
+          <div class="col-sm-5 heightAuto-300px" *ngIf="Systemictablecategory">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="systemicapplyFilter($event)" #input>
+            </mat-form-field>
+
+            <div class="row">
+              <table mat-table [dataSource]="dataSourcessystemic" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selectsystemictype(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssystemic"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssystemic;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Patient History - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':Deletecoulardetails}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="OkdeleteoculardetailsOk()">&times;</button>
+        <h4 class="modal-title text-left">Confirm to Delete</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <mat-label>Enter reasons</mat-label>
+              <textarea [(ngModel)]="M_reasonsocular" name="Ocular" #messagesR maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+
+
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" (click)="Okdeleteoculardetails()">Delete</button>
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="OkdeleteoculardetailsOk()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':Deletesystemicdetails}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="OkdeletesystemicdetailsOk()">&times;</button>
+        <h4 class="modal-title text-left">Confirm to Delete</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <mat-label>Enter reasons</mat-label>
+              <textarea [(ngModel)]="M_systemic" name="syste" #messagesS maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" (click)="Okdeletesystemicdetails()">Delete</button>
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="OkdeletesystemicdetailsOk()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':oneeyeod}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">One eyed patient - OD</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Want to continue for both eyes?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printssssood()" class="btn btn-danger">No</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosesood()" cdkFocusInitial>Yes</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':oneeyeos}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">One eyed patient - OS</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Want to continue for both eyes?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printssssoos()" class="btn btn-danger">No</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosesoos()" cdkFocusInitial>Yes</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':helppopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="helppopupOk()">&times;</button>
+        <h4 class="modal-title text-left">Shortcut Keys</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th style="width:27%;text-align:center;">Add Existing complaint</th>
+              <th style="width:27%;text-align:center;">Add New complaint</th>
+              <th style="width:27%;text-align:center;">Save</th>
+              <th style="width:27%;text-align:center;">Cancel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                alt+a
+              </td>
+              <td>
+                alt+m
+              </td>
+              <td>
+                alt+s
+              </td>
+              <td>
+                alt+c
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="helppopupOk()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':helpocularpopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="helpoculadpopupOk()">&times;</button>
+        <h4 class="modal-title text-left">Shortcut Keys</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th style="width:27%;text-align:center;">View complaint</th>
+              <th style="width:27%;text-align:center;">Update complaint</th>
+              <th style="width:27%;text-align:center;">Save</th>
+              <th style="width:27%;text-align:center;">Cancel</th>
+              <th style="width:27%;text-align:center;">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                alt+v
+              </td>
+              <td>
+                alt+u
+              </td>
+              <td>
+                alt+s
+              </td>
+              <td>
+                alt+c
+              </td>
+              <td>
+                alt+d
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="helpoculadpopupOk()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

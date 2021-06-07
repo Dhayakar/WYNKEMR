@@ -1,0 +1,1593 @@
+<mat-tab-group class="tabsss" animationDuration="0ms" (selectedTabChange)="tabChanged($event)" style="border:2px solid gray">
+  <mat-tab label="Patient History" style="background-color: aliceblue">
+    <div class="col-sm-12">
+
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+
+          <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;border-radius:8px;border:2px solid gray">
+        </div>
+      </div>
+
+      <!--<div class="row" style="margin-top:1%">
+
+        <div class="col-sm-2" style="font-size:12px">
+          <mat-form-field appearance="outline">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">UIN</mat-label>
+
+            <strong><input disabled style="color:darkblue" [(ngModel)]="Getuin" name="id" matInput placeholder="Enter ID"></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Name</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getname" name="name" matInput placeholder="Name" disabled></strong>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Age</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getage" name="age" matInput placeholder="Age" disabled></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Gender</mat-label>
+            <strong> <input style="color:darkblue" [(ngModel)]="Getgender" name="gender" matInput placeholder="Sex" disabled></strong>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;margin-top:-10px;border-radius:8px;border:2px solid gray">
+        </div>
+
+      </div>-->
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+          </mat-form-field>
+          <div class="mat-elevation-z8">
+
+            <table mat-table [dataSource]="dataSource" matSort class="table table-bordered">
+
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">SlNo. </th>
+                <td mat-cell *matCellDef="let element ;let i = index;" style="text-align:center"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Vdate">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Visit Date </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.FromDate| date:"dd-MMM-y"}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Fdate">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> From Date </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.SufferedFromDate| date:"dd-MMM-yyyy"}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Duration">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Duration </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.Duration}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Ocularhistory">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Ocular History </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.OcularDescription}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Systemic">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Systemic Conditions </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.systematicDescription}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Current">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Current Medications </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.currentDescription}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Allergy">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Allergy </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.allergyDescription}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Familyhistory">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Family History </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.familyhistoryDescription}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[3 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40]" showFirstLastButtons></mat-paginator>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </mat-tab>
+  <mat-tab label="Refraction">
+
+    <div class="col-sm-12">
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+          <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;margin-top:-10px;border-radius:8px;border:2px solid gray">
+        </div>
+
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+
+
+
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+          </mat-form-field>
+          <div class="mat-elevation-z8">
+
+            <table mat-table [dataSource]="dataSourcerefraction" matSort class="table table-bordered">
+
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">SlNo. </th>
+                <td mat-cell *matCellDef="let element ;let i = index;" style="text-align:center"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Select">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+                <td mat-cell *matCellDef="let element" style="text-align:center" (click)="selectallref(element)"> <mat-icon class="grab">touch_app</mat-icon> </td>
+              </ng-container>
+              <ng-container matColumnDef="Visit">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Visit Date </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.visitDate| date:"dd-MMM-yyyy"}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsRefraction"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsRefraction;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[3 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40]" showFirstLastButtons></mat-paginator>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </mat-tab>
+
+  <mat-tab label="Findings">
+    <ng-template mat-tab-label>
+      Findings
+    </ng-template>
+    <div class="col-sm-12">
+      <div class="row" style="margin-top:1%">
+        <h1 align="center" style="border-top:2px solid white;border-bottom:2px solid gray;border-left:2px solid gray;border-right:2px solid gray;background-color:white;color:white;background-color:darkblue">
+          <strong>Findings History</strong>
+        </h1>
+      </div>
+      <!--<div class="row" style="margin-top:1%">
+        <div class="col-sm-3" style="font-size:12px">
+          <mat-form-field appearance="outline">
+            <mat-label>UIN</mat-label>
+
+            <strong><input disabled style="color:darkblue" [(ngModel)]="Getuin" name="id" matInput placeholder="Enter ID" (keydown.enter)="getPatientDeatils($event.target.value)" required></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label>Name</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getname" name="name" matInput placeholder="Name" disabled></strong>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label>Age</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getage" name="age" matInput placeholder="Age" disabled></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label>Gender</mat-label>
+            <strong> <input style="color:darkblue" [(ngModel)]="Getgender" name="gender" matInput placeholder="Sex" disabled></strong>
+          </mat-form-field>
+        </div>
+      </div>-->
+
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+
+          <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;border-radius:8px;border:2px solid gray">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+          <input style="width:18%" class="form-control" id="myInput" type="text" placeholder="Search Date ...">
+
+          <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Findings Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Treatment & Advice </th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Review Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Doctor Name</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let hi of lathis; index as i">
+
+                <!--<td style="text-align:center;"><mat-radio-button (click)="selecttypes(hi)"></mat-radio-button></td>-->
+                <td style="text-align:center;" (click)="selecttypes(hi)"><mat-icon class="grab">touch_app</mat-icon></td>
+
+                <td style="text-align:center;">{{hi.FiDate | date: 'dd-MMM-y'}}</td>
+                <td style="text-align:center;">{{hi.Treatment}}</td>
+                <td style="text-align:center;">{{hi.Rdate | date: 'dd-MMM-y'}}</td>
+                <td style="text-align:center;">{{hi.DocName}}</td>
+              </tr>
+
+
+            </tbody>
+          </table>
+          <mat-paginator [pageSizeOptions]="[3 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40]" showFirstLastButtons></mat-paginator>
+
+        </div>
+      </div>
+
+    </div>
+  </mat-tab>
+
+  <!--<mat-tab>-->
+  <!--<mat-tab label="Findings" style="background-color: aliceblue">  </mat-tab>-->
+  <mat-tab label="Medical Prescription" style="background-color: aliceblue">
+    <div class="col-sm-12">
+
+      <div class="row" style="margin-top:1%">
+
+        <div class="col-sm-2" style="font-size:12px">
+          <mat-form-field appearance="outline">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">UIN</mat-label>
+
+            <strong><input disabled style="color:darkblue" [(ngModel)]="Getuin" name="id" matInput placeholder="Enter ID"></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Name</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getname" name="name" matInput placeholder="Name" disabled></strong>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Age</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getage" name="age" matInput placeholder="Age" disabled></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Gender</mat-label>
+            <strong> <input style="color:darkblue" [(ngModel)]="Getgender" name="gender" matInput placeholder="Sex" disabled></strong>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;margin-top:-10px;border-radius:8px;border:2px solid gray">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+          <input style="width:18%" class="form-control" id="myInput" type="text" placeholder="Search Date ...">
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Prescribed Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Prescribed By</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Medical Prescription No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Status</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let MPHistory  of Medicalprescriptionhistorydata;index as i">
+                <td style="padding:0px;text-align:center"><mat-icon class="example-tab-icon grab" (click)="LatestMPHistory(MPHistory.MedicalPrescriptionNo)">touch_app</mat-icon></td>
+                <td style="padding:0px;text-align:center">{{MPHistory.PrescribeDate| date:"dd-MMM-yyyy"}}</td>
+                <td style="padding:0px;text-align:center">{{MPHistory.PrescribedBY}}</td>
+                <td style="padding:0px;text-align:center">{{MPHistory.MedicalPrescriptionNo}}</td>
+                <td style="padding:0px;text-align:center">{{MPHistory.Status}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </mat-tab>
+
+  <mat-tab label="Optical Prescription">
+
+    <div class="col-sm-12">
+
+      <div class="row" style="margin-top:1%">
+
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+          <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;margin-top:-10px;border-radius:8px;border:2px solid gray">
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+
+          <div class="mat-elevation-z8">
+
+            <table mat-table [dataSource]="dataSourceOpptical" matSort class="table table-bordered">
+
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">SlNo. </th>
+                <td mat-cell *matCellDef="let element ;let i = index;" style="text-align:center"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Select">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+                <td mat-cell *matCellDef="let element" style="text-align:center" (click)="selecttype(element)"> <mat-icon class="grab">touch_app</mat-icon> </td>
+              </ng-container>
+              <ng-container matColumnDef="Prescribed">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Prescribed Date </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.prescribeddate1| date:"dd-MMM-yyyy"}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Visit">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Prescribed By </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.Prescribedby1}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsoptical"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsoptical;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[3 , 5 , 10 , 15 , 20 , 25 , 30 , 35 , 40]" showFirstLastButtons></mat-paginator>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </mat-tab>
+
+  <mat-tab label="Investigation Prescription" style="background-color: aliceblue">
+    <div class="col-sm-12">
+
+      <div class="row" style="margin-top:1%">
+
+        <div class="col-sm-2" style="font-size:12px">
+          <mat-form-field appearance="outline">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">UIN</mat-label>
+
+            <strong><input disabled style="color:darkblue" [(ngModel)]="Getuin" name="id" matInput placeholder="Enter ID"></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Name</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getname" name="name" matInput placeholder="Name" disabled></strong>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Age</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getage" name="age" matInput placeholder="Age" disabled></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Gender</mat-label>
+            <strong> <input style="color:darkblue" [(ngModel)]="Getgender" name="gender" matInput placeholder="Sex" disabled></strong>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;margin-top:-10px;border-radius:8px;border:2px solid gray">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+
+          <!--<mat-form-field  style="font-size:14px">
+            <mat-label>Date</mat-label>
+            <mat-select  (ngModelChange)="EDate(totalhistorydata)">
+              <mat-option *ngFor="let Engage of Idatess" [value]="Engage">{{Engage.FromDate| date:"dd-MMM-y"}}</mat-option>
+            </mat-select>
+          </mat-form-field>-->
+          <input style="width:18%" class="form-control" id="myInput" type="text" placeholder="Search Date ...">
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Visit Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Investigation Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Amount</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Prescribed By</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let IHistory  of totalInvprescdata;index as i">
+                <td style="padding:0px;text-align:center"><mat-icon class="example-tab-icon">touch_app</mat-icon></td>
+                <td style="padding:0px;text-align:center">{{IHistory.date| date:"dd-MMM-y"}}</td>
+                <td style="padding:0px;text-align:center">{{IHistory.Investigationdesc}}</td>
+                <td style="padding:0px;text-align:center">{{IHistory.Amount}}.00 Rs</td>
+                <td style="padding:0px;text-align:center">{{IHistory.Prescribedby}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </mat-tab>
+  <mat-tab label="Investigation" style="background-color: aliceblue">
+    <div class="col-sm-12">
+
+      <div class="row" style="margin-top:1%">
+
+        <div class="col-sm-2" style="font-size:12px">
+          <mat-form-field appearance="outline">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">UIN</mat-label>
+
+            <strong><input disabled style="color:darkblue" [(ngModel)]="Getuin" name="id" matInput placeholder="Enter ID"></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Name</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getname" name="name" matInput placeholder="Name" disabled></strong>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Age</mat-label>
+            <strong><input style="color:darkblue" [(ngModel)]="Getage" name="age" matInput placeholder="Age" disabled></strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="font-size:12px;width: -webkit-fill-available">
+            <mat-label style="color:blue;font-size:larger;font-weight:bold">Gender</mat-label>
+            <strong> <input style="color:darkblue" [(ngModel)]="Getgender" name="gender" matInput placeholder="Sex" disabled></strong>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-3">
+          <img [src]="transform()" style="height:30%;width:35%;margin-top:-10px;border-radius:8px;border:2px solid gray">
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;">
+          <input style="width:18%" class="form-control" id="myInput" type="text" placeholder="Search Date ...">
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Visit Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">External / Internal</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Prescribed By</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Total Amount</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let INHistory  of totalInvdata;index as i">
+                <td style="padding:0px;text-align:center">
+                  <mat-icon class="example-tab-icon grab"
+                            (click)="LatestInvHistory(INHistory.visistdate)">touch_app</mat-icon>
+                </td>
+                <td style="padding:0px;text-align:center">{{INHistory.visistdate| date:"dd-MMM-y"}}</td>
+                <td style="padding:0px;text-align:center">{{INHistory.exterinternal}}</td>
+                <td style="padding:0px;text-align:center">{{INHistory.prescribedby}}</td>
+                <td style="padding:0px;text-align:center">{{INHistory.invamount}}.00 Rs</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </mat-tab>
+  <mat-tab label="SurgeryDetails" style="background-color: aliceblue"></mat-tab>
+  <mat-tab label="Discharge" style="background-color: aliceblue">  </mat-tab>
+</mat-tab-group>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':MedicalPrescriptionblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="top:160px">
+      <div class="modal-header">
+        <h4 class="modal-title">Medical Prescription Details</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="MedicalPrescriptionClosessss()">&times;</button>
+      </div>
+      <div class="modal-body">
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S No</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Brand</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Generic</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">UOM</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Frequency</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Quantity</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Eye</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Food</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Total Days </th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">From Date</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">To Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Prescriptionvalues of Medicalhistorydata;index as i ">
+              <td style="padding:0px;text-align:center">{{i + 1}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Drugname}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Generic}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.UOM}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Frequency}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Quantity}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Eye}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Food}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Days}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.FromDate| date:"dd-MMM-yyyy"}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.ToDate| date:"dd-MMM-yyyy"}}</td>
+              <td style="padding:0px;text-align:center">{{Prescriptionvalues.Remarks}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="MedicalPrescriptionClosessss()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':investigationblock}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Investigation Details</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="InvestigationClosessss()">&times;</button>
+      </div>
+      <div class="modal-body" style="height:400px;overflow:auto;padding:0px;">
+
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S No</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Description</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Images</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Images of totalInvImagesdata;index as i ">
+              <td style="padding:0px;text-align:center">{{i + 1}}</td>
+              <td style="padding:0px;text-align:center">{{Images.Desccmre}}</td>
+              <td style="padding:0px;text-align:center" *ngFor="let image of Images.imgdtre"><img style="height:176px;width:362px;" [src]="image"></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="InvestigationClosessss()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--Total History Refraction-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreview}">
+  <div class="modal-dialog modal-lg" style="width:65%">
+    <div class="modal-content" style="height:540px;width: 120%">
+      <div class="example-box" cdkDrag>
+        <div class="modal-header" style="background-color:#51b8f2;color:white;">
+          <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreview()">&times;</button>
+          <h5 class="modal-title" style="text-align:center">
+            <strong>Refraction History Details</strong>
+          </h5>
+        </div>
+
+        <div class="modal-body">
+
+
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-7" style="margin-top: 1%;margin-bottom: 2%;">
+                <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';
+              border:1px solid gray;padding:10px;border-radius: 16px;">
+                  <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12" style="height:380px;overflow:auto">
+
+            <div class="row">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Visual Acuity</strong></div>
+
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Category</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="5">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="5">OS</th>
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near Description</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Power Glass</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">Pinhole</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near Description</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Power Glass</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Pinhole</th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let s of Visual;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{s.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{s.SubCategory}}</td>
+                      <td style="text-align:center;">{{s.DistSph}}</td>
+                      <td style="text-align:center;">{{s.NearCyl}}</td>
+                      <td style="text-align:center;">{{s.N_V_DESC}}</td>
+                      <td style="text-align:center;">{{s.PowerGlass}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{s.PinAxis}}</td>
+                      <td style="text-align:center;">{{s.DistSphh}}</td>
+                      <td style="text-align:center;">{{s.NearCyll}}</td>
+                      <td style="text-align:center;">{{s.N_V_DESCC}}</td>
+                      <td style="text-align:center;">{{s.PowerGlasss}}</td>
+                      <td style="text-align:center;">{{s.PinAxiss}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>PGP</strong></div>
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="4">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">OS</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Details</th>
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">Add</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Add</th>
+                  </tr>
+
+                  <tbody>
+                    <tr>
+                    <tr *ngFor="let p of pgp;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{p.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{p.DistSph}}</td>
+                      <td style="text-align:center;">{{p.NearCyl}}</td>
+                      <td style="text-align:center;">{{p.PinAxis}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{p.Add}}</td>
+                      <td style="text-align:center;">{{p.DistSph1}}</td>
+                      <td style="text-align:center;">{{p.NearCyl1}}</td>
+                      <td style="text-align:center;">{{p.PinAxis1}}</td>
+                      <td style="text-align:center;">{{p.Add1}}</td>
+                      <td style="text-align:center;">{{p.Details}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Refraction</strong></div>
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Date</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Category</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="6">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="6">OS</th>
+                  </tr>
+
+
+                  <tr>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="3">DRY</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="3">WET</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="3">DRY</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="3">WET</th>
+                  </tr>
+
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let r of ref;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{r.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{r.SubCategory}}</td>
+                      <td style="text-align:center;">{{r.DistSph}}</td>
+                      <td style="text-align:center;">{{r.NearCyl}}</td>
+                      <td style="text-align:center;">{{r.PinAxis}}</td>
+                      <td style="text-align:center;">{{r.DistSph2}}</td>
+                      <td style="text-align:center;">{{r.NearCyl2}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{r.PinAxis2}}</td>
+                      <td style="text-align:center;">{{r.DistSph1}}</td>
+                      <td style="text-align:center;">{{r.NearCyl1}}</td>
+                      <td style="text-align:center;">{{r.PinAxis1}}</td>
+                      <td style="text-align:center;">{{r.DistSph3}}</td>
+                      <td style="text-align:center;">{{r.NearCyl3}}</td>
+                      <td style="text-align:center;">{{r.PinAxis3}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Acceptancce</strong></div>
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="6">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="6">OS</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Remarks</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Pupillary Distance</th>
+                  </tr>
+
+
+                  <tr>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">DISTANCE</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="2">NEAR</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">DISTANCE</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">NEAR</th>
+                  </tr>
+
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">V/A</th>
+                    <th></th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let a of acc;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{a.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{a.DistSph}}</td>
+                      <td style="text-align:center;">{{a.NearCyl}}</td>
+                      <td style="text-align:center;">{{a.PinAxis}}</td>
+                      <td style="text-align:center;">{{a.Add}}</td>
+                      <td style="text-align:center;">{{a.DistSph2}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{a.Add2}}</td>
+                      <td style="text-align:center;">{{a.DistSph1}}</td>
+                      <td style="text-align:center;">{{a.NearCyl1}}</td>
+                      <td style="text-align:center;">{{a.PinAxis1}}</td>
+                      <td style="text-align:center;">{{a.Add1}}</td>
+                      <td style="text-align:center;">{{a.DistSph3}}</td>
+                      <td style="text-align:center;">{{a.Add3}}</td>
+                      <td style="text-align:center;">{{a.Remarks}}</td>
+                      <td style="text-align:center;">{{a.PD}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Final Prescription</strong></div>
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="6">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="6">OS</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Remarks</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-bottom-color:white !important" rowspan="2">Pupillary Distance</th>
+                  </tr>
+
+
+                  <tr>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">DISTANCE</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="2">NEAR</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">DISTANCE</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">NEAR</th>
+                  </tr>
+
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">V/A</th>
+                    <th></th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let f of fin;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{f.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{f.DistSph}}</td>
+                      <td style="text-align:center;">{{f.NearCyl}}</td>
+                      <td style="text-align:center;">{{f.PinAxis}}</td>
+                      <td style="text-align:center;">{{f.Add}}</td>
+                      <td style="text-align:center;">{{f.DistSph2}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{f.Add2}}</td>
+                      <td style="text-align:center;">{{f.DistSph1}}</td>
+                      <td style="text-align:center;">{{f.NearCyl1}}</td>
+                      <td style="text-align:center;">{{f.PinAxis1}}</td>
+                      <td style="text-align: center; ">{{f.Add1}}</td>
+                      <td style="text-align:center;">{{f.DistSph3}}</td>
+                      <td style="text-align:center;">{{f.Add3}}</td>
+                      <td style="text-align:center;">{{f.Remarks}}</td>
+                      <td style="text-align:center;">{{f.PD}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Cover Test</strong></div>
+
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Icd Speciality</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Squint Type</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="3">Distance Vision</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="3">Near Vision</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Squint Description</th>
+                  </tr>
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">DV OD</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">DV OS</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">DV OU</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">NV OD</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">NV OS</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">NV OU</th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let squi of sq;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{squi.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{squi.Squintname}}</td>
+                      <td style="text-align:center;">{{squi.SquintTypename}}</td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="squi.IsDVOD"></mat-checkbox></td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="squi.IsDVOS"></mat-checkbox></td>
+                      <td style="text-align:center;border-right:2px solid black"><mat-checkbox disabled="true" [(checked)]="squi.IsDVOU"></mat-checkbox></td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="squi.IsNVOD"></mat-checkbox></td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="squi.IsNVOS"></mat-checkbox></td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="squi.IsNVOU"></mat-checkbox></td>
+                      <td style="text-align:center;">{{squi.SquintDiagnosisDescription}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Amsler</strong></div>
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="3">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="3">OS</th>
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Normal</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Abnormal</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">Description</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Normal</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Abnormal</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Description</th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let am of ams;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{am.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="am.A_n_OD"></mat-checkbox></td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="am.A_abn_OD"></mat-checkbox></td>
+                      <td style="text-align:center;border-right:2px solid black">{{am.Desc_Text}}</td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="am.A_n_OS"></mat-checkbox></td>
+                      <td style="text-align:center;"><mat-checkbox disabled="true" [(checked)]="am.A_abn_OS"></mat-checkbox></td>
+                      <td style="text-align:center;">{{am.Desc_Text1}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Color Vision</strong></div>
+
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="3">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="3">OS</th>
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Normal</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Defective</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">Description</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Normal</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Defective</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Description</th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let c of cv;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{c.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{c.CV_normal}}</td>
+                      <td style="text-align:center;">{{c.CV_defective}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{c.Desc_Text}}</td>
+                      <td style="text-align:center;">{{c.CV_normal1}}</td>
+                      <td style="text-align:center;">{{c.CV_defective1}}</td>
+                      <td style="text-align:center;">{{c.Desc_Text1}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div class="row">
+
+                  <div class="col-sm-4"></div>
+
+                  <div class="col-sm-4" align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Intra Ocular Pressure</strong></div>
+
+                  <div class="col-sm-4" style="font-family:'Proxima Nova Semibold';font-size:14px;">
+                    <strong>Non-Contact Tonometry</strong>
+                  </div>
+
+                </div>
+
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="2">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">OS</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="1">TIME</th>
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Before Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">After Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Before Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">After Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">After Dilation</th>
+                  </tr>
+
+                  <tbody>
+
+                    <tr *ngFor="let o of iop;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{o.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{o.Iolnct}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{o.Iolat}}</td>
+                      <td style="text-align:center;">{{o.Iolnct1}}</td>
+                      <td style="text-align:center;">{{o.Iolat1}}</td>
+                      <td style="text-align:center;">{{o.Time}}</td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!--Total History Optical Prescription-->
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalmeds}">
+  <div class="modal-dialog modal-lg" style="width:65%">
+    <div class="modal-content" style="height:540px;width: 120%">
+      <div class="example-box" cdkDrag>
+        <div class="modal-header" style="background-color:#51b8f2;color:white;">
+          <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessmeds()">&times;</button>
+          <h5 class="modal-title" style="text-align:center">
+            <strong>Optical Prescription Details</strong>
+          </h5>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-7" style="margin-top: 1%;margin-bottom: 2%;">
+                <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';
+              border:1px solid gray;padding:10px;border-radius: 16px;">
+                  <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12" style="height:380px;overflow:auto">
+
+
+            <div class="row">
+
+              <div class="col-sm-12" style="overflow-x:auto;overflow-y:auto;position:sticky">
+                <div align="center" style="font-family:'Proxima Nova Semibold';font-size:14px;"><strong>Optical Prescription</strong></div>
+                <table class="table table-bordered">
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Date</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black" colspan="6">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="6">OS</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Remarks</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Binocular PD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">Monocular PD</th>
+                  </tr>
+
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;border-right:2px solid black">Near V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance Cyl</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance Axis</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near Sph</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near V/A</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OD</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OS</th>
+                  </tr>
+
+                  <tbody>
+                    <tr *ngFor="let opt of opticalfin;index as i">
+                      <td style="text-align:center">{{i+1}}</td>
+                      <td style="text-align:center;">{{opt.Date | date:"dd-MMM-y"}}</td>
+                      <td style="text-align:center;">{{opt.DistSph}}</td>
+                      <td style="text-align:center;">{{opt.NearCyl}}</td>
+                      <td style="text-align:center;">{{opt.PinAxis}}</td>
+                      <td style="text-align:center;">{{opt.Add}}</td>
+                      <td style="text-align:center;">{{opt.DistSph2}}</td>
+                      <td style="text-align:center;border-right:2px solid black">{{opt.Add2}}</td>
+                      <td style="text-align:center;">{{opt.DistSph1}}</td>
+                      <td style="text-align:center;">{{opt.NearCyl1}}</td>
+                      <td style="text-align:center;">{{opt.PinAxis1}}</td>
+                      <td style="text-align:center;">{{opt.Add1}}</td>
+                      <td style="text-align:center;">{{opt.DistSph3}}</td>
+                      <td style="text-align:center;">{{opt.Add3}}</td>
+                      <td style="text-align:center;">{{opt.Remarks}}</td>
+                      <td style="text-align:center;">{{opt.PD}}</td>
+                      <td style="text-align:center;">{{opt.MPD}}</td>
+                      <td style="text-align:center;">{{opt.MPD1}}</td>
+                    </tr>
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Findingsblock}">
+  <div class="modal-dialog modal-lg" style="width:100%;padding-top:10px;padding-left:290px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="FindingsClose()">&times;</button>
+        <h4 class="modal-title">Findings Details</h4>
+      </div>
+      <div class="modal-body">
+        <div style="overflow:auto; height:550px">
+
+          <div class="col-sm-12">
+            <div class="row">
+
+              <div class="col-sm-1"></div>
+
+              <div class="col-sm-7" style="margin-top: 1%;margin-bottom: 2%;">
+
+
+                <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+                  <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                </span>
+
+              </div>
+              <div class="col-sm-4">
+                <mat-label>Date : </mat-label>
+                {{fipdate | date: 'dd-MMM-y'}}
+
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <div class="row">
+              <h6 style="color:#293846;text-align:center"> <strong>Visual Acuity</strong>  </h6>
+
+              <table class="table table-bordered" style="position:sticky;font-family:'Proxima Nova';font-size:14px;">
+
+
+
+                <tr>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Category</th>
+
+                  <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">OD</th>
+                  <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="4">OS</th>
+
+                </tr>
+                <tr>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near Desc</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Pinhole</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Distance</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Near Desc</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Pinhole</th>
+                </tr>
+                <tbody>
+                  <tr *ngFor="let va of vahis; index as i">
+                    <td style="text-align:center;">{{i+1}}</td>
+                    <td style="text-align:center;">{{va.SubCategory}}</td>
+                    <td style="text-align:center;">{{va.DistSph}}</td>
+                    <td style="text-align:center;">{{va.NearCyl}}</td>
+                    <td style="text-align:center;">{{va.N_V_DESC}}</td>
+                    <td style="text-align:center;">{{va.PinAxis}}</td>
+                    <td style="text-align:center;">{{va.DistSphs}}</td>
+                    <td style="text-align:center;">{{va.NearCyls}}</td>
+                    <td style="text-align:center;">{{va.N_V_DESCs}}</td>
+                    <td style="text-align:center;">{{va.PinAxiss}}</td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+
+
+          </div>
+
+          <div class="col-sm-12">
+            <h6 style="color:#293846;text-align:center"> <strong>Intra Ocular Pressure</strong>  </h6>
+
+            <div class="row">
+              <div class="col-sm-6" #table>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h2 align="center">Non Contact Tonometry</h2>
+                  </div>
+                </div>
+
+                <table class="table table-bordered" style="position:sticky;font-family:'Proxima Nova';font-size:14px">
+
+
+
+                  <tr>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">OS</th>
+
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Before Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">After Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Before Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">After Dilation</th>
+
+                  </tr>
+                  <tbody>
+                    <tr *ngFor="let nc of ncthis; index as i">
+                      <td style="text-align:center;">{{nc.Iolnctbdod}}</td>
+                      <td style="text-align:center;">{{nc.Iolnctbdos}}</td>
+                      <td style="text-align:center;">{{nc.Iolnctadod}}</td>
+                      <td style="text-align:center;">{{nc.Iolnctados}}</td>
+
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+
+              <div class="col-sm-6" #table>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h2 align="center">Applanation Tonometry</h2>
+                  </div>
+                </div>
+
+                <table class="table table-bordered" style="position:sticky;font-family:'Proxima Nova';font-size:14px">
+
+
+
+                  <tr>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">OD</th>
+                    <th style="text-align:center;background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" colspan="2">OS</th>
+
+                  </tr>
+                  <tr>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Before Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">After Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Before Dilation</th>
+                    <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">After Dilation</th>
+
+                  </tr>
+                  <tbody>
+                    <tr *ngFor="let at of athis; index as i">
+                      <td style="text-align:center;">{{at.Iolatbdod}}</td>
+                      <td style="text-align:center;">{{at.Iolatbdos}}</td>
+                      <td style="text-align:center;">{{at.Iolatadod}}</td>
+                      <td style="text-align:center;">{{at.Iolatados}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12" #table>
+
+
+            <h6 style="color:#293846;text-align:center"> <strong>Slit Lamp</strong>  </h6>
+
+            <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S.No</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Description</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Category</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OD</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OS</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OU</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let hiss of sltlathis; index as i">
+
+                  <td style="text-align:center;">{{i + 1}}</td>
+                  <td style="text-align:center;">{{hiss.SlitDescLat}}</td>
+                  <td style="text-align:center;">{{hiss.DescLat}}</td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hiss.OdLat" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hiss.OsLat" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hiss.OuLat" disabled></mat-checkbox></td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+
+
+          <div class="col-sm-12" #table>
+
+
+            <h6 style="color:#293846;text-align:center"> <strong>Fundus</strong>  </h6>
+
+            <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S.No</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Description</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Category</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OD</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OS</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OU</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let hiff of funlathis; index as i">
+
+                  <td style="text-align:center;">{{i + 1}}</td>
+                  <td style="text-align:center;">{{hiff.FundDescLat}}</td>
+                  <td style="text-align:center;">{{hiff.DescFun}}</td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hiff.OdFun" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hiff.OsFun" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hiff.OuFun" disabled></mat-checkbox></td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-sm-12" #table>
+
+
+            <h6 style="color:#293846;text-align:center"> <strong>Diagnosis</strong>  </h6>
+
+            <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S.No</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">ICD Code</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">ICD Description</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OD</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OS</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OU</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let hidi of dialathis; index as i">
+
+                  <td style="text-align:center;">{{i + 1}}</td>
+                  <td style="text-align:center;">{{hidi.IcdCode2}}</td>
+                  <td style="text-align:center;">{{hidi.IcdDesc2}}</td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hidi.Odd2" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hidi.Oss2" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hidi.Ouu2" disabled></mat-checkbox></td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-sm-12" #table>
+
+
+            <h6 style="color:#293846;text-align:center"> <strong>Surgery</strong>  </h6>
+
+            <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S.No</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">ICD Speciality</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">ICD Description</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OD</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OS</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">OU</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Surgery Adviced By</th>
+                  <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Surgery Adviced Date</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let hisu of surlathis; index as i">
+
+                  <td style="text-align:center;">{{i + 1}}</td>
+                  <td style="text-align:center;">{{hisu.ICDSpec}}</td>
+                  <td style="text-align:center;">{{hisu.IcdDesc}}</td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hisu.OdSur" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hisu.OsSur" disabled></mat-checkbox></td>
+                  <td style="text-align:center;"> <mat-checkbox [(checked)]="hisu.OuSur" disabled></mat-checkbox></td>
+                  <td style="text-align:center;">{{hisu.dname}}</td>
+                  <td style="text-align:center;">{{hisu.sdate | date: 'dd-MMM-y'}}</td>
+
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+
+          <div col-sm-12>
+            <div class="col-sm-4">
+              <h2 align="center">
+                <span>Treatment & Advice</span>
+              </h2>
+              <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                <mat-label>Treatment & Advice</mat-label>
+                <textarea #message maxlength="250" [(ngModel)]="selectedTreat" name="Treat" matInput rows="10" cols="50" placeholder="Enter Treatment & Advice" disabled></textarea>
+                <mat-hint align="start">Max 250 Character</mat-hint>
+                <mat-hint align="end">{{message.value.length}} / 250</mat-hint>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+      <!--<div class="modal-footer">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="FindingsClosess()">Yes</button>
+      </div>-->
+    </div>
+  </div>
+</div>

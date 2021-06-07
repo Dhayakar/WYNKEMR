@@ -1,0 +1,422 @@
+
+<div class="col-sm-12 formborder">
+  <form #Location="ngForm">
+    <div class="row">
+      <h6>Location Master</h6>
+    </div>
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-2 mph-0 pb20">
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+
+          </div>
+          <div class="col-sm-8 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline" class="login-mat">
+          <mat-label>Country</mat-label>
+          <mat-select [(ngModel)]="C_country" name="C_country" (ngModelChange)="countrychoose()" placeholder="Select Country">
+            <mat-option *ngFor="let cntry of country" [value]="cntry">{{cntry.ParentDescription}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-1">
+        <mat-icon data-toggle="tooltip" title="Add Country" class="grab" (click)="c_pop()">add_circle_outline</mat-icon>
+      </div>
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline" class="login-mat">
+          <mat-label>State</mat-label>
+          <mat-select [(ngModel)]="C_state" name="C_state" (ngModelChange)="choosestate()" placeholder="Select State" [disabled]="statedisable">
+            <mat-option *ngFor="let state of statee" [value]="state">{{state.ParentDescriptionstate}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-1">
+        <mat-icon data-toggle="tooltip" title="Add State" class="grab" (click)=" c_state();">add_circle_outline</mat-icon>
+      </div>
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline" class="login-mat">
+          <mat-label>City</mat-label>
+          <mat-select [(ngModel)]="C_district" name="C_district" (ngModelChange)="choosedistrict()" placeholder="Select City" [disabled]="citydisable">
+            <mat-option *ngFor="let District of Districts " [value]="District">{{District.ParentDescriptioncity}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-1">
+        <mat-icon data-toggle="tooltip" title="Add City" class="grab" (click)="c_district()">add_circle_outline</mat-icon>
+      </div>
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline" class="login-mat">
+          <mat-label>Location</mat-label>
+          <mat-select [(ngModel)]="C_location" name="C_location" placeholder="Select Location" [disabled]="locationdisable">
+            <mat-option *ngFor="let loc of locations " [value]="loc">{{loc.ParentDescriptionlocation}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-1">
+        <mat-icon data-toggle="tooltip" title="Add Location" class="grab" (click)="c_Loc()">add_circle_outline</mat-icon>
+      </div>
+    </div>
+
+    <!--<div class="row" style="margin-top:1%;margin-bottom:2%">
+      <div class="col-sm-5"></div>
+      <div class="col-sm-3">
+        <button type="button" class="btn btn-warning-default" style="font-size:15px;color:orange;background-color:white;min-height:initial" (click)="Cancelcountry()"><strong>Cancel</strong></button>
+      </div>
+      <div class="col-sm-4"></div>
+
+    </div>-->
+    <div class="row" *ngIf="tablelocation">
+      <h6>Location Details</h6>
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-4">
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" #input>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4"></div>
+        </div>
+
+
+        <div class="row">
+          <table mat-table [dataSource]="dataSourcesq" class="custom-table withoutbackgroung search-table table-bordered">
+
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef>S.No</th>
+              <td mat-cell *matCellDef="let id = index">{{id+1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Country">
+              <th mat-header-cell *matHeaderCellDef>  Country </th>
+              <td mat-cell *matCellDef="let element">{{element.Cty}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="State">
+              <th mat-header-cell *matHeaderCellDef> State </th>
+              <td mat-cell *matCellDef="let element">{{element.St}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="City">
+              <th mat-header-cell *matHeaderCellDef> City </th>
+              <td mat-cell *matCellDef="let element">{{element.Cy}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Location">
+              <th mat-header-cell *matHeaderCellDef> Location </th>
+              <td mat-cell *matCellDef="let element">{{element.Ln}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Pincode">
+              <th mat-header-cell *matHeaderCellDef> Pincode </th>
+              <td mat-cell *matCellDef="let element">{{element.Pincode}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="checked">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element;let id = index;">
+                <mat-icon style="margin-right:2%" (change)="selecttype(element,$event.checked)" [disabled]="element.disab">touch_app</mat-icon>
+                <!--<mat-checkbox style="margin-right:2%" (change)="selecttype(element,$event.checked)" [disabled]="element.disab"></mat-checkbox>-->
+                <mat-icon data-toggle="tooltip" title="Remove" style="color:red" (click)="removelocation(id,element)" class="grab">delete</mat-icon>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnssq"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnssq;"></tr>
+          </table>
+
+        </div>
+        <div class="col-sm-12 pb25">
+          <div class="content-right sub-section btn-wrap">            
+            <button type="button" class="btn btn-warning-default" (click)="Cancelcountry()"><strong>Cancel</strong></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </form>
+</div>
+
+
+<!--create country-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreview}">
+
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreview()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          Country
+        </h5>
+
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <mat-label>Country</mat-label>
+            <mat-form-field appearance="outline">
+              <input [(ngModel)]="M_Country" name="M_country" matInput placeholder="">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row pb25" style="margin-right:1%">
+          <div class="content-right sub-section btn-wrap">
+            <button class="success btn btn-primary" *ngIf="hiddenSubmit"  (click)="submitcountry()" [disabled]="disSubmit">Submit</button>
+            <button class="success btn btn-primary" *ngIf="hiddenUpdate"  (click)="updatecountry()" [disabled]="disupdate">Submit</button>
+            <button type="button" class="btn btn-warning-default" (click)="cancelcoun()"><strong>Cancel</strong></button>
+          </div>
+        </div>
+        <!--<div class="row" >
+    <div class="row">
+      <div class="col-sm-4" *ngIf="hiddenSubmit">
+        <button class="success btn btn-primary"  (click)="submitcountry()"  [disabled]="disSubmit">Submit</button>
+      </div>
+      <div class="col-sm-4" *ngIf="hiddenUpdate">
+        <button class="success btn btn-primary"  (click)="updatecountry()"  [disabled]="disupdate">Submit</button>
+      </div>
+      <div class="col-sm-4">
+        <button type="button" class="btn btn-warning-default"  (click)="cancelcoun()"><strong>Cancel</strong></button>
+      </div>
+    </div>
+  </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--create state-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewstate}">
+
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewstate()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          State
+        </h5>
+
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <mat-label>State</mat-label>
+            <mat-form-field appearance="outline">
+              <input [(ngModel)]="M_State" name="M_State" matInput placeholder="">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row pb25" style="margin-right:1%">
+          <div class="content-right sub-section btn-wrap">
+            <button class="success btn btn-primary" *ngIf="hiddenSubmit"  (click)="submitstate()" [disabled]="disSubmit">Submit</button>
+            <button class="success btn btn-primary" *ngIf="hiddenUpdate"  (click)="updatestate()" [disabled]="disupdate">Submit</button>
+            <button type="button" class="btn btn-warning-default" (click)="cancelstate()"><strong>Cancel</strong></button>
+          </div>
+        </div>
+
+        <!--<div class="row">
+    <div class="col-sm-4" *ngIf="hiddenSubmit">
+      <button class="success btn btn-primary"  (click)="submitstate()"  [disabled]="disSubmit">Submit</button>
+    </div>
+    <div class="col-sm-4" *ngIf="hiddenUpdate">
+      <button class="success btn btn-primary"  (click)="updatestate()"  [disabled]="disupdate">Submit</button>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-warning-default"  (click)="cancelstate()"><strong>Cancel</strong></button>
+    </div>
+  </div>-->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--create City-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewcity}">
+
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewcity()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          City
+        </h5>
+
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-12">
+            <mat-label>City</mat-label>
+            <mat-form-field appearance="outline">
+              <input [(ngModel)]="M_city" name="M_city" matInput placeholder="">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row pb25" style="margin-right:1%">
+          <div class="content-right sub-section btn-wrap">
+            <button class="success btn btn-primary" *ngIf="hiddenSubmit"  (click)="submitcity()" [disabled]="disSubmit">Submit</button>
+            <button class="success btn btn-primary" *ngIf="hiddenUpdate"  (click)="updatecity()" [disabled]="disupdate">Submit</button>
+            <button type="button" class="btn btn-warning-default" (click)="cancelcity()"><strong>Cancel</strong></button>
+          </div>
+        </div>
+        <!--<div class="row">
+    <div class="col-sm-4" *ngIf="hiddenSubmit">
+      <button class="success btn btn-primary"  (click)="submitcity()"  [disabled]="disSubmit">Submit</button>
+    </div>
+    <div class="col-sm-4" *ngIf="hiddenUpdate">
+      <button class="success btn btn-primary"  (click)="updatecity()"  [disabled]="disupdate">Submit</button>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-warning-default"  (click)="cancelcity()"><strong>Cancel</strong></button>
+    </div>
+  </div>-->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-------create Location------->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewlocation}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewlocation()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          City
+        </h5>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-5"><mat-label>Location</mat-label></div>
+          <div class="col-sm-7">
+            <mat-form-field appearance="outline">
+              <input [(ngModel)]="A_Loc" name="A_Loc" matInput placeholder="">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5">
+            <mat-label>PinCode</mat-label>
+          </div>
+          <div class="col-sm-7">
+            <mat-form-field appearance="outline">
+              <input [(ngModel)]="A_PIN" name="A_PIN" matInput placeholder="">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row pb25" style="margin-right:1%">
+          <div class="content-right sub-section btn-wrap">
+            <button class="success btn btn-primary" *ngIf="hiddenSubmit" (click)="submitlocation()" [disabled]="disSubmit">Submit</button>
+            <button class="success btn btn-primary" *ngIf="hiddenUpdate" (click)="updatelocation()" [disabled]="disupdate">Submit</button>
+            <button type="button" class="btn btn-warning-default" (click)="cancellocation()"><strong>Cancel</strong></button>
+          </div>
+        </div>
+        <!--<div class="row">
+
+    <div class="col-sm-4" *ngIf="hiddenUpdate">
+      <button class="success btn btn-primary"  (click)="updatelocation()"  [disabled]="disSubmit">Submit</button>
+    </div>
+
+    <div class="col-sm-4" *ngIf="hiddenSubmit">
+      <button class="success btn btn-primary"  (click)="submitlocation()"  [disabled]="disupdate">Submit</button>
+    </div>
+
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-warning-default"  (click)="cancellocation()"><strong>Cancel</strong></button>
+    </div>
+  </div>-->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----*Cancel Popup*---->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+        <h4 class="modal-title">Location Master</h4>
+      </div><br />
+
+      <p align="center">Do you want to cancel</p>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-left">Location Master - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Update</th>
+              <th>Delete</th>
+              <!--<th>Export</th>
+              <th>Print</th>-->
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <!--<td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>-->
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

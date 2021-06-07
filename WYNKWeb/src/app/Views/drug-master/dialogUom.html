@@ -1,0 +1,22 @@
+<form #DrugGroupForm="ngForm" name="DrugGroupForm" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="modal-header">
+    <h6 class="modal-title">UOM</h6>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-3 ml-3p">
+        <mat-form-field appearance="outline">
+          <mat-label>UOM</mat-label>
+          <input name="UOM" [(ngModel)]="M_UOM" matInput placeholder="Enter Unit Of Measurement" required>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 pb25">
+      <div class="col-sm-10  sub-section btn-wrap">
+        <button class="success btn btn-primary" (click)="AddUOM(DrugGroupForm,M_UOM)"> Submit </button>
+        <button type="button" class="btn btn-warning-default ml-3p" (click)="Dialogclose()"><strong>Cancel</strong></button>
+      </div>
+    </div>
+  </div>
+</form>
+

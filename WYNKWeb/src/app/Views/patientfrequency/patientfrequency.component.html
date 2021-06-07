@@ -1,0 +1,531 @@
+<form #ReportssForm="ngForm">
+  <div class="col-sm-12">
+    <div class="row">
+      <h6>Patient Population</h6>
+    </div>
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <!--<span class="uinborder">
+              <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+            </span>-->
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+            <!--<label>Allergy&nbsp;:<span class="uinborder">{{allergys}}</span></label>-->
+          </div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12" style="margin-top:1%;">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Date</mat-label>
+            <input [(ngModel)]="M_FromDate" [max]="maxDate()" autocomplete="off" (dateChange)="CheckToDate();" name="FromDate" matInput [matDatepicker]="FromDate" placeholder="FromDate">
+            <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+            <mat-datepicker #FromDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input [(ngModel)]="M_ToDate" [max]="maxDate()" autocomplete="off"  (dateChange)="CheckToDate()" name="ToDate" matInput [matDatepicker]="ToDate" placeholder="ToDate">
+            <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+            <mat-datepicker #ToDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!--<div class="col-sm-1" style="margin-top:1%">
+      <button mat-raised-button [disabled]="isNextDelete" matTooltip="Export to PDF" id="cmd" (click)="modalSuccesPrintOk()"><i class="fa fa-print" style="color:cornflowerblue;font-size:36px"></i></button>
+    </div>
+    <div class="col-sm-1" style="margin-top:1%">
+      <button mat-raised-button [disabled]="isNextDelete" matTooltip="Export to Excel" (click)="fireEvent()"><img style="height:35px;width:45px;" src="assets/excel.svg" /></button>
+    </div>-->
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-5">
+          <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+          <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+        </div>
+
+    <!--<div class="col-sm-1" style="margin-top:1%">
+      <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+    </div>-->
+      </div>
+      <!--*ngIf="sPatientForm"-->
+
+      <div class="row" *ngIf="sPatientForm">
+        <h2 class="h2style">Patient Population from  <span style="color:blue">{{submitfdate | date : "dd-MMM-yyyy"}}</span>  to   <span style="color:blue">{{submittodate | date : "dd-MMM-yyyy"}}</span></h2>
+
+        <div class="row">
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label><strong>Items per page</strong></mat-label>
+              <mat-select [(ngModel)]="M_items" name="View" (ngModelChange)="selectedvalue()">
+                <mat-option value="3">3</mat-option>
+                <mat-option value="6">6</mat-option>
+                <mat-option value="9">9</mat-option>
+                <mat-option value="12">12</mat-option>
+                <mat-option value="15">15</mat-option>
+                <mat-option value="18">18</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="tableFixHead">
+          <table id="customers" class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th rowspan="3">SNo</th>
+                <th rowspan="3" style="width:7%">Date</th>
+                <th colspan="4">New Patients</th>
+                <th rowspan="3">Total</th>
+                <th rowspan="3">Revenue Total (New)</th>
+                <th colspan="4">Review Patients</th>
+                <th rowspan="3">Total</th>
+                <th rowspan="3">Revenue Total (Review)</th>
+                <th colspan="4">Surgery-Review Patients</th>
+                <th rowspan="3">Total</th>
+                <th rowspan="3">Revenue Total (Surgery-Review)</th>
+                <th rowspan="3">Cumulative Total Patients</th>
+                <th rowspan="3" style="width:8%">Cumulative Total Revenue</th>
+              </tr>
+              <tr>
+
+                <th colspan="2">General</th>
+                <th colspan="2">Pediatric</th>
+
+                <th colspan="2">General</th>
+                <th colspan="2">Pediatric</th>
+
+                <th colspan="2">General</th>
+                <th colspan="2">Pediatric</th>
+              </tr>
+              <tr>
+
+                <th>Normal</th>
+                <th>Ocular</th>
+                <th>Normal</th>
+                <th>Ocular</th>
+
+                <th>Normal</th>
+                <th>Ocular</th>
+                <th>Normal</th>
+                <th>Ocular</th>
+
+                <th>Normal</th>
+                <th>Ocular</th>
+                <th>Normal</th>
+                <th>Ocular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of tabledata | paginate: { itemsPerPage: pagecountvalue, currentPage: p }; let i = index">
+                <td>{{i + 1}}</td>
+                <td style="width: 7%">
+                  <a class="cursor" (click)="GetBranchwise(data.Datess)">{{data.Datess | date : "dd-MMM-yyyy"}}</a>
+                </td>
+
+                <td data-toggle="tooltip" title="New General Normal">
+                  <span>{{data.NewGeneralNormal}}</span>
+
+                </td>
+
+                <td data-toggle="tooltip" title="New General Ocular">
+                  <span>{{data.NewGeneralOcular}}</span>
+                </td>
+
+                <td data-toggle="tooltip" title="New Pediatric Normal">
+                  <span>
+                    {{data.NewPediatricNormal}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="New Pediatric Ocular">
+                  <span>
+                    {{data.NewPediatricOcular}}
+                  </span>
+                </td>
+
+
+                <td data-toggle="tooltip" title="New Visits Total">
+                  <span>
+                    {{data.NewPatients}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="New Visits Total">
+                  <span>
+
+                    <!--{{data.RevenueNewPatients}}.00-->
+                    {{data.RevenueNewPatients | currency:Country2}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="Review General Normal">
+                  <span>
+                    {{data.ReviewGeneralNormal}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Review General OCular">
+                  <span>
+                    {{data.ReviewGeneralOcular}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Review Pediatric Normal">
+                  <span>
+                    {{data.ReviewPediatricNormal}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Review Pediatric Ocular">
+                  <span>
+                    {{data.ReviewPediatricOcular}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="Review Visits Total">
+                  <span>
+                    {{data.ReviewPatients}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Reveiew Revenue Total">
+                  <span>
+                    {{data.revenueReviewPatients | currency:Country2}}
+                  </span>
+                </td>
+                <td>{{data.SReviewGeneralNormal}}</td>
+                <td>{{data.SReviewGeneralOcular}}</td>
+                <td>{{data.SReviewPediatricNormal}}</td>
+                <td>{{data.SReviewPediatricOcular}}</td>
+
+                <td>{{data.Surgeryreviewpatients}}</td>
+                <td>0.00</td>
+
+                <td>
+                  <span>
+                    {{data.Cumulativetotal}}
+                  </span>
+                </td>
+
+                <td style="width:8%">
+                  <span>
+                    {{data.RevenueCumulativetotal | currency:Country2}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td style="width:11%" colspan="2"><b>Total</b></td>
+
+                <td><b>{{newgeneralnormal}}</b></td>
+                <td><b>{{newgeneralocular}}</b></td>
+                <td><b>{{newediatricnormal}}</b></td>
+                <td><b>{{newpediatricocular}}</b></td>
+                <td><b>{{Tnewgeneralnormal}}</b></td>
+                <td><b> {{NewTotalRevenue | currency:Country2}}</b></td>
+
+
+                <td><b>{{Reviewgeneralnormal}}</b></td>
+                <td><b>{{Reviewgeneralocular}}</b></td>
+                <td><b>{{Reviewediatricnormal}}</b></td>
+                <td><b>{{Reviewpediatricocular}}</b></td>
+                <td><b>{{TReviewgeneralnormal}}</b></td>
+                <td><b> {{ReviewTotalRevenue | currency:Country2}}</b></td>
+
+                <td><b>{{SReviewgeneralnormal}}</b></td>
+                <td><b>{{SReviewgeneralocular}}</b></td>
+                <td><b>{{SReviewpedatricnormal}}</b></td>
+                <td><b>{{SReviewpediatricocular}}</b></td>
+                <td><b>{{TSReviewgeneralnormal}}</b></td>
+                <td><b>0.00</b></td>
+
+
+                <td><b>{{cumtotal}}</b></td>
+                <td style="width:8%"><b> {{TotalRevenue | currency:Country2}}</b></td>
+
+              </tr>
+            </tfoot>
+          </table>
+         
+        </div>
+      </div>
+
+      <div class="row" style="display:none;">
+        <div class="tableFixHead">
+          <table id="customersone" class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th rowspan="3">SNo</th>
+                <th rowspan="3" style="width:7%">Date</th>
+                <th colspan="4">New Patients</th>
+                <th rowspan="3">Total</th>
+                <th rowspan="3">Revenue Total (New)</th>
+                <th colspan="4">Review Patients</th>
+                <th rowspan="3">Total</th>
+                <th rowspan="3">Revenue Total (Review)</th>
+                <th colspan="4">Surgery-Review Patients</th>
+                <th rowspan="3">Total</th>
+                <th rowspan="3">Revenue Total (Surgery-Review)</th>
+                <th rowspan="3">Cumulative Total Patients</th>
+                <th rowspan="3" style="width:8%">Cumulative Total Revenue</th>
+              </tr>
+              <tr>
+
+                <th colspan="2">General</th>
+                <th colspan="2">Pediatric</th>
+
+                <th colspan="2">General</th>
+                <th colspan="2">Pediatric</th>
+
+                <th colspan="2">General</th>
+                <th colspan="2">Pediatric</th>
+              </tr>
+              <tr>
+
+                <th>Normal</th>
+                <th>Ocular</th>
+                <th>Normal</th>
+                <th>Ocular</th>
+
+                <th>Normal</th>
+                <th>Ocular</th>
+                <th>Normal</th>
+                <th>Ocular</th>
+
+                <th>Normal</th>
+                <th>Ocular</th>
+                <th>Normal</th>
+                <th>Ocular</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of tabledata; let i = index">
+                <td>{{i + 1}}</td>
+                <td style="width: 7%">
+                  <a class="cursor" (click)="GetBranchwise(data.Datess)">{{data.Datess | date : "dd-MMM-yyyy"}}</a>
+                </td>
+
+                <td data-toggle="tooltip" title="New General Normal">
+                  <span>{{data.NewGeneralNormal}}</span>
+
+                </td>
+
+                <td data-toggle="tooltip" title="New General Ocular">
+                  <span>{{data.NewGeneralOcular}}</span>
+                </td>
+
+                <td data-toggle="tooltip" title="New Pediatric Normal">
+                  <span>
+                    {{data.NewPediatricNormal}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="New Pediatric Ocular">
+                  <span>
+                    {{data.NewPediatricOcular}}
+                  </span>
+                </td>
+
+
+                <td data-toggle="tooltip" title="New Visits Total">
+                  <span>
+                    {{data.NewPatients}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="New Visits Total">
+                  <span>
+
+                    <!--{{data.RevenueNewPatients}}.00-->
+                    {{data.RevenueNewPatients | currency:Country2}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="Review General Normal">
+                  <span>
+                    {{data.ReviewGeneralNormal}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Review General OCular">
+                  <span>
+                    {{data.ReviewGeneralOcular}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Review Pediatric Normal">
+                  <span>
+                    {{data.ReviewPediatricNormal}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Review Pediatric Ocular">
+                  <span>
+                    {{data.ReviewPediatricOcular}}
+                  </span>
+                </td>
+
+                <td data-toggle="tooltip" title="Review Visits Total">
+                  <span>
+                    {{data.ReviewPatients}}
+                  </span>
+                </td>
+                <td data-toggle="tooltip" title="Reveiew Revenue Total">
+                  <span>
+                    {{data.revenueReviewPatients | currency:Country2}}
+                  </span>
+                </td>
+                <td>{{data.SReviewGeneralNormal}}</td>
+                <td>{{data.SReviewGeneralOcular}}</td>
+                <td>{{data.SReviewPediatricNormal}}</td>
+                <td>{{data.SReviewPediatricOcular}}</td>
+
+                <td>{{data.Surgeryreviewpatients}}</td>
+                <td>0.00</td>
+
+                <td>
+                  <span>
+                    {{data.Cumulativetotal}}
+                  </span>
+                </td>
+
+                <td style="width:8%">
+                  <span>
+                    {{data.RevenueCumulativetotal | currency:Country2}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td style="width:11%" colspan="2"><b>Total</b></td>
+
+                <td><b>{{newgeneralnormal}}</b></td>
+                <td><b>{{newgeneralocular}}</b></td>
+                <td><b>{{newediatricnormal}}</b></td>
+                <td><b>{{newpediatricocular}}</b></td>
+                <td><b>{{Tnewgeneralnormal}}</b></td>
+                <td><b> {{NewTotalRevenue | currency:Country2}}</b></td>
+
+
+                <td><b>{{Reviewgeneralnormal}}</b></td>
+                <td><b>{{Reviewgeneralocular}}</b></td>
+                <td><b>{{Reviewediatricnormal}}</b></td>
+                <td><b>{{Reviewpediatricocular}}</b></td>
+                <td><b>{{TReviewgeneralnormal}}</b></td>
+                <td><b> {{ReviewTotalRevenue | currency:Country2}}</b></td>
+
+                <td><b>{{SReviewgeneralnormal}}</b></td>
+                <td><b>{{SReviewgeneralocular}}</b></td>
+                <td><b>{{SReviewpedatricnormal}}</b></td>
+                <td><b>{{SReviewpediatricocular}}</b></td>
+                <td><b>{{TSReviewgeneralnormal}}</b></td>
+                <td><b>0.00</b></td>
+
+
+                <td><b>{{cumtotal}}</b></td>
+                <td style="width:8%"><b> {{TotalRevenue | currency:Country2}}</b></td>
+
+              </tr>
+            </tfoot>
+          </table>
+
+        </div>
+      </div>
+
+
+      <div class="col-sm-12 pb25">
+        <div class="content-right sub-section btn-wrap">          
+          <button  type="button" class="btn btn-warning-default" (click)="Cancel()"> Cancel </button>
+          <button  class="success btn btn-primary" [disabled]="isNextButton" (click)="Submit(ReportssForm)">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':secificperiodError}" style="top:10%">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: -webkit-fill-available;">
+      <div class="modal-header">
+        <h4 class="modal-title">Information</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="esecificperiodErorClose()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <p style="text-align:center;font-size:15px">
+            <b>
+              No Data found !
+            </b>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="esecificperiodErorClose()">OK</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Patient Population - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table" style="width:auto">
+          <thead>
+            <tr>
+              <!--<th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>-->
+              <th>Export</th>
+              <!--<th>Print</th>-->
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <!--<td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>-->
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <!--<td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>-->
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

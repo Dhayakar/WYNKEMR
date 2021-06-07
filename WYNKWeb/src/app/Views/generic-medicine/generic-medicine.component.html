@@ -1,0 +1,172 @@
+  <div class="col-sm-12">
+    <div class="row">
+      <h5 align="center" class="card-header bg-success text-white rounded-top">
+        <b> Generic Medicine Master</b>
+      </h5>
+    </div>
+  </div>
+  <form #GenericForm="ngForm">
+    <div class="col-sm-12 border-blue border-radius">
+      <div class="col-sm-12 mt-1p">
+        <div class="col-sm-3 f-r">
+          <button type="button" class="btn-text f-r" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <input #id name="ID" [(ngModel)]="M_ID" type="hidden">
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Generic Name</mat-label>
+            <input name="DrugGroup" [(ngModel)]="M_DrugGroup" matInput placeholder="Generic Name" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <button type="button" [disabled]="disableSearch" (click)="SeachDrugGroup()" class="btn-text grab mt-2p ml-n5p">
+            <i class="fas fa-info-circle"> </i> Help
+          </button>
+        </div>
+        <div class="col-sm-3" style="width: 20%;">
+          <mat-form-field appearance="outline">
+            <mat-label>Drug Group</mat-label>
+            <mat-select [(ngModel)]="M_DrugForm" name=">DrugForm" required>
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let DrugForms of DrugForm" [value]="DrugForms.Value">{{DrugForms.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3" style="margin-left: 4%;">
+          <mat-form-field appearance="outline">
+            <mat-label>Retest Interval(In Days)</mat-label>
+            <input name="M_RetestInterval" [(ngModel)]="M_RetestInterval" matInput placeholder="Retest Interval(In Days)" (keypress)="numberOnly($event)" maxlength="2" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3" style="margin-left: -1%;">
+          <mat-form-field appearance="outline">
+            <mat-label>Retest Critical Interval(In Days)</mat-label>
+            <input name="M_RetestCriticalInterval" [(ngModel)]="M_RetestCriticalInterval" matInput placeholder="Retest Critical Interval(In Days)" (keypress)="numberOnly($event)" maxlength="2" required>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>IsStepDown</mat-label>
+            <mat-select [(ngModel)]="M_IsStepDown" placeholder="IsStepDown" name="M_IsStepDown" required>
+              <mat-option value="true">Yes</mat-option>
+              <mat-option value="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <table class="table table-bordered">
+          <thead style="background-color: #67babf;">
+            <tr>
+              <th style="text-align:center">Side Effects</th>
+              <th style="text-align:center">Precaution</th>
+              <th style="text-align:center">Overdose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div>
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Side Effects</mat-label>
+                    <textarea #message1 maxlength="500" matInput placeholder="Side Effects" [(ngModel)]="M_SideEffects" name="M_SideEffects"></textarea>
+                    <mat-hint align="start">Max 500 Character</mat-hint>
+                    <mat-hint align="end">{{message1.value.length}}/500</mat-hint>
+                  </mat-form-field>
+                </div>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <mat-label>Precautions</mat-label>
+                  <textarea #message2 maxlength="500" matInput placeholder="Precautions" [(ngModel)]="M_Precautions" name="M_Precautions"></textarea>
+                  <mat-hint align="start">Max 500 Character</mat-hint>
+                  <mat-hint align="end">{{message2.value.length}}/500</mat-hint>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <mat-label>Overdose</mat-label>
+                  <textarea #message3 maxlength="500" matInput placeholder="Overdose" [(ngModel)]="M_Overdose" name="M_Overdose"></textarea>
+                  <mat-hint align="start">Max 500 Character</mat-hint>
+                  <mat-hint align="end">{{message3.value.length}}/500</mat-hint>
+                </mat-form-field>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row">
+        <div class="col-sm-12" style="margin-top:1%">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-1" *ngIf="hideSubmit">
+            <button [disabled]="disableSubmit" class="success" style=" font-family:'Proxima Nova Semibold'" (click)="AddDrugGroup(GenericForm)" mat-raised-button>Submit</button>
+          </div>
+          <div class="col-sm-1" *ngIf="hideupdate">
+            <button [disabled]="disableupdate" class="success" style=" font-family:'Proxima Nova Semibold'" (click)="UpdateDrugGroup(GenericForm,id.value)" mat-raised-button>Submit</button>
+          </div>
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;font-family:'Proxima Nova Semibold'" (click)="Cancel()"><strong>Cancel</strong></button>
+          </div>
+          <div class="col-sm-1" style=" font-family:'Proxima Nova Semibold'" *ngIf="hiddenDelete">
+            <button [disabled]="disableDelete" class="danger" (click)="Deleteclk(GenericForm,id.value)" mat-raised-button>Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+<!----*Cancel Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+        <h6 class="modal-title">Do You Want to Cancel ?</h6>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccessClosessss()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!----*Access Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Drug Master - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

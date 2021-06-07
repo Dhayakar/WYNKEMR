@@ -1,0 +1,30 @@
+
+<div class="col-sm-12">
+
+  <div class="row">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" (click)="closepopups()">&times;</button>
+      <h4 class="modal-title">Appointment Calender</h4>
+    </div>
+  </div>
+  <!--<div class="row">
+    <div class="col-sm-5"></div>
+    <div class="col-sm-5"></div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-danger" style="margin-top:2%" (click)="closepopups()">Close</button>
+    </div>
+  </div>-->
+  <div class="row">
+    <dx-scheduler [dataSource]="appointmentsData"
+                  [views]='["week", "month"]'
+                  currentView="day"
+                  [currentDate]="currentDate"
+                  [startDayHour]="1"
+                  [height]="500">
+    </dx-scheduler>
+  </div>
+</div>
+
+
+
+

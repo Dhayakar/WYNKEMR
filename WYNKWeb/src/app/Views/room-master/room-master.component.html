@@ -1,0 +1,237 @@
+<div class="col-sm-12">
+  <form #RoomMasterForm="ngForm">
+
+
+    <div class="col-sm-12 borfiglau-0">
+
+      <div class="col-sm-12">
+        <div class="row">
+          <h5 align="center" class="card-header center">
+            Room Master
+          </h5>
+        </div>
+      </div>
+
+      <div class="row mt10 mb5">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3 f-r">
+          <button type="button" class="btn-text" (click)="getRoomDetails()"><i class="fas fa-eye"></i> Help </button>
+        </div>
+      </div>
+      <div class="row">
+        <input #Roomid name="Roomid" [(ngModel)]="R_ID" type="hidden">
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Room Type</mat-label>
+            <mat-select [(ngModel)]="R_RoomCode" name="R_RoomCode" required >
+              <mat-option *ngFor="let RT of RoomType" [value]="RT">{{RT.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Room Description</mat-label>
+            <input maxlength="100" matInput placeholder="Room Description" [(ngModel)]="R_RoomDescription" name="R_RoomDescription" required>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Room Cost</mat-label>
+            <input matInput placeholder="Room Cost" maxlength="9" [(ngModel)]="R_RoomCost" name="R_RoomCost" (keypress)="NumberonlywithDot($event)" required>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>No of Rooms</mat-label>
+            <input matInput placeholder="No of Rooms" maxlength="4" [(ngModel)]="R_NoofRooms" name="R_NoofRooms" (keypress)="Numberonly($event)" (focusout)="showRoomDetails()" #NoofRooms="matInput" [disabled]="disableNoR">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>No of Beds per Room</mat-label>
+            <input matInput placeholder="No of Beds per Room" maxlength="4" [(ngModel)]="R_NoofBedsperroom" name="R_NoofBedsperroom" [disabled]="disableNoB">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <!--<div class="row">
+        <div class="col-sm-12" *ngIf="hideIsActive">
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select [(ngModel)]="R_IsActive" name="R_IsActive" [disabled]="disableIsActive">
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>-->
+
+      <div class="clearfix ">
+        <mat-panel-title class="text-title d-inblock">
+          Generate Room Details
+        </mat-panel-title>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-12 mb5">
+
+
+          <div class="col-sm-12">
+            <div class="col-sm-5">
+              <div class="row">
+                <div class="col-sm-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Starting Room No</mat-label>
+                    <input matInput placeholder="Enter Room No " maxlength="4" [(ngModel)]="R_RoomNo" name="R_RoomNo" (keypress)="Numberonly($event)" [required]="hiderequireRoomNO" (focusout)="RequiredRoomNo()">
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>No of Rooms</mat-label>
+                    <input matInput placeholder="No of Rooms" maxlength="4" [(ngModel)]="R_NoofRooms1" name="R_NoofRooms1" (keypress)="Numberonly($event)" (keyup)="NOR1()" [required]="hiderequireNOofRooms1">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Starting Bed No</mat-label>
+                    <input matInput placeholder="Enter Bed No " maxlength="50" [(ngModel)]="R_BedNo" name="R_BedNo" (focusout)="bednosplit()" (keypress)="restrictsplchar($event)" [required]="hiderequireBedNO">
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Rest Room Type</mat-label>
+                    <mat-select [(ngModel)]="R_RestRoomType" name="Gender" [required]="hiderequireRRType" multiple>
+                      <mat-option value="IndianToilet">Indian Toilet</mat-option>
+                      <mat-option value="WesternToilet"> Western Toilet</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5" >
+                  <mat-form-field appearance="outline">
+                    <mat-label>Remaining Rooms</mat-label>
+                    <input matInput placeholder="Remaining Room(s)" [(ngModel)]="R_RemainingRooms" name="R_RemainingRooms" (keypress)="Numberonly($event)" disabled>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-5">
+                  <button mat-raised-button class="success btn btn-primary" (click)="GetRoomDet()">Generate Room Number</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-7 heightAuto-300px" *ngIf="hideRoomdet">
+              <table mat-table [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="S.No">
+                  <th mat-header-cell *matHeaderCellDef> S.No </th>
+                  <td mat-cell *matCellDef="let element; let i = index" contenteditable="false"> {{i + 1}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Room_No">
+                  <th mat-header-cell *matHeaderCellDef> Room No </th>
+                  <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.No }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="IndianWestern">
+                  <th mat-header-cell *matHeaderCellDef>Rest Room Type</th>
+                  <td mat-cell *matCellDef="let element;let id = index" contenteditable="false"> {{element.ToiletType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="BedNo">
+                  <th mat-header-cell *matHeaderCellDef> Bed Number </th>
+                  <td mat-cell *matCellDef="let element;let id = index" contenteditable="false"> {{element.BedNo}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td id="row1" mat-cell *matCellDef="let element;let id = index" contenteditable="true" (keypress)="restrictinput($event)">
+
+                    <input matInput value="{{element.IsActive}}" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectchangeTT(id,'IsActive',$event)">
+                     
+                      <mat-option value="true">Active</mat-option>
+                      <mat-option value="false">InActive</mat-option>
+                    </mat-autocomplete>
+
+                   
+
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Delete">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon data-toggle="tooltip" class="grab" title="Delete" (click)="removeRoomDetdata(i, element )">delete</mat-icon></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default" (click)="Cancel()"><strong>Cancel</strong></button>
+
+            <button (click)="Roomid.value == '' ? onSubmit(RoomMasterForm):onUpdate(RoomMasterForm,Roomid.value)"
+                    class="success btn btn-primary">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Cancel Popup-->
+      <div class="modal" role="dialog" [ngStyle]="{'display':CancelBlock}">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" (click)="CloseC_Block()">&times;</button>
+              <h4 class="modal-title"> Room  </h4>
+            </div><br />
+            <p align="center">Do you want to cancel</p>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="Cancel_No()">No</button>
+              <button type="reset" class="btn btn-success " data-dismiss="modal" (click)="CancelYes()">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+</form>
+  </div>
+
+
+
+
+
+
+
+

@@ -1,0 +1,122 @@
+
+  <div class="col-sm-12" style="border:1px solid gray;border-radius:8px;">
+    <div class="row">
+      <h1 style="font-size:18px;text-align:center;font-family: 'Proxima Nova Semibold';">Message Template</h1>
+    </div>
+    <div class="row" style="margin-bottom:2%">
+      <div class="col-sm-3">
+
+        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+          <mat-label>Message Template Name</mat-label>
+          <mat-select required [(ngModel)]="M_Smsstatus" name="Ssstaus">
+            <mat-option>Select</mat-option>
+            <mat-option value="New Patients">New Patients</mat-option>
+            <mat-option value="Review Patients">Review Patients</mat-option>
+            <mat-option value="Surgery-Review Patients">Surgery-Review Patients</mat-option>
+            <mat-option value="Discharged Patients">Discharged Patients</mat-option>
+            <mat-option value="Pediatric">Pediatric</mat-option>
+            <mat-option value="Appointment Confirmation">Appointment Confirmation</mat-option>
+            <mat-option value="Appointment Cancelled">Appointment Cancelled</mat-option>
+            <mat-option value="Appointment Re-Scheduled">Appointment Re-Scheduled</mat-option>
+            <mat-option value="PatientBirthdayTemplate">Patient Birthday Template</mat-option>
+            <mat-option value="DoctorBirthdayTemplate">Doctor Birthday Template</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Message Type</mat-label>
+          <mat-select required [(ngModel)]="M_SmsType" name="MSGTYPE" (ngModelChange)="TemplateConfirmation()">
+            <mat-option>Select</mat-option>
+            <mat-option value="Normals">Normal Template</mat-option>
+            <mat-option value="Process">Process Template</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-4">
+        <h2 *ngIf="HideColumns" style="text-align:-webkit-center;margin-top:5px">Columns</h2>
+        <div *ngIf="HideColumns" style="margin-left:17px;border:2px solid gray;border-radius:8px;box-shadow: 0px 10px 8px 1px #888888;height:237px;overflow:auto;position: sticky;">
+
+
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;width:36px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Columns</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let PG of Columnsname">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center"> <mat-radio-button (click)="SelectChecklisrDescriptionValue(PG.ColumnDescription)"></mat-radio-button></td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{PG.ColumnDescription}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4" style="border:1px solid gray;border-radius:8px;height:220px;overflow:auto">
+        <div class="row">
+          <h2 style="text-align:center;font-size:18px;font-family: 'Proxima Nova Semibold';text-align:center">SMS Message Template</h2>
+        </div>
+        <div class="row">
+          <mat-form-field style="width: 94%;left: 16px;" appearance="outline">
+            <mat-label>SMS Text</mat-label>
+            <textarea (blur)="onBlurExternalMethod(M_SmsTYemlate)" matInput placeholder="Enter text" style="height: 117px;" #messageSMS maxlength="150" [(ngModel)]="M_SmsTYemlate" name="M_SmsTYemlatess"></textarea>
+            <mat-hint align="start">Max 150 Character</mat-hint>
+            <mat-hint align="end">{{messageSMS.value.length}}/150</mat-hint>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="col-sm-4" style="border:1px solid gray;border-radius:8px;height:220px;overflow:auto">
+        <div class="row">
+          <h2 style="text-align:center;font-size:18px;font-family: 'Proxima Nova Semibold';text-align:center">E-Mail Message Template</h2>
+        </div>
+        <div class="row">
+          <mat-form-field style="width: 94%;left: 16px;" appearance="outline">
+            <mat-label>Subject</mat-label>
+            <input matInput placeholder="Subject" [(ngModel)]="M_Subjectemlate" name="M_Subjectemlatess">
+          </mat-form-field>
+
+          <mat-form-field style="width: 94%;left: 16px;" appearance="outline">
+            <mat-label>E-Mail Text</mat-label>
+            <textarea (blur)="onBlurExternalEMAILMethod(M_EmailTYemlate)" matInput placeholder="Enter Text" style="height: 117px;" #messageALL maxlength="200"[(ngModel)]="M_EmailTYemlate" name="M_EmailTYemlates" ></textarea>
+            <mat-hint align="start">Max 200 Character</mat-hint>
+            <mat-hint align="end">{{messageALL.value.length}}/200</mat-hint>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="col-sm-4" style="border:1px solid gray;border-radius:8px;height:220px;overflow:auto">
+        <div class="row">
+          <h2 style="text-align:center;font-size:18px;font-family: 'Proxima Nova Semibold';text-align:center">Whatspp Message Template</h2>
+        </div>
+        <div class="row">
+          <mat-form-field style="width: 94%;left: 16px;" appearance="outline">
+            <mat-label>Whatsapp Text</mat-label>
+            <textarea (blur)="onBlurExternalWhatsappMethod(M_WhatsappYemlate)" matInput placeholder="Enter text" style="height: 117px;" #messageWhatsaapSMS maxlength="150" [(ngModel)]="M_WhatsappYemlate" name="M_WhatsappYemlates"></textarea>
+            <mat-hint align="start">Max 150 Character</mat-hint>
+            <mat-hint align="end">{{messageWhatsaapSMS.value.length}}/150</mat-hint>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+    </div>
+
+
+    <div class="row" style="margin-top:2%;margin-bottom:2%">
+      <div class="col-sm-5"></div>
+      <div class="col-sm-4">
+        <button type="button" class="btn btn-success" style="margin-right:2%" (click)="SubmitMessage(M_Smsstatus)">Submit</button>
+        <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;" (click)="Cancel()"><strong>Cancel</strong></button>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+
+
+  </div>

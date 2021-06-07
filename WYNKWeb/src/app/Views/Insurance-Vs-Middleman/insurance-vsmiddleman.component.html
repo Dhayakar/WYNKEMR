@@ -1,0 +1,186 @@
+<div class="col-sm-12" style="border:2px solid gray;margin-top:1%">
+  <form #InsuranceVSMiddleman="ngForm">
+    <div class="col-sm-12">
+      <h2 style="border:2px solid gray;border-bottom:2px solid gray;border-top:2px solid white" align="center"><strong>Insurance VS Middleman</strong></h2>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-10">
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+      </div>
+    </div>
+
+
+    <div class="col-sm-6" style="margin-top:1%;margin-bottom:1%">
+
+
+
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Middleman</mat-label>
+            <mat-select required [(ngModel)]="M_Middleman" name="Middleman" (ngModelChange)="MiddlemanEvent()">
+              <mat-option *ngFor="let Engage of Middleman" [value]="Engage">{{Engage.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm-5" *ngIf="Middlemantable">
+          <strong *ngFor="let option of MiddlemanData">
+            <mat-label>Middleman Name : {{option.Name}}</mat-label> <br />
+            <mat-label>Address&nbsp;	&nbsp;&nbsp;  &nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;	: {{option.Address1}}</mat-label> <br />
+            <mat-label>Location&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;&nbsp; : {{option.LocationName}}</mat-label> <br />
+            <mat-label>Pincode&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp;&nbsp;	&nbsp; &nbsp;&nbsp;	&nbsp;: {{option.Pincode}}</mat-label>
+          </strong>
+
+        </div>
+      </div>
+      <div class="row" style="margin-top:2%">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2">
+          <button [disabled]="disableSubmit" *ngIf="hiddenSubmit" style="font-size:15px;" id="submit" (click)="onSubmit(InsuranceVSMiddleman)" class="btn btn-success">Submit</button>
+          <button [disabled]="disableUpdate" *ngIf="hiddenUpdate" style="font-size:15px;" id="Update" (click)="Update(InsuranceVSMiddleman)" class="btn btn-success">Submit</button>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;" (click)="CancelClk()">Cancel</button>
+        </div>
+        <div class="col-sm-1"></div>
+      </div>
+    </div>
+
+    <div class="col-sm-6" style="margin-top:1%;margin-bottom:1%">
+
+
+
+      <div class="col-sm-6" style="height:350px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;position: sticky;width:auto;border:2px solid #51b8f2;border-radius:8px">
+        <div class="row">
+          <h2 class="col-sm-4" style="margin-left: -2px;position: sticky;width:auto" align="center">Insurance Company Details</h2>
+        </div>
+
+        <table mat-table matSort [dataSource]="dataSource" id="tableee" class="table table-bordered table-striped" style="width:100%;">
+
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S.No</th>
+            <td mat-cell *matCellDef="let element; index as i" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{i + 1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="InsuranceCompanyName">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Insurance Company Name</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.Name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Amount">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Amount</th>
+            <td mat-cell *matCellDef="let element;let id = index" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"
+                contenteditable="true" (keypress)="RestrictNegativeValues($event)" (keyup)="changeValue(id,'Amount',$event,element)">
+              {{element.Amount|currency:Country2 }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Select</th>
+            <td mat-cell *matCellDef="let element;let id = index" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">
+              <mat-checkbox [disabled]="element.CB" [(checked)]="element.checkeda" (click)="SelectInsuranceValue(element)"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row;  columns: displayedColumns;"></tr>
+
+        </table>
+        <!--<table class="css-serial">
+          <thead>
+            <tr>
+              <th style="text-align:center;background-color:rgb(95, 121, 160);color: white;font-size: 15px">S.No</th>
+              <th style="text-align:center;background-color:rgb(95, 121, 160);color: white;font-size: 15px">Insurance Company Name</th>
+              <th style="text-align:center;background-color:rgb(95, 121, 160);color: white;font-size: 15px">Amount</th>
+              <th style="text-align:center;background-color:rgb(95, 121, 160);color: white;font-size: 15px">select</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let option of Insurancedata; index as i">
+              <td style="text-align:center">{{i + 1}}</td>
+              <td style="text-align:center">{{option.Name}}</td>
+              <td style="text-align:center" contenteditable="true"(keypress)="InsuranceValues(i,option,option.CB)" >{{option.Amount}}</td>
+              <td style="text-align:center">
+                <mat-checkbox  [disabled]="option.CB" [(checked)]="option.ID" (click)="SelectInsuranceValue(option)"></mat-checkbox>
+              </td>
+            </tr>
+          </tbody>
+        </table>-->
+      </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+  </form>
+</div>
+<!--////////////////////////////////////////view asses//////////////////////////////////////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 527px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Insurance VS Middleman - View Access</h4>
+      </div>
+      <div class="modal-body" style="height:40px;margin-top:-10px;">
+        <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Add</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Edit</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Delete</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Export</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata">
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top:20%">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-----------------------------------cancel Popup----------------------------------------->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Insurance VS Middleman</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="cancelClose()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h5 style="text-align:center;background-color:white;color:black">Do You Want to Cancel ?</h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="CloseNo()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="CloseYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

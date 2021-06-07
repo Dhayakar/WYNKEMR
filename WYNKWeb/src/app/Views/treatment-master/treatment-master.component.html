@@ -1,0 +1,155 @@
+<form #TreatmentMaster="ngForm">
+  <div class="col-sm-12">
+    <h4 style="text-align:center;background-color: #51b8f2;color:white;margin-top: 19px; margin-bottom: 0px;"><label><b>Treatment Master</b></label></h4>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10" style="border: 3px solid #51b8f2; width: -webkit-fill-available;border-radius: 2px;border-width: 4px; margin-left:0px;height:511px;">
+      <div class="col-sm-12" style="border: 3px solid #51b8f2; width: -webkit-fill-available;border-radius: 20px;border-width: 2px; margin-left:0px;height:145px;margin-top:15px;">
+        <div class="row">
+          <div class="col-sm-2" style="margin-top:26px">
+            <mat-form-field appearance="outline">
+              <mat-label> Speciality </mat-label>
+              <mat-select [(ngModel)]="M_SplID" name="Spl" (ngModelChange)="OptionSelect()" [disabled]="dropdown" required>
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let SplID of getSplIDdata" [value]="SplID">{{SplID.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2" style="margin-top:36px">
+            <mat-icon (click)="SearchClick()" class="grab" style="font-size:30px;margin-left:42px;margin-right: -37px;" data-toggle="tooltip" title="Search">search</mat-icon>
+          </div>
+          <div class="col-sm-3" style="margin-top:26px">
+            <mat-form-field appearance="outline">
+              <mat-label>Treatment Description</mat-label>
+              <input [(ngModel)]="M_TDescription" required [disabled]="desc" name="TDescrip" maxlength="250" autocomplete="off" style="color:#000000" matInput placeholder="Description">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3" style="margin-top:26px" *ngIf="IActive">
+            <mat-form-field appearance="outline">
+              <mat-label> Is Active</mat-label>
+              <mat-select [(ngModel)]="M_IsActive" name="IsActi" [disabled]="Isactive">
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1" style="margin-top:35px">
+            <button mat-raised-button color="primary" (click)="AddRows()">Add</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1">
+            <input #ProfesID name="M_ID" [(ngModel)]="M_ID" type="hidden">
+          </div>
+        </div>
+      </div>
+      <div *ngIf="TableData">
+        <div class="col-sm-12" style="border: 3px solid #51b8f2; width: -webkit-fill-available;border-radius: 20px;border-width: 2px; margin-left:0px;height:229px;margin-top:15px;">
+          <div class="col-sm-12" style="border: 3px solid white;margin-top: 2px;height:195px;overflow:auto;width: -webkit-fill-available;border-width: 2px; margin-left:0px;">
+            <table #table mat-table [dataSource]="dataSource" class="table-responsive" style="margin-left:15px;width:98%;">
+              <ng-container matColumnDef="sno">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:5%"><b>S.No</b></th>
+                <td mat-cell *matCellDef="let element;let i = index;" style="width:3px;"> {{i+1}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="ID">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> ID </th>
+                <td mat-cell *matCellDef="let element;let i = index;" contenteditable="false"> {{element.ID}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="SID">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> Speciality Name </th>
+                <td mat-cell *matCellDef="let element;let i = index;" contenteditable="false"> {{element.SpecialityID.Text}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> Description </th>
+                <td mat-cell *matCellDef="let element;let i= index;" contenteditable="false"> {{element.Description}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="IsActive">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> IsActive </th>
+                <td mat-cell *matCellDef="let element;let i = index;" contenteditable="false"> {{element.IsActive}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+              <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumns;" [ngClass]="{gray: even}"></tr>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-1" style="margin-top:14px" *ngIf="ProfesID.value!=0;else notShow">
+            <button class="success" mat-raised-button (click)="Update(LensMaster,i)">Submit</button>
+          </div>
+          <div class="col-sm-1" style="margin-top:14px">
+            <button class="btn btn-warning" type="button" style="margin-right: 10px;font-size:15px;color:orange;background-color:white" (click)="Clear(TreatmentMaster,i)">Cancel</button>
+          </div>
+          <div class="col-sm-1" style="margin-top:14px;" *ngIf="ProfesID.value!=0">
+            <button class="danger" mat-raised-button (click)="Delete(TreatmentMaster,i,ProfesID.value)">Delete</button>
+          </div>
+          <ng-template #notShow>
+            <div class="col-sm-1" style="margin-top:14px">
+              <button type="button" class="btn btn-success" (click)="Submit(TreatmentMaster,i)">Submit</button>
+            </div>
+          </ng-template>
+          <div class="col-sm-4"></div>
+        </div>
+      </div>
+      <div *ngIf="TableData1">
+        <div class="col-sm-12" style="border: 3px solid #51b8f2; width: -webkit-fill-available;border-radius: 20px;border-width: 2px; margin-left:0px;height:229px;margin-top:15px;">
+          <div class="col-sm-12" style="border: 3px solid white;margin-top: 2px;height:195px;overflow:auto;width: -webkit-fill-available;border-width: 2px; margin-left:0px;">
+            <table #table mat-table [dataSource]="dataSourceList" class="table table-bordered" style="margin-left:15px;width:98%;">
+              <ng-container matColumnDef="sno1">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:5%"><b>S.No</b></th>
+                <td mat-cell *matCellDef="let element;let i = index;" style="width:3px;"> {{i+1}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="ID1">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> ID </th>
+                <td mat-cell *matCellDef="let element;let i = index;" contenteditable="false"> {{element.ID}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="SID1">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> Speciality Name </th>
+                <td mat-cell *matCellDef="let element;let i = index;" contenteditable="false"> {{element.SpecialityID.Text}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Description1">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> Description </th>
+                <td mat-cell *matCellDef="let element;let i= index;" contenteditable="false"> {{element.Description}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="IsActive1">
+                <th mat-header-cell *matHeaderCellDef style="background-color:#51b8f2;color:white;width:10%"> IsActive </th>
+                <td mat-cell *matCellDef="let element;let i = index;" contenteditable="false"> {{element.IsActive}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsList;sticky:true"></tr>
+              <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumnsList;" [ngClass]="{gray: even}"></tr>
+            </table>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-1" style="margin-top:14px" *ngIf="ProfesID.value!=0;else notShow">
+            <button class="success" mat-raised-button (click)="Update(LensMaster,i)">Submit</button>
+          </div>
+          <div class="col-sm-1" style="margin-top:14px">
+            <button class="btn btn-warning" type="button" style="margin-right: 10px;font-size:15px;color:orange;background-color:white" (click)="Clear(TreatmentMaster,i)">Cancel</button>
+          </div>
+          <div class="col-sm-1" style="margin-top:14px;" *ngIf="ProfesID.value!=0">
+            <button class="danger" mat-raised-button (click)="Delete(TreatmentMaster,i,ProfesID.value)">Delete</button>
+          </div>
+          <ng-template #notShow>
+            <div class="col-sm-1" style="margin-top:14px">
+              <button type="button" class="btn btn-success" (click)="Submit(TreatmentMaster,i)">Submit</button>
+            </div>
+          </ng-template>
+          <div class="col-sm-4"></div>
+        </div>
+      </div>
+    </div>
+      <div class="col-sm-1"></div>
+    </div>
+</form>

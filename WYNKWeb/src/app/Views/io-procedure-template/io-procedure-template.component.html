@@ -1,0 +1,227 @@
+<form #IOProcedureTemplateForm="ngForm" name="IOProcedureTemplateForm" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="col-sm-12 mt-1p">
+    <div class="row">
+      <h5 align="center" class="card-header bg-success text-white rounded-top">
+        Intra-operative procedure template
+      </h5>
+    </div>
+  </div>
+  <div class="col-sm-12 dividebar">
+    <div class="col-sm-12 mph-0 downmargin">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+          </div>
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-6 dividebar">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>ICD speciality</mat-label>
+                <mat-select [(ngModel)]="M_icdSpeciality" name="icdSpeciality" required [disabled]="DisableICD" (ngModelChange)="SurgerydescriptionChange(M_icdSpeciality)">
+                  <mat-option>Select</mat-option>
+                  <mat-option *ngFor="let icd of ICDSpec" [value]="icd">{{icd.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+              <button (click)="Search()" class="btn-text grab f-r">
+                <i class="fas fa-info-circle"> </i> Help
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-10">
+              <mat-form-field appearance="outline" *ngIf="DisableICD">
+                <mat-label>Surgery description</mat-label>
+                <textarea #Surgerydesc maxlength="250" matInput placeholder="Surgery Description" [disabled]="DisableICD" [(ngModel)]="M_SurgeryDescription" name="D_SurgeryDescription" required></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" *ngIf="!DisableICD">
+                <mat-label>Surgery description</mat-label>
+                <mat-select [(ngModel)]="M_SurgeryDescription" name="D_SurgeryDescription" (ngModelChange)="AssignSurgerydescription(M_SurgeryDescription)" required>
+                  <mat-option>Select</mat-option>
+                  <mat-option *ngFor="let Surgerydescription of Surgerydescriptions" [value]="Surgerydescription.Value">{{Surgerydescription.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-10">
+              <mat-form-field appearance="outline">
+                <mat-label>OT notes description</mat-label>
+                <textarea id="otnotesdesc" #OtNotes maxlength="250" matInput placeholder="OT Notes Description" [(ngModel)]="M_OTNotesDescription" name="D_OTNotesDescription" required></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-4p">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>User input type</mat-label>
+                <mat-select [(ngModel)]="M_UserInput" name="UserInput" (ngModelChange)="UserInputChange()" required>
+                  <mat-option value="None">None</mat-option>
+                  <mat-option value="User enterable">User enterable</mat-option>
+                  <mat-option value="User selection">User selection</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-5">
+              <mat-form-field appearance="outline">
+                <mat-label>Input value</mat-label>
+                <textarea #SD maxlength="500" matInput placeholder="" [disabled]="DisableInputValue" [(ngModel)]="M_InputValue" name="InputValue"></textarea>
+                <mat-hint>ex:- in sulcus,in bag,eye left aphakic</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2 mt-2p">
+              <button (click)="AddAnotherProcedure();" matTooltip="Add Procedure" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="ml-1p">
+            <div class="row" *ngIf="showTable">
+              <div class="col-sm-5">
+                <mat-form-field appearance="outline">
+                  <mat-label>Search</mat-label>
+                  <input (keyup)="applyFilter($event.target.value)" matInput placeholder="">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row tableoverflowheight" *ngIf="showTable">
+              <table mat-table matSort [dataSource]="dataSource" class="table table-bordered">
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef>S.No</th>
+                  <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                </ng-container>
+                <ng-container matColumnDef="OTNotesDescription">
+                  <th mat-header-cell *matHeaderCellDef>OT notes description</th>
+                  <td mat-cell *matCellDef="let element">{{element.OTNotesDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="UserInputType">
+                  <th mat-header-cell *matHeaderCellDef>User input type</th>
+                  <td mat-cell *matCellDef="let element">{{element.UserInputType}} </td>
+                </ng-container>
+                <ng-container matColumnDef="InputValue">
+                  <th mat-header-cell *matHeaderCellDef>Input value</th>
+                  <td mat-cell *matCellDef="let element">{{element.InputValue}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let element; let i = index;">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <button mat-icon-button><mat-icon data-toggle="tooltip" class="grab" title="Edit" (click)="Edit(i,element)">create</mat-icon></button> &nbsp;&nbsp;
+                      </div>
+                      <div class="col-sm-6">
+                       <!-- <button mat-icon-button [disabled]="element.ID != null"><mat-icon data-toggle="tooltip" title="Drop" (click)="element.ID != null ? null : remove(i)">delete</mat-icon></button>-->
+                        <button mat-icon-button ><mat-icon data-toggle="tooltip" title="Drop" class="cursor" (click)="element.ID != null ? RemoveFromDb(element,i) : remove(i)">delete</mat-icon></button>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 pb25 mt-2p">
+    <div class="content-right sub-section btn-wrap">
+      <button type="button" class="btn btn-warning-default" (click)="clear()"> Clear </button>
+      <button type="button" class="btn btn-warning-default" (click)="cancel()"> Cancel </button>
+
+      <div *ngIf="!DisableICD;else notShow">
+        <button class="success btn btn-primary" [disabled]="DisableSubmit && isNextButton" (click)="Submit(IOProcedureTemplateForm)">Submit</button>
+      </div>
+      <ng-template #notShow>
+        <div>
+          <button class="success btn btn-primary" [disabled]="isNextupdate" (click)="onUpdate()">Submit</button>
+
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</form>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':AddProcedureblock}" style="top:30%">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 450px;">
+      <div class="modal-body">
+        <p style="text-align:center;background-color:white;color:black;font-size:17px">
+          Would you want to add another procedure,
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="ProcedureblockClose()">Close</button>
+        <button type="reset" class="btn btn-success" style="background-color:green;border-color:green;" data-dismiss="modal" (click)="ProcedureblockYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!----*Access Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Intra Opertaive Template - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!----*Cancel Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseOk()">&times;</button>
+        <h6 class="modal-title">Do You Want to Cancel ?</h6>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning-default" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="button" class="success btn btn-primary" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+
+
+<div class="col-sm-12">
+  <div class="row">
+    <h6>Patient Queue Status - {{TodayDate}}</h6>
+  </div>
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <table class="table table-condensed  withoutbackgroung search-table table-bordered" style="border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Registration</th>
+            <th>Waiting for Optometrist<br />/ Vision / Doctor Staff</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+            <td>Total</td>
+            <td><a (click)="GetNewstaffwisedetails()" style="cursor:pointer">{{QueueNewtotal}}</a></td>
+            <td><a (click)="GetOptometriststaffwisedetails()" style="cursor:pointer">{{TotalAwaitingforoptometristCOuntdata}}</a></td>
+          </tr>
+          <tr>
+            <td colspan="6" class="hiddenRow">
+              <div class="accordian-body collapse" id="demo1">
+                <table class="table table-condensed  withoutbackgroung search-table table-bordered" style="border-collapse:collapse;">
+                  <thead>
+                    <tr>
+                      <th>Sno</th>
+                      <th>Staff</th>
+                      <th>Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-toggle="collapse" data-target="#demo2" class="accordion-toggle" *ngFor="let regdata of RegistrationdatawithMedicalstaff; index as i">
+                      <td>{{i+1}}</td>
+                      <td><a (click)="GetDoctorwisedetails(regdata.Assignedto,regdata.DoctorID)" style="cursor:pointer">{{regdata.Docnames}}</a></td>
+                      <td>{{regdata.TotalCount}}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="6" class="hiddenRow">
+                        <div class="accordian-body collapse" id="demo2">
+                          <table class="table table-condensed  withoutbackgroung search-table table-bordered" style="border-collapse:collapse;">
+                            <thead>
+                              <tr *ngFor="let Header of Patientdatabasedonoptiometrist">
+                                <th>SNo</th>
+                                <th>{{Header.UIN}}</th>
+                                <th>{{Header.PatientName}}</th>
+                                <th>{{Header.AssignedDateandTime}}</th>
+                                <th>{{Header.Waitingtime}}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let doctorbaseddateilas of Patientdatabasedondoctor; index as j">
+                                <td>{{j+1}}</td>
+                                <td>{{doctorbaseddateilas.UIN}}</td>
+                                <td>{{doctorbaseddateilas.PatientName}}</td>
+                                <td>{{doctorbaseddateilas.RegisteredDate}}</td>
+                                <td>{{doctorbaseddateilas.waitngtime}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+</div>

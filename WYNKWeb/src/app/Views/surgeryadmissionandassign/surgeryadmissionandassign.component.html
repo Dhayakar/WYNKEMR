@@ -1,0 +1,2228 @@
+
+
+
+<form #SurgeryAssign="ngForm">
+
+  <div class="col-sm-12">
+    <div class="row">
+
+      <div class="col-sm-12 borfiglau-0">
+
+        <div class="row card-header center">
+          <h5>Admission</h5>
+        </div>
+
+        <div class="col-sm-12 mph-0">
+          <div class="row mph-0">
+            <div class="col-sm-12 mph-0">
+              <div class="col-sm-6 mph-0 pb20">
+                <span class="uinborder">
+                  <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                </span>
+              </div>
+
+              <div class="col-sm-2 mph-0 f-r content-right pb20">
+                <button class="btn-text" type="button" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+              </div>
+              <div class="col-sm-4 mph-0 f-r content-right pb20">
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-sm-12 mt-2p">
+          <div class="card mb-3">
+            <h5 class="card-header bg-success text-white">
+              Admission
+              <label class="labelfloat">
+                <button type="button" (click)="patientview()" data-toggle="tooltip" title="View Surgery patient" class="btn btn-primary-default btn-Excel buttonsfloat">Surgery patient </button>
+                <button type="button" (click)="patientdataview()" data-toggle="tooltip" class="btn btn-primary-default btn-Excel buttonsfloat">View surgery patient </button>
+              </label>
+            </h5>
+
+            <div class="card-body">
+
+              <div class="row">
+
+                <div class="col-sm-3">
+                  <div class="col-sm-11">
+                    <input required [owlDateTimeTrigger]="dt8" autocomplete="off" class="form-control" [owlDateTime]="dt8" [(ngModel)]="M_AdmissionDate" name="DatePicker3" placeholder="Admission Date" disabled>
+                    <owl-date-time #dt8></owl-date-time>
+                  </div>
+                </div>
+
+                <div class="col-sm-3">
+                  <div class="col-sm-11">
+                    <input disabled required [owlDateTimeTrigger]="dt4" autocomplete="off" [min]="mintoDate" class="form-control" (dateTimeChange)="ScheduleaddEvents()" [owlDateTime]="dt4" placeholder="Schedule Date & time" [(ngModel)]="M_Fromtime" name="Timefrom">
+                    <owl-date-time [disabled]="ScheduleDate" #dt4></owl-date-time>
+                  </div>
+                  <div class="col-sm-1 ml-n7p mt-2p">
+                    <span [owlDateTimeTrigger]="dt4"><i class="fa fa-calendar"></i></span>
+                  </div>
+                </div>
+
+
+
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <textarea [(ngModel)]="M_Remarks" name="Remarks" placeholder="Remarks" matInput #message2 maxlength="250"></textarea>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Operation Theatre</mat-label>
+                    <mat-select [(ngModel)]="M_OperationTheatre" name="M_OperationTheatre">
+                      <mat-option *ngFor="let Engage of OperationTheatre" [value]="Engage.Value">{{Engage.Text}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="container">
+            <input id="tab-1" type="radio" name="tabs" checked="checked" />
+            <input id="tab-2" type="radio" name="tabs" />
+            <input id="tab-3" type="radio" name="tabs" />
+
+            <div class="tabs">
+              <label for="tab-1">General</label>
+              <label for="tab-2">Payment</label>
+              <label for="tab-3">Others</label>
+            </div>
+
+            <div class="content">
+
+              <div class="tab percent">
+
+                <div class="col-sm-12">
+                  <div class="row">
+
+                    <div class="tab-content tab-wrap">
+                      <div id="ocular" class="tab-pane fade in active">
+
+                        <div class="row" *ngIf="resultTable">
+
+                          <div class="col-sm-10">
+                            <div class="card mb-3">
+                              <h5 class="card-header bg-success text-white">
+                                Counselling
+                              </h5>
+
+                              <div class="card-body">
+
+                                <div class="row heightAuto-110px">
+
+                                  <table #table align="center" class="custom-table withoutbackgroung search-table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>S No</th>
+                                        <th>Counselling Date</th>
+                                        <th>Advisor Name</th>
+                                        <th>Surgery Advised Date</th>
+                                        <th>Remarks</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+
+                                      <tr *ngFor="let c of coun; index as i">
+                                        <td>{{i+1}}</td>
+                                        <td>{{c.CreatedUTC | date:"dd-MMM-y HH:mm"}}</td>
+                                        <td>{{c.CounsellingAdvName}}</td>
+                                        <td>{{c.SurgeryDate | date:"dd-MMM-y HH:mm"}}</td>
+                                        <td>{{c.OtherRequirements}}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="row">
+
+                    <div class="col-sm-5">
+                      <div class="row">
+                        <div class="tab-content tab-wrap">
+                          <div id="ocular" class="tab-pane fade in active">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="card mb-3">
+                                  <h5 class="card-header bg-success text-white">
+                                    Surgery
+                                  </h5>
+
+                                  <div class="card-body">
+
+                                    <div class="row heightAuto-150px">
+                                      <table #table class="custom-table withoutbackgroung search-table table-bordered">
+
+                                        <tr>
+
+                                          <th rowspan="2">Surgery Type</th>
+                                          <th rowspan="2" class="width-20p">Surgery Description</th>
+                                          <th colspan="3">Ocular</th>
+                                          <th rowspan="2">Date</th>
+                                          <th rowspan="2">Doctor Name</th>
+                                        </tr>
+
+                                        <tr>
+                                          <th>OD</th>
+                                          <th>OS</th>
+                                          <th>OU</th>
+                                        </tr>
+
+
+
+                                        <tbody id="myTable">
+
+                                          <tr *ngFor="let r of Items;index as i">
+
+                                            <td>{{r.SurgeryTypname}}</td>
+                                            <td>{{r.SurgeryDescriptionname}}</td>
+                                            <td><mat-checkbox [(checked)]="r.IsOD" disabled="true"></mat-checkbox></td>
+                                            <td><mat-checkbox [(checked)]="r.IsOS" disabled="true"></mat-checkbox></td>
+                                            <td><mat-checkbox [(checked)]="r.IsOU" disabled="true"></mat-checkbox></td>
+                                            <td>{{r.CreateUtc | date:"dd-MMM-y HH:mm"}}</td>
+                                            <td>{{r.Doctorname}}</td>
+                                          </tr>
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-1"> </div>
+
+                    <div class="col-sm-6">
+                      <div class="row">
+                        <div class="tab-content tab-wrap">
+                          <div id="ocular" class="tab-pane fade in active">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="card mb-3">
+                                  <h5 class="card-header bg-success text-white">
+                                    Room
+                                    <label class="labelfloat">
+                                      <button type="button" (click)="Search()" [disabled]="roomsearch" matTooltip="View Room" class="btn btn-primary-default btn-Excel buttonsfloat">View Room</button>
+                                    </label>
+                                  </h5>
+
+                                  <div class="card-body">
+
+                                    <div class="row heightAuto-110px">
+                                      <table #table class="custom-table vawithoutbackgroung search-table table-bordered">
+
+                                        <thead>
+                                          <tr>
+                                            <th class="width-5p">Room Type</th>
+                                            <th>Room Number</th>
+                                            <th>Bed No</th>
+                                            <th>Room Cost</th>
+                                            <th class="width-6p">Room Occupied Date and Time</th>
+                                            <th>Rest Room Type</th>
+                                            <th>Status</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+
+                                          <tr>
+                                            <td>
+                                              <mat-select #inps (selectionChange)="RoomType($event)" [disabled]="isDateEnabledCreateTask">
+                                                <mat-option *ngFor="let Room of Rooms" [value]="Room.Value">{{Room.Text}}</mat-option>
+                                              </mat-select>
+                                            </td>
+                                            <td>{{RoomNumber}}</td>
+                                            <td>{{BedNo}}</td>
+                                            <td>{{RoomCost | currency:Country2}}</td>
+                                            <td>
+                                              <input #inp [owlDateTimeTrigger]="dt" autocomplete="off" class="form-control tableinputheight" [owlDateTime]="dt" [min]="RoomfromDate" [max]="RoomToDate" (dateTimeChange)="addEvents($event)" [(ngModel)]="owldat" name="owldat" [disabled]="isDateEnabledCreate">
+                                              <owl-date-time #dt></owl-date-time>
+                                            </td>
+                                            <td>{{RestroomType}}</td>
+                                            <td [style.color]="getColor(Status)">{{Status}}</td>
+                                          </tr>
+
+                                        </tbody>
+                                      </table>
+
+                                    </div>
+
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="row">
+
+                    <div class="col-sm-6"></div>
+
+                    <div class="col-sm-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Filter</mat-label>
+                        <input id="myInputdoctor" type="text" matInput placeholder="Search">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="row">
+
+                    <div class="col-sm-5">
+                      <div class="row">
+                        <div class="tab-content tab-wrap">
+                          <div id="ocular" class="tab-pane fade in active">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="card mb-3">
+                                  <h5 class="card-header bg-success text-white">
+                                    Surgery Cost
+                                  </h5>
+
+                                  <div class="card-body">
+
+                                    <div class="row heightAuto-150px">
+                                      <table #table class="custom-table withoutbackgroung search-table table-bordered">
+                                        <thead>
+                                          <tr>
+                                            <th>S No</th>
+                                            <th>Package Rate</th>
+                                            <th>Room Type</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let d of cost;index as i">
+                                            <td>{{i+1}}</td>
+                                            <td>{{d.PackageRate | currency:Country2}}</td>
+                                            <td>{{d.RoomType}}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+
+                                    </div>
+
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-1"> </div>
+
+                    <div class="col-sm-6">
+
+                      <div class="row">
+                        <div class="tab-content tab-wrap">
+                          <div id="ocular" class="tab-pane fade in active">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="card mb-3">
+                                  <h5 class="card-header bg-success text-white">
+                                    Surgeon and Medical Staff
+                                  </h5>
+
+                                  <div class="card-body">
+
+                                    <div class="row heightAuto-150px">
+                                      <table class="custom-table withoutbackgroung search-table table-bordered">
+                                        <thead>
+                                          <tr>
+                                            <th>S No</th>
+                                            <th>Name</th>
+                                            <th>Speciality</th>
+                                            <th>Select</th>
+                                          </tr>
+                                        </thead>
+
+                                        <tbody id="myTabledoctor">
+                                          <tr *ngFor="let r of Item;index as i">
+                                            <td>{{i+1}}</td>
+                                            <td>{{r.Name}}</td>
+                                            <td>{{r.Role}}</td>
+                                            <td><mat-checkbox name="adnod" (click)="onChange(r,i, r.checkStatus, $event)" [(checked)]="r.checkStatusall"></mat-checkbox></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div class="tab percent">
+
+                <div class="col-sm-12">
+
+                  <div class="col-sm-3">
+
+                    <div class="row">
+                      <div class="col-sm-7">
+                        <div class="row">
+                          <mat-label class="refcol">Advance Paid:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</mat-label>
+                        </div>
+                      </div>
+                      <div class="col-sm-5">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Amount</mat-label>
+                          <input matInput [(ngModel)]="advamnt" name="advamnt" placeholder="Amount" maxlength="8" (keypress)="numberOnly($event)" autocomplete="off" [disabled]="selectdisable">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <div class="col-sm-12 mt-1p">
+                  <div class="card mb-12">
+                    <h5 class="card-header bg-success text-white">
+                      Payment details
+                      <label class="labelfloat">
+                        <button type="button" (click)="AddPaymentDetailsNewgrid()" matTooltip="Add Payment Details" class="btn btn-primary-default btn-Excel buttonsfloat">Add Payment</button>
+                      </label>
+                    </h5>
+                    <div class="card-body">
+                      <div class="row heightAuto-300px">
+                        <table mat-table [dataSource]="dataSource3" class="custom-table withoutbackgroung search-table table-bordered">
+
+                          <ng-container matColumnDef="PaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>Payment Mode</th>
+                            <td mat-cell *matCellDef="let element;let id = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="enterPaymentMode(id)" (keyup.ArrowLeft)="arrowlefPaymentMode(id,$event,element)" (keyup.arrowright)="arrowrightPaymentMode(id,$event,element)" (keyup.ArrowDown)="arrowdownPaymentMode(id)" (keyup.ArrowUp)="arrowupPaymentMode(id)" [attr.contenteditable]="element.PaymentMode != '' || element.PaymentMode == ''" #PaymentMode>
+                              <mat-select #PaymentModee (focus)="PaymentModee.open()" (keyup.enter)="savePaymentMode(id,$event,element)" (openedChange)="someMethodPaymentMode(id,$event,element)" (selectionChange)="PaymentChangee(id,$event,element);PaymentModee.close()" value="{{element.PaymentMode}}">
+                                <input matInput #inputpaymode class="search" (keyup.arrowright)="arrowrightPaymentModee(id,$event,element)" (input)="FIlterdatapaymode($event.target.value)" autocomplete="off">
+                                <mat-option *ngFor="let Paymentsmode of Paymentsmodes" [value]="Paymentsmode.Value">
+                                  {{Paymentsmode.Text}}
+                                </mat-option>
+                              </mat-select>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+                          <ng-container matColumnDef="BankName">
+                            <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <input (keyup)="BankNameenter(id,'BankName',$event)" matInput value="{{element.BankName}}" maxlength="100" [disabled]="element.PaymentMode =='Cash'" type="text" class="form-control tableinputheight" (keypress)="nameField($event)" (keyup.ArrowLeft)="arrowlefBankName(id,$event,element)" (keyup.arrowright)="arrowrightBankName(id,$event,element)" (keyup.ArrowDown)="arrowdownBankName(id,$event,element)" (keyup.ArrowUp)="arrowupBankName(id,$event,element)" (keyup.enter)="DescriptionBankName(id,$event,element)" autocomplete="off" #BankName>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+                          <ng-container matColumnDef="InstrumentNumber">
+                            <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <input (keyup)="InstrumentNumberenter(id,'InstrumentNumber',$event)" matInput value="{{element.InstrumentNumber}}" maxlength="15" [disabled]="element.PaymentMode =='Cash'" type="text" class="form-control tableinputheight" (keypress)="numberOnly($event)" (keyup.ArrowLeft)="arrowlefInstrumentNumber(id,$event,element)" (keyup.arrowright)="arrowrightInstrumentNumber(id,$event,element)" (keyup.ArrowDown)="arrowdownInstrumentNumber(id,$event,element)" (keyup.ArrowUp)="arrowupInstrumentNumber(id,$event,element)" (keyup.enter)="DescriptionInstrumentNumber(id,$event,element)" autocomplete="off" #InstrumentNumber>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="InstrumentDate">
+                            <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <input id="tablepress" (keypress)="DistanceODtablepress($event)" matInput type="date" value="{{element.Instrumentdate}}" class="form-control tableinputheight" [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card'|| element.PaymentMode =='Credit Card'" (change)="dateofinstrument(id,'Instrumentdate',$event)" (keyup.ArrowLeft)="arrowlefInstrumentdate(id,$event,element)" (keyup.arrowright)="arrowrightInstrumentdate(id,$event,element)" (keyup.ArrowDown)="arrowdownInstrumentdate(id,$event,element)" (keyup.ArrowUp)="arrowupInstrumentdate(id,$event,element)" (keyup.enter)="DescriptionInstrumentdate(id,$event,element)" #InstrumentDate>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="ExpiryDate">
+                            <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <input id="tablepress" (keypress)="DistanceODtablepress($event)" matInput type="date" value="{{element.Expirydate}}" [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Demand Draft'" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowlefInstrumentExpiryDate(id,$event,element)" (keyup.arrowright)="arrowrightInstrumentExpiryDate(id,$event,element)" (keyup.ArrowDown)="arrowdownInstrumentExpiryDate(id,$event,element)" (keyup.ArrowUp)="arrowupInstrumentExpiryDate(id,$event,element)" (change)="dateExpirydate(id,'Expirydate',$event)" (keyup.enter)="DescriptionExpirydate(id,$event,element)" #ExpiryDate>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
+                          </ng-container>
+                          <ng-container matColumnDef="Branch">
+                            <th mat-header-cell *matHeaderCellDef>Branch</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <input matInput value="{{element.BankBranch}}" [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card' || element.PaymentMode =='Credit Card'" class="form-control tableinputheight" (keyup)="Branchvalue(id,'BankBranch',$event)" (keypress)="nameField($event)" maxlength="50" (keyup.ArrowLeft)="arrowleftBranch(id,$event,element)" (keyup.arrowright)="arrowrightBranch(id,$event,element)" (keyup.ArrowDown)="arrowdownBranch(id,$event,element)" (keyup.ArrowUp)="arrowupBranch(id,$event,element)" (keyup.enter)="DescriptionBranch(id,$event,element)" autocomplete="off" type="text" #Branch>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                          </ng-container>
+                          <ng-container matColumnDef="Amount">
+                            <th mat-header-cell *matHeaderCellDef>Amount</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <input type="text" matInput value="{{element.Amount}}" class="form-control tableinputheight" (keypress)="numberOnly($event)" (keyup)="Amountcheck(id,'Amount',$event)" (keyup.ArrowLeft)="arrowleftAmount(id,$event,element)" (keyup.arrowright)="arrowrightAmount(id,$event,element)" (keyup.ArrowDown)="arrowdownAmount(id,$event,element)" (keyup.ArrowUp)="arrowupAmount(id,$event,element)" (keyup.enter)="DescriptionAmount(id,$event,element)" autocomplete="off" #Amount>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>
+                              <strong>
+                                {{PaymentTotalAmount() | currency:Country2}}
+                              </strong>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Action">
+                            <th mat-header-cell *matHeaderCellDef>Action</th>
+                            <td mat-cell *matCellDef="let element;let id = index">
+                              <button type="button" mat-icon-button (click)="removePaytype(id)">
+                                <mat-icon data-toggle="tooltip" title="Remove" class="grab">delete</mat-icon>
+                              </button>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns3;sticky: true"></tr>
+                          <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumns3"></tr>
+                          <tr mat-footer-row *matFooterRowDef="displayedColumns3;"></tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+              </div>
+
+              <div class="tab percent">
+
+
+                <div class="col-sm-12 mt-1p">
+                  <div class="row">
+
+                    <div class="col-sm-5">
+                      <div class="row">
+                        <div class="tab-content tab-wrap">
+                          <div id="ocular" class="tab-pane fade in active">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="card mb-3">
+                                  <h5 class="card-header bg-success text-white">
+                                    Vehicle Pass
+                                    <label class="labelfloat">
+                                      <button type="button" (click)="AddVehicle()" matTooltip="Add Vehicle" class="btn btn-primary-default btn-Excel buttonsfloat">Add Vehicle</button>
+                                    </label>
+                                  </h5>
+
+                                  <div class="card-body">
+
+                                    <div class="row heightAuto-150px">
+
+
+                                      <table mat-table [dataSource]="dataSourcevehicle" class="custom-table vawithoutbackgroung search-table table-bordered">
+
+
+                                        <ng-container matColumnDef="Make">
+                                          <th mat-header-cell *matHeaderCellDef> Make </th>
+                                          <td mat-cell *matCellDef="let element; let id = index;">
+                                            <input (keyup)="Makeenter(id,'Make',$event)" matInput value="{{element.Make}}" maxlength="30" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftMake(id,$event,element)" (keyup.arrowright)="arrowrightMake(id,$event,element)" (keyup.ArrowDown)="arrowdownMake(id,$event,element)" (keyup.ArrowUp)="arrowupMake(id,$event,element)" (keyup.enter)="DescriptionMake(id,$event,element)" autocomplete="off" #Make>
+                                          </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="VehicleNo">
+                                          <th mat-header-cell *matHeaderCellDef>
+                                            Vehicle No
+                                          </th>
+                                          <td mat-cell *matCellDef="let element; let id = index;">
+                                            <input (keyup)="VehicleNoenter(id,'VehicleNo',$event)" matInput value="{{element.VehicleNo}}" maxlength="30" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftVehicleNo(id,$event,element)" (keyup.arrowright)="arrowrightVehicleNo(id,$event,element)" (keyup.ArrowDown)="arrowdownVehicleNo(id,$event,element)" (keyup.ArrowUp)="arrowupVehicleNo(id,$event,element)" (keyup.enter)="DescriptionVehicleNo(id,$event,element)" autocomplete="off" #VehicleNo>
+                                          </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Type">
+                                          <th mat-header-cell *matHeaderCellDef> Type </th>
+                                          <td mat-cell *matCellDef="let element; let id = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressType(id)" (keyup.ArrowLeft)="arrowleftType(id,$event,element)" (keyup.arrowright)="arrowrightType(id,$event,element)" (keyup.ArrowDown)="arrowdownType(id,$event,element)" (keyup.ArrowUp)="arrowupType(id,$event,element)" [attr.contenteditable]="element.Type != '' || element.Type == ''" #Type>
+                                            <mat-select #slides (focus)="slides.open()" (selectionChange)="ChangeType(id,$event,element);slides.close()" value="{{element.Type}}">
+                                              <mat-option>None</mat-option>
+                                              <mat-option value="Car">Car</mat-option>
+                                              <mat-option value="Bike">Bike</mat-option>
+                                              <mat-option value="Cycle">Cycle</mat-option>
+                                              <mat-option value="Bus">Bus</mat-option>
+                                              <mat-option value="Van">Van</mat-option>
+                                              <mat-option value="Auto">Auto</mat-option>
+                                            </mat-select>
+
+                                          </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="Delete">
+                                          <th mat-header-cell *matHeaderCellDef>Action</th>
+                                          <td mat-cell *matCellDef="let element;let id = index;">
+                                            <button type="button" mat-icon-button (click)="removeVehicle(id,element)">
+                                              <mat-icon data-toggle="tooltip" title="remove" class="grab">delete</mat-icon>
+                                            </button>
+                                          </td>
+                                        </ng-container>
+
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumnsvehicle"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumnsvehicle"></tr>
+                                      </table>
+
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-1"> </div>
+
+                    <div class="col-sm-6">
+                      <div class="row">
+                        <div class="tab-content tab-wrap">
+                          <div id="ocular" class="tab-pane fade in active">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="card mb-3">
+                                  <h5 class="card-header bg-success text-white">
+                                    Attender  Pass
+                                  </h5>
+
+                                  <div class="card-body">
+
+                                    <div class="row heightAuto-169px">
+
+                                      <div class="row mt-4p">
+
+                                        <div class="col-sm-4">
+                                          <mat-form-field appearance="outline">
+                                            <mat-label>Name</mat-label>
+                                            <input autocomplete="off" [(ngModel)]="M_Name" name="Name" matInput placeholder="Name" [required]="Name" (keyup)="Nameenter()">
+                                          </mat-form-field>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                          <mat-form-field appearance="outline">
+                                            <mat-label>Relation</mat-label>
+                                            <mat-select autocomplete="off" [(ngModel)]="M_Relation" name="Relation">
+                                              <mat-option>--Select--</mat-option>
+                                              <mat-option *ngFor="let Relation of Relations" [value]="Relation.Value">
+                                                {{Relation.Text}}
+                                              </mat-option>
+                                            </mat-select>
+                                          </mat-form-field>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                          <mat-form-field appearance="outline">
+                                            <mat-label>Gender</mat-label>
+                                            <mat-select autocomplete="off" [(ngModel)]="M_Gender" name="Gender" placeholder="" [required]="Gender" (ngModelChange)="GenderChange()">
+                                              <mat-option>--Select--</mat-option>
+                                              <mat-option value="Male">Male</mat-option>
+                                              <mat-option value="Female">Female</mat-option>
+                                              <mat-option value="Transgender">Transgender</mat-option>
+                                            </mat-select>
+                                          </mat-form-field>
+                                        </div>
+
+                                      </div>
+
+                                      <div class="row mt-1p">
+
+                                        <div class="col-sm-4">
+                                          <mat-form-field appearance="outline">
+                                            <mat-label>Phone No</mat-label>
+                                            <input autocomplete="off" placeholder="Phone No" [(ngModel)]="M_TelNo" maxlength="15" (keypress)="numberOnly($event)" name="TelNo" matInput [required]="TelNo" (keyup)="TelNoenter()">
+                                          </mat-form-field>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default" (click)="oncancel()"> Cancel </button>
+            <button class="success btn btn-primary  ml-2p" [disabled]="disSubmit" (click)="onSubmit(SurgeryAssign)">Submit</button>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</form>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreview}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreview()">&times;</button>
+        <h5 class="modal-title">
+          Surgery patient
+        </h5>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInput" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row heightAuto-300px">
+
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="2">Select</th>
+              <th rowspan="2">S.No</th>
+              <th rowspan="2">UIN</th>
+              <th rowspan="2">Patient name</th>
+              <th rowspan="2">Age</th>
+              <th rowspan="2">Gender</th>
+              <th rowspan="2">Surgery Adviced By</th>
+              <th rowspan="2">Surgery Adviced Date</th>
+              <th rowspan="2">Surgery Type</th>
+
+            </tr>
+
+            <tbody id="myTable">
+
+              <tr *ngFor="let o of Details;index as i">
+                <td (click)="selectpatient(o)">
+                  <button type="button" mat-icon-button [disabled]="o.status == '1'">
+                    <mat-icon data-toggle="tooltip" title="Select" class="example-tab-icon">create</mat-icon>
+                  </button>
+                </td>
+                <td>{{i+1}}</td>
+                <td>{{o.UIN}}</td>
+                <td>{{o.Name}}</td>
+                <td>{{o.Age}}</td>
+                <td>{{o.Gender}}</td>
+                <td>{{o.SurgeryAdvName}}</td>
+                <td>{{o.SurgeryAdvDate | date:"dd-MMM-y HH:mm"}}</td>
+                <td>{{o.SurgeryType}}</td>
+              </tr>
+
+
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewsearch}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewsearch()">&times;</button>
+        <h5 class="modal-title">
+          Room details
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInput1" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+
+
+        <div class="row heightAuto-300px">
+          <table #table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Room Number</th>
+                <th>Bed No</th>
+                <th>Room Cost</th>
+                <th>RestRoom Type</th>
+                <th>Status</th>
+
+              </tr>
+            </thead>
+
+
+            <tbody id="myTable1">
+
+              <tr *ngFor="let rom of rooms; index as i">
+                <td><mat-checkbox (change)="onChangeroom(rom,$event.checked)" [disabled]="rom.room"></mat-checkbox></td>
+                <td>{{rom.RoomNumber}}</td>
+                <td>{{rom.BedNo}}</td>
+                <td>{{rom.RoomCost | currency:Country2}}</td>
+                <td>{{rom.RestroomType}}</td>
+                <td [style.color]="getColor(rom.Status)">{{rom.Status}}</td>
+
+
+              </tr>
+
+            </tbody>
+          </table>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+        <h4>Do you want to cancel?</h4>
+      </div>
+
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':admissioncardprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong>Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="printadminTest()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printadminclose()" cdkFocusInitial>No</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewsurgery}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewsurgery()">&times;</button>
+        <h5 class="modal-title">
+          View  Surgery patient
+        </h5>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInputsurgery" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row heightAuto-300px">
+
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="2">Select</th>
+              <th rowspan="2">UIN</th>
+              <th rowspan="2">Patient name</th>
+              <th rowspan="2">Age</th>
+              <th rowspan="2">Gender</th>
+              <th rowspan="2">Surgery done By</th>
+              <th rowspan="2">Surgery done Date</th>
+              <th rowspan="2">Surgery Type</th>
+
+            </tr>
+
+            <tbody id="myTablesurgery">
+
+              <tr *ngFor="let o of viewpatient;index as i">
+                <td (click)="selectpatientview(o)">
+                  <button type="button" mat-icon-button class="grab">
+                    <mat-icon data-toggle="tooltip" title="Select" class="example-tab-icon">visibility</mat-icon>
+                  </button>
+                </td>
+                <td>{{o.uin}}</td>
+                <td>{{o.Name}}</td>
+                <td>{{o.Age}}</td>
+                <td>{{o.Gender}}</td>
+                <td>{{o.SurgeryAdvName}}</td>
+                <td>{{o.SurgeryAdvDate | date:"dd-MMM-y HH:mm"}}</td>
+                <td>{{o.SurgeryType}}</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewdetails}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewdetails()">&times;</button>
+        <h5 class="modal-title">
+          Patient details
+        </h5>
+      </div>
+
+      <div class="modal-body ml-3p">
+
+        <div class="row  ml-3p">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-4 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{AdmUin}} / {{AdmName}} / {{AdmAge}} / {{AdmGender}}</strong>
+                  </span>
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-primary" (click)="AdmitcardPrint()">Admit card Print</button>
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-primary" (click)="Advanceprint()">Advance print</button>
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-primary" (click)="Vehiclepassprint()">Vehicle pass print</button>
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-primary" (click)="Attenderpassprint()">Attender pass print</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row heightAuto-350px">
+
+          <div class="row ml-3p">
+
+            <div class="col-sm-6">
+              <div class="row">
+
+
+                <div class="tab-content tab-wrap">
+                  <div class="tab-pane fade in active">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card mb-3">
+                          <h5 class="card-header bg-success text-white">
+                            Admission
+                          </h5>
+                          <div class="card-body">
+
+                            <div class="row heightAuto-110px">
+
+                              <table #table class="custom-table withoutbackgroung search-table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Adm No.</th>
+                                    <th>Adm date</th>
+                                    <th>Date of surgery</th>
+                                    <th>Operation theatre</th>
+                                    <th>Remarks</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                  <tr *ngFor="let vaa of viewarrayadmission; index as i">
+                                    <td>{{vaa.Admnumber}}</td>
+                                    <td>{{vaa.Admdate | date:"dd-MMM-y HH:mm"}}</td>
+                                    <td>{{vaa.Dateofsurgery | date:"dd-MMM-y HH:mm"}}</td>
+                                    <td>{{vaa.operationtheatre}}</td>
+                                    <td>{{vaa.remarks}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+
+                            </div>
+
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+
+            <div class="col-sm-1"> </div>
+
+            <div class="col-sm-5 ml-n4p">
+              <div class="row">
+
+
+                <div class="tab-content tab-wrap">
+                  <div class="tab-pane fade in active">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="card mb-3">
+                          <h5 class="card-header bg-success text-white">
+                            Counselling
+                          </h5>
+                          <div class="card-body">
+
+                            <div class="row heightAuto-110px">
+
+                              <table #table class="custom-table withoutbackgroung search-table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Counselling Date</th>
+                                    <th>Advisor Name</th>
+                                    <th>Surgery Adviced Date</th>
+                                    <th>Remarks</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                  <tr *ngFor="let vac of viewarraycounselling; index as i">
+                                    <td>{{vac.CreatedUTC | date:"dd-MMM-y HH:mm"}}</td>
+                                    <td>{{vac.CounsellingAdvName}}</td>
+                                    <td>{{vac.SurgeryDate | date:"dd-MMM-y HH:mm"}}</td>
+                                    <td>{{vac.OtherRequirements}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+
+                            </div>
+
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row ml-3p">
+
+            <mat-tab-group animationDuration="0ms">
+
+              <mat-tab label="General">
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <div class="tab-content tab-wrap">
+                        <div class="tab-pane fade in active">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card mb-3">
+                                <h5 class="card-header bg-success text-white ml-2p">
+                                  Surgery
+                                </h5>
+                                <div class="card-body">
+
+                                  <div class="row heightAuto-150px">
+
+                                    <table #table class="custom-table vawithoutbackgroung search-table table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th>Surgery Type</th>
+                                          <th>Surgery Description</th>
+                                          <th>OD</th>
+                                          <th>OS</th>
+                                          <th>OU</th>
+                                          <th>Date</th>
+                                          <th>Doctor Name</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+
+                                        <tr *ngFor="let vas of viewarraysurgery;index as i">
+
+                                          <td>{{vas.SurgeryTypname}}</td>
+                                          <td>{{vas.SurgeryDescriptionname}}</td>
+                                          <td><mat-checkbox [(checked)]="vas.IsOD" disabled="true"></mat-checkbox></td>
+                                          <td><mat-checkbox [(checked)]="vas.IsOS" disabled="true"></mat-checkbox></td>
+                                          <td><mat-checkbox [(checked)]="vas.IsOU" disabled="true"></mat-checkbox></td>
+                                          <td>{{vas.DateofSurgery | date:"dd-MMM-y HH:mm"}}</td>
+                                          <td>{{vas.Doctorname}}</td>
+                                        </tr>
+
+                                      </tbody>
+                                    </table>
+
+                                  </div>
+
+                                </div>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+                  <div class="col-sm-1"> </div>
+
+                  <div class="col-sm-5 ml-n4p">
+                    <div class="row">
+
+
+                      <div class="tab-content tab-wrap">
+                        <div class="tab-pane fade in active">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card mb-3">
+                                <h5 class="card-header bg-success text-white">
+                                  Room
+                                </h5>
+                                <div class="card-body">
+
+                                  <div class="row heightAuto-150px">
+
+                                    <table #table class="custom-table withoutbackgroung search-table table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th>Room Type</th>
+                                          <th>Room Number</th>
+                                          <th>Bed No</th>
+                                          <th>Room Cost</th>
+                                          <th>Room Occupied Date and Time</th>
+                                          <th>RestRoom Type</th>
+                                          <th>Status</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+
+                                        <tr *ngFor="let rm of viewarrayroom; index as i">
+                                          <td>{{rm.Roomtype}}</td>
+                                          <td>{{rm.Roomnumber}}</td>
+                                          <td>{{rm.Bedno}}</td>
+                                          <td>{{rm.Roomcost | currency:Country2}}</td>
+                                          <td>{{rm.roomocudate}}</td>
+                                          <td>{{rm.roomresttype}}</td>
+                                          <td>{{rm.vacant}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </div>
+
+                                </div>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <div class="tab-content tab-wrap">
+                        <div class="tab-pane fade in active">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card mb-3">
+                                <h5 class="card-header bg-success text-white ml-2p">
+                                  Surgery Cost
+                                </h5>
+                                <div class="card-body">
+
+                                  <div class="row heightAuto-150px">
+
+                                    <table #table class="custom-table withoutbackgroung search-table table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th>Package Rate</th>
+                                          <th>Room Type</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let vs of viewarraysurgerycost;index as i">
+                                          <td>{{vs.packagerate | currency:Country2}}</td>
+                                          <td>{{vs.Roomtype}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </div>
+
+                                </div>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+                  <div class="col-sm-1"> </div>
+
+                  <div class="col-sm-5 ml-n4p">
+                    <div class="row">
+
+
+                      <div class="tab-content tab-wrap">
+                        <div class="tab-pane fade in active">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="card mb-3">
+                                <h5 class="card-header bg-success text-white">
+                                  Surgeon and Medical Staff
+                                </h5>
+                                <div class="card-body">
+
+                                  <div class="row heightAuto-150px">
+                                    <table class="custom-table withoutbackgroung search-table table-bordered">
+                                      <thead>
+                                        <tr>
+                                          <th>Name</th>
+                                          <th>Speciality</th>
+                                        </tr>
+                                      </thead>
+
+                                      <tbody>
+                                        <tr *ngFor="let vd of viewarraydoctorlist;index as i">
+                                          <td>{{vd.Surgerydoctorname}}</td>
+                                          <td>{{vd.speciality}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </div>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+              </mat-tab>
+
+              <mat-tab label="Payment">
+
+                <div class="col-sm-10">
+                  <div class="row">
+
+
+                    <div class="tab-content tab-wrap">
+                      <div class="tab-pane fade in active">
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="card mb-3">
+                              <h5 class="card-header bg-success text-white">
+                                Payment details
+                              </h5>
+                              <div class="card-body">
+
+                                <div class="row heightAuto-150px">
+
+                                  <table class="custom-table withoutbackgroung search-table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>Payment Mode</th>
+                                        <th>Instruction No.</th>
+                                        <th>Instrument Date</th>
+                                        <th>Bank Name</th>
+                                        <th>Branch Name</th>
+                                        <th>Expiry Date</th>
+                                        <th>Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let vp of viewarraypayment; index as i">
+                                        <td>{{vp.PaymentMode}}</td>
+                                        <td>{{vp.InstrumentNumber}}</td>
+                                        <td>{{vp.Instrumentdate| date:"dd-MMM-y"}}</td>
+                                        <td>{{vp.BankName}}</td>
+                                        <td>{{vp.BankBranch}}</td>
+                                        <td>{{vp.Expirydate | date:"dd-MMM-y"}}</td>
+                                        <td>{{vp.Amount | currency:Country2}}</td>
+                                      </tr>
+                                    </tbody>
+
+                                    <tfoot>
+                                      <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total Amount</td>
+                                        <td>{{totalpayment | currency:Country2}}</td>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
+
+                                </div>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+
+              </mat-tab>
+
+              <mat-tab label="Others">
+
+                <div class="col-sm-12">
+                  <div class="row">
+
+
+                    <div class="tab-content tab-wrap">
+                      <div class="tab-pane fade in active">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="card mb-3">
+                              <h5 class="card-header bg-success text-white">
+                                Vehicle Pass
+                              </h5>
+                              <div class="card-body">
+
+                                <div class="row heightAuto-150px">
+
+                                  <table class="custom-table withoutbackgroung search-table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>Make</th>
+                                        <th>Vehicle No</th>
+                                        <th>Type</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let vi of viewarrayvehiclepass; index as i">
+                                        <td>{{vi.Make}}</td>
+                                        <td>{{vi.vehicle}}</td>
+                                        <td>{{vi.Type}}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+
+                                </div>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+
+                          <div class="col-sm-1"> </div>
+
+                          <div class="col-sm-5 ml-n4p">
+                            <div class="card mb-3">
+                              <h5 class="card-header bg-success text-white">
+                                Attender Pass
+                              </h5>
+                              <div class="card-body">
+
+                                <div class="row heightAuto-150px">
+
+                                  <table class="custom-table withoutbackgroung search-table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>Name</th>
+                                        <th>Relationship</th>
+                                        <th>Gender</th>
+                                        <th>Phone No.</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let ap of viewarrayattenderpass; index as i">
+                                        <td>{{ap.Name}}</td>
+                                        <td>{{ap.relationship}}</td>
+                                        <td>{{ap.gender}}</td>
+                                        <td>{{ap.phone}}</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+
+                                </div>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!---------------------------------- print----------------------------------------------->
+
+
+<div id="admitcardprint" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center"><strong>{{PAddress}}</strong></div>
+        <div style="text-align:center"><strong>Phone No:{{Pphone}} &nbsp; Website:{{Pweb}}</strong></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>Admit card</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%;page-break-after:always">
+
+    <div class="row">
+
+
+      <div class="col-sm-5">
+
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="row">
+              <mat-label><b>Admission No:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <mat-label>{{AdmitCardNo}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="row">
+              <mat-label><b>Admission Date:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <mat-label>{{AdmitCardDate | date:"dd-MMM-y HH:mm"}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="row">
+              <mat-label><b>Patient ID:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <mat-label>{{AdmUin}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="row">
+              <mat-label><b>Patient Name:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <mat-label>{{AdmName}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="row">
+              <mat-label><b>Age / Gender:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <mat-label>{{AdmAge}} / {{AdmGender}}</mat-label>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="col-sm-5">
+
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="row">
+              <mat-label><b>Room Occupied Date:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <mat-label>{{RoomOccupiedDate}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="row">
+              <mat-label><b>Room Type:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <mat-label>{{RoomTypeprint}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="row">
+              <mat-label><b>Room Description:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <mat-label>{{RoomDescription}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="row">
+              <mat-label><b>Room No:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <mat-label>{{RoomNo}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="row">
+              <mat-label><b>Bed No:</b></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <mat-label>{{BedNoprint}}</mat-label>
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+    <div class="row" style="margin-top:2%">
+
+      <div class="col-sm-10">
+        <div class="row">
+          <mat-label><b>Authorised signatory</b></mat-label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="Advanceprint" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center"><strong>{{PAddress}}</strong></div>
+        <div style="text-align:center"><strong>Phone No:{{Pphone}} &nbsp; Website:{{Pweb}}</strong></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>Advance</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label><strong>Receipt No &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{ReceiptNumber}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Receipt Date &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{ReceiptDate|date:"dd-MMM-y HH:mm"}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label><strong>Patient ID &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmUin}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Patient Name&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmName}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Age / Gender&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmAge}} / {{AdmGender}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <table align="center" style="margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Payment Mode</th>
+          <th>Instruction No.</th>
+          <th>Instruction Date</th>
+          <th>Bank Name</th>
+          <th>Branch Name</th>
+          <th>Expiry Date</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of sudetailsprint; index as i">
+          <td>{{i+1}}</td>
+          <td>{{x.PaymentMode}}</td>
+          <td>{{x.InstrumentNumber}}</td>
+          <td>{{x.Instrumentdate| date:"dd-MMM-y"}}</td>
+          <td>{{x.BankName}}</td>
+          <td>{{x.BankBranch}}</td>
+          <td>{{x.Expirydate | date:"dd-MMM-y"}}</td>
+          <td>{{x.Amount | currency:Country2}}</td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Total Amount</td>
+          <td>{{toam | currency:Country2}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-6">
+        <strong>Rupees (in Words) :{{transform(toam)}}only</strong>
+      </div>
+      <div class="col-sm-6"> </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%;page-break-after: always;">
+    <div class="row">
+      <div class="col-sm-10">
+        <mat-label><b>Authorised signatory</b></mat-label>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+<div id="Vehicleprint" style="display:none">
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center"><strong>{{PAddress}}</strong></div>
+        <div style="text-align:center"><strong>Phone No:{{Pphone}} &nbsp; Website:{{Pweb}}</strong></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>Vehicle Pass</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label><strong>Admission No &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmitCardNo}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Admission Date &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmitCardDate | date:"dd-MMM-y HH:mm"}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label><strong>Patient ID &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmUin}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Patient Name&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmName}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Age / Gender&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmAge}} / {{AdmGender}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <table align="center" style="margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Make</th>
+          <th>Vehicle No</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of Vehiclepassdetails; index as i">
+          <td>{{i+1}}</td>
+          <td>{{v.Make}}</td>
+          <td>{{v.VehicleNo}}</td>
+          <td>{{v.Type}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%;page-break-after: always;">
+    <div class="row">
+      <div class="col-sm-10">
+        <mat-label><b>Authorised signatory</b></mat-label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="Attendersprint" style="display:none">
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center"><strong>{{PAddress}}</strong></div>
+        <div style="text-align:center"><strong>Phone No:{{Pphone}} &nbsp; Website:{{Pweb}}</strong></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="text-align:center"><strong>Attender Pass</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label><strong>Admission No &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmitCardNo}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Admission Date &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmitCardDate |date:"dd-MMM-y HH:mm"}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label><strong>Patient ID &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmUin}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Patient Name&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmName}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label><strong>Age / Gender&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{AdmAge}} / {{AdmGender}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <table align="center" style="margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Name</th>
+          <th>Relation ship</th>
+          <th>Gender</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let A of AttendersPassdetails; index as i">
+          <td>{{i+1}}</td>
+          <td>{{A.Name}}</td>
+          <td>{{A.Relationship}}</td>
+          <td>{{A.Gender}}</td>
+          <td>{{A.Phone}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-10">
+        <mat-label><b>Authorised signatory</b></mat-label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!---------------------------------- print----------------------------------------------->
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':admissioncardreprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong>Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="reprintadminTest()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="reprintadminclose()" cdkFocusInitial>No</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':advancereprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong>Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="reprintadvance()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="reprintadvanceclose()" cdkFocusInitial>No</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':vehiclereprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong>Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="reprintvehicle()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="reprintvehicleclose()" cdkFocusInitial>No</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Attenderreprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong>Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="reprintAttender()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="reprintAttenderclose()" cdkFocusInitial>No</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Surgery Admission and Assign - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

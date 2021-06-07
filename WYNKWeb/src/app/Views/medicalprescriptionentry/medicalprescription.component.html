@@ -1,0 +1,1749 @@
+
+
+
+<form #MEDICALPRESCRIPTIONFORM="ngForm">
+  <div class="col-sm-12 dividebar">
+    
+    <div class="col-sm-12 mph-0 downmargin">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-5 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+            </span>
+            <!--<span>
+              <button mat-icon-button (click)="selectuploadnew()">
+                <mat-icon data-toggle="tooltip" title="Upload Prescriptions" class="cursor">cloud_upload</mat-icon>
+              </button>
+            </span>-->
+          </div>
+          <!--<div class="col-sm-1 ml-7p">
+    <button mat-icon-button (click)="selectuploadnew()" [disabled]="DisabledPrescriptions">
+      <mat-icon data-toggle="tooltip" title="Upload Prescriptions" class="cursor">cloud_upload</mat-icon>
+    </button>
+  </div>-->
+          <div class="col-sm-2 mph-0 pb20">
+
+          </div>
+          <div class="col-sm-1 mph-0 pb20">
+
+          </div>
+
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" [disabled]="disprint" (click)="getRecentdetails()"><i class="fas fa-eye"></i>History</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 dividebar">
+      <div class="row">
+
+        <div class="col-sm-12">
+
+
+          <h5 class="card-header">
+            Prescribed medicines
+
+            <label class="labelfloat">
+              <button type="button" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat" data-toggle="tooltip" title="view" autofocus (click)="selectuploadnew()" [disabled]="DisabledPrescriptions">
+                Upload Prescription
+              </button>
+              <button type="button" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat" data-toggle="tooltip" title="view" autofocus (click)="getuppresDeatils()">
+                View Prescription
+              </button>
+              <button type="button" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat" [disabled]="disSerdrg" data-toggle="tooltip" title="ShowTemplate" autofocus (click)="Templates()">
+                Show Template
+              </button>
+              <button type="button" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat" [disabled]="disTemp" data-toggle="tooltip" title="SaveTemplate" autofocus (click)="SaveTemplate()">
+                Save Template
+              </button>
+              <button type="button" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat" [disabled]="disTemp" data-toggle="tooltip" title="Create tappering" autofocus (click)="SaveTappering()">
+                Create Tappering
+              </button>
+              <button type="button" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat" [disabled]="disTemp" data-toggle="tooltip" title="View tappering" autofocus (click)="viewTappering()">
+                View Tappering
+              </button>
+              <button accesskey="a" (click)="Addmedicine();" matTooltip="Add Item" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">Add Item</button>
+            </label>
+          </h5>
+
+        </div>
+      </div>
+
+      <div class="row heightAuto-250px">
+        <div *ngIf="commonService.data.MPT != null && commonService.data.MPT.length > 0">
+          <table #MEtable mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered" style="height:1px"
+                 cdkDropList
+                 [cdkDropListData]="dataSource"
+                  (cdkDropListDropped)="dropTable($event)">
+
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef>  S.No </th>
+              <td mat-cell *matCellDef="let element; let i = index" cdkDragHandle> {{i+1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Brand">
+              <th mat-header-cell *matHeaderCellDef> Brand </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="false" class="width-18p" (mousedown)="$event.stopPropagation()">
+
+                <input type="text" matInput placeholder="" value="{{element.ICD_DESCRIPTION }}" disabled>
+                <span>
+                  <mat-icon (click)="SearchClick(i)" class="grab f-r ml-n5p cursor" data-toggle="tooltip" title="Search">search</mat-icon>
+                </span>
+
+              </td>
+            </ng-container>
+
+            <!--<ng-container matColumnDef="Brand">
+              <th mat-header-cell *matHeaderCellDef> Generic Name </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="false" class="width-18p">
+
+                <input type="text" matInput placeholder="" value="{{element.Brand }}" disabled>
+                <span>
+                  <mat-icon (click)="SearchClick(i)" class="grab f-r ml-n5p cursor" data-toggle="tooltip" title="Search">search</mat-icon>
+                </span>
+
+              </td>
+            </ng-container>-->
+
+
+
+            <ng-container matColumnDef="UOM">
+              <th mat-header-cell *matHeaderCellDef> UOM </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="false">
+                <input type="text" matInput placeholder="" value="{{element.UOM }}" disabled>
+
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="DrugForm">
+              <th mat-header-cell *matHeaderCellDef> Drug Form </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="false">
+                <input type="text" matInput placeholder="" value="{{element.dform }}" disabled>
+
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Frequency">
+              <th mat-header-cell *matHeaderCellDef> Frequency </th>
+              <td mat-cell *matCellDef="let element; let i = index;" class="width-12p" [attr.contenteditable]="element.Frequency != '' || element.Frequency == ''" (keyup.ArrowLeft)="arrowleftpl(i,$event,element)" (keyup.arrowright)="arrowrightpl(i,$event,element)" (keyup.ArrowDown)="arrowdownpl(i,$event,element)" (keyup.ArrowUp)="arrowuppl(i,$event,element)" #FreqDescription>
+
+                <mat-select (selectionChange)="Changefqy(i,$event);FreqDescription.close()" value="{{element.Frequency}}" (focus)="FreqDescription.open()">
+                  <mat-option>Select</mat-option>
+                  <mat-option *ngFor="let Frequency of FrequencyName" [value]="Frequency.Text">{{Frequency.Text}}</mat-option>
+                </mat-select>
+
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Eye">
+              <th mat-header-cell *matHeaderCellDef> Eye </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true" class="width-12p" [attr.contenteditable]="element.Eye != '' || element.Eye == ''" (keyup.ArrowLeft)="arrowleftpleye(i,$event,element)" (keyup.arrowright)="arrowrightpleye(i,$event,element)" #EyeDescription>
+
+                <mat-label></mat-label>
+                <mat-select #EyeDescription (selectionChange)="Changeeye(i,$event);EyeDescription.close()" value="{{element.Eye}}" (focus)="EyeDescription.open()" [disabled]="element.dform != 'Drops'">
+                  <mat-option>Select</mat-option>
+                  <mat-option value="RightEye">Right Eye</mat-option>
+                  <mat-option value="LeftEye">Left Eye</mat-option>
+                  <mat-option value="BothEyes">Both Eyes</mat-option>
+                </mat-select>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Food">
+              <th mat-header-cell *matHeaderCellDef> Food </th>
+              <td mat-cell *matCellDef="let element; let i = index;" class="width-12p" [attr.contenteditable]="element.Food != '' || element.Food == ''" (keyup.ArrowLeft)="arrowleftplfood(i,$event,element)" (keyup.arrowright)="arrowrightplfo(i,$event,element)" #FoodDescription>
+                <mat-select (selectionChange)="ChangeFood(i,$event);FoodDescription.close()" value="{{element.Food}}" (focus)="FoodDescription.open()" [disabled]="element.dform != 'tablets'">
+                  <input (input)="FIlterdata($event.target.value)">
+                  <mat-option>Select</mat-option>
+                  <mat-option *ngFor="let Food of FoodName" [value]="Food.Text">{{Food.Text}}</mat-option>
+                </mat-select>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Days">
+              <th mat-header-cell *matHeaderCellDef> Days </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true" class="width-4p">
+                <!--<mat-form-field appearance="outline">-->
+                <input matInput placeholder="Enter Days" class="form-control" style="text-align:center" name="txthour1" id="txthour1" (keyup.ArrowLeft)="arrowleftpldays(i,$event,element)" (keyup.arrowright)="arrowrightplda(i,$event,element)" (focus)="DayDescription.open()" value="{{element.Days }}" (keyup)="changeValuedy(i,'Days',$event);Restrictmt($event)" (keypress)="numberOnly1($event)" type="number" min="0" autocomplete="off" #DayDescription>
+                <!--</mat-form-field>-->
+
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Quantity">
+              <th mat-header-cell *matHeaderCellDef> Quantity </th>
+              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true" class="width-4p">
+                <!--<mat-form-field appearance="outline">-->
+                <input type="number" matInput placeholder="Enter Quantity" class="form-control" style="text-align:center" value="{{element.Quantity }}" (keyup)="changeValueqy(i,'Quantity',$event)" autocomplete="off" (focus)="QuantDescription.open()" [disabled]="element.dform == 'Drops'" #QuantDescription>
+                <!--</mat-form-field>-->
+
+              </td>
+            </ng-container>
+
+
+            <!--<ng-container matColumnDef="Remarks">
+    <th mat-header-cell *matHeaderCellDef> Remarks </th>
+    <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true">
+
+      <mat-form-field appearance="outline">
+        <input type="text" matInput placeholder="Enter Remarks" value="{{element.Remarks }}" (keyup)="changeValuerem(i,'Remarks',$event);">
+      </mat-form-field>
+
+    </td>
+  </ng-container>-->
+
+
+
+            <ng-container matColumnDef="Delete">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element;let i = index;">
+                <button mat-icon-button (click)="removePatient(i,element)">
+                  <mat-icon data-toggle="tooltip" title="remove" class="grab">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></tr>
+          </table>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-6 dividebar" *ngIf="commonService.data.DrugInfo != null && commonService.data.DrugInfo.length > 0">
+          <h5 class="modal-title center">Drug Instructions</h5>
+          <div class="col-sm-12">
+            <table mat-table matSort [dataSource]="dataSourcedr" class="custom-table withoutbackgroung search-table table-bordered tablebottom">
+              <ng-container matColumnDef="SNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>S.NO</th>
+                <td mat-cell *matCellDef="let element ;let i = index;">{{i+1}}  </td>
+              </ng-container>
+              <ng-container matColumnDef="GenericName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Generic Name
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.DrugName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="sideeffect">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Side Effects </th>
+                <td mat-cell *matCellDef="let element"> {{element.sideeffect}} </td>
+              </ng-container>
+              <ng-container matColumnDef="precaution">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Precaution </th>
+                <td mat-cell *matCellDef="let element"> {{element.precaution}} </td>
+              </ng-container>
+              <ng-container matColumnDef="overdose">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Overdose </th>
+                <td mat-cell *matCellDef="let element"> {{element.overdose}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsdr"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsdr;"></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+
+          <mat-form-field class="col-sm-12" appearance="outline">
+            <mat-label>Remarks</mat-label>
+            <textarea #message maxlength="250" name="searchremarks" [(ngModel)]="searchremarks" matInput rows="5" cols="150" placeholder="If any"></textarea>
+            <mat-hint align="start">Max 250 Character</mat-hint>
+            <mat-hint align="end">{{message.value.length}} / 250</mat-hint>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button type="button" class="btn btn-warning-default" (click)="onCancel()"> Cancel </button>
+        <button class="success btn btn-primary" [disabled]="disSubmit" (click)="onSubmit(MEDICALPRESCRIPTIONFORM)">Submit</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalSuccess}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg diaclosmodal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-10">
+                <h4 class="modal-title">Information</h4>
+              </div>
+              <div class="col-sm-1">
+                <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClose()">&times;</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Do you want to print?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--<div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="close();">Ok</button>
+
+        </div>-->
+        <div class="modal-footer">
+
+          <button (click)="close()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-danger" data-dismiss="modal" (click)="printcloses()" cdkFocusInitial>No</button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="section" style="display:none">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{cname}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6"> <label> {{caddres}}</label></div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"> <label>Tel - {{cph}},- {{cwe}}</label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"> <span style="font-size:50px">&#8478;</span></div>
+      <div class="col-sm-6">
+        <label style="text-align:center">
+          <strong>
+            Medical Prescription<br />Prescription date & time : {{toDayDate | date: 'dd-MMM-y HH:mm'}}hrs
+          </strong>
+        </label>
+
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label>UIN : {{ids}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Patient Name : {{patcontre}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Age / Gender : {{Getage}}/{{genders}}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <table align="center" style="border-left:3px solid#51b8f2;margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <!--<th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Generic</th>-->
+          <th style="background-color:#F0F3F5;color:#8FA3B0; font-family: 'Proxima Nova Semibold'; font-size: 14px; height: 40px">Brand</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">UOM</th>
+          <th style="    background-color:#F0F3F5;color:#8FA3B0;
+    font-family: 'Proxima Nova Semibold';
+    font-size: 14px;
+    height: 40px">Frequency</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Days</th>
+          <th style="    background-color:#F0F3F5;color:#8FA3B0;
+    font-family: 'Proxima Nova Semibold';
+    font-size: 14px;
+    height: 40px">Quantity</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Eye</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Food</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of med; index as i">
+          <!--<td style="text-align:center">{{x.ICD_DESCRIPTION}}</td>-->
+          <td style="text-align:center">{{x.Brand}}</td>
+          <td style="text-align:center">{{x.uom}}</td>
+          <td style="text-align:center">{{x.Frequency}}</td>
+          <td style="text-align:center">{{x.Dayss}}</td>
+          <td style="text-align:center">{{x.Quant}}</td>
+          <td style="text-align:center">{{x.Eye}}</td>
+          <td style="text-align:center">{{x.Food}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Allergy : &nbsp;susceptible to <strong>{{d_allergy}}</strong></strong></label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Remarks : {{remak}}</strong></label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Next Review date :{{reviewdatee | date :'dd-MMM-y'}}</strong></label>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-top:15px;">
+    <div class="row">
+      <div class="col-sm-4">
+
+      </div>
+      <div class="col-sm-4">
+
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Prescribed by :&nbsp;Dr.{{dpatcontre}}<br />Registration No : {{dcregg}}</strong></label>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':modalSuccess2}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClose2()">&times;</button>
+        <h4 class="modal-title">To Date should be greater than or equal to From Date</h4>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="close2();">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>-->
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalmed}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessmed()">&times;</button>
+        <h5 class="modal-title center">
+          List Of Generics
+        </h5>
+      </div>
+      <div class="modal-body heightAuto-300px">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <input class="form-control" id="myInputg" type="text" placeholder="Search Generics ...">
+            </div>
+          </div>
+
+          <div class="row">
+            <table class="custom-table withoutbackgroung search-table table-bordered" style="margin:2%">
+              <thead>
+                <tr>
+                  <th style="width:6%;">Action</th>
+                  <th class="width-18p">Generic Name</th>
+                  <th>Brand</th>
+                  <th>UOM</th>
+                  <th>Drug Group</th>
+                  <th>Manufacturer</th>
+                </tr>
+              </thead>
+              <tbody id="myTableg">
+                <tr *ngFor="let sb of selbrnd; index as i">
+                  <td><mat-radio-button (click)="selecttypes(sb)"></mat-radio-button></td>
+                  <td class="width-18p">{{sb.MedicineName}}</td>
+                  <td>{{sb.Brand}}</td>
+                  <td>{{sb.uomName}}</td>
+                  <td>{{sb.DrugGroup}}</td>
+                  <td>{{sb.Manufacturer}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Template Pop up-->
+<div class="modal" role="dialog" [ngStyle]="{'display':Template}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="TemplateClose()">&times;</button>
+        <h5 class="modal-title center">
+          Drug Template
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Enter Template Description</mat-label>
+              <input required [(ngModel)]="M_TemplateDescription" name="TemplateDescription" matInput placeholder="">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-primary addbutton" mat-raised-button (click)="SubmitTemplate()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Show Template Pop up-->
+<div class="modal" role="dialog" [ngStyle]="{'display':ShowTemplate}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ShowTemplateClose()">&times;</button>
+        <h5 class="modal-title center">
+          List of Medicine Templates
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <table mat-table matSort [dataSource]="dataSource11" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef>S.NO</th>
+              <td mat-cell *matCellDef="let element ;let i = index;">{{i+1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="TempDesc">
+              <th mat-header-cell *matHeaderCellDef>Template Description</th>
+              <td mat-cell *matCellDef="let element ;let i = index;">{{element.TempDesc}}  </td>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef> Action </th>
+              <td mat-cell *matCellDef="let element; let i = index;" style="text-align:center"> <mat-icon data-toggle="tooltip" title="View Template Details" class="grab" (click)="ViewTempDetails(element)">visibility</mat-icon> &nbsp;&nbsp;&nbsp;&nbsp;<mat-icon data-toggle="tooltip" title="Select" class="grab" (click)="SelectTempDetails(element)">touch_app</mat-icon> &nbsp;&nbsp;&nbsp;&nbsp;<mat-icon data-toggle="tooltip" title="delete" class="grab" (click)="delTempDetails(element, i)">delete</mat-icon> </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns11;sticky: true"></tr>
+            <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumns11" [ngClass]="{gray: even}"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Medicine Template Pop up-->
+<div class="modal" role="dialog" [ngStyle]="{'display':MedicineTemplate}">
+  <div class="modal-dialog modal-lg custhispopmodal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="MedicineTemplateClose()">&times;</button>
+        <h5 class="modal-title center">
+          Medicine Details
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="row">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+              <mat-label>Template Name : </mat-label>
+              {{tname}}
+            </div>
+            <div class="col-sm-4">
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="col-sm-12 custpopht-0" #table>
+              <table mat-table matSort [dataSource]="dataSource22" class="custom-table withoutbackgroung search-table table-bordered">
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>S.NO</th>
+                  <td mat-cell *matCellDef="let element let i = index"> {{i+1}} </td>
+                </ng-container>
+                <!--<ng-container matColumnDef="Brand">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Brand</th>
+                  <td mat-cell *matCellDef="let element"> {{element.DrugDesc}} </td>
+                </ng-container>-->
+                <ng-container matColumnDef="GenericName">
+                  en
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Generic Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.GenericName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="frequency">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Frequency</th>
+                  <td mat-cell *matCellDef="let element"> {{element.frequency}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Days">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Days</th>
+                  <td mat-cell *matCellDef="let element"> {{element.Days}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Food">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Food</th>
+                  <td mat-cell *matCellDef="let element"> {{element.Food}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns22;sticky:false"></tr>
+                <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumns22;"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalsfi}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessfi()">&times;</button>
+        <h5 class="modal-title center">History</h5>
+      </div>
+      <div class="modal-body Genrricsheight">
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" #table>
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Prescription No</th>
+                <th>Prescribed date & time</th>
+                <th>Prescribed by</th>
+                <th>Branch Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let hi of bills; index as i">
+                <td style="text-align:center;">
+                  <button mat-button><mat-icon data-toggle="tooltip" title="Select" class="grab" (click)="selecttyp(hi)">touch_app</mat-icon></button>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <button mat-button><mat-icon data-toggle="tooltip" title="Print" class="grab" (click)="SelectprintDetails(hi)">print</mat-icon></button>
+                </td>
+                <td>{{hi.Bill}}</td>
+                <td>{{hi.BillDate | date: 'dd-MMM-y HH:mm'}}</td>
+                <td>{{hi.DocName}}</td>
+                <td>{{hi.CmpName}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalsfii}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessfii()">&times;</button>
+        <h5 class="modal-title center">
+          Prescribed Generics
+        </h5>
+      </div>
+      <div class="modal-body Genrricsheight">
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12">
+          <div class="row">
+
+            <div class="col-sm-4">
+              <mat-label>Prescription No : </mat-label>
+              {{bno}}
+            </div>
+            <div class="col-sm-5">
+              <mat-label>Prescribed date : </mat-label>
+              {{pdate | date: 'dd-MMM-y HH:mm'}}
+            </div>
+            <div class="col-sm-3">
+              <mat-label>Prescribed by : </mat-label>
+              {{dname}}
+            </div>
+          </div>
+        </div>
+
+        <div class="row" #table>
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th>Brand</th>
+                <th>UOM</th>
+                <th>Eye</th>
+                <th>Frequency</th>
+                <th>Food</th>
+                <th>Days</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let uii of userss; index as i">
+                <td>{{uii.DrugName}}</td>
+                <td>{{uii.uom}}</td>
+                <td>{{uii.Eye}}</td>
+                <td>{{uii.Freq}}</td>
+                <td>{{uii.Foodd}}</td>
+                <td>{{uii.Tdays}}</td>
+                <td>{{uii.Quant}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalbill}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessbill()">&times;</button>
+        <h5 class="modal-title center">Prescribed Generics</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+          </div>
+          <div class="col-sm-3">
+            <mat-label>Prescription No : </mat-label>
+            {{bnno}}
+          </div>
+          <div class="col-sm-3">
+            <mat-label>Prescribed date : </mat-label>
+            {{bdtt | date: 'dd-MMM-y'}}
+          </div>
+          <div class="col-sm-3">
+            <mat-label>Prescribed by : </mat-label>
+            {{dnme}}
+          </div>
+        </div>
+
+        <div class="row" #table>
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th>Brand</th>
+                <th>Eye</th>
+                <th>Frequency</th>
+                <th>Food</th>
+                <th>Days</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ui of users; index as i">
+                <td>{{ui.DrugName}}</td>
+                <td>{{ui.Eye}}</td>
+                <td>{{ui.Freq}}</td>
+                <td>{{ui.Foodd}}</td>
+                <td>{{ui.Tdays}}</td>
+                <td>{{ui.Quant}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalSuccesste}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessteClose()">&times;</button>
+        <h5 class="modal-title center">Information</h5>
+      </div><br />
+
+      <p align="center">Do you want to overwrite?</p>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="closete();">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closetes();">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':purchaseprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h5 class="modal-title center">Existing generic</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+              <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to continue?</strong></h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button (click)="printsss()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclose()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="printssp" style="display:none">
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{cnamep}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6"> <label> {{caddresp}}</label></div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"> <label>Tel-{{cphp}},- {{cwep}}</label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"> <span style="font-size:50px">&#8478;</span></div>
+      <div class="col-sm-6">
+        <label style="text-align:center">
+          <strong>
+            Medical Prescription<br />Prescription No : {{bnor}}<br />Prescription date & time : {{pdater | date: 'dd-MMM-y HH:mm'}}hrs
+          </strong>
+        </label>
+
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label>Patient ID : {{uinnp}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Patient Name : {{patcontp}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Age / Gender : {{agep}}/{{genderp}}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <table align="center" style="border-left:3px solid#51b8f2;margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Brand</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">UOM</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Frequency</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Days</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Quantity</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Eye</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Food</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let xx of userssr; index as i">
+          <td style="text-align:center">{{xx.DrugName}}</td>
+          <td style="text-align:center">{{xx.uom}}</td>
+          <td style="text-align:center">{{xx.Freq}}</td>
+          <td style="text-align:center">{{xx.Tdays}}</td>
+          <td style="text-align:center">{{xx.Quant}}</td>
+          <td style="text-align:center">{{xx.Eye}}</td>
+          <td style="text-align:center">{{xx.Foodd}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Allergy : &nbsp;susceptible to <strong>{{d_allergy}}</strong></strong></label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Remarks : {{rem}}</strong></label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Next Review Date :{{redt | date :'dd-MMM-y'}}</strong></label>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-top:15px;">
+    <div class="row">
+      <div class="col-sm-4">
+
+      </div>
+      <div class="col-sm-4">
+
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Prescribed by:&nbsp;Dr.{{docontp}}<br />Reg No : {{docnop}}</strong></label>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':purchaseprintp}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h5 class="modal-title center">Information</h5>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to Print?</strong></h1>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="printsssp()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosep()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-center">Medical Prescription - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':stockpopup}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h5 class="modal-title center">Insufficient quantity</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+              <h1><strong>Do you want to prescribe?</strong></h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button (click)="stockpopupyes()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="stockpopupno()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':tappopup}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h5 class="modal-title center">Tappered medicine</h5>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+              <h1><strong>Do you want to prescribe?</strong></h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button (click)="tappopupyes()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="tappopupno()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalfreq}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessfreq()">&times;</button>
+        <h5 class="modal-title center">Frequency</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+
+
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Frequency</mat-label>
+              <textarea [(ngModel)]="addFreq" name="addFreq" placeholder="Enter Frequency" matInput #message8 maxlength="100"></textarea>
+              <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+              <mat-hint align="end"><strong>{{message8.value.length}}/100</strong></mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-3">
+
+          </div>
+
+
+
+
+        </div>
+        <div class="row">
+          <div class="col-sm-12 pb25">
+            <div class="content-right sub-section btn-wrap">
+              <button type="button" class="btn btn-warning-default" (click)="canceladddescf()"> Cancel </button>
+              <button class="success btn btn-primary" (click)="AddFrequency()">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalfood}">
+
+  <div class="modal-dialog modal-lmd">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessfood()">&times;</button>
+        <h5 class="modal-title center">
+          Food
+        </h5>
+
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Food</mat-label>
+              <textarea [(ngModel)]="addFood" name="addFood" placeholder="Enter Food" matInput #message8 maxlength="100"></textarea>
+              <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+              <mat-hint align="end"><strong>{{message8.value.length}}/100</strong></mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 pb25">
+            <div class="content-right sub-section btn-wrap">
+              <button type="button" class="btn btn-warning-default" (click)="cancelFood()"> Cancel </button>
+              <button class="success btn btn-primary" (click)="AddFood()">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':purchaseprintdi}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Added Successfully</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+              <h1><strong>Want to add another frequency</strong></h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printsssdi()" class="btn btn-success">Yes</button>
+          <button type="button" id="theButton" class="btn btn-danger" data-dismiss="modal" (click)="printclosedi()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':purchaseprintdif}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Added Successfully</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+              <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Want to add another </strong></h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="printsssdif()" class="btn btn-success">Yes</button>
+          <button type="button" id="theButton" class="btn btn-danger" data-dismiss="modal" (click)="printclosedif()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--ocuod pop-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':oneeyeod}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg diaclosmodal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">One eyed patient - OD</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Want to continue for both eyes?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printssssood()" class="btn btn-danger">No</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosesood()" cdkFocusInitial>Yes</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':oneeyeos}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg diaclosmodal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">One eyed patient - OS</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Want to continue for both eyes?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printssssoos()" class="btn btn-danger">No</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosesoos()" cdkFocusInitial>Yes</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':alerpopup}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h5 class="modal-title center">Patient having drug allergy</h5>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+              <h1><strong>Do you want to prescribe?</strong></h1>
+            </div>
+            <div class="col-sm-1">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button (click)="alerpopupyes()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="alerpopupno()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ShowTap}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ShowTapClose()">&times;</button>
+        <h5 class="modal-title center">
+          List of Tappered Drugs
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <table mat-table matSort [dataSource]="dataSourcetap" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef>S.NO</th>
+              <td mat-cell *matCellDef="let element ;let i = index;">{{i+1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="GenName">
+              <th mat-header-cell *matHeaderCellDef>Generic name</th>
+              <td mat-cell *matCellDef="let element ;let i = index;">{{element.drugname}}  </td>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef> Action </th>
+              <td mat-cell *matCellDef="let element; let i = index;" style="text-align:center"> <mat-icon data-toggle="tooltip" title="View Tappered Details" class="grab" (click)="ViewTapmedicine(element)">visibility</mat-icon> &nbsp;&nbsp;&nbsp;&nbsp;<mat-icon data-toggle="tooltip" title="Select" class="grab" (click)="DeleteTapDetails(element, i)">delete</mat-icon>  </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnstap;sticky: true"></tr>
+            <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumnstap" [ngClass]="{gray: even}"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ShowTapdet}">
+  <div class="modal-dialog modal-lg custhispopmodal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ShowTapdetClose()">&times;</button>
+        <h5 class="modal-title center">
+          Tappered Details
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="row">
+
+            <div class="col-sm-12 custpopht-0" #table>
+              <table mat-table matSort [dataSource]="dataSourcetapdet" class="custom-table withoutbackgroung search-table table-bordered">
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">S.NO</th>
+                  <td mat-cell *matCellDef="let element let i = index" class="width-4p"> {{i+1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="GenName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Generic Name</th>
+                  <td mat-cell *matCellDef="let element" class="width-18p"> {{element.drugname}} </td>
+                </ng-container>
+                <ng-container matColumnDef="frequency">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Frequency</th>
+                  <td mat-cell *matCellDef="let element" class="width-12p"> {{element.freq}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Days">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Days</th>
+                  <td mat-cell *matCellDef="let element" class="width-4p"> {{element.days}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Food">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Food</th>
+                  <td mat-cell *matCellDef="let element" class="width-12p"> {{element.food}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Quantity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Quantity</th>
+                  <td mat-cell *matCellDef="let element" class="width-4p"> {{element.quant}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnstapdet;sticky:false"></tr>
+                <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumnstapdet;"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg can-0">
+      <div class="modal-content">
+
+        <div class="modal-body">
+
+
+
+          <p>
+            Do you want to delete this tappered drug?
+          </p>
+
+
+          <div class="modal-footer">
+
+            <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="nodelete()">No</button>
+            <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="yesdelete()">Yes</button>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblockt}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg can-0">
+      <div class="modal-content">
+
+        <div class="modal-body">
+
+
+
+          <p>
+            Do you want to delete this template?
+          </p>
+
+
+          <div class="modal-footer">
+
+            <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="nodeletet()">No</button>
+            <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="yesdeletet()">Yes</button>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--/* Prescription  upload */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':Uploadfilesblock}">
+  <div class="modal-dialog modal-md" style="width:800px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="UploadfilesblockClosesss()">&times;</button>
+        <h5 class="modal-title center">Upload Prescription</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="slimod-0">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-8">
+
+
+
+
+                  <img id="OpticalBiometry" *ngFor='let url of urls' [src]="url" height="75" width="75" style="margin-left: 8px; border: 1px solid #51b8f2" #patientImage1> <br />
+
+                  <span><mat-icon *ngFor='let url of urls; index as i' data-toggle="tooltip" title="Remove" (click)="removeOptical(i)"> cancel </mat-icon></span>
+                  <span *ngFor='let url of urls; index as i'>{{resu}}</span>
+                  <input #userPhoto type='file' [disabled]="isDisabledimag" (change)="onSelectFile($event)" multiple accept=".jpg, .png">
+
+                  <div class="row">
+                    <small class="refcol"><b> .png, .jpeg Images Supported</b></small>
+                  </div>
+                </div>
+                <div class="col-sm-4" [hidden]="!isHiddendt">
+                  <mat-form-field appearance="outline">
+                    <textarea [(ngModel)]="Remarks" name="Remarks" matInput rows="5" cols="10" placeholder="Enter Description" maxlength="250"></textarea>
+                    <mat-hint align="start">Max 250 Characters</mat-hint>
+                  </mat-form-field>
+                </div>
+
+
+                </div>
+              </div>
+          </div>
+
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-9" [hidden]="!isHiddendt">
+                <mat-label>Uploaded Date & Time :</mat-label>
+                {{date4 | date: 'dd-MMM-y HH:mm'}}
+              </div>
+              <div class="col-sm-3">
+                <button class="btn btn-success" [disabled]="isDisabledup" style="color:green;background-color:white;" (click)="onUpload()">Upload</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':investigationblocktot}">
+  <div class="modal-dialog modal-lg invimgpop-0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Prescription Details</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="InvestigationClosesssstot()">&times;</button>
+      </div>
+      <div class="modal-body invimgpopbody-0">
+
+
+
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>S No</th>
+              <th>Prescriptions</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of imagePathdy; index as i">
+              <td>{{i + 1}}</td>
+              <td *ngFor="let image of x.imgdtre; let id = index">
+                <img style="height:75px;width:75px;" [src]="image">
+
+                <div *ngFor="let y of x.imgdttm; let i = index">
+                  <div *ngIf="id == i">
+                    {{y | date: 'dd-MMM-y HH:mm'}}
+                  </div>
+                </div>
+
+                <div *ngFor="let y1 of x.remarks; let i = index">
+                  <div *ngIf="id == i && y1 != null && y1 != ''">
+                    <mat-label class="fcolor">Remarks : </mat-label>{{y1}}
+                  </div>
+                </div>
+
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="InvestigationClosesssstot()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

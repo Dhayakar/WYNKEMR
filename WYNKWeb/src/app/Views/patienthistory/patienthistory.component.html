@@ -1,0 +1,1525 @@
+
+  <mat-tab-group animationDuration="0ms" class="tabsss" (selectedTabChange)="tabChanged($event)" style="border:2px solid gray">
+    <mat-tab label="Common Complaints">
+      <app-dummy-patient-history-orginal></app-dummy-patient-history-orginal>
+    </mat-tab>
+
+    <mat-tab label="Allergy">
+
+
+      <div class="col-sm-12 mph-0 mt10">
+        <div class="row mph-0">
+          <div class="col-sm-12 mph-0">
+            <div class="col-sm-6 mph-0 pb20">
+              <span class="uinborder">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+            <div class="col-sm-2 mph-0 pb20">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-12 mt10">
+        <div class="card mb-3">
+          <h5 class="card-header bg-success text-white">
+            Allergy
+            <label class="labelfloat">
+              <button (click)="toggle();" matTooltip="Show removed list" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">{{toggledata}}</button>
+              <button (click)="Addallery();" [disabled]="disabledallergy" matTooltip="Add Allergy" class="btn btn-primary-default btn-Excel buttonsfloat">Add Allergy</button>
+            </label>
+          </h5>
+          <div class="card-body">
+
+            <div class="col-sm-12 mt10">
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Type</mat-label>
+                    <mat-select [(ngModel)]="M_Type" name="Type" (ngModelChange)="Type()">
+                      <mat-option>None</mat-option>
+                      <mat-option *ngFor="let Type of Types" [value]="Type">{{Type.Text}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <mat-select [(ngModel)]="M_Descriptionn" name="Description" [disabled]="Desc">
+                      <mat-option>None</mat-option>
+                      <mat-option *ngFor="let Description of Descriptionss" [value]="Description">{{Description.Text}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Period</mat-label>
+                    <mat-select [(ngModel)]="M_Period" name="Status" (ngModelChange)="getPeriodvalue()">
+                      <mat-option value="Day">Day</mat-option>
+                      <mat-option value="Week">Week</mat-option>
+                      <mat-option value="Month">Month</mat-option>
+                      <mat-option value="Year">Year</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Since</mat-label>
+                    <input type="text" [(ngModel)]="M_YearvalueGet" name="getyearvalue" matInput placeholder="Enter Value" (keyup)="Getdatevalue($event)" (keypress)="Restrict($event)" id="txthour" [disabled]="sincedis">
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Date</mat-label>
+                    <input [(ngModel)]="M_Yearvalue" name="Yearvalue" matInput placeholder="Date" disabled>
+                  </mat-form-field>
+
+                </div>
+
+
+              </div>
+
+
+
+
+            </div>
+
+
+            <div class="row col-sm-12 heightAuto-300px" *ngIf="NotshowRemoved">
+              <table mat-table #table [dataSource]="dataSourcesqq" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef>S.No</th>
+                  <td mat-cell *matCellDef="let id = index; let id = index">{{id+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Type">
+                  <th mat-header-cell *matHeaderCellDef>  Type </th>
+                  <td mat-cell *matCellDef="let element; let id = index">{{element.Typename}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef> Description </th>
+                  <td mat-cell *matCellDef="let element; let id = index">{{element.Descriptionname}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let element">{{element.FromUTC | date:"dd-MMM-y"}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Delete">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element;let i = index;">
+                    <button mat-icon-button class="mt-1p">
+                      <mat-icon data-toggle="tooltip" title="Edit allergy" class="grab" (click)="Editallergy(i,element)">create</mat-icon>
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button mat-icon-button (click)="removeallergy(i,element)" [disabled]="element.IsActive == true">
+                      <mat-icon data-toggle="tooltip" title="Remove allergy" class="grab">delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqq"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqq;"></tr>
+              </table>
+
+            </div>
+
+            <div class="row col-sm-12 heightAuto-300px" *ngIf="ShowRemoved">
+              <table mat-table [dataSource]="dataSourcesqq1" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef>S.No</th>
+                  <td mat-cell *matCellDef="let id = index">{{id+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Type">
+                  <th mat-header-cell *matHeaderCellDef>  Type </th>
+                  <td mat-cell *matCellDef="let element">{{element.Typename}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef> Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Descriptionname}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let element">{{element.FromUTC | date:"dd-MMM-y"}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqq1"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqq1;"></tr>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default" (click)="CancelClk()"><strong>Cancel</strong></button>
+            <button class="success btn btn-primary" (click)="onSubmitallergy()" [disabled]="disupdate"> Submit </button>
+            <button type="button" mat-raised-button class="danger btn-danger-default " *ngIf="hiddenDeleted" (click)="Deleteallergy()"><strong>Delete</strong></button>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </mat-tab>
+
+    <mat-tab label="Vital Signs">
+      <div class="col-sm-12">
+        <div class="row">
+          <!--<h6>Vital Signs</h6>-->
+        </div>
+
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+            </span>
+          </div>
+          <div class="col-sm-2 mph-0 pb20">Taken by : {{doctorname}}</div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="getHistorydetails()"><i class="fas fa-eye"></i> History</button>
+          </div>
+        </div>
+        <div class="col-sm-12 mt-2p">
+          <div class="col-sm-12 border-blue border-radius mt-n1p">
+            <div class="row">
+              <div class="col-sm-6 border-rightblack mb-1p mt-1p">
+
+                <div class="col-sm-12">
+                  <div class="col-sm-3">
+                  </div>
+                  <div class="col-sm-5">
+
+                  </div>
+                  <div class="col-sm-3">
+                    <label><span>Normal</span></label>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0">Pulse / Heart Rate</label>
+                  </div>
+                  <div class="col-sm-2">
+                    <!--<input matInput class="width-50p border-black border-radius border-ShadowBlue" [(ngModel)]="PulseHeartRate" name="PulseHeartRate" placeholder="" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)">
+          &nbsp; <label>&#47; per min</label>-->
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input class="width-50p" [(ngModel)]="PulseHeartRate" name="PulseHeartRate" placeholder="" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)" matInput>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0">&#47; per min</label>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0"><span class="fcolor">60 - 100</span> per min</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 mt-1p">
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0">Respiration</label>
+                  </div>
+                  <div class="col-sm-2">
+                    <!--<input matInput placeholder="" maxlength="12" class="width-50p border-black border-radius border-ShadowBlue" [(ngModel)]="PAE_Respiration" name="PAE_Respiration" (keyup)="Restrictresp($event)" (keypress)="numberOnlyresp($event)" id="resp">
+          &nbsp;<label>&#47; per min</label>-->
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input class="width-50p" placeholder="" maxlength="12" [(ngModel)]="PAE_Respiration" name="PAE_Respiration" (keyup)="Restrictresp($event)" (keypress)="numberOnlyresp($event)" id="resp" matInput>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0">&#47; per min</label>
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0"><span class="fcolor">12 - 16</span> per min</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 mb-1p mt-1p">
+                <div class="col-sm-12">
+                  <div class="col-sm-3">
+                  </div>
+                  <div class="col-sm-6">
+
+                  </div>
+                  <div class="col-sm-3">
+                    <label><span>Normal</span></label>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-2">
+                    <label>Blood Pressure</label>
+                  </div>
+                  <div class="col-sm-2">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input maxlength="3" placeholder="" [(ngModel)]="BP1" name="BP1" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)" matInput>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-1">
+                    <label class="pgtop20-0">&#47;</label>
+                  </div>
+                  <div class="col-sm-2">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input maxlength="3" placeholder="" [(ngModel)]="BP2" name="BP2" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)" matInput>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2">
+                    <label class="pgtop20-0">mm of Hg</label>
+                  </div>
+                  <!--<div class="col-sm-5">
+          <input matInput maxlength="3" class="width-25p border-black border-radius border-ShadowBlue" placeholder="" [(ngModel)]="BP1" name="BP1" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)">
+          &nbsp;<label>&#47;</label>
+          &nbsp; <input matInput maxlength="3" class="width-25p border-black border-radius border-ShadowBlue" placeholder="" [(ngModel)]="BP2" name="BP2" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)">
+          &nbsp;<label>mm of Hg</label>
+        </div>-->
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0"><span class="fcolor">80 - 120</span> mm of Hg</label>
+                  </div>
+                </div>
+                <div class="col-sm-12 mt-1p">
+                  <div class="col-sm-2">
+                    <label class="pgtop20-0">Temper<br />ature</label>
+                  </div>
+                  <div class="col-sm-2">
+                    <!--<label class="ml-5p">Afebrile /</label>
+          &nbsp; <input matInput maxlength="3" class="width-25p border-black border-radius border-ShadowBlue" placeholder="" [(ngModel)]="Temperature" name="Temperature" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)">
+          &nbsp;  <label>&#47; &nbsp;&#8451; &nbsp;&#47; &nbsp;&#8457;</label>-->
+
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input type="number" min="0" maxlength="4" placeholder="" [(ngModel)]="Temperature" name="Temperature" (keyup)="Restrictmt($event)" (keypress)="numberOnly1($event)" matInput>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <mat-select [(ngModel)]="tempType" name="tempType">
+                        <mat-option value="°C">&nbsp;&#8451;</mat-option>
+                        <mat-option value="°F">&nbsp;&#8457;</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2">
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="pgtop20-0"><span class="fcolor">97.5</span> &#47; &nbsp;&#8451; &nbsp;&#47; &nbsp;&#8457;</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4 mt-2p">
+                    <label class="pgtop20-0">Weight</label>
+                  </div>
+                  <div class="col-sm-3 pgtop20-0">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input matInput type="number" min="0" maxlength="6" [(ngModel)]="PAEWeight" name="PAEWeight" id="PAEWeight" (keyup)="CalculateBMI($event);Restrictmt($event)" [disabled]="disableweight" (keypress)="numberOnly1($event)">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3 pgtop20-0">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <mat-select [(ngModel)]="WeightType" name="WeightType">
+                        <mat-option value="kg" (click)="showweight()">kg</mat-option>
+                        <mat-option value="pounds" (click)="showweight()">Pounds</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4 mt-2p">
+                    <label class="pgtop20-0">Height</label>
+                  </div>
+                  <div class="col-sm-3 pgtop20-0">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input matInput type="number" min="0" maxlength="6" [(ngModel)]="PAEHeight" name="PAEHeight" (keyup)="CalculateBMI($event);Restrictht($event)" id="PAEHeight" [disabled]="disableHeight" (keypress)="numberOnlyht($event)">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3 pgtop20-0">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <mat-select [(ngModel)]="HeightType" name="HeightType">
+                        <mat-option value="cms" (click)="showHeight()">cms</mat-option>
+                        <mat-option value="inches" (click)="showHeight()">inches</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-8 mt-2p">
+                    <label class="pgtop20-0">Body Mass Index (BMI)</label>
+                  </div>
+                  <div class="col-sm-3 pgtop20-0">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <input matInput placeholder="" [(ngModel)]="PAEBMI" name="PAEBMI" disabled>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4 mt-2p">
+                  </div>
+                  <div class="col-sm-3">
+                    
+                  </div>
+                  <div class="col-sm-3">
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4 mt-2p">
+                  </div>
+                  <div class="col-sm-3">
+                    
+                  </div>
+                  <div class="col-sm-3">
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-8 mt-2p">
+                  </div>
+                  <div class="col-sm-3">
+                    <label> {{BMIRange}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="col-sm-12 m-3">
+          <div class="col-sm-12 pb25">
+            <div class="col-sm-4  sub-section btn-wrap f-r">
+              <button type="button" class="btn btn-warning-default" (click)="onCancelVs()"> Cancel </button>
+
+              <button type="submit" class="success btn btn-primary  ml-2p" (click)="onSubmitVs()">
+                Submit
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+
+
+
+    <mat-tab label="Birth History">
+      <div class="col-sm-12">
+        
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+            </span>
+          </div>
+          <div class="col-sm-2 mph-0 pb20"></div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="getHistorydetailsbh()"><i class="fas fa-eye"></i> History</button>
+          </div>
+        </div>
+        <div class="col-sm-12 pgtop20-0">
+          <div class="row">
+            <div class="col-sm-12 dividebar">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-2 pgtop20-0">
+                    <mat-label>Delivery Type</mat-label>
+
+                  </div>
+                  <div class="col-sm-2">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <mat-select [(ngModel)]="Delivery" name="Delivery" placeholder="Select" [disabled]="disableddel">
+                        <mat-option>Select</mat-option>
+                        <mat-option value="Normal">Normal</mat-option>
+                        <mat-option value="Cesarean">Cesarean</mat-option>
+
+
+
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!--<div class="col-sm-2 pgtop20-0">
+        <mat-label class="refcol">Weight(Kg)</mat-label>
+
+      </div>
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline">
+          <mat-label></mat-label>
+          <input [(ngModel)]="selectedWeight" name="selectedWeight" maxlength="3" matInput type="number" (keypress)="Rate($event)" onKeyDown="if(this.value.length==4 && event.keyCode>47 && event.keyCode < 58)return false;" oninput="validity.valid||(value='');">
+        </mat-form-field>
+
+
+      </div>-->
+
+                  <div class="col-sm-1 pgtop20-0">
+                    <mat-label>Weight</mat-label>
+                  </div>
+                  <div class="col-sm-1">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <!--<input matInput placeholder="" [(ngModel)]="selectedWeight" name="selectedWeight" id="selectedWeight" (keyup)="Restrictmt($event)" [disabled]="disableddel" (keypress)="numberOnly1($event)">-->
+
+                      <input matInput type="number" min="0" maxlength="6" [(ngModel)]="selectedWeight" name="selectedWeight" id="selectedWeight" (keyup)="Restrictmt($event)" [disabled]="disableddel" (keypress)="numberOnly1($event)">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-1">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <mat-select [disabled]="disableddel" (ngModelChange)="changewt($event)" [(ngModel)]="WeightTypebh" name="WeightTypebh">
+                        <mat-option value="kg">kg</mat-option>
+                        <mat-option value="pounds">Pounds</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2 pgtop20-0">
+                    <mat-label>Vaccination</mat-label>
+
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <textarea #messagevac maxlength="250" [(ngModel)]="Vaccination" name="Vaccination" matInput cols="4" placeholder="Enter Details"></textarea>
+
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-2 pgtop20-0">
+                    <mat-label>Growth and Development</mat-label>
+
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <textarea #messagegad maxlength="250" [(ngModel)]="gad" name="gad" matInput cols="4" placeholder="Enter Details"></textarea>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-2 pgtop20-0">
+                    <mat-label>Blood Transplant</mat-label>
+
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <textarea #messagebt maxlength="250" [(ngModel)]="Transplant" name="Transplant" matInput cols="4" placeholder="Enter Details"></textarea>
+
+                    </mat-form-field>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-2 pgtop20-0">
+                    <mat-label>Any Oxygen Therapy</mat-label>
+
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <textarea #messageaot maxlength="250" [(ngModel)]="Therapy" name="Therapy" matInput cols="4" placeholder="Enter Details"></textarea>
+
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-2 pgtop20-0">
+                    <mat-label>Any critical illness</mat-label>
+
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label></mat-label>
+                      <textarea #messageill maxlength="250" [(ngModel)]="illness" name="illness" matInput cols="4" placeholder="Enter Details"></textarea>
+
+                    </mat-form-field>
+                  </div>
+
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-sm-12 m-3">
+          <div class="col-sm-12 pb25">
+            <div class="col-sm-4  sub-section btn-wrap f-r">
+              <button (click)="onCancelbh()" type="button" class="btn btn-warning-default"> Cancel </button>
+
+              <button (click)="onSubmitbh()" type="submit" class="success btn btn-primary  ml-2p">
+                Submit
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+
+
+  <mat-tab label="Surgery History">
+    <div class="col-sm-12">
+      <div class="row">
+        <h6>Surgery History</h6>
+      </div>
+      <div class="col-sm-12 mph-0 mt10" style="margin-bottom:1%">
+        <div class="row mph-0">
+          <div class="col-sm-12 mph-0">
+            <div class="col-sm-6 mph-0 pb20">
+              <span class="uinborder">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+            <div class="col-sm-4 mph-0 pb20"></div>
+            <div class="col-sm-2 mph-0 pb20">              
+                <button style="float:right" (click)="SurHisAdd();" matTooltip="Add Surgery History" class="btn btn-primary-default  buttonsfloat">Add Surgery History</button>              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt10">
+        <div class="col-sm-10"></div>
+        <div class="col-sm-1 text-right pr-0 ml-1p">
+        
+        </div>
+      </div>
+      <div class="row m-0 heightAuto-300px">
+        <table mat-table [dataSource]="SurgeryHistorySource" class="custom-table search-table table-bordered">
+          <ng-container matColumnDef="Sno">
+            <th mat-header-cell *matHeaderCellDef>S.No</th>
+            <td mat-cell *matCellDef="let element;let i = index;"> {{i +1}} </td>
+          </ng-container>
+          <ng-container matColumnDef="DateOfSurgery" #names>
+            <th mat-header-cell *matHeaderCellDef>Date of Surgery</th>
+            <td mat-cell *matCellDef="let element;let id = index;" contenteditable="false">
+              <div *ngIf="element.Status =='New'" class="ml-1p mt-4p">
+                <mat-form-field appearance="outline">
+                  <input name="date" type="datetime" autocomplete="off" [min]="DOB" [max]="maxToDate" matInput [matDatepicker]="Date" placeholder=""
+                         (dateChange)="DateOfSurgery($event,element)" (keyup.arrowright)="arrowrightDateOfSurgery(id,$event,element)"
+                         (keyup.enter)="arrowrightDateOfSurgery(id,$event,element)" (keydown.Tab)="arrowrightDateOfSurgery(id,$event,element)"
+                         (keypress)="numberOnly($event)" #DateOfSurgerys>
+                  <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                  <mat-datepicker #Date></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div *ngIf="element.Status =='Saved'">
+                {{element.DateOfSurgery | date:"dd-MMM-y"}}
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="TypeofSurgery">
+            <th mat-header-cell *matHeaderCellDef>Type of Surgery</th>
+            <td mat-cell *matCellDef="let element;let id = index;" [attr.contenteditable]="element.Status == 'New'">
+              <div *ngIf="element.Status =='New'" class="ml-1p">
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="" class="form-control" (blur)="TypeofSurgery($event,element)" name="TypeofSurgery" type="text" #TypeofSurgerys (keyup.arrowright)="arrowrightTypeofSurgerys(id,$event,element)" (keyup.enter)="arrowrightTypeofSurgerys(id,$event,element)">
+                </mat-form-field>
+              </div>
+              <div *ngIf="element.Status =='Saved'">
+                {{element.TypeofSurgery}}
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="SurgeonName">
+            <th mat-header-cell *matHeaderCellDef>Surgeon Name</th>
+            <td mat-cell *matCellDef="let element;let id = index;">
+              <div *ngIf="element.Status =='New'" class="ml-1p">
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="" class="form-control" (blur)="SurgeonName($event,element)" name="SurgeonName" type="text" #SurgeonNames (keyup.arrowright)="arrowrightSurgeonName(id,$event,element)" (keyup.enter)="arrowrightSurgeonName(id,$event,element)">
+                </mat-form-field>
+              </div>
+              <div *ngIf="element.Status =='Saved'">
+                {{element.SurgeonName}}
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="HospitalClinic">
+            <th mat-header-cell *matHeaderCellDef>Hospital / Clinic</th>
+            <td mat-cell *matCellDef="let element;let id = index;">
+              <div *ngIf="element.Status =='New'" class="ml-1p">
+                <mat-form-field appearance="outline">
+                  <input matInput placeholder="" class="form-control" (blur)="HospitalClinic($event,element)" name="SurgeonName" type="text" #HospitalClinics (keyup.arrowright)="arrowrightHospitalClinic(id,$event,element)" (keyup.enter)="arrowrightHospitalClinic(id,$event,element)">
+                </mat-form-field>
+              </div>
+              <div *ngIf="element.Status =='Saved'">
+                {{element.HospitalClinic}}
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Eye">
+            <th mat-header-cell *matHeaderCellDef>Eye</th>
+            <td mat-cell *matCellDef="let element;let id = index;" #Eyes [attr.contenteditable]="element.Status == 'New'">
+              <div *ngIf="element.Status =='New'" class="ml-1p mt-4p">
+                <mat-form-field>
+                  <mat-label>Select an Eye</mat-label>
+                  <mat-select (selectionChange)="SelectEye($event,element);OcEyes.close()" #OcEyes (focus)="OcEyes.open()" (keyup.enter)="saveEyes(id,$event,element)">
+                    <mat-option value="OD">OD</mat-option>
+                    <mat-option value="OS">OS</mat-option>
+                    <mat-option value="OU">OU</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div *ngIf="element.Status =='Saved'">
+                {{element.Eye}}
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="SurgDone">
+            <th mat-header-cell *matHeaderCellDef>Surgery Done</th>
+            <td mat-cell *matCellDef="let element">{{element.SurgeryDone}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element;let i = index;" #Actionsq>
+              <button mat-icon-button *ngIf="element.Status != 'New'" [disabled]="element.SurgeryDone == 'External'" style="text-align: end">
+                <!--<mat-icon data-toggle="tooltip" title="View Io notes details" class="grab" (click)="element.SurgeryDone == 'Internal' ? GetSurOtNotes(element.SurgeryId,element) : null">create</mat-icon>-->
+                <i class="fas fa-eye" data-toggle="tooltip" title="View Io notes details" (click)="element.SurgeryDone == 'Internal' ? GetSurOtNotes(element.SurgeryId,element) : null"></i>
+              </button>
+              <button mat-icon-button style="text-align: end" [disabled]="element.SurgeryDone == 'Internal'">
+                <mat-icon data-toggle="tooltip" title="Drop" class="grab" (click)="element.SurgeryDone == 'Internal' ? null: DropNewSurHistory(i,element)">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="SurgeryHistoryColumns"></tr>
+          <tr mat-row *matRowDef="let element;  let even = even;  columns: SurgeryHistoryColumns;"></tr>
+        </table>
+      </div>
+      <div class="row marg-12">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-3">
+          <button type="submit" class="success btn btn-primary" (click)="SaveData()" mat-raised-button>Submit</button>
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+    </div>
+  </mat-tab>
+
+    <mat-tab label="Admission And Surgery History">
+      <div class="col-sm-12">
+        <div class="row">
+          <h1 class="col-sm-3" align="center" style="margin-bottom:0px;margin-top:10px">Admission And Surgery Details</h1>
+        </div>
+      </div>
+      <div class="col-sm-11" style="background-color:white;border:2px solid #51b8f2;border-radius:8px">
+        <div class="col-sm-12" style="margin-top:10px">
+          <div class="row">
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+
+              <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';
+             border:1px solid gray;padding:10px;border-radius: 16px;">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+            <div class="col-sm-2">
+              <!--<button type="button" class="btn btn-info" data-toggle="tooltip" title="View Total History" autofocus (click)="getTotalhistorydetailsdetails()">
+              <mat-label style="color:white;font-size:15px">View History</mat-label>
+              <mat-icon style="font-size:15px;">search</mat-icon>
+            </button>-->
+            </div>
+
+          </div>
+        </div>
+        <div class="col-sm-12" style="margin-top:10px">
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field style="width: 200px;" appearance="outline">
+                <mat-label>Admission Date</mat-label>
+                <input [(ngModel)]="M_AdmissionDate" name="DatePicker3" matInput [matDatepicker]="picker3" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field style="width: 200px;" appearance="outline">
+                <mat-label>Surgery Date</mat-label>
+                <input [(ngModel)]="M_SurgeryDate" name="DatePicker" matInput [matDatepicker]="picker" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Surgery Description</mat-label>
+                <input [(ngModel)]="M_SurgeryDescription" name="SurgeryDescription" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Surgeon Name</mat-label>
+                <input [(ngModel)]="M_SurgeonName" name="SurgeonName" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Operation Theatre</mat-label>
+                <input [(ngModel)]="M_OperationTheatre" name="M_OperationTheatre" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Anesthetist Name</mat-label>
+                <input [(ngModel)]="M_anesthesiologistName" name="anesthesiologistName" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Ocular</mat-label>
+                <input [(ngModel)]="M_Ocular" name="Ocular" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Anaesthesia </mat-label>
+                <input [(ngModel)]="M_Anaesthesia" name="Anaesthesia" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Surgery Cost</mat-label>
+                <input [(ngModel)]="M_SurgeryCost" name="SurgeryCost" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field style="width: 200px;" appearance="outline">
+                <mat-label>Review Date</mat-label>
+                <input required [(ngModel)]="M_ReviewDate" name="ReviewDate" matInput [matDatepicker]="picker7" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                <mat-datepicker #picker7></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Is Surgery Completed</mat-label>
+                <input [(ngModel)]="M_IsSurgeryCompleted" name="IsSurgeryCompleted" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Remarks</mat-label>
+                <textarea [(ngModel)]="M_Remarks" name="Remarks" placeholder="Remarks" matInput #message2 maxlength="250" disabled></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message2.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+
+
+    <mat-tab label="Pre-operative History">
+      <div class="col-sm-12">
+        <div class="row">
+          <h1 class="col-sm-3" align="center" style="margin-bottom:0px;margin-top:10px">Pre-operative Details</h1>
+        </div>
+      </div>
+      <div class="col-sm-11" style="background-color:white;border:2px solid #51b8f2;border-radius:8px;">
+        <div class="col-sm-12" style="margin-top:10px">
+          <div class="row">
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+
+              <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';
+border:1px solid gray;padding:10px;border-radius: 16px;">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+            <div class="col-sm-2">
+              <!--<button type="button" class="btn btn-info" data-toggle="tooltip" title="View Total History" autofocus (click)="getTotalhistorydetailsdetails()">
+              <mat-label style="color:white;font-size:15px">View History</mat-label>
+              <mat-icon style="font-size:15px;">search</mat-icon>
+            </button>-->
+            </div>
+
+          </div>
+        </div>
+        <div class="col-sm-12" style="margin-top: 15px;">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline" style="width:215px">
+                <mat-label>Antibiotic Given Date</mat-label>
+                <input [(ngModel)]="M_PreopantiDateP" name="PreopantiDateP" matInput [matDatepicker]="picker4" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Antibiotic Given BY</mat-label>
+                <input [(ngModel)]="M_AntibioticP" name="AntibioticP" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Case Sheet Checked By</mat-label>
+                <input [(ngModel)]="M_CaseSheetCheckedP" name="CaseSheetCheckedP" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Instruction Given By</mat-label>
+                <input [(ngModel)]="M_InstructionGivenP" name="InstructionGivenP" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Notes</mat-label>
+                <textarea [(ngModel)]="M_NotesP" name="Notesp" placeholder="Notes" matInput #message1 maxlength="250" disabled></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message1.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Intra-operative Details">
+      <div class="col-sm-12">
+        <div class="row">
+          <h1 class="col-sm-3" align="center" style="margin-bottom:0px;margin-top:10px">Intra-operative Details</h1>
+        </div>
+      </div>
+      <div class="col-sm-11" style="background-color:white;border:2px solid #51b8f2;border-radius:8px;">
+        <div class="col-sm-12" style="margin-top:10px">
+          <div class="row">
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+
+              <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';
+border:1px solid gray;padding:10px;border-radius: 16px;">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+            <div class="col-sm-2">
+              <!--<button type="button" class="btn btn-info" data-toggle="tooltip" title="View Total History" autofocus (click)="getTotalhistorydetailsdetails()">
+              <mat-label style="color:white;font-size:15px">View History</mat-label>
+              <mat-icon style="font-size:15px;">search</mat-icon>
+            </button>-->
+            </div>
+
+          </div>
+        </div>
+        <div class="col-sm-12" style="margin-top: 15px;">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Surgery Description</mat-label>
+                <input [(ngModel)]="M_SurgeryDescription1" name="SurgeryDescription1" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Surgeon Name</mat-label>
+                <input [(ngModel)]="M_SurgeonName1" name="M_SurgeonName1" matInput placeholder="" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Post-operative Instructions </mat-label>
+                <textarea [(ngModel)]="M_InstructionGivenI" name="InstructionGivenI" placeholder="Instructions" matInput #message3 maxlength="250" disabled></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message3.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Post-operative Details">
+      <div class="col-sm-12">
+        <div class="row">
+          <h1 class="col-sm-3" align="center" style="margin-bottom:0px;margin-top:10px">Post-operative Details</h1>
+        </div>
+      </div>
+      <div class="col-sm-11" style="background-color:white;border:2px solid #51b8f2;border-radius:8px;">
+        <div class="col-sm-12" style="margin-top:10px">
+          <div class="row">
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+
+              <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';
+border:1px solid gray;padding:10px;border-radius: 16px;">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+            <div class="col-sm-2">
+              <!--<button type="button" class="btn btn-info" data-toggle="tooltip" title="View Total History" autofocus (click)="getTotalhistorydetailsdetails()">
+              <mat-label style="color:white;font-size:15px">View History</mat-label>
+              <mat-icon style="font-size:15px;">search</mat-icon>
+            </button>-->
+            </div>
+
+          </div>
+        </div>
+        <div class="col-sm-12" style="margin-top: 15px;">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline" style="width:215px">
+                <mat-label>Post-Operative Date</mat-label>
+                <input [(ngModel)]="M_PostOperative" name="M_PostOperative" matInput [matDatepicker]="picker6" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                <mat-datepicker #picker6></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Complications Details</mat-label>
+                <textarea required [(ngModel)]="M_NotesI" name="NotesI" placeholder="Notes" matInput #message2 maxlength="250" disabled></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message2.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Treatment and Advice</mat-label>
+                <textarea required [(ngModel)]="M_InstructionGivenII" name="InstructionGivenI" placeholder="Instructions" matInput #message3 maxlength="250" disabled></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message3.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline" style="width:215px">
+                <mat-label>Review Date</mat-label>
+                <input [(ngModel)]="M_Review" name="Review" matInput [matDatepicker]="picker5" placeholder="" disabled>
+                <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                <mat-datepicker #picker5></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+
+
+
+
+
+<!--/* OtNotes Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':OtNotes}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content height-550px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="OtNotesClose()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Surgery History</strong>
+        </h5>
+      </div>
+      <div class="modal-body heightAuto-450px overflowx-hide">
+        <div class="row m-3">
+          <div class="col-sm-3">
+            <mat-label><b>Type of Surgery:</b></mat-label>&nbsp;&nbsp;
+            {{PopTypeOfSurg}}
+          </div>
+          <div class="col-sm-4">
+            <mat-label><b>Surgeron Name:</b></mat-label>&nbsp;&nbsp;
+            {{PopSurName}}
+          </div>
+          <div class="col-sm-2">
+            <mat-label><b>Eye:</b></mat-label>&nbsp;&nbsp;&nbsp;
+            {{PopEye}}
+          </div>
+          <!--<div class="col-sm-3">
+            <mat-label><b>Hospital / Clinic:</b></mat-label>&nbsp;&nbsp;&nbsp;
+            {{PopHospClinic}}
+          </div>-->
+        </div>
+        <div class="row heightAuto-150px ml-1p mt-2p width-90p">
+          <table mat-table matSort [dataSource]="OtNotesSource" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="Sno">
+              <th mat-header-cell *matHeaderCellDef>S.no</th>
+              <td mat-cell *matCellDef="let i = index;">{{i+1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Desc">
+              <th mat-header-cell *matHeaderCellDef>Io Notes Description</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Description}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="OtNotesCoulmns;sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; let element;   let even = even;columns: OtNotesCoulmns;" [ngClass]="{gray: even}"></tr>
+          </table>
+        </div>
+        <div class="row">
+          <div class="row mt-2p ml-2p">
+            <mat-label><b>IO Drug Used :</b></mat-label>
+          </div>
+          <div class="row heightAuto-150px ml-2p mt-2p width-90p">
+            <table mat-table matSort [dataSource]="DrugUsedSource" class="custom-table withoutbackgroung search-table table-bordered">
+              <ng-container matColumnDef="Sno">
+                <th mat-header-cell *matHeaderCellDef>S.no</th>
+                <td mat-cell *matCellDef="let i = index;">{{i+1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Brand">
+                <th mat-header-cell *matHeaderCellDef>Brand</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Brand}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Generic">
+                <th mat-header-cell *matHeaderCellDef>Generic Name</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Generic}} </td>
+              </ng-container>
+              <ng-container matColumnDef="UOM">
+                <th mat-header-cell *matHeaderCellDef>UOM</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.UOM}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Qty">
+                <th mat-header-cell *matHeaderCellDef>Qty</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Qty}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="DrugUsedCoulmns;sticky:true"></tr>
+              <tr mat-row *matRowDef="let row; let element;   let even = even;columns: DrugUsedCoulmns;"></tr>
+            </table>
+          </div>
+        </div>
+        <div class="row" *ngIf="ShowDischargeDrugSource">
+          <div class="row mt-2p ml-2p">
+            <mat-label><b>Discharge Prescribed Drugs :</b></mat-label>
+          </div>
+          <div class="row heightAuto-150px ml-2p mt-2p width-90p">
+            <table mat-table matSort [dataSource]="DischargeDrugSource" class="custom-table withoutbackgroung search-table table-bordered">
+              <ng-container matColumnDef="Sno">
+                <th mat-header-cell *matHeaderCellDef>S.no</th>
+                <td mat-cell *matCellDef="let i = index;">{{i+1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Brand">
+                <th mat-header-cell *matHeaderCellDef>Brand</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Brand}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Generic">
+                <th mat-header-cell *matHeaderCellDef>Generic Name</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Generic}} </td>
+              </ng-container>
+              <ng-container matColumnDef="UOM">
+                <th mat-header-cell *matHeaderCellDef>UOM</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.UOM}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Qty">
+                <th mat-header-cell *matHeaderCellDef>Qty</th>
+                <td mat-cell *matCellDef="let element" data-toggle="tooltip">{{element.Qty}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="DischargeDrugCoulmns;sticky:true"></tr>
+              <tr mat-row *matRowDef="let row; let element;   let even = even;columns: DischargeDrugCoulmns;"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblockAllergy}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessssAllergy()">&times;</button>
+        <h4 class="modal-title">Allergy</h4>
+      </div><br />
+
+      <p align="center">Do you want to cancel?</p>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOkAllergy()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOkAllergy()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalallergy}">
+  <div class="modal-dialog modal-lg" style="width:70%;padding-top:10px">
+    <div class="modal-content" style="height:450px;width:100%">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessallergy()">&times;</button>
+        <h5 class="modal-title" style="text-align:center;font-family:'Proxima Nova';font-size:14px">
+          History
+        </h5>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="col-sm-12">
+          <div class="row">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" #input>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+
+          <div class="row" style="height:350px;overflow:auto;position:sticky">
+            <table mat-table matSort [dataSource]="dataSourcesqh" class="table table-bordered">
+
+              <ng-container matColumnDef="SNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;width: 33px">S.No</th>
+                <td mat-cell *matCellDef="let id = index">{{id+1}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="Type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center;background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px">  Type </th>
+                <td mat-cell *matCellDef="let element">{{element.Typename}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center;background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px"> Description </th>
+                <td mat-cell *matCellDef="let element">{{element.Descriptionname}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="Date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align:center;background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px"> Date </th>
+                <td mat-cell *matCellDef="let element">{{element.FromUTC | date:"dd-MMM-y"}}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnssqh"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnssqh;"></tr>
+            </table>
+
+          </div>
+
+
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewpac}">
+  <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px">
+    <div class="modal-content" style="height:450px;width: 112%">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewpac()">&times;</button>
+        <h5 class="modal-title" style="text-align:center;font-family:'Proxima Nova'">
+          History - Vital Signs
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+
+        <div class="col-sm-12">
+          <div class="row">
+
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-8" style="    margin-top: 1%;
+    margin-bottom: 2%;">
+
+
+              <span style="    color: darkblue;
+    font-size: 17px;
+    font-family: 'Proxima Nova Semibold';
+    border: 1px solid gray;
+    padding: 10px;
+    border-radius: 16px;">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-12" style="height:400px; overflow:auto" #table>
+
+
+
+            <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova Semibold';font-size:14px;" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color: black;">S No</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Date & time</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Pulse / Heart Rate</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Respiration</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Blood Pressure</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Temperature</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Weight</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">Height</th>
+                  <th style="font-family:'Proxima Nova Semibold';font-size:14px;height:40px;color:black">BMI</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let uii of padata; index as i">
+                  <td>{{i+1}}</td>
+                  <td>{{uii.Dates | date: 'dd-MMM-y HH:mm'}}</td>
+                  <td>{{uii.PulseHeartRate}} / per minute</td>
+                  <td>{{uii.Respiration}} / per minute</td>
+                  <td>
+                    {{uii.BloodPressure}}  mm of Hg
+                  </td>
+                  <td>{{uii.temperature}} / ℃/ ℉</td>
+                  <td>{{uii.Weight}}</td>
+                  <td>{{uii.Height}}</td>
+                  <td>{{uii.BMI}}</td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>-->
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewpac}">
+  <div class="modal-dialog modal-lg width-80p pt10">
+    <div class="modal-content heightAuto-450px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewpac()">&times;</button>
+        <h6>History - Vital Signs</h6>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6 mph-0 pb20">
+              <span class="uinborder">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3p">
+          <div class="col-sm-12 heightAuto" #table>
+            <table align="center" class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>S No</th>
+                  <th>Date & time</th>
+                  <th>Pulse / Heart Rate</th>
+                  <th>Respiration</th>
+                  <th>Blood Pressure</th>
+                  <th>Temperature</th>
+                  <th>Weight</th>
+                  <th>Height</th>
+                  <th>BMI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let uii of padata; index as i">
+                  <td>{{i+1}}</td>
+                  <td>{{uii.Dates | date: 'dd-MMM-y HH:mm'}}</td>
+                  <td>{{uii.PulseHeartRate}} / per minute</td>
+                  <td>{{uii.Respiration}} / per minute</td>
+                  <td>
+                    {{uii.BloodPressure}}  mm of Hg
+                  </td>
+                  <td>{{uii.temperature}}</td>
+                  <td>{{uii.Weight}}</td>
+                  <td>{{uii.Height}}</td>
+                  <td>{{uii.BMI}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewpacbh}">
+  <div class="modal-dialog modal-lg width-80p pt10">
+    <div class="modal-content heightAuto-450px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewpacbh()">&times;</button>
+        <h6>Birth History</h6>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6 mph-0 pb20">
+              <span class="uinborder">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3p">
+          <div class="col-sm-12 heightAuto" #table>
+            <table align="center" class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>S No</th>
+                  <th>Date & time</th>
+                  <th>DeliveryType</th>
+                  <th>Weight</th>
+                  <th>Vaccination</th>
+                  <th>Growth and Development</th>
+                  <th>Blood Transplant</th>
+                  <th>Oxygen Therapy</th>
+                  <th>Critical Illness</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let u of padatas; index as i">
+                  <td>{{i+1}}</td>
+                  <td>{{u.Dates | date: 'dd-MMM-y HH:mm'}}</td>
+                  <td>{{u.delivery}}</td>
+                  <td>{{u.weight}}&nbsp;&nbsp; {{u.unit}}</td>
+                  <td>{{u.vac}}</td>
+                  <td>{{u.gad}}</td>
+                  <td>{{u.transplant}}</td>
+                  <td>
+                    {{u.therapy}}
+                  </td>
+                  <td>{{u.illness}}</td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Removed Reason Popup-->
+<div class="modal" role="dialog" [ngStyle]="{'display':RemovedReasonBlock}">
+  <div class="example-box">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <button type="button" class="close" data-dismiss="modal" (click)="RemovedReasonBlockClose()">&times;</button>
+                <h6 class="modal-title">Remove Reason</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <mat-form-field appearance="outline">
+                  <mat-label>Removed Reason</mat-label>
+                  <input [(ngModel)]="M_RemovedReason" maxlength="100" autocomplete="off" matInput placeholder="Enter Removed Reason" name="RemovedReason" type="text">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-9"></div>
+              <div class="col-sm-1">
+                <button (click)="RemovedSurHisID()" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+
+04-06-2021 10:16:32 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 10:16:32 	Message : 	Successfully Logged-In
+
+04-06-2021 10:40:43 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 10:40:43 	Message : 	Successfully Logged-In
+
+04-06-2021 11:05:30 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 11:05:30 	Message : 	Successfully Logged-In
+
+04-06-2021 11:09:41 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 11:09:41 	Message : 	Successfully Logged-In
+
+04-06-2021 11:13:17 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 11:13:17 	Message : 	Successfully Logged-In
+
+04-06-2021 11:17:16 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 11:17:16 	Message : 	Successfully Logged-In
+
+04-06-2021 15:15:26 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+04-06-2021 15:15:26 	Message : 	Successfully Logged-In
+04-06-2021 15:21:42 	Information : 	Patient History Saved Successfully

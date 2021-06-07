@@ -1,0 +1,516 @@
+<form #InvPrescription="ngForm">
+  <div class="modal-dialog modal-lg" style="width:100%;margin:0px">
+    <div class="modal-content" style="height:450px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClos()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Investigation Prescription</strong>
+        </h5>
+      </div>
+      <!--/////////////////////////////////////////////////////////////////////////////////////////////-->
+      <div class="col-sm-12" style="margin-top:1%">
+        <div class="row">
+          <h1 class="col-sm-3" align="center" style="margin-bottom:0px;">Patient Details</h1>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="background-color:white;border:2px solid #51b8f2;border-radius:8px;border-top-left-radius:0px;">
+        <div class="row" style="margin-top: 1%;margin-bottom: 2%;">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+              <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}} </strong>
+            </span>
+          </div>
+          <div class="col-sm-2">
+            <button mat-button style="font-size:15px;background-color: royalblue;color:white" (click)="Clicksch1()" class="btn btn-primary">Re print</button>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+      <div class="col-sm-12" style="margin-top:1%">
+        <div class="row">
+          <h1 class="col-sm-3" align="center" style="margin-bottom:0px;">Prescription Details</h1>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="background-color:white;border:2px solid #51b8f2;border-radius:8px;border-top-left-radius:0px;">
+
+        <div class="col-sm-12">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline" style="width: 200px;">
+              <mat-label>Date</mat-label>
+              <input [disabled]="DisableDate" [(ngModel)]="M_DatePicker2" name="DatePicker2" [min]="minDate2" [max]="maxDate2" matInput [matDatepicker]="picker2" placeholder="">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Referred By</mat-label>
+              <mat-select [(ngModel)]="M_ReferredBy" name="ReferredBy" [disabled]="disabledsub">
+                <mat-option *ngFor="let Engage of ReferredBy" [value]="Engage">{{Engage.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>InvestigationDescription</mat-label>
+              <mat-select [(ngModel)]="M_InvestigationDescription" multiple [disabled]="disabledsub" name="InvestigationDescription" (ngModelChange)="InvDescriptionAmt()">
+                <mat-option *ngFor="let Engage of InvDescription" [value]="Engage">{{Engage.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Remarks</mat-label>
+              <textarea [(ngModel)]="M_Remarks" name="Remarks" [disabled]="disabledsub" placeholder="Remarks" matInput #message2 maxlength="250"></textarea>
+              <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+              <mat-hint align="end"><strong>{{message2.value.length}} /250</strong></mat-hint>
+            </mat-form-field>
+            <button mat-button (click)="onAddItem()" [disabled]="disabledsub">
+              <mat-icon data-toggle="tooltip" title="Add" class="grab">add_box</mat-icon>
+            </button>
+          </div>
+
+        </div>
+
+        <div class="col-sm-12" *ngIf="hiddentable" style="height:200px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;">
+          <div class="row">
+
+            <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8" style="width: -webkit-fill-available;">
+
+              <ng-container matColumnDef="Sl.No">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Sl.No </th>
+                <td mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="InvestigationID">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Investigation Description </th>
+                <td mat-cell *matCellDef="let element"> {{element.InvestigationD}} </td>
+              </ng-container>
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="col-sm-12 " style="padding-top:10px">
+          <div class="row">
+
+            <div class="col-sm-4"></div>
+            <div class="col-sm-1">
+              <button class="success" mat-raised-button [disabled]="DisableOnSubmit" (click)="OnSubmit()">Submit</button>
+            </div>
+
+            <div class="col-sm-1">
+              <button class="danger" mat-raised-button (click)="Cancel()">Cancel</button>
+            </div>
+            <div class="col-sm-6"></div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+      <!--/////////////////////////////////////////////////////////////////////////////////////////////-->
+    </div>
+  </div>
+
+  <!--////////////////pop-up//////////-->
+  <div class="modal" role="dialog" [ngStyle]="{'display':modalpreview}">
+    <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px">
+      <div class="modal-content" style="height:450px">
+        <div class="modal-header" style="background-color:#51b8f2;color:white;">
+          <button class="close" (click)="modalSuccesspreview()">&times;</button>
+          <h5 class="modal-title" style="text-align:center">
+            <strong>previous Investigation Prescription Details</strong>
+          </h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-8" style="margin-top: 1%;margin-bottom: 2%;">
+              <span style="color:darkblue;font-size:17px;font-family:'Proxima Nova Semibold';border:1px solid gray;padding:10px;border-radius: 16px;">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}} </strong>
+              </span>
+            </div>
+          </div>
+
+
+
+          <div class="col-sm-12" style="box-shadow: 0px 10px 8px 1px #888888;height:210px;overflow:auto">
+            <div class="row">
+              <table mat-table matSort [dataSource]="dataSource1" id="contentToConvert" class="table table-bordered" #contentToConvert>
+
+                <ng-container matColumnDef="Print">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Print </th>
+                  <td mat-cell *matCellDef="let element">  <mat-icon style="font-size: 25px" (click)="PrintBN(element);" class="grab" data-toggle="Print">local_printshop</mat-icon> </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="Sl.No1">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Sl.No </th>
+                  <td mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Date1">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Dateofinvestigation1| date:"dd-MMM-y"}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="RefferedBy1">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Refered By </th>
+                  <td mat-cell *matCellDef="let element"> {{element.PrescribedBy1}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="Remarks1">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Remarks </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Remarks1}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="IpId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> IPID </th>
+                  <td mat-cell *matCellDef="let element"> {{element.IPID}} </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns1;sticky:true"></tr>
+                <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumns1;" [ngClass]="{gray: even}"></tr>
+
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+
+<!-------------------------------------Cancelpop_up------------------------------------------------------>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Investigation Prescription</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+      </div>
+      <div class="modal-body">
+
+        <h5 style="text-align:center;background-color:white;color:black">Do You Want to Cancel ?</h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!----------------------------------Print----------------------------------------------->
+<div id="section" style="display:none">
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{PCompnayname}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label>{{PAddress}},{{PAddress2}} </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"> <label>{{Pphone}}-{{Pweb}}</label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"> <span style="font-size:50px">&#8478;</span></div>
+      <div class="col-sm-4">
+        <label style="text-align:center">
+          <strong>
+            Investigation Prescription<br />Prescription Date : {{M_DatePicker2| date:"dd-MMM-y"}}
+          </strong>
+        </label>
+
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label>Patient ID : {{Getuin}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Patient Name : {{Getname}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Age / Gender : {{Getage}}/{{Getgender}}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <table align="center" style="border-left:3px solid#51b8f2;margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sl.No</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Investigation Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of InvP; index as i">
+          <td style="text-align:center">{{i+1}}</td>
+          <td style="text-align:center">{{x.InvestigationD}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <label><strong>Remarks : {{M_Remarks}}</strong></label>
+      </div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3">
+        <label><strong>DoctorName : {{DRID}}</strong></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3">
+        <label><strong>RegistrationNumber : {{DRREGID}}</strong></label>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+<!----------------------------------Print1----------------------------------------------->
+<div id="section1" style="display:none">
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{commonService.data.P1Compnayname}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label>{{commonService.data.P1Address}},{{commonService.data.P1Address2}}</label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"> <label>{{commonService.data.P1phone}}-{{commonService.data.P1web}}</label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"> <span style="font-size:50px">&#8478;</span></div>
+      <div class="col-sm-4">
+        <label style="text-align:center">
+          <strong>
+            Investigation Prescription<br />Prescription Date : {{M_DatePicker2| date:"dd-MMM-y"}}
+          </strong>
+        </label>
+
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label>Patient ID : {{Getuin}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Patient Name : {{Getname}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label>Age / Gender : {{Getage}}/{{Getgender}}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <table align="center" style="border-left:3px solid#51b8f2;margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="text-align:center;background-color:#f0f5fa;color:gray">Sl.No</th>
+          <th style="text-align:center;background-color:#f0f5fa;color:gray">Investigation Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of commonService.data.InvPre1; index as i">
+          <td style="text-align:center">{{i+1}}</td>
+          <td style="text-align:center">{{x.InvestigationID}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+        <label><strong>Remarks : {{M_Remarks}}</strong></label>
+      </div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3">
+        <label><strong>DoctorName : {{commonService.data.DRNAME}}</strong></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-3">
+        <label><strong>RegistrationNumber : {{commonService.data.DRID}}</strong></label>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+
+<!--Print Popup-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':printpopup1}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+
+        <div class="modal-body">
+
+          <p style="margin-left:70px">
+            Do you want print
+          </p>
+
+
+          <div class="modal-footer">
+
+            <button type="button" class="btn btn-primary" style="font-size:15px" (click)="print1()">Yes</button>
+            <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" style="font-size:15px" (click)="printclose()" cdkFocusInitial>No</button>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Re-Print Popup-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':printpopup}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+
+        <div class="modal-body">
+
+          <p style="margin-left:70px">
+            Do you want print
+          </p>
+
+
+          <div class="modal-footer">
+
+            <button type="button" class="btn btn-primary" style="font-size:15px" (click)="printreprint()">Yes</button>
+            <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" style="font-size:15px" (click)="printclose1()" cdkFocusInitial>No</button>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

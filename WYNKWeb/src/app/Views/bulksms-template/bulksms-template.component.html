@@ -1,0 +1,393 @@
+<div class="col-sm-12" style="border:1px solid gray;border-radius:8px;">
+  <div class="row">
+    <h1 style="font-size:18px;text-align:center;font-family: 'Proxima Nova Semibold';">Message Forward</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Visit type</mat-label>
+        <mat-select [(ngModel)]="M_Visit" name="visists" placeholder="" (ngModelChange)="Selectformat()">
+
+          <!--<mat-option value="All">All</mat-option>-->
+          <mat-option value="New">New Patients</mat-option>
+          <mat-option value="Review">Review Patients</mat-option>
+          <mat-option value="Surgery">Surgery-Review Patients</mat-option>
+          <mat-option value="Pediatric">Pediatric</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+    </div>
+    <div class="col-sm-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Period</mat-label>
+        <mat-select [(ngModel)]="M_Period" name="periods" placeholder="" (ngModelChange)="Selectperiod()">
+
+          <mat-option value="week">Current Month</mat-option>
+          <mat-option value="month">Last Month</mat-option>
+          <mat-option value="quarter">Last Quarter</mat-option>
+          <mat-option value="specific">Specific Period</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+    <div class="col-sm-2" *ngIf="hidetemplate">
+
+      <mat-form-field appearance="outline" style="width:200px">
+        <mat-label>From Date</mat-label>
+        <input [(ngModel)]="M_fdate" name="fdate" required [max]="FmaxDateDOB" matInput [matDatepicker]="FpickerDOB" placeholder="">
+        <mat-datepicker-toggle matSuffix [for]="FpickerDOB"></mat-datepicker-toggle>
+        <mat-datepicker #FpickerDOB></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2" *ngIf="hidetemplate">
+      <mat-form-field appearance="outline" style="width:200px">
+        <mat-label>To Date</mat-label>
+        <input [(ngModel)]="M_tdate" name="tdate" required [max]="TmaxDateDOB" matInput [matDatepicker]="TpickerDOB" placeholder="">
+        <mat-datepicker-toggle matSuffix [for]="TpickerDOB"></mat-datepicker-toggle>
+        <mat-datepicker #TpickerDOB></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2">
+      <button style="margin-top:4%" type="button" class="btn btn-primary" (click)="getpatientdetails(M_fdate,M_tdate)">Get patient details</button>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4" style="border:2px solid gray">
+      <div class="row">
+        <h2 style="text-align:-webkit-center;margin-top:5px;font-family:'Proxima Nova Semibold'">Sms Templates</h2>
+        <div class="col-sm-12" style="height:150px;overflow:auto;position:sticky;box-shadow: 0px 10px 8px 1px #888888;">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;width:36px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Template Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let PG of Columnsname">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">
+                  <!--<mat-radio-button (click)="SelectTemplate(PG)"></mat-radio-button>-->
+                  <mat-checkbox (click)="SelectTemplate(PG)"></mat-checkbox>
+                </td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{PG.ColumnDescription}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">
+                  <mat-icon (click)="selectType(PG)" style="color:#83aac0;font-size:20px;cursor:pointer;" data-toggle="tooltip" title="view">create</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10%">
+        <h2 style="text-align:-webkit-center;margin-top:5px;font-family:'Proxima Nova Semibold'">E-Mail Templates</h2>
+        <div class="col-sm-12" style="height:150px;overflow:auto;position:sticky;box-shadow: 0px 10px 8px 1px #888888;">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;width:36px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Template Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let PGE of Columnsname">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">
+                  <!--<mat-radio-button (click)="SelectmailTemplate(PGE)"></mat-radio-button>-->
+                  <mat-checkbox (click)="SelectmailTemplate(PGE,$event)"></mat-checkbox>
+                </td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{PGE.mailColumnDescription}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">
+                  <mat-icon (click)="selectmailType(PGE)" style="color:#83aac0;font-size:20px;cursor:pointer;" data-toggle="tooltip" title="view">create</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row" style="margin-top:10%">
+        <h2 style="text-align:-webkit-center;margin-top:5px;font-family:'Proxima Nova Semibold'">Whatsapp Templates</h2>
+        <div class="col-sm-12" style="height:150px;overflow:auto;position:sticky;box-shadow: 0px 10px 8px 1px #888888;">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;width:36px">Select</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Template Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let PGW of Columnsname">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">
+                  <!--<mat-radio-button (click)="SelectwhatsappTemplate(PGW)"></mat-radio-button>-->
+                  <mat-checkbox (click)="SelectwhatsappTemplate(PGW,$event)"></mat-checkbox>
+                </td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{PGW.whatsappColumnDescription}}</td>
+                <td style="color: #212121; font-family: 'Proxima Nova Semibold'; font-size: 13px; text-align: center">
+                  <mat-icon (click)="selectwhatsappType(PGW)" style="color:#83aac0;font-size:20px;cursor:pointer;" data-toggle="tooltip" title="view">create</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2" style="border:2px solid gray;">
+      <div class="row">
+        <div class="col-sm-12">
+          <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+            <mat-label>SMS Description</mat-label>
+            <textarea [disabled]="disableinputs" [(ngModel)]="smsdescription" name="sms" #messagesms maxlength="500" rows="6" cols="50" matInput placeholder="Enter Details"></textarea>
+            <mat-hint align="start">Max 500 Character</mat-hint>
+            <mat-hint align="end">{{messagesms.value.length}}/500</mat-hint>
+          </mat-form-field>
+        </div>
+        <br />
+        <button type="button" style="margin-left:17%" class="btn btn-primary" [disabled]="disEdit" (click)="modifysms()">Update</button>
+
+
+
+      </div>
+      <div class="row" style="margin-top:10%">
+        <div class="col-sm-12">
+
+          <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+            <mat-label>E-Mail Description</mat-label>
+            <textarea [disabled]="Emaildisableinputs" [(ngModel)]="mailtemplate" name="mail" #messagemail maxlength="500" rows="6" cols="50" matInput placeholder="Enter Details"></textarea>
+            <mat-hint align="start">Max 500 Character</mat-hint>
+            <mat-hint align="end">{{messagemail.value.length}}/500</mat-hint>
+          </mat-form-field>
+        </div>
+        <br />
+        <button type="button" style="margin-left:17%" class="btn btn-primary" [disabled]="disEdit" (click)="modifyemail()">Update</button>
+
+
+      </div>
+      <div class="row" style="margin-top:22%">
+        <div class="col-sm-12">
+
+          <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+            <mat-label>Whatsapp Description</mat-label>
+            <textarea [disabled]="Whatsappdisableinputs" [(ngModel)]="whatsapptemplate" name="wharsapp" #messagewhstapp maxlength="500" rows="6" cols="50" matInput placeholder="Enter Details"></textarea>
+            <mat-hint align="start">Max 500 Character</mat-hint>
+            <mat-hint align="end">{{messagewhstapp.value.length}}/500</mat-hint>
+          </mat-form-field>
+        </div>
+        <br />
+        <button type="button" style="margin-left:17%" class="btn btn-primary" [disabled]="disEdit" (click)="modifywhstapp()">Update</button>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-6 container" style="border:2px solid gray">
+      <h2 style="text-align:-webkit-center;margin-top:5px">Patient Details</h2>
+      <input class="form-control" id="myInput" style="width:40%;float:right" type="text" placeholder="Search">
+      <div class="col-sm-12" style="height:586px;overflow:auto;position:sticky;box-shadow: 0px 10px 8px 1px #888888;">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;width:36px">
+                <input type="checkbox" name="allNonTrades" [value]="Pdetails" (click)="SelectallPatiente($event)" />
+                <!--<mat-checkbox (click)="SelectallPatiente()"></mat-checkbox>-->
+              </th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Patient Name</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Phone</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">E-Mail</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            <tr *ngFor="let G of Pdetails">
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">
+                <!--<mat-checkbox (click)="SelectPatientTemplate(G)"></mat-checkbox>-->
+                <input type="checkbox" name="nontrades" [checked]="G.selected" (change)="changeTradesByCategory(G)" />
+              </td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{G.fname}}&nbsp;{{G.mname}}&nbsp;{{G.lname}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{G.phonenumber}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{G.emails}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <div class="row" style="margin-top:2%;margin-bottom:2%">
+    <div class="col-sm-5">
+    </div>
+    <div class="col-sm-3">
+      <button type="button" class="btn btn-success" style="margin-right:2%" [disabled]="disSubmit" (click)="Sendsms()">Send</button>
+      <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;" (click)="Cancel()"><strong>Cancel</strong></button>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-3"></div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpost}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h1 style="font-size:15px">Information</h1>
+        <button type="button" class="close" data-dismiss="modal" (click)="modalpostpo()">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p style="font-family:'Proxima Nova Semibold';text-align:center">
+          Do you want update in original template ?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin-right:2%" (click)="modalpostpo()">No</button>
+        <button type="button" *ngIf="hidesms" class="btn btn-success" data-dismiss="modal" (click)="modalpostpoyes()">Yes</button>
+
+        <button type="button" *ngIf="hideemal" class="btn btn-success" data-dismiss="modal" (click)="modalyesmail()">Yes</button>
+
+        <button type="button" *ngIf="hidewhatsapp" class="btn btn-success" data-dismiss="modal" (click)="modalyeswhatsapp()">Yes</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Updatedtemplate}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h1 style="font-size:15px">Information</h1>
+        <button type="button" class="close" data-dismiss="modal" (click)="Updatedtemplatepookay()">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p style="font-family:'Proxima Nova Semibold';text-align:center">
+          Template Updated successfully
+        </p>
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="Updatedtemplatepookay()">OK</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ErrorUpdatedtemplate}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h1 style="font-size:15px">Information</h1>
+        <button type="button" class="close" data-dismiss="modal" (click)="ErrorUpdatedtemplateokay()">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p style="font-family:'Proxima Nova Semibold';text-align:center">
+          Some Data Missing
+        </p>
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="ErrorUpdatedtemplateokay()">OK</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Successpopup}" style="top:30%">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 450px;">
+      <div class="modal-body">
+        <p style="text-align:center;background-color:white;color:black;font-size:17px">
+          Successfully Messages Sent.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-success" style="background-color:green;border-color:green;" data-dismiss="modal" (click)="Yess()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Bulk SMS - View Access</h4>
+      </div>
+      <div class="modal-body" style="height:40px;margin-top:-10px;">
+        <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova Semibold';font-size:14px;" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Add</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Edit</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Delete</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Export</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top:20%">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

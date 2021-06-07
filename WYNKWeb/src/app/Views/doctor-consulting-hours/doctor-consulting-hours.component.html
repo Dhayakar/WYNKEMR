@@ -1,0 +1,473 @@
+
+<form #Doctorconsulting="ngForm" name="Doctorconsultingform" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="col-sm-12 dividebar">
+    <div class="row">
+      <h6>Doctor Consulting Hr</h6>
+    </div>
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+          </div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline">
+          <mat-label><strong>Select Doctor</strong></mat-label>
+          <mat-select required [(ngModel)]="M_EyeDoctor" name="EyeDoctor" (ngModelChange)="DoctorChange()">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let Engage of EyeDoctor" [value]="Engage">{{Engage.Text}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline">
+          <mat-label><strong>Select Day</strong></mat-label>
+          <mat-select required [(ngModel)]="M_Days" name="Datyss" (ngModelChange)="DoctorChangevalidation()">
+            <mat-option>None</mat-option>
+            <mat-option value="Sunday">Sunday</mat-option>
+            <mat-option value="Monday">Monday</mat-option>
+            <mat-option value="Tuesday">Tuesday</mat-option>
+            <mat-option value="Wednesday">Wednesday</mat-option>
+            <mat-option value="Thursday">Thursday</mat-option>
+            <mat-option value="Friday">Friday</mat-option>
+            <mat-option value="Saturday">Saturday</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row labelalign">
+              <mat-label><strong>First Session</strong></mat-label>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-label><strong>From</strong></mat-label>
+              </div>
+              <div class="row">
+                <!--<div class="col-sm-5" style="margin-top:4%">
+      <mat-label>Time (HH : MM)</mat-label>
+    </div>-->
+                <div class="col-sm-3">
+                  <!--<input required [(ngModel)]="HH" name="HH" (keypress)="RestrictNegativeValues1($event)" (keyup)="Restrict($event);" matInput placeholder="HH">-->
+                  <mat-form-field appearance="outline">
+                    <mat-label><strong>Hr</strong></mat-label>
+                    <mat-select required [(ngModel)]="HH" name="HH">
+                      <mat-option value="00">00</mat-option>
+                      <mat-option value="01">01</mat-option>
+                      <mat-option value="02">02</mat-option>
+                      <mat-option value="03">03</mat-option>
+                      <mat-option value="04">04</mat-option>
+                      <mat-option value="05">05</mat-option>
+                      <mat-option value="06">06</mat-option>
+                      <mat-option value="07">07</mat-option>
+                      <mat-option value="08">08</mat-option>
+                      <mat-option value="09">09</mat-option>
+                      <mat-option value="10">10</mat-option>
+                      <mat-option value="11">11</mat-option>
+                      <mat-option value="12">12</mat-option>
+                      <mat-option value="13">13</mat-option>
+                      <mat-option value="14">14</mat-option>
+                      <mat-option value="15">15</mat-option>
+                      <mat-option value="16">16</mat-option>
+                      <mat-option value="17">17</mat-option>
+                      <mat-option value="18">18</mat-option>
+                      <mat-option value="19">19</mat-option>
+                      <mat-option value="20">20</mat-option>
+                      <mat-option value="21">21</mat-option>
+                      <mat-option value="22">22</mat-option>
+                      <mat-option value="23">23</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-1" style="margin-top:4%">
+                  <p><strong>:</strong></p>
+                </div>
+                <div class="col-sm-3">
+                  <!--<mat-form-field appearance="outline">
+        <input required [(ngModel)]="MM" name="MM" (keypress)="RestrictNegativeValues1m($event)" (keyup)="Restrictm($event);" matInput placeholder="MM">
+      </mat-form-field>-->
+                  <mat-form-field appearance="outline">
+                    <mat-label><strong>Min</strong></mat-label>
+                    <mat-select required [(ngModel)]="MM" name="MM">
+                      <mat-option value="01">00</mat-option>
+                      <mat-option value="31">30</mat-option>                      
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-label><strong>To</strong></mat-label>
+              </div>
+                <div class="row">
+                  <!--<div class="col-sm-5" style="margin-top:4%">
+      <mat-label>Time (HH : MM)</mat-label>
+    </div>-->
+                  <div class="col-sm-3">
+                    <!--<input required [(ngModel)]="HH" name="HH" (keypress)="RestrictNegativeValues1($event)" (keyup)="Restrict($event);" matInput placeholder="HH">-->
+                    <mat-form-field appearance="outline">
+                      <mat-label><strong>Hr</strong></mat-label>
+                      <mat-select required [(ngModel)]="TOHH" name="THH"  (ngModelChange)="Checkfromvalidation()"> 
+                        <mat-option value="00">00</mat-option>
+                        <mat-option value="01">01</mat-option>
+                        <mat-option value="02">02</mat-option>
+                        <mat-option value="03">03</mat-option>
+                        <mat-option value="04">04</mat-option>
+                        <mat-option value="05">05</mat-option>
+                        <mat-option value="06">06</mat-option>
+                        <mat-option value="07">07</mat-option>
+                        <mat-option value="08">08</mat-option>
+                        <mat-option value="09">09</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="11">11</mat-option>
+                        <mat-option value="12">12</mat-option>
+                        <mat-option value="13">13</mat-option>
+                        <mat-option value="14">14</mat-option>
+                        <mat-option value="15">15</mat-option>
+                        <mat-option value="16">16</mat-option>
+                        <mat-option value="17">17</mat-option>
+                        <mat-option value="18">18</mat-option>
+                        <mat-option value="19">19</mat-option>
+                        <mat-option value="20">20</mat-option>
+                        <mat-option value="21">21</mat-option>
+                        <mat-option value="22">22</mat-option>
+                        <mat-option value="23">23</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-sm-1" style="margin-top:4%">
+                    <p><strong>:</strong></p>
+                  </div>
+                  <div class="col-sm-3">
+                    <!--<mat-form-field appearance="outline">
+        <input required [(ngModel)]="MM" name="MM" (keypress)="RestrictNegativeValues1m($event)" (keyup)="Restrictm($event);" matInput placeholder="MM">
+      </mat-form-field>-->
+                    <mat-form-field appearance="outline">
+                      <mat-label><strong>Min</strong></mat-label>
+                      <mat-select required [(ngModel)]="TOMM" name="toMM" (ngModelChange)="Restrictm($event)">
+
+                        <mat-option value="01">00</mat-option>
+                        <mat-option value="31">30</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+          <div class="col-sm-6">
+            <div class="row labelalign">
+              <mat-label><strong>Second Session</strong></mat-label>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-label><strong>From</strong></mat-label>
+              </div>
+
+                <div class="row">
+                  <!--<div class="col-sm-5" style="margin-top:4%">
+      <mat-label>Time (HH : MM)</mat-label>
+    </div>-->
+                  <div class="col-sm-3">
+                    <!--<input required [(ngModel)]="HH" name="HH" (keypress)="RestrictNegativeValues1($event)" (keyup)="Restrict($event);" matInput placeholder="HH">-->
+                    <mat-form-field appearance="outline">
+                      <mat-label><strong>Hr</strong></mat-label>
+                      <mat-select required [(ngModel)]="eveningFromHH" name="eveningFromHHs" (ngModelChange)="Checksecondfromvalidation()">
+                        <mat-option value="00">00</mat-option>
+                        <mat-option value="01">01</mat-option>
+                        <mat-option value="02">02</mat-option>
+                        <mat-option value="03">03</mat-option>
+                        <mat-option value="04">04</mat-option>
+                        <mat-option value="05">05</mat-option>
+                        <mat-option value="06">06</mat-option>
+                        <mat-option value="07">07</mat-option>
+                        <mat-option value="08">08</mat-option>
+                        <mat-option value="09">09</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="11">11</mat-option>
+                        <mat-option value="12">12</mat-option>
+                        <mat-option value="13">13</mat-option>
+                        <mat-option value="14">14</mat-option>
+                        <mat-option value="15">15</mat-option>
+                        <mat-option value="16">16</mat-option>
+                        <mat-option value="17">17</mat-option>
+                        <mat-option value="18">18</mat-option>
+                        <mat-option value="19">19</mat-option>
+                        <mat-option value="20">20</mat-option>
+                        <mat-option value="21">21</mat-option>
+                        <mat-option value="22">22</mat-option>
+                        <mat-option value="23">23</mat-option>
+                 
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-sm-1" style="margin-top:4%">
+                    <p><strong>:</strong></p>
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label><strong>Min</strong></mat-label>
+                      <mat-select required [(ngModel)]="eveningToMM" name="eveningToMMss">
+                        <mat-option value="01">00</mat-option>
+                        <mat-option value="31">30</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-label><strong>To</strong></mat-label>
+              </div>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label><strong>Hr</strong></mat-label>
+                      <mat-select required [(ngModel)]="eveinisecondTOEHH" name="eveinisecondTOEHHss" (ngModelChange)="Checksecondtovalidation()">
+                        <mat-option value="00">00</mat-option>
+                        <mat-option value="01">01</mat-option>
+                        <mat-option value="02">02</mat-option>
+                        <mat-option value="03">03</mat-option>
+                        <mat-option value="04">04</mat-option>
+                        <mat-option value="05">05</mat-option>
+                        <mat-option value="06">06</mat-option>
+                        <mat-option value="07">07</mat-option>
+                        <mat-option value="08">08</mat-option>
+                        <mat-option value="09">09</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="11">11</mat-option>
+                        <mat-option value="12">12</mat-option>
+                        <mat-option value="13">13</mat-option>
+                        <mat-option value="14">14</mat-option>
+                        <mat-option value="15">15</mat-option>
+                        <mat-option value="16">16</mat-option>
+                        <mat-option value="17">17</mat-option>
+                        <mat-option value="18">18</mat-option>
+                        <mat-option value="19">19</mat-option>
+                        <mat-option value="20">20</mat-option>
+                        <mat-option value="21">21</mat-option>
+                        <mat-option value="22">22</mat-option>
+                        <mat-option value="23">23</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-sm-1" style="margin-top:4%">
+                    <p><strong>:</strong></p>
+                  </div>
+                  <div class="col-sm-3">                    
+                    <mat-form-field appearance="outline">
+                      <mat-label><strong>Min</strong></mat-label>
+                      <mat-select required [(ngModel)]="eveingsecondTOMM" name="eveingsecondTOMMs" (ngModelChange)="Restrictm($event)">
+                        <mat-option value="01">00</mat-option>
+                        <mat-option value="31">30</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label> Max Patients (Morning) </mat-label>
+          <input [(ngModel)]="Maxm" name="Maxmormi" (keypress)="RestrictNegativeValues1max($event)" matInput placeholder="MM">
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label> Max Patients (Evening) </mat-label>
+          <input [(ngModel)]="Maxeve" name="Maxeveni" (keypress)="RestrictNegativeValues1maxev($event)" matInput placeholder="MM">
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-white" (click)="Addall(Doctorconsulting)" [disabled]="disSubmit">Add</button>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="Hidetruedoctorbreakwise">
+
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <caption>Doctor Consulting Hrs</caption>
+          <thead>
+            <tr>
+              <th rowspan="2">Sno</th>
+              <th rowspan="2">Day</th>
+              <th rowspan="2">First Session</th>
+              <th rowspan="2">Second Session</th>
+              <th colspan="2">Max Patients Count</th>
+              <th rowspan="2">Action</th>
+            </tr>
+            <tr>
+              <th>First</th>
+              <th>Second</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of doctorbeakwise; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{data.Days}}</td>
+              <td>{{data.firstsessionstart}} hrs - {{data.firstsessionend}} hrs</td>
+              <td>{{data.Secondsessionstart}} hrs - {{data.fsecondsessionend}} hrs</td>
+              <td>{{data.Maxpatientsmorning}}</td>
+              <td>{{data.Maxpatientecening}}</td>
+              <td>
+                <button type="button" (click)="EditDet(data,i)" [disabled]="disEdit" class="editbutton">
+                  <mat-icon data-toggle="tooltip" title="Edit">create</mat-icon>
+                </button>
+                <button type="button" (click)="Removerowdata(data,i)" [disabled]="disDelete" class="deletebutton">
+                  <mat-icon data-toggle="tooltip" title="Delete">delete_forever</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+
+
+    <div class="row" *ngIf="Hidetrue">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <caption>Doctor Consulting Hrs</caption>
+          <thead>
+            <tr>
+              <th rowspan="2">Sno</th>
+              <th rowspan="2">Day</th>
+              <th rowspan="2">First Session</th>
+              <th rowspan="2">Second Session</th>
+              <th colspan="2">Max Patients Count</th>
+              <th rowspan="2">Action</th>
+            </tr>
+            <tr>
+              <th>First</th>
+              <th>Second</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of sample; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{data.Docday}}</td>
+              <td>{{data.FirstFtime}} hrs - {{data.FirstTTime}} hrs</td>
+              <td>{{data.secondFtime}} hrs - {{data.secondTTime}} hrs</td>
+              <td>{{data.Maxfpatient}}</td>
+              <td>{{data.Maxtpatient}}</td>
+              <td>
+                <button type="button" (click)="ViewDet(data,i)" [disabled]="disEdit" class="editbutton">
+                  <mat-icon data-toggle="tooltip" title="Edit">create</mat-icon>
+                </button>
+                <button type="button" (click)="Removerow(i)" [disabled]="disDelete" class="deletebutton">
+                  <mat-icon data-toggle="tooltip" title="Delete">delete_forever</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+
+    <!--<div class="row">
+    <div class="col-sm-5"></div>
+    <div class="col-sm-3">
+      <div class="row">
+        <button type="button" class="btn btn-success" (click)="onsubmit(Doctorconsulting)" [disabled]="disSubmit">Submit</button>
+        <button type="button" class="btn btn-danger" (click)="Cancel()">Cancel</button>
+      </div>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>-->
+
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button type="button" class="btn btn-warning-default" (click)="Cancel()"> Cancel </button>
+        <button *ngIf="HideSubmit" class="success btn btn-primary" (click)="onsubmit(Doctorconsulting)" [disabled]="disSubmit">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+
+
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Doctor Consulting Hr - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

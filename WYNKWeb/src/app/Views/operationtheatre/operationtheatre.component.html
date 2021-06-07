@@ -1,0 +1,256 @@
+
+
+
+<form #OperationTheatreForm="ngForm">
+
+  <div class="col-sm-12">
+    <div class="row">
+
+      <div class="col-sm-12 borfiglau-0">
+
+        <div class="row card-header center">
+          <h5>Operation Theatre</h5>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2">
+            <button (click)="ClickOperation()" data-toggle="tooltip" title="Search Operation Theatre" class="btn-text grab f-r">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+
+
+
+        <div class="col-sm-12">
+
+          <div class="row">
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>OT Description</mat-label>
+                <input [(ngModel)]="M_Description" matInput placeholder="Enter OT Description" name="Description" type="text" required>
+              </mat-form-field>
+            </div>
+
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Address1</mat-label>
+                <textarea [(ngModel)]="M_Address1" name="Address1" matInput placeholder="Enter Address1" #message1 maxlength="250" type="text"></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message1.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Address2</mat-label>
+                <textarea [(ngModel)]="M_Address2" name="Address2" matInput placeholder="Enter Address2" #message2 maxlength="250" type="text"></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message2.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Address3</mat-label>
+                <textarea [(ngModel)]="M_Address3" name="Address3" matInput placeholder="Enter Address3" #message3 maxlength="250" type="text"></textarea>
+                <mat-hint align="start"><strong>Max 250 characters</strong> </mat-hint>
+                <mat-hint align="end"><strong>{{message3.value.length}} /250</strong></mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row mt-2p">
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>location</mat-label>
+                <mat-select [(ngModel)]="location" name="location">
+                  <mat-option>Select</mat-option>
+                  <mat-option *ngFor="let location of locations" [value]="location.Value">
+                    {{location.Text}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>OT Charge</mat-label>
+                <input #StoreID [(ngModel)]="M_Charge" name="Charge" matInput placeholder="Enter Charge" (keypress)="numberOnly($event)">
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>GST%</mat-label>
+                <input [(ngModel)]="M_GST" name="GST" matInput placeholder="Enter Charge" (keypress)="numberOnly($event)" (ngModelChange)="Gstvalue()">
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>SGST%</mat-label>
+                <input [(ngModel)]="M_SGST" name="SGST" matInput placeholder="Enter Charge" onkeydown="return false">
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="row mt-2p">
+
+
+
+            <div class="col-sm-3">
+
+              <mat-form-field appearance="outline">
+                <mat-label>CGST%</mat-label>
+                <input [(ngModel)]="M_CGST" name="CGST" matInput placeholder="Enter Charge" onkeydown="return false">
+              </mat-form-field>
+            </div>
+
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Icd Speciality</mat-label>
+                <mat-select [(ngModel)]="speciality" name="speciality" (ngModelChange)="IcSpecsumbit(speciality)" required>
+                  <mat-option *ngFor="let Speciality of Specialityname" [value]="Speciality.Values">{{Speciality.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Icd Description</mat-label>
+                <mat-select [(ngModel)]="IcdDescription" name="IcdDescription" multiple>
+                  <mat-option *ngFor="let Description of Descriptionname" [value]="Description">{{Description.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+
+          </div>
+
+          <div class="row mt-2p">
+
+            <div class="col-sm-3" *ngIf="Activeis">
+              <mat-form-field appearance="outline">
+                <mat-label>Active</mat-label>
+                <mat-select [(ngModel)]="IsActive" name="Active" required>
+                  <mat-option>Select</mat-option>
+                  <mat-option value="true">Yes</mat-option>
+                  <mat-option value="false">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3" [hidden]="hiddenOTID">
+              <mat-form-field appearance="outline">
+                <mat-label>OTID</mat-label>
+                <input #OTID [(ngModel)]="M_OTID" name="OTID" matInput placeholder="">
+              </mat-form-field>
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default" (click)="CancelClk()"> Cancel </button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdate" [disabled]="disupdate" id="update" (click)="UpdateOperation(OperationTheatreForm,OTID.value)">Submit</button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmit" [disabled]="disSubmit" id="submit" (click)="onSubmitOperation(OperationTheatreForm)">Submit</button>
+            <button mat-raised-button color="warn" class="ml-2p cursor" *ngIf="hiddenDelete" (click)="DeleteOperation(OperationTheatreForm,OTID.value)" [disabled]="disdelete">Delete</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</form>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+        <h6 class="modal-title">Operation Theatre</h6>
+      </div><br />
+
+      <p align="center">Do you want to cancel?</p>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Operation Theatre - View Access</h6>
+      </div>
+      <div class="modal-body">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

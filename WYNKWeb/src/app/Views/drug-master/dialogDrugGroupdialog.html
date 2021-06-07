@@ -1,0 +1,110 @@
+<form #DrugGroupForm="ngForm" name="DrugGroupForm" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="modal-header">
+    <h6 class="modal-title">Generic Medicine Master</h6>
+     <button type="button" class="close" data-dismiss="modal">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <input #id name="ID" [(ngModel)]="M_ID" type="hidden">
+      <div class="col-sm-3">
+        <div class="col-sm-11 ml-n5p">
+          <mat-form-field appearance="outline">
+            <mat-label>Generic Name</mat-label>
+            <input name="DrugGroup" [(ngModel)]="M_DrugGroup" matInput placeholder="Generic Name" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1 ml-n4p">
+          <button type="button" (click)="SeachDrugGroup()" class="btn-text grab mt-2p ml-n5p">
+            <i class="fas fa-info-circle"> </i> Help
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Drug Form</mat-label>
+          <mat-select [(ngModel)]="M_DrugForm" name=">DrugForm" required>
+            <mat-option>Select</mat-option>
+            <mat-option *ngFor="let DrugForms of DrugForm" [value]="DrugForms.Value">{{DrugForms.Text}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Retest Interval(In Days)</mat-label>
+          <input name="M_RetestInterval" [(ngModel)]="M_RetestInterval" matInput placeholder="Retest Interval(In Days)" (keypress)="numberOnly($event)" maxlength="2" required>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Retest Critical Interval(In Days)</mat-label>
+          <input name="M_RetestCriticalInterval" [(ngModel)]="M_RetestCriticalInterval" matInput placeholder="Retest Critical Interval(In Days)" (keypress)="numberOnly($event)" maxlength="2" required>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label>IsStepDown</mat-label>
+          <mat-select [(ngModel)]="M_IsStepDown" placeholder="IsStepDown" name="M_IsStepDown" required>
+            <mat-option value="true">Yes</mat-option>
+            <mat-option value="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <table class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+        <thead>
+          <tr>
+            <th>Side Effects</th>
+            <th>Precaution</th>
+            <th>Overdose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label>Side Effects</mat-label>
+                  <textarea #message1 maxlength="500" matInput placeholder="Side Effects" [(ngModel)]="M_SideEffects" name="M_SideEffects"></textarea>
+                  <mat-hint align="start">Max 500 Character</mat-hint>
+                  <mat-hint align="end">{{message1.value.length}}/500</mat-hint>
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <mat-form-field appearance="outline">
+                <mat-label>Precautions</mat-label>
+                <textarea #message2 maxlength="500" matInput placeholder="Precautions" [(ngModel)]="M_Precautions" name="M_Precautions"></textarea>
+                <mat-hint align="start">Max 500 Character</mat-hint>
+                <mat-hint align="end">{{message2.value.length}}/500</mat-hint>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="outline">
+                <mat-label>Overdose</mat-label>
+                <textarea #message3 maxlength="500" matInput placeholder="Overdose" [(ngModel)]="M_Overdose" name="M_Overdose"></textarea>
+                <mat-hint align="start">Max 500 Character</mat-hint>
+                <mat-hint align="end">{{message3.value.length}}/500</mat-hint>
+              </mat-form-field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row pb25">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <div class="content-right sub-section btn-wrap">
+          <button *ngIf="hideSubmit" [disabled]="disableUpdate" (click)="UpdateDrugGroup(DrugGroupForm,id.value)" class="success btn btn-primary">Submit</button>
+          <button *ngIf="hideupdate" [disabled]="disableSubmit" class="success btn btn-primary" (click)="AddDrugGroup(DrugGroupForm)"> Submit </button>
+          <button type="button" class="btn btn-warning-default" (click)="Dialogclose()"><strong>Cancel</strong></button>
+          <button *ngIf="hideupdate" type="button" class="danger btn-danger-default " (click)="Delete(id.value)"><strong>Delete</strong></button>
+        </div>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+</form>
+

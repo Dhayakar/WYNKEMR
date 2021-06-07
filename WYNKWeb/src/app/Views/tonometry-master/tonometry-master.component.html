@@ -1,0 +1,184 @@
+
+
+<form #TonometryMaster="ngForm">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+
+      <div class="col-sm-12 tono">
+
+        <div class="row tonotop">
+          <h6>Types of Tonometry</h6>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-6 vamph-0">
+            <mat-form-field appearance="outline" hintLabel="Max 100 characters">
+              <mat-label>Description</mat-label>
+              <textarea matInput [(ngModel)]="M_Description" name="Description" maxlength="100" #add1 placeholder="Description" required></textarea>
+              <mat-hint align="end">{{add1.value?.length || 0}}/100</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button (click)="ClickTonometry()" class="btn-text grab f-r" data-toggle="tooltip" title="Tonometry">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeis">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tabletonometry">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" #input>
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table matSort [dataSource]="dataSourcesq" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttype(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssq"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssq;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+
+
+      </div>
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default" (click)="CancelClk()"> Cancel </button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdate" id="update" (click)="onupdate(TonometryMaster)">Submit</button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmit" id="submit" (click)="onSubmit(TonometryMaster)">Submit</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+</form>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+        <h4 class="modal-title">Tonometry</h4>
+      </div><br />
+
+      <p align="center">Do you want to cancel?</p>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Tonometry - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

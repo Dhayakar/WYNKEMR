@@ -1,0 +1,522 @@
+
+<form #CounsellingForm="ngForm">
+  <div class="col-sm-12">
+    <div class="row">
+      <h6>Counselling</h6>
+    </div>
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{M_UIN}} / {{M_Name}} / {{M_Age}} / {{M_Gender}}</strong>
+            </span>
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+
+            <button [disabled]="isNextupdate" (click)="openDialog()" class="btn-text grab ">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+
+          </div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="dtails-wrap">
+        <ul class="nav nav-tabs">
+          <li>
+            <a class="active show" data-toggle="tab" href="#CounsellingDetails" animationDuration="1s">
+              <span><i class="fas fa-user"></i></span>
+              Counselling Details
+            </a>
+          </li>
+          <li>
+            <a data-toggle="tab" href="#History" animationDuration="1s">
+              <span><i class="fas fa-user"></i></span>
+              History
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content tab-wrap">
+          <div id="CounsellingDetails" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Surgery Confirmation</mat-label>
+                  <mat-select required [(ngModel)]="M_Confirmsurgery" name="Confirmsurgery" (ngModelChange)="Confirmation()">
+                    <mat-option value="Confirm">Confirmed</mat-option>
+                    <mat-option value="Reject">Not Confirmed</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline" *ngIf="Hidesurgerydate">
+                  <mat-label>Scheduled Date</mat-label>
+                  <input required matInput [matDatepicker]="pickerschedule" [(ngModel)]="M_Scheduled" [min]="minSdate" name="Scheduleddate">
+                  <mat-datepicker-toggle matSuffix [for]="pickerschedule"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerschedule></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="Hidereasons">
+                  <mat-label>Reasons</mat-label>
+                  <input matInput placeholder="" [(ngModel)]="M_Reasons" name="Reasonss">
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Room</mat-label>
+                  <mat-select required [(ngModel)]="M_Roomtype" name="RoomtypeNames" [disabled]="disableinputs">
+                    <mat-option *ngFor="let Roomtype of RoomTypes" [value]="Roomtype.Value">{{Roomtype.Text}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Room Status</mat-label>
+                  <mat-select [(ngModel)]="M_Roomstatus" name="Statusroom" [disabled]="disableinputs">
+                    <mat-option *ngFor="let Status of Roomstatusmaster" [value]="Status.Value">{{Status.Text}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Type of Lens</mat-label>
+                  <mat-select [(ngModel)]="M_Lensname" name="Lensmae" [disabled]="disableinputs">
+                    <mat-option *ngFor="let Lens of SurgeryLens" [value]="Lens.Value">{{Lens.Text}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Prognosis</mat-label>
+                  <input required matInput placeholder="" [(ngModel)]="M_Prgnosis" name="Progonosis" [disabled]="disableinputs">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Remarks</mat-label>
+                  <textarea placeholder="Remarks" matInput #message2 maxlength="250" [(ngModel)]="M_remarks" name="Remarks" [disabled]="disableinputs"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4 formborder">
+                <h6>Counselling Checklist</h6>
+                <div class="col-sm-12 Management_dashboard_Tableheightsinsidepopup">
+                  <table class="custom-table withoutbackgroung search-table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Select</th>
+                        <th>Counselling Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let PG of Counsellingdata">
+                        <td> <mat-checkbox (click)="SelectChecklisrDescriptionValue(PG)" [disabled]="disableinputs"></mat-checkbox></td>
+                        <td>{{PG.Description}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              
+              <div class="col-sm-8 formborder Management_dashboard_Tableheightsinsidepopup" style="height:293px;">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>Payment Details</h6>
+                  </div>
+                  <mat-accordion class="matsexpansionspanel">
+                    <mat-expansion-panel class="col-sm-11" style="left:2%">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Advance
+                        </mat-panel-title>
+                        <!--<mat-icon class="mat-iconss" matTooltip="Expand">keyboard_arrow_down</mat-icon>-->
+                      </mat-expansion-panel-header>
+                      <div class="col-sm-12">
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Advance</mat-label>
+                              <strong>
+                                <input (keypress)="numberOnly($event)" required [(ngModel)]="M_Consultation" name="Advance" matInput placeholder="Advance" [disabled]="disableinputs">
+                              </strong>
+                            </mat-form-field>
+                          </div>
+                          <button class="btn btn-success" (click)="PaymentMode()" [disabled]="disableinputs">Make payment</button>
+                        </div>
+                      </div>
+                      <!--//////////////////////////////////////////////Payment///////////////////////////////////////////////////////-->
+                      <div class="col-sm-12" *ngIf="hiddenPayment">
+                        <div class="row">
+                          <div class="row">
+                            <div class="col-sm-12">
+
+                              <div class="col-sm-3">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Payment Mode</mat-label>
+                                  <mat-select [(ngModel)]="M_paymode" name="PaymentMode" (ngModelChange)="PaymentChange()">
+                                    <mat-option *ngFor="let Paymentsmode of Paymentsmode" [value]="Paymentsmode.Value">{{Paymentsmode.Text}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+
+                              <div class="col-sm-3" *ngIf="paymentChequeDd || paymentDebitCredit">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Instrument Number</mat-label>
+                                  <input maxlength="15" (keypress)="numberOnly($event)" [(ngModel)]="M_InstrumentNumber" matInput placeholder="Enter Instrument Number" name="InstrumentNumber" type="text">
+                                </mat-form-field>
+                              </div>
+
+                              <div class="col-sm-3" *ngIf="paymentChequeDd">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Instrument Date</mat-label>
+                                  <input [(ngModel)]="M_InstrumentDate" name="InstrumentDate" [min]="maxToDate" matInput [matDatepicker]="InstrumentDate" placeholder="InstrumentDate" type="datetime">
+                                  <mat-datepicker-toggle matSuffix [for]="InstrumentDate"></mat-datepicker-toggle>
+                                  <mat-datepicker #InstrumentDate></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+
+                              <div class="col-sm-3" *ngIf="paymentChequeDd || paymentDebitCredit">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Bank Name</mat-label>
+                                  <input (keypress)="nameField($event)" maxlength="100" [(ngModel)]="M_BankName" matInput placeholder="Enter BankName" name="BankName" type="text">
+                                </mat-form-field>
+                              </div>
+
+                              <div class="col-sm-3" *ngIf="paymentChequeDd">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Branch</mat-label>
+                                  <input (keypress)="nameField($event)" maxlength="50" matInput [(ngModel)]="M_Branch" name="Branch" placeholder="Branch" type="text">
+                                </mat-form-field>
+                              </div>
+
+                              <div *ngIf="paymentDebitCredit">
+                                <div class="col-sm-3">
+                                  <mat-form-field appearance="outline">
+                                    <mat-label>Expiry Date</mat-label>
+                                    <input [(ngModel)]="M_ExpiryDate" [min]="maxToDate" name="ExpiryDate" matInput [matDatepicker]="ExpiryDate" placeholder="ExpiryDate" type="datetime">
+                                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #ExpiryDate></mat-datepicker>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-3" *ngIf="paymentCash">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Amount</mat-label>
+                                  <input matInput [(ngModel)]="M_Amount" name="Amount" (keyup)="Totalamount()" (keypress)="numberOnly($event)" placeholder="Amount">
+                                </mat-form-field>
+                              </div>
+
+                              <div>
+                                <button (click)="AddPayment()" class="btn btn-primary">ADD</button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+
+                            <table mat-table matSort [dataSource]="dataSourcepay" class="custom-table withoutbackgroung search-table table-bordered">
+                              <ng-container matColumnDef="PaymentMode">
+                                <th mat-header-cell *matHeaderCellDef>PaymentMode</th>
+                                <td mat-cell *matCellDef="let element">{{element.PaymentMode}}</td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="InstrumentNumber">
+                                <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+                                <td mat-cell *matCellDef="let element">{{element.InstrumentNumber}} </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="InstrumentDate">
+                                <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+                                <td mat-cell *matCellDef="let element">{{element.Instrumentdate| date:'dd/MMM/y'}} </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="BankName">
+                                <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                                <td mat-cell *matCellDef="let element">{{element.BankName}} </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Branch">
+                                <th mat-header-cell *matHeaderCellDef>Branch</th>
+                                <td mat-cell *matCellDef="let element">{{element.BankBranch}} </td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="ExpiryDate">
+                                <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+                                <td mat-cell *matCellDef="let element">{{element.Expirydate| date:'dd/MMM/y'}} </td>
+                                <td mat-footer-cell *matFooterCellDef><strong>Total Amount</strong> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Amount">
+                                <th mat-header-cell *matHeaderCellDef>Amount</th>
+                                <td mat-cell *matCellDef="let element">{{element.Amount | currency:Country2}} </td>
+                                <td mat-footer-cell *matFooterCellDef><strong>{{PTotalAmount | currency:Country2}}</strong> </td>
+                              </ng-container>
+                              <ng-container matColumnDef="Delete">
+                                <th mat-header-cell *matHeaderCellDef> Action </th>
+                                <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon data-toggle="tooltip" title="Select" (click)="removePaytype(i)">delete</mat-icon></td>
+                                <td mat-footer-cell *matFooterCellDef> </td>
+                              </ng-container>
+                              <tr mat-header-row *matHeaderRowDef="displayedColumnspay;sticky: true"></tr>
+                              <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumnspay" [ngClass]="{gray: even}"></tr>
+                              <tr mat-footer-row *matFooterRowDef="displayedColumnspay;sticky: true"></tr>
+                            </table>
+                          </div>
+
+                        </div>
+                      </div>
+                      <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="History" class="tab-pane fade">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-6 Management_dashboard_Tableheightsinsidepopup">
+                  <h6>Occular Complaints</h6>
+                  <table class="custom-table withoutbackgroung search-table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sno</th>
+                        <th>Description</th>
+                        <th>OD</th>
+                        <th>OS</th>
+                        <th>OU</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let OCGG of Oculardata;let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{OCGG.Description}}</td>
+                        <td> <mat-checkbox disabled="true" [(checked)]="OCGG.ISOD"></mat-checkbox></td>
+                        <td><mat-checkbox disabled="true" [(checked)]="OCGG.ISOS"></mat-checkbox></td>
+                        <td><mat-checkbox disabled="true" [(checked)]="OCGG.ISOU"></mat-checkbox></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-sm-6 Management_dashboard_Tableheightsinsidepopup">
+                  <h6>Systemic History</h6>
+                  <table class="custom-table withoutbackgroung search-table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sno</th>
+                        <th>Description</th>
+                        <th>From</th>
+                        <th>Total Months</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let PCGG of PHistorydata;let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{PCGG.Description}}</td>
+                        <td> {{PCGG.FromUTC | date:'dd-MMM-y'}}</td>
+                        <td> {{PCGG.Duration}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <h6>Current Medications</h6>
+                  <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                    <mat-label>Current Medications</mat-label>
+                    <textarea [(ngModel)]="currentmedicatoions" disabled name="currentmedicatoion" #message maxlength="500" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+                    <mat-hint align="start">Max 500 Character</mat-hint>
+                    <mat-hint align="end">{{message.value.length}}/500</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                  <h6>Allergy</h6>
+                  <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                    <mat-label>Allergy</mat-label>
+                    <textarea [(ngModel)]="allergys" name="allergysss" #messageALL maxlength="100" rows="10" cols="50" matInput placeholder="Enter Details" disabled></textarea>
+                    <mat-hint align="start">Max 100 Character</mat-hint>
+                    <mat-hint align="end">{{messageALL.value.length}}/100</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                  <h6>Family History</h6>
+                  <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                    <mat-label>Family History</mat-label>
+                    <textarea [(ngModel)]="fhistory" name="fhistorys" #messageFH maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details" disabled></textarea>
+                    <mat-hint align="start">Max 250 Character</mat-hint>
+                    <mat-hint align="end">{{messageFH.value.length}}/250</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <!--<mat-tab-group animationDuration="0ms" class="tabsss">
+      <mat-tab label="Counselling Details">
+
+      </mat-tab>
+      <mat-tab label="History">
+
+      </mat-tab>
+    </mat-tab-group>-->
+    </div>
+ 
+    <div class="row">
+      <div class="row">
+        <div class="col-sm-6">
+          <h6>General Consent</h6>
+        </div>
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-4">
+
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4">
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <table>
+        <tr *ngFor="let lines of totallinesdata">
+          <td><strong>{{lines}}</strong></td>
+        </tr>
+        <tr>
+          <td>
+            <mat-checkbox [(ngModel)]="disablechecked" name="disablechecked" (change)="disableSubmitt($event.checked)">I agree terms and conditions</mat-checkbox>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <!--<div class="row">
+    <div class="col-sm-5"></div>
+    <div class="col-sm-3">
+      <button *ngIf="HidenotconfirmedSubmit" class="success" [disabled]="isNextButton" (click)="onsubmitcounsellingnotConfirmation(M_Reasons)">Submit</button>
+      <button *ngIf="HideconfirmedSubmit" class="success" [disabled]="isNextButton" (click)="onsubmitcounsellingConfirmation(CounsellingForm)">Submit</button>
+      <button type="button" class="btn btn-warning" (click)="Cancel()"><strong>Cancel</strong></button>
+    </div>
+    <div class="col-sm-4"></div>
+
+  </div>-->
+
+
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button type="button" class="btn btn-warning-default" (click)="Cancel()"> Cancel </button>
+        <button *ngIf="HidenotconfirmedSubmit"  [disabled]="isNextButton" class="success btn btn-primary" (click)="onsubmitcounsellingnotConfirmation(M_Reasons)">
+          Submit
+        </button>
+        <button *ngIf="HideconfirmedSubmit"  [disabled]="isNextButton" class="success btn btn-primary" (click)="onsubmitcounsellingConfirmation(CounsellingForm)">
+          Submit
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <!--<div class="modal" role="dialog" [ngStyle]="{'display':modalpo}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 style="font-size:15px">Record</h1>
+          <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspo()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <video width="400" controls="controls" poster="LasikEYE.jpg">
+            <source src="../../../assets/KLA237CLINIC.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="modalSuccesspo()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>-->
+
+</form>
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Patient History - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <!--<th>Export</th>
+              <th>Print</th>-->
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <!--<td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>-->
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':Consnetpopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ConsnetpopupOk()">&times;</button>
+        <h4 class="modal-title text-left">Information</h4>
+      </div>
+      <div class="modal-body">
+      <p>Consent not available</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="ConsnetpopupOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+<form #PatientInsurance="ngForm" style="margin-top:1%">
+
+
+  <div class="col-sm-12" style="border:2px solid gray;  border-radius:6px;">
+    <div class="col-sm-12">
+      <div class="row">
+        <h1 align="center" style="margin-bottom:0px;text-align:center;border:2px solid gray;border-bottom-color:white;font-family:'Proxima Nova Semibold'">Patient Insurance</h1>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <div class="col-sm-10">
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline" style="width:200px">
+          <mat-label>From Date</mat-label>
+          <input [(ngModel)]="M_FromDate" name="FromDate" [max]="maxFromDate()" (dateChange)="CheckToDate();" required matInput [matDatepicker]="FromDate" placeholder="FromDate">
+          <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+          <mat-datepicker #FromDate></mat-datepicker>
+        </mat-form-field>
+
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline" style="width:200px">
+          <mat-label>To Date</mat-label>
+          <input [(ngModel)]="M_ToDate" name="ToDate" matInput [matDatepicker]="ToDate" [max]="maxFromDate()" required [min]="minToDate" (dateChange)="CheckToDate()" placeholder="ToDate">
+          <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+          <mat-datepicker #ToDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <mat-radio-group [(ngModel)]="M_Insurancetype" name="M_Insurancetype" aria-label="Select an option">
+        <div class="col-sm-2" style="margin-top:1%">
+          <mat-radio-button value="Insurance">Insurance</mat-radio-button>
+        </div>
+        <div class="col-sm-2" style="margin-top:1%">
+          <mat-radio-button value="Private">Private</mat-radio-button>
+        </div>
+        <div class="col-sm-2" style="margin-top:1%">
+          <mat-radio-button value="Both">Both</mat-radio-button>
+        </div>
+      </mat-radio-group>
+
+    </div>
+
+
+
+
+    <div class="col-sm-12" style="margin-top:30px;margin-bottom:1%">
+      <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-2">
+          <button [disabled]="disableSubmit"  style="font-size:15px;" (click)="onSubmit(PatientInsurance)" class="btn btn-success">Submit</button>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;" (click)="CancelClk()">Cancel</button>
+        </div>
+        <div class="col-sm-4">
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+
+</form>
+
+<!--/////////////////////////////////////////////table/////////////// <h3 align="center" style="margin-bottom:0px;width:60%">Patient Insurance</h3>//////////////////////////////-->
+
+<div class="col-sm-12" style="border:2px  gray;border-radius:6px;margin-top:1%" *ngIf="hiddentable">
+
+  <mat-form-field appearance="outline" style="font-size:14px;">
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search">
+  </mat-form-field>
+
+  <button mat-icon-button matTooltip="Export To PDF" mat-button style="color:red;margin-left:2%;margin-right:2%" (click)="modalSuccesPrintOk()" class="btn btn-Pdf"><mat-icon>picture_as_pdf</mat-icon></button>
+  <button mat-icon-button matTooltip="Export To Excel" mat-button style="color:green;margin-left:3%" (click)="fireEvent()" class="btn btn-Excel"><img src="https://img.icons8.com/color/24/000000/ms-excel.png"></button>
+
+
+  <div class="row" #table>
+    <div class="col-sm-12" style="height:400px; overflow:auto" id="section">
+      <div class="mat-elevation-z8" style="box-shadow: 0px 10px 8px 1px #888888;position: sticky">
+        <table mat-table [dataSource]="dataSource" style="width:100%">
+          <ng-container matColumnDef="UIN">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">UIN</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.UIN}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">Patient Name</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.Name}} {{element.MName}} {{element.LName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="DateofReg">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">Registered Date</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.DateofRegistration| date:"dd-MMM-y"}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Age">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">Age</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.Age}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Gender">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">Gender</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.Gender}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Address1">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">Address</th>
+            <td mat-cell *matCellDef="let element">{{element.Address1}}</td>
+          </ng-container>
+          <ng-container matColumnDef="Phone">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px">Phone</th>
+            <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">{{element.Phone}}</td>
+          </ng-container>
+
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row;  columns: displayedColumns;"></tr>
+
+        </table>
+        <!--<mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 50, 100]" showFirstLastButtons></mat-paginator>-->
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Patient VS Insurance - View Access</h4>
+      </div>
+      <div class="modal-body" style="height:40px;margin-top:-10px;">
+        <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Add</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Edit</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Delete</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Export</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata">
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top:20%">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

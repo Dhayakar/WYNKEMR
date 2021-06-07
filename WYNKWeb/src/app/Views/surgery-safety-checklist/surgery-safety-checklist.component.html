@@ -1,0 +1,186 @@
+<div class="col-sm-12">
+  <div class="row">
+    <h5 align="center" class="card-header bg-success text-white rounded-top">
+      <b>Surgery Safety Checklist</b>
+    </h5>
+  </div>
+</div>
+
+<form #SurgerySafetyChecklist="ngForm" name="SurgerySafetyChecklist" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="col-sm-12  border-blue border-radius">
+    <div class="row">
+      <div class="col-sm-2 mph-0 f-r content-right pb20">
+        <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+      </div>
+    </div>
+    <div class="row m-3 mt-1p">
+      <input #SSCId name="SSCID" [(ngModel)]="M_SSCID" type="hidden">
+      <div class="col-sm-4">
+        <mat-form-field appearance="outline">
+          <mat-label>SSC Group Description</mat-label>
+          <mat-select [(ngModel)]="M_SSCType" name="SSCType" required (ngModelChange)="SSCTypeChange(M_SSCType)">
+            <mat-option *ngFor="let SSCType of SSCTypes" [value]="SSCType.Value">{{SSCType.Text}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-1">
+        <mat-icon (click)="SScTypeList()" class="cursor" data-toggle="tooltip" title="Search">search</mat-icon>
+        <!--<button style="margin-top: 1px;" class="col-sm-1 search" type="button" (click)="SScTypeList()" data-toggle="tooltip" title="Search"><mat-icon>search</mat-icon></button>-->
+      </div>
+      <div class="col-sm-7">
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea matInput [(ngModel)]="M_Question" name="Question" placeholder="Enter Question" required></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row m-3 mt-1p">
+      <div class="col-sm-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Person to address</mat-label>
+          <input matInput autocomplete="off" [(ngModel)]="M_QuestionToWhom" name="QuestionToWhom">
+        </mat-form-field>
+      </div>
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Default value</mat-label>
+          <mat-select [(ngModel)]="M_Default" name="Default">
+            <mat-option value="1">Yes</mat-option>
+            <mat-option value="0">No</mat-option>
+            <mat-option value="2">N/A</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 m-3">
+    <div class="col-sm-12 pb25">
+      <div class="col-sm-4  sub-section btn-wrap f-r">
+        <button type="button" class="btn btn-warning-default" (click)="clear()"><strong>Cancel</strong></button>
+        <button type="button" class="btn btn-warning-default" [disabled]="isNextDelete"  (click)="Delete(SSCId.value)"><strong>Delete</strong></button>
+        <button type="submit"  *ngIf="SSCId.value !=0" class="success btn btn-primary" [disabled]="isNextupdate"  (click)="Update(SurgerySafetyChecklist,SSCId.value)">Submit</button>
+        <button type="submit"  *ngIf="SSCId.value == 0" class="success btn btn-primary" [disabled]="isNextButton" (click)="Submit(SurgerySafetyChecklist)">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="row" style="margin:3%">
+    <div class="col-sm-5"></div>
+    <div class="col-sm-1" style="margin-left:-82px;" *ngIf="SSCId.value !=0;else notShow">
+      <button class="success" [disabled]="isNextupdate" (click)="Update(SurgerySafetyChecklist,SSCId.value)" mat-raised-button>Submit</button>
+    </div>
+    <ng-template #notShow>
+      <div class="col-sm-1" style="margin-left:-82px;">
+        <button class="success" [disabled]="isNextButton" mat-raised-button (click)="Submit(SurgerySafetyChecklist)">Submit</button>
+      </div>
+    </ng-template>
+    <div class="col-sm-1">
+      <button class="btn btn-warning" (click)="clear()" type="button" style="margin-right:12px;font-size:15px;color:orange;background-color:white">Cancel</button>
+    </div>
+    <div class="col-sm-5" *ngIf="SSCId.value !=0;">
+      <button class="danger" [disabled]="isNextDelete" mat-raised-button (click)="Delete(SSCId.value)">Delete</button>
+    </div>
+  </div>-->
+</form>
+
+
+
+<!--/* Adding Item Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':SSCListModel}">
+  <div class="modal-dialog modal-md width-70p">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ModelClose()">&times;</button>
+        <h5 class="modal-title">
+          <strong>Surgery Safety Checklist Details</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <!--<div class="row">
+          <h4>
+            <strong>Surgery Safety Checklist Details</strong>
+          </h4>
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <mat-icon class="cursor" matTooltip="Close" (click)="ModelClose()">clear</mat-icon>
+          </div>
+        </div>-->
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row heightAuto-300px">
+          <table mat-table [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-checkbox [(ngModel)]="element.checked" (click)="selecttype(element)"></mat-checkbox>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="SSCGroupDescription">
+              <th mat-header-cell class="width-25p" *matHeaderCellDef>SSC Group Description</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.SSCGroupDescription}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Question">
+              <th mat-header-cell class="width-40p" *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.Question}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Questiontowhom">
+              <th mat-header-cell *matHeaderCellDef>Person to address</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.Questiontowhom}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Default">
+              <th mat-header-cell *matHeaderCellDef>Default value</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.DefaultDescription}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+            <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--/* Access Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title">Surgery Safety Checklist</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

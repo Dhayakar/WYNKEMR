@@ -1,0 +1,226 @@
+
+
+<h5 class="col-sm-5 card-header bg-success text-white">
+  Insurance Details
+</h5>
+
+<div class="col-sm-12 borderline">
+  <!--------------------------------------------------------------------------------------------------->
+  <form #insurance="ngForm">
+
+
+
+    <div class="col-sm-12 mt10">
+
+      <div class="col-sm-12 mph-0">
+        <div class="col-sm-8 mph-0">
+
+        </div>
+        <div class="col-sm-2 mph-0">
+          <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+        <div class="col-sm-2 mph-0">
+          <button type="button" [disabled]="disableSearch" (click)="Clicksch()" class="btn-text grab f-r">
+            <i class="fas fa-info-circle"> </i> Help
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Insurance Name</mat-label>
+            <input required [(ngModel)]="M_InsuranceName" name="insurancename" matInput placeholder="Insurance name">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Address1</mat-label>
+            <textarea required [(ngModel)]="M_Address1" name="Address1" [disabled]="DisabledREV" placeholder="Address" matInput #message1 maxlength="100"></textarea>
+            <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+            <mat-hint align="end"><strong>{{message1.value.length}} /100</strong></mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Address2</mat-label>
+            <textarea [(ngModel)]="M_Address2" name="Address2" [disabled]="DisabledREV" placeholder="Address" matInput #message2 maxlength="100"></textarea>
+            <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+            <mat-hint align="end"><strong>{{message2.value.length}} /100</strong></mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Address3</mat-label>
+            <textarea [(ngModel)]="M_Address3" name="Address3" [disabled]="DisabledREV" placeholder="Address" matInput #message3 maxlength="100"></textarea>
+            <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+            <mat-hint align="end"><strong>{{message3.value.length}} /100</strong></mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <mat-select [(ngModel)]="M_City" name="City" (ngModelChange)="Citysumbit()">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let City of Cityname" [value]="City.Value">{{City.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <mat-select [(ngModel)]="M_location" name="Location" [disabled]="disableLOC" (ngModelChange)="locationsumbit()">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let Location of Locationname" [value]="Location.Value">{{Location.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <strong>
+              <input [(ngModel)]="State" name="State" matInput placeholder="State Name" disabled>
+            </strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <strong>
+              <input [(ngModel)]="Country" name="Country" matInput placeholder="Country Name" disabled>
+            </strong>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Pincode</mat-label>
+            <input maxlength="10" [(ngModel)]="M_Pincode" name="Pincode" matInput placeholder="Pincode" disabled>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Insurance Category</mat-label>
+            <mat-select required [(ngModel)]="M_InsuranceCategory" name="InsuranceCategory">
+              <mat-option value="0">Insurance Company</mat-option>
+              <mat-option value="1">Middle Man</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3" *ngIf="hiddenIsActive">
+          <mat-form-field appearance="outline">
+            <mat-label>IsActive</mat-label>
+            <mat-select required [(ngModel)]="M_IsActive" name="IsActive">
+              <mat-option value="Yes">Yes</mat-option>
+              <mat-option value="No">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="col-sm-12" style="margin-top:30px">
+      <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-2">
+          <button [disabled]="disableSubmit" *ngIf="hiddenSubmit" style="font-size:15px;" id="submit" (click)="onSubmit(insurance)" class="btn btn-success">Submit</button>
+          <button [disabled]="disableUpdate" *ngIf="hiddenUpdate" style="font-size:15px;" id="Update" (click)="Update(insurance)" class="btn btn-success">Submit</button>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;" (click)="CancelClk()">Cancel</button>
+        </div>-->
+    <!--<button class="btn btn-primary" [disabled]="isDisabled" (click)="print()">Print</button>-->
+    <!--<div class="col-sm-4">
+        </div>
+      </div>
+    </div>-->
+
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button class="btn btn-warning-default" (click)="CancelClk()"><strong>Cancel</strong></button>
+        <button class="success btn btn-primary" [disabled]="disableSubmit" *ngIf="hiddenSubmit" (click)="onSubmit(insurance)">Submit</button>
+        <button class="success btn btn-primary" [disabled]="disableUpdate" *ngIf="hiddenUpdate" (click)="Update(insurance)">Submit</button>
+      </div>
+    </div>
+
+
+  </form>
+  <!--------------------------------------------------------------------------------------------------------------->
+</div>
+
+
+<!-----------------------------------cancel Popup----------------------------------------->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="cancelClose()">&times;</button>
+        <h4 class="modal-title">Insurance</h4>
+      </div>
+      <p align="center">Do you want to cancel</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="CloseNo()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="CloseYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--////////////////////////////////////////view asses//////////////////////////////////////////-->
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Insurance - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

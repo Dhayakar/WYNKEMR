@@ -1,0 +1,1266 @@
+<form #IntraOperativeProcedure="ngForm" name="IntraOperativeProcedure" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="col-sm-12">
+    <div class="row">
+      <h5 align="center" class="card-header bg-success text-white rounded-top">
+        <b>Intra-operative procedure</b>
+      </h5>
+    </div>
+  </div>
+  <div class="col-sm-12 dividebar">
+    <div class="col-sm-12 mph-0 downmargin">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{M_UIN}} / {{M_Name}} / {{M_Age}} / {{M_Gender}}</strong>
+            </span>
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+            <button (click)="OpenIopopup()" class="btn-text grab f-r" type="button" >
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+
+      <mat-tab-group animationDuration="0ms" class="tabsss">
+        <mat-tab label="Surgery Details">
+          <div class="col-sm-12 mt-1p">
+            <div class="row">
+              <div class="col-sm-3 ml-n3p">
+                <div class="col-sm-11">
+                  <input required disabled  [owlDateTimeTrigger]="dt8" autocomplete="off" class="form-control" [owlDateTime]="dt8" [min]="M_AdmDate" [max]="M_AssignedSurgeryDate" [(ngModel)]="M_SurgeryDate" name="SurgeryDate" placeholder="Surgery Date">
+                  <owl-date-time [disabled]="FromDB"  #dt8></owl-date-time>
+                </div>
+                <div class="col-sm-1 ml-n7p mt-2p">
+                  <span [owlDateTimeTrigger]="dt8"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+              <div class="col-sm-2 ml-1np">
+                <label class="refcol">From :</label> &nbsp;
+                <input matInput maxlength="2" class="IoInputTime" placeholder=" HH" [(ngModel)]="Fhours" name="Fhours" (keypress)="RestrictNegativeValues($event)" (keyup)="Frestricthrs()" [disabled]="FromDB">
+                &nbsp;<span>&#58;</span>&nbsp;
+                <input class="ml-n3p IoInputTime" matInput maxlength="2"  placeholder=" MM" [(ngModel)]="FMins" name="FMins" (keypress)="RestrictNegativeValues($event)" (keyup)="Frestrictmins()" [disabled]="FromDB">
+              </div>
+              <div class="col-sm-2">
+                <label class="refcol">To :</label> &nbsp;
+                <input matInput maxlength="2" class="IoInputTime" placeholder=" HH" [(ngModel)]="Thours" name="Thours" (keypress)="RestrictNegativeValues($event)" (keyup)="Trestricthrs()" [disabled]="FromDB">
+                &nbsp;<span>&#58;</span>&nbsp;
+                <input matInput maxlength="2" class="IoInputTime" placeholder=" MM" [(ngModel)]="TMins" name="TMins" (keypress)="RestrictNegativeValues($event)" (keyup)="Trestrictmins()" [disabled]="FromDB">
+              </div>
+
+              <div class="col-sm-5">
+                <div class="col-sm-6">
+                  <label class="refcol">Diagnosed on :</label>
+                  <label class="ml-4p"> {{M_Diagnosed| date :'dd-MMM-yyyy'}}</label>
+                </div>
+                <div class="col-sm-6"  style="margin-left: -4%">
+                  <div class="col-sm-5" style="width: 49%;">
+                    <label class="refcol">OT Name :</label>
+                  </div>
+                  <div class="col-sm-7" style="margin-left: -12%">
+                    <label> {{M_OperationTheatre}} </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row mt-2p">
+              <div class="col-sm-3">
+                <label class="refcol">Surgery Type :</label>
+                <label class="ml-4p">{{M_SurgeryType}}</label>
+              </div>
+              <div class="col-sm-4">
+                <div class="col-sm-12">
+                  <div class="col-sm-6 ml-n12p">
+                    <label class="refcol">Surgery Procedure :</label>
+                  </div>
+                  <div class="col-sm-6 ml-n7p width-67p mt-n3p">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Surgery Procedure</mat-label>
+                      <mat-select [(ngModel)]="M_surgeryprocedure" name="surgeryprocedure" (ngModelChange)="surgeryprocedureChange()" required [disabled]="FromDB">
+                        <mat-option *ngFor="let surgeryprocedures of surgeryprocedurelist" [value]="surgeryprocedures">{{surgeryprocedures.Text}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <label class="refcol">Surgery Advice by :</label>
+                <label class="ml-4p">{{M_SurgeryAdviceby}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h5 class="card-header bg-success text-white">
+                      Surgeon & Medical staff details
+                    </h5>
+                  </div>
+                </div>
+                <div class="row col-sm-12">
+                  <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+                    <ng-container matColumnDef="SNo">
+                      <th mat-header-cell *matHeaderCellDef class="width-7p pr10">S.No</th>
+                      <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Name">
+                      <th mat-header-cell *matHeaderCellDef class="width-40p">Name</th>
+                      <td mat-cell *matCellDef="let element">{{element.Name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Role">
+                      <th mat-header-cell *matHeaderCellDef>Role</th>
+                      <td mat-cell *matCellDef="let element">{{element.Role}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Specialization">
+                      <th mat-header-cell *matHeaderCellDef>Specialization</th>
+                      <td mat-cell *matCellDef="let element">{{element.Specialization}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                    <tr mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{gray: even}"></tr>
+                  </table>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>Additional Notes:</mat-label>
+                  <textarea matInput [(ngModel)]="M_OTNotes" name="OT_Notes" placeholder="" required [disabled]="FromDB"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <!--<div class="row">
+              <div class="col-sm-3">
+                <h5 class="card-header bg-success text-white">
+                  Surgeon & Medical staff details
+                </h5>
+              </div>
+            </div>
+            <div class="row col-sm-6">
+              <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef class="width-7p pr10">S.No</th>
+                  <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                </ng-container>
+                <ng-container matColumnDef="Name">
+                  <th mat-header-cell *matHeaderCellDef class="width-40p">Name</th>
+                  <td mat-cell *matCellDef="let element">{{element.Name}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Role">
+                  <th mat-header-cell *matHeaderCellDef>Role</th>
+                  <td mat-cell *matCellDef="let element">{{element.Role}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Specialization">
+                  <th mat-header-cell *matHeaderCellDef>Specialization</th>
+                  <td mat-cell *matCellDef="let element">{{element.Specialization}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{gray: even}"></tr>
+              </table>
+            </div>-->
+          </div>
+        </mat-tab>
+        <mat-tab label="Intra Operative Details">
+          <div class="row col-sm-12">
+            <mat-tab-group animationDuration="0ms" class="tabsss" #MainSubtabs>
+              <mat-tab label="SSC">
+                <mat-tab-group animationDuration="0ms" class="subtabs" #SSCChildtabs>
+                  <mat-tab label="Before skin incision">
+                    <div class="row tableoverflowheight">
+                      <table mat-table matSort [dataSource]="BeforeSkinIncisionSource" class="custom-table withoutbackgroung search-table table-bordered">
+                        <ng-container matColumnDef="SNo">
+                          <th mat-header-cell *matHeaderCellDef>S.No</th>
+                          <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Questions">
+                          <th mat-header-cell *matHeaderCellDef>Question</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">{{element.Questions}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ToWhom">
+                          <th mat-header-cell *matHeaderCellDef>To Whom</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">{{element.ToWhom}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Yes">
+                          <th mat-header-cell *matHeaderCellDef>Yes</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">
+                            <mat-checkbox name="Yes" (change)="OnChangeYes($event,element,id)" [disabled]="element.DisabledYes"
+                                          [(checked)]="element.Yes"></mat-checkbox>
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="NO">
+                          <th mat-header-cell *matHeaderCellDef>No</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" style="text-align:center;">
+                            <mat-checkbox name="No" (change)="OnChangeNo($event,element,id)" [disabled]="element.DisabledNo"
+                                          [(checked)]="element.No"></mat-checkbox>
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="NA">
+                          <th mat-header-cell *matHeaderCellDef>N/A</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">
+                            <mat-checkbox name="NA" (change)="OnChangeNA($event,element,id)" [disabled]="element.DisabledNA"
+                                          [(checked)]="element.NA"></mat-checkbox>
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef>Addl. information</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true" (keyup)="changeDescription(id,'Description',$event);">{{element.Description}}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="BeforeSkinIncisionColumns;sticky: true"></tr>
+                        <tr mat-row *matRowDef="let element;  columns: BeforeSkinIncisionColumns"></tr>
+                      </table>
+                    </div>
+                  </mat-tab>
+                  <mat-tab label="Before patient leaves operating room">
+                    <div class="row tableoverflowheight">
+                      <table mat-table matSort [dataSource]="BeforePatientLeavesOperatingSource" class="custom-table withoutbackgroung search-table table-bordered">
+                        <ng-container matColumnDef="SNo">
+                          <th mat-header-cell *matHeaderCellDef>S.No</th>
+                          <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Questions">
+                          <th mat-header-cell *matHeaderCellDef>Question</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">{{element.Questions}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ToWhom">
+                          <th mat-header-cell *matHeaderCellDef>To Whom</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">{{element.ToWhom}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Yes">
+                          <th mat-header-cell *matHeaderCellDef>Yes</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">
+
+                            <mat-checkbox name="Yes" (change)="OnChangeYes1($event,element,id)" [disabled]="element.DisabledYes"
+                                          [(checked)]="element.Yes"></mat-checkbox>
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="NO">
+                          <th mat-header-cell *matHeaderCellDef>No</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">
+                            <mat-checkbox name="No" (change)="OnChangeNo1($event,element,id)" [disabled]="element.DisabledNo"
+                                          [(checked)]="element.No"></mat-checkbox>
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="NA">
+                          <th mat-header-cell *matHeaderCellDef>N/A</th>
+                          <td mat-cell *matCellDef="let element;let id = index;">
+                            <mat-checkbox name="NA" (change)="OnChangeNA1($event,element,id)" [disabled]="element.DisabledNA"
+                                          [(checked)]="element.NA"></mat-checkbox>
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef>Addl. information</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true" (keyup)="changeDescription1(id,'Description',$event);">{{element.Description}}</td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="BeforePatientLeavesOperatingColumns;sticky: true"></tr>
+                        <tr mat-row *matRowDef="let element;  columns: BeforePatientLeavesOperatingColumns"></tr>
+                      </table>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-tab>
+              <mat-tab label="Anaesthesia Record">
+                <mat-tab-group animationDuration="0ms" class="subtabs" #AnaesthesiaChildtabs>
+                  <mat-tab label="Monitoring">
+                    <div class="col-sm-12" style="margin-top: 3%;">
+                      <div class="col-sm-6" style="border-right: 1px solid black;">
+                        <div class="col-sm-12" style="margin:3px">
+                          <div class="row">
+                            <div class="col-sm-2 ml-n4p">
+                              <label>ECG : </label>
+                            </div>
+                            <div class="col-sm-4">
+                              <mat-radio-group aria-label="Select an option" [(ngModel)]="M_Ecg" name="Ecg" [disabled]="FromDB">
+                                <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                                &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                              </mat-radio-group>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                              <label>Leads</label>
+                            </div>
+                            <div class="col-sm-2 mt-n2p">
+                              <mat-form-field class="width-88px">
+                                <input matInput placeholder=" " [(ngModel)]="M_Leads" name="Leads" [disabled]="FromDB">
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2 ml-n5p">
+                              <label>SpO2 :</label>
+                            </div>
+                            <div class="col-sm-4 ml-1p">
+                              <mat-radio-group aria-label="Select an option" [(ngModel)]="M_SpO2" name="SpO2" [disabled]="FromDB">
+                                <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                                &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                              </mat-radio-group>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                              <label>Site</label>
+                            </div>
+                            <div class="col-sm-2 mt-n2p">
+                              <mat-form-field class="width-88px">
+                                <input matInput placeholder=" " [(ngModel)]="M_SpO2Site" name="SpO2Site" [disabled]="FromDB">
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2 mt-2p  ml-n5p">
+                              <label>Temp :</label>
+                            </div>
+                            <div class="col-sm-3">
+                              <mat-form-field>
+                                <mat-label>Select Temp</mat-label>
+                                <mat-select [(ngModel)]="M_Temp" name="Temp" [disabled]="FromDB">
+                                  <mat-option value="Core">Core</mat-option>
+                                  <mat-option value="Periph">Periph</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2 ml-9p">
+                              <mat-form-field>
+                                <input matInput placeholder="Temp" [(ngModel)]="M_TempValue" name="TempValue" [disabled]="FromDB">
+                              </mat-form-field>
+                            </div>
+                            <div class="col-sm-4"></div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-2 ml-n4p">
+                              <label>FiO2 :</label>
+                            </div>
+                            <div class="col-sm-4">
+                              <mat-radio-group aria-label="Select an option" [(ngModel)]="M_FiO2" name="FiO2" [disabled]="FromDB">
+                                <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                                &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                              </mat-radio-group>
+                            </div>
+                          </div>
+                          <div class="row mt-1p">
+                            <div class="col-sm-2  ml-n7p mt-3p">
+                              <label>ETCO2 :</label>
+                            </div>
+                            <div class="col-sm-3">
+                              <mat-form-field>
+                                <mat-label>Select ETCO2</mat-label>
+                                <mat-select [(ngModel)]="M_ETCO2" name="ETCO2" [disabled]="FromDB">
+                                  <mat-option value="Main">Main</mat-option>
+                                  <mat-option value="Sidestream">Sidestream</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2 ml-9p">
+                              <mat-form-field>
+                                <input matInput placeholder="ETCO2" [(ngModel)]="M_ETCO2Value" name="ETCO2Value" [disabled]="FromDB">
+                              </mat-form-field>
+                            </div>
+                            <div class="col-sm-4"></div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-3 ml-n9p">
+                              <label>Insp/ET AA :</label>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-4 ml-n13p">
+                              <mat-radio-group aria-label="Select an option" [(ngModel)]="M_InspET" name="InspET" [disabled]="FromDB">
+                                <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                                &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                              </mat-radio-group>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-3 ml-n9p">
+                              <label>AirwayPress :</label>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-4 ml-n13p">
+                              <mat-radio-group aria-label="Select an option" [(ngModel)]="M_AirwayPress" name="AirwayPress" [disabled]="FromDB">
+                                <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                                &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                              </mat-radio-group>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 mt-1p">
+                        <div class="row mt-1p">
+                          <div class="col-sm-2 ml-4p">
+                            <label>NIBP :</label>
+                          </div>
+                          <div class="col-sm-4 ml-2p">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_NIBP" name="NIBP" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                          <div class="col-sm-1"></div>
+                          <div class="col-sm-2">
+                            <label> Manual/Automated </label>
+                          </div>
+                          <div class="col-sm-1"></div>
+                        </div>
+                        <div class="row mt-1p">
+                          <div class="col-sm-2 ml-6p">
+                            <label>IBP :</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_IBP" name="IBP" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-2">
+                              <label>Site</label>
+                            </div>
+                            <div class="col-sm-2 mt-n2p">
+                              <mat-form-field class="width-88px">
+                                <input matInput placeholder=" " [(ngModel)]="M_IBPSITE" name="IBPSITE" [disabled]="FromDB">
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mt-1p">
+                          <div class="col-sm-2 ml-6p">
+                            <label>CVP :</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_CVP" name="CVP" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                          <div class="col-sm-1"></div>
+                          <div class="col-sm-2">
+                            <label>Site</label>
+                          </div>
+                          <div class="col-sm-2 mt-n2p">
+                            <mat-form-field class="width-88px">
+                              <input matInput placeholder=" " [(ngModel)]="M_CVPSITE" name="CVPSITE" [disabled]="FromDB">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mt-1p">
+                          <div class="col-sm-2 ml-4p">
+                            <label>PCWP :</label>
+                          </div>
+                          <div class="col-sm-4 ml-2p">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_PCWP" name="PCWP" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                        <div class="row mt-1p">
+                          <div class="col-sm-2 ml-6p">
+                            <label>Resp :</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_Resp" name="Resp" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                          <div class="col-sm-1"></div>
+                          <div class="col-sm-2">
+                            <label>Source</label>
+                          </div>
+                          <div class="col-sm-2 mt-n2p">
+                            <mat-form-field class="width-88px">
+                              <input matInput placeholder=" " [(ngModel)]="M_RespSource" name="RespSource" [disabled]="FromDB">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mt-1p">
+                          <div class="col-sm-3 ml-1p">
+                            <label>Bloodloss :</label>
+                          </div>
+                          <div class="col-sm-4 ml-n4p">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_Bloodloss" name="Bloodloss" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value=true>Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                        <div class="row mt-1p">
+                          <div class="col-sm-3 ml-n2p">
+                            <label>Urine Output :</label>
+                          </div>
+                          <div class="col-sm-4 ml-n1p">
+                            <mat-radio-group aria-label="Select an option" [(ngModel)]="M_Urine" name="Urine" [disabled]="FromDB">
+                              <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                              &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-tab>
+              <mat-tab label="Intra-operative">
+                <mat-tab-group animationDuration="0ms" class="subtabs" #IntraChildtabs>
+                  <mat-tab label="Intra-operative drugs used">
+                    <div class="row mt-1p">
+                      <div class="col-sm-2 mt-1p">
+                        <label class="refcol">Store Name :</label>
+                      </div>
+                      <div class="col-sm-2 ml-n7p">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Store Name</mat-label>
+                          <mat-select [(ngModel)]="M_store" name="store" required [disabled]="FromDB">
+                            <mat-option *ngFor="let Supplier of Suppliername" [value]="Supplier.Value">{{Supplier.Text}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-2 f-r">
+                        <button (click)="ViewOtNotes();" matTooltip="OT Notes" class="btn btn-primary-default btn-Pdf buttonsfloat">OT Notes</button>
+                      </div>
+                    </div>
+                    <div *ngIf="!IoDrugUsed">
+                      <div class="row card">
+                        <h5 class="card-header bg-success text-white" style="height: 47px; margin: 0px; padding-left: 30px; padding-top: 9px;">
+                          Item Details 
+                          <label class="labelfloat" style=" padding-right: 20px;">
+                            <button (click)="AddItemDetails();" matTooltip="Add Items" class="btn btn-primary-default">Add Items</button>
+                          </label>
+                        </h5>
+                      </div>
+                      <div class="row heightAuto-200px">
+                        <table mat-table matSort [dataSource]="dataSource1" class="custom-table withoutbackgroung search-table table-bordered">
+                          <ng-container matColumnDef="SNo">
+                            <th mat-header-cell *matHeaderCellDef>S.No</th>
+                            <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                          </ng-container>
+                          <ng-container matColumnDef="Brand">
+                            <th mat-header-cell *matHeaderCellDef>Brand</th>
+                            <td mat-cell *matCellDef="let element;let id = index;" contenteditable="false" (keypress)="RestrictValues($event)" (keyup)="changeText(id,'Drug',$event)">
+
+                              <!--<input id="c" type="text" matInput value="{{element.Brand}}" [matAutocomplete]="auto">
+                              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="DrugDetailsSearch($event,id)">
+                                <mat-option *ngFor="let DrugName of DrugNameList" [value]="DrugName">
+                                  {{DrugName.Text}}
+                                </mat-option>
+                              </mat-autocomplete>-->
+
+
+                              <mat-form-field appearance="outline">
+                                <mat-select value="{{element.DrugID}}" (selectionChange)="DrugDetailsSearch($event,id)">
+                                  <input matInput #inputdrug class="search" (input)="Filterdatainputdrug($event.target.value)" autocomplete="off">
+                                  <mat-option *ngFor="let DrugName of DrugNameList" [value]="DrugName.Value">{{DrugName.Text}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+
+
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Generic">
+                            <th mat-header-cell *matHeaderCellDef>Generic Name</th>
+                            <td mat-cell *matCellDef="let element">{{element.GenericName}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="UOM">
+                            <th mat-header-cell *matHeaderCellDef>UOM</th>
+                            <td mat-cell *matCellDef="let element">{{element.UOM}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="AvailableQty">
+                            <th mat-header-cell *matHeaderCellDef>Avlbl Qty</th>
+                            <td mat-cell *matCellDef="let element;let id = index;">{{element.AvailQuantity}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Qty">
+                            <th mat-header-cell *matHeaderCellDef>Qty</th>
+                            <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true" (keypress)="RestrictNegativeValues($event)" (keyup)="changeValue(id,'Quantity',$event,element);">{{element.Quantity}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element; let i = index;">
+                              <button mat-icon-button [disabled]="element.IsSerial == null"> <mat-icon data-toggle="tooltip" title="Add/Edit Serials" class="cursor" (click)="element.IsSerial == true ? SerialList(element,i,'Intra'): element.IsSerial == null ? null : BatchList(element,i,'Intra')">new_releases</mat-icon></button>
+                              <button mat-icon-button><mat-icon data-toggle="tooltip" title="Remove" (click)="removeDrug(i)">delete</mat-icon> </button>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns1;sticky: true"></tr>
+                          <tr mat-row *matRowDef="let element; columns: displayedColumns1"></tr>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-sm-12" *ngIf="IoDrugUsed">
+                      <div class="row">
+                        <table mat-table matSort [dataSource]="IoDrugsDetails" class="custom-table withoutbackgroung search-table table-bordered">
+                          <ng-container matColumnDef="SNo">
+                            <th mat-header-cell *matHeaderCellDef>S.No</th>
+                            <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                          </ng-container>
+                          <ng-container matColumnDef="Brand">
+                            <th mat-header-cell *matHeaderCellDef>Brand</th>
+                            <td mat-cell *matCellDef="let element">{{element.Brand}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Generic">
+                            <th mat-header-cell *matHeaderCellDef>Generic Name</th>
+                            <td mat-cell *matCellDef="let element">{{element.GenericName}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="UOM">
+                            <th mat-header-cell *matHeaderCellDef>UOM</th>
+                            <td mat-cell *matCellDef="let element">{{element.UOM}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Qty">
+                            <th mat-header-cell *matHeaderCellDef>Qty</th>
+                            <td mat-cell *matCellDef="let element;let id = index;">{{element.Quantity}} </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="IoDrugsDetailsColumns;sticky: true"></tr>
+                          <tr mat-row *matRowDef="let element; columns: IoDrugsDetailsColumns"></tr>
+                        </table>
+                      </div>
+                    </div>
+                  </mat-tab>
+                  <!--<mat-tab label="Intra-operative notes">
+                     </mat-tab>-->
+                </mat-tab-group>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <div class="row  col-sm-12 mt-3p">
+      <div class="col-sm-6 ml-2p" *ngIf="!FromDB">
+        <div class="row otimg">
+          <img *ngFor='let urlssl of urlsslod' [src]="urlssl" height="75" width="75" style="margin-left: 8px;border:1px solid #51b8f2" #patientImageslod> <br />
+          <span><mat-icon *ngFor='let urlssl of urlsslod; index as i' data-toggle="tooltip" title="Select" (click)="removeImages(i)"> cancel </mat-icon></span>
+        </div>
+        <div class="row" style="margin-left: 5px;">
+          <input type='file' id="Intraimagefile" (change)="onSelectFileslod($event)"  accept=".jpg" multiple>
+          <small><b> .png, .jpeg Images Supported</b></small>
+        </div>
+      </div>
+      <div class="col-sm-6" *ngIf="FromDB">
+        <!--Image-->
+        <div class="row images otimg">
+          <img *ngFor='let ImageFile of ImageFiles; index as i' [lightbox]="i" [src]="ImageFile.data.thumb" height="75" width="75" style="margin-left: 8px;border:1px solid #51b8f2"> <br />
+        </div>
+      </div>
+    </div>
+
+    <div class="row ml10px" *ngIf="!FromDB">
+      <div class="row">
+        <div class="col-sm-6">
+          <h6 class="col-sm-6">Surgery Consent</h6>
+        </div>
+      </div>
+      <table>
+        <tr *ngFor="let lines of totallinesdata">
+          <td><strong>{{lines}}</strong></td>
+        </tr>
+        <tr>
+          <td class="refcol">
+            <mat-checkbox [(ngModel)]="disablechecked" name="disablechecked" (change)="disableSubmitt($event.checked)">I agree terms and conditions</mat-checkbox>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+
+        <button class="btn btn-warning-default" (click)="clear()" type="button">Cancel</button>
+
+      <!--<button class="success btn btn-primary" mat-raised-button [disabled]="disableSubmit || isNextButton" (click)="Submit(IntraOperativeProcedure)" *ngIf="!FromDB">Submit</button>-->
+        <button class="success btn btn-primary" mat-raised-button [disabled]="disableSubmit || disableSurgeryCost" (click)="Submit(IntraOperativeProcedure)" *ngIf="!FromDB">Submit</button>
+        <button class="success btn btn-primary" mat-raised-button [disabled]="isNextupdate" (click)="Update()" *ngIf="FromDB && !IsDischarge">Update</button>
+      </div>
+    </div>
+
+  </div>
+
+</form>
+
+<!--/* Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':Model}" style="width:116%">
+  <div class="modal-dialog modal-lg" style="width:85%;padding-top:10px;padding-left:290px;margin-left: -1%;">
+    <div class="modal-content" style="height:500px;margin-top:3%">
+      <div class="modal-body">
+        <div class="container">
+          <div class="row f-r">
+            <mat-icon style="margin-top: 0%;" class="close" matTooltip="Close" (click)="ModelClose()">clear</mat-icon>
+          </div>
+          <input id="tab-1" type="radio" name="tabs" />
+          <input id="tab-2" type="radio" name="tabs" />
+          <div class="tabs">
+            <label for="tab-1" (click)="SelectedTab('SurgeryAssignlist')">Surgery Assign list</label>
+            <label for="tab-2" (click)="SelectedTab('Unbilled')">Intra operative unbilled Details</label>
+          </div>
+          <div class="content">
+            <div class="tab" style="position: sticky;width: 100%;">
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="">
+                  </mat-form-field>
+                
+                </div>
+              </div>
+              <div class="row heightAuto-300px">
+                <table mat-table matSort [dataSource]="dataSource2" class="custom-table withoutbackgroung search-table table-bordered">
+                  <ng-container matColumnDef="SurgeryDate">
+                    <th mat-header-cell *matHeaderCellDef >Surgery Date</th>
+                    <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.SurgeryDate| date:'dd-MMM-y'}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Surgery">
+                    <th mat-header-cell *matHeaderCellDef >Surgery Type</th>
+                    <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.Surgery}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="UIN">
+                    <th mat-header-cell *matHeaderCellDef >UIN</th>
+                    <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.UIN}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef >Patient Name</th>
+                    <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.Name}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef >Action</th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon data-toggle="tooltip" title="Select" class="cursor" (click)="Selected(element)">create</mat-icon></td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns2;sticky:true"></tr>
+                  <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumns2;" [ngClass]="{gray: even}"></tr>
+                </table>
+              </div>
+            </div>
+            <div class="tab" style="position: sticky;width: 100%;">
+              <div class="row heightAuto-300px">
+                <table mat-table matSort [dataSource]="dataSource4" class="custom-table withoutbackgroung search-table table-bordered">
+                  <ng-container matColumnDef="SurgeryDate">
+                    <th mat-header-cell *matHeaderCellDef >Surgery Date</th>
+                    <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.SurgeryDate| date:'dd-MMM-y'}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Surgery">
+                    <th mat-header-cell *matHeaderCellDef >Surgery Type</th>
+                    <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.Surgery}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="UIN">
+                    <th mat-header-cell *matHeaderCellDef >UIN</th>
+                    <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.UIN}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef >Patient Name</th>
+                    <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.Name}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef >Action</th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon data-toggle="tooltip" title="Select" class="cursor" (click)="SelectedUnbilled(element)">create</mat-icon></td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns4;sticky:true"></tr>
+                  <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumns4;" [ngClass]="{gray: even}"></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!--<div style="margin-top: -3%;">
+          <h4 style="text-align:center;font-size: 20px;color: black;font-family: 'Proxima Nova';background-color:white">
+            <strong>Surgery Assigned Details</strong>
+          </h4>
+        </div>-->
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Out Of Stock Alert-->
+<div class="modal" role="dialog" [ngStyle]="{'display':modalmed}">
+  <div class="modal-dialog modal-lg" style="width:87%;padding-top:15px;padding-left:200px">
+    <div class="modal-content" style="height:586px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessmed()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Out Of Stock Medicines</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div *ngIf="OutOfDrugsView" style="height:200px;width:auto;position:sticky;overflow:auto;">
+          <h5 style="text-align:center">
+            <strong>Batch Details</strong>
+          </h5>
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">S.No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Batch No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Expiry Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Available Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of druglist; index as i">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{i+1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.DrugName}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.BatchNumber}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.ExpiryDate |  date:'dd-MMM-y'}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.BalanceQuantity}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="OutOfSerialView" style="height:176px;width:auto;position:sticky;overflow:auto;margin-top: -28px;">
+          <h5 style="text-align:center">
+            <strong>Serials Details</strong>
+          </h5>
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">S.No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Serial No</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Seriallist; index as i">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{i+1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.Brand}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.SerialNo}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="OutOfOtherView" style="height:158px;width:auto;position:sticky;overflow:auto;margin-top: 5px;">
+          <h5 style="text-align:center">
+            <strong>Other Drug Details</strong>
+          </h5>
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">S.No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Avail.Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of OutOtherDrugsList; index as i">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{i+1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.Brand}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.AvailableQty}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--/* Serial Popup */-->
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':SerialModel}" style="width:106%">
+  <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px;padding-left:290px;margin-right: 21%;">
+    <div class="modal-content" style="height:400px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="SerialModelClose()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Available Serial List</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12" style="border: 2px solid #51b8f2; border-radius: 8px;padding: 5px;">
+          <div class="col-sm-4">
+            <label class="col-sm-4" style="margin-left: -13px;width: 78px;"><strong> Brand :</strong></label>
+            <p class="col-sm-6">{{PopBrand}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Requested Qty :</strong></label>
+            <p class="col-sm-6">{{PopReqqty}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Selected Qty :</strong></label>
+            <p class="col-sm-6">{{PopSelectedQty}}</p>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4" style="margin-top: 2%;">
+            <div>
+              <mat-label>Available Serial Numbers:</mat-label>
+            </div>
+            <div style="height: 200px;overflow: auto;">
+              <mat-selection-list #list [(ngModel)]="selectedOptions" (selectionChange)="onSelection($event)" (ngModelChange)="SerialListChanged($event,list)" style="background: #f7f2f2;">
+                <mat-list-option *ngFor="let tta of SerialLists" [value]="tta.SerialNo">
+                  {{tta.SerialNo}}
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
+          </div>
+          <div class="col-sm-4" style="margin-top: 26%;">
+            <div class="col-sm-1">
+              <button class="success" mat-raised-button (click)="QtyCheck()">Ok</button>
+            </div>
+            <div class="col-sm-1" style="margin-left: 20%;">
+              <button class="success" mat-raised-button (click)="list.deselectAll()" style="margin-right:12px;font-size:15px;color:orange;background-color:white">Clear</button>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>-->
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':SerialModel}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="SerialModelClose()">&times;</button>
+        <h5 class="modal-title text-center">
+          <strong>Available Serial List</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row border-blue border-radius Padding-5px">
+          <div class="col-sm-4">
+            <div class="col-sm-6">
+              <label><strong>Brand :</strong></label>
+            </div>
+            <div class="col-sm-6">
+              <p>{{PopBrand}}</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6 ml-n11p"><strong>Requested Qty :</strong></label>
+            <p class="col-sm-6">{{PopReqqty}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Selected Qty :</strong></label>
+            <p class="col-sm-6">{{PopSelectedQty}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 mt-2p">
+            <div>
+              <mat-label>Available Serial Numbers:</mat-label>
+            </div>
+            <div class="heightAuto-200px">
+              <mat-selection-list #list [(ngModel)]="selectedOptions" (selectionChange)="onSelection($event)" (ngModelChange)="SerialListChanged($event,list)" style="background: #f7f2f2;">
+                <mat-list-option *ngFor="let tta of SerialLists" [value]="tta.SerialNo">
+                  {{tta.SerialNo}}
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
+          </div>
+          <div class="col-sm-4 mt-26p">
+            <div class="col-sm-4 ml-n9p">
+              <button type="button" class="success btn btn-primary" (click)="QtyCheck()">OK</button>
+            </div>
+            <div class="col-sm-4 ml-20p">
+              <button type="button" class="btn btn-warning-default ml-2p"  (click)="list.deselectAll()" >Clear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--/* Batch Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':BatchModel}" style="width:106%">
+  <div class="modal-dialog modal-lg" style="width:88%;padding-top:10px;padding-left:290px;margin-left: -1%;">
+    <div class="modal-content" style="height:520px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="BatchModelClose()">&times;</button>
+        <h5 class="modal-title">
+          <strong>Available Batch List</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="col-sm-12" style="border: 2px solid #51b8f2; border-radius: 8px;padding: 5px;">
+          <div class="col-sm-4">
+            <label class="col-sm-4" style="margin-left: -13px;width: 78px;"><strong>Brand</strong></label>
+            <p class="col-sm-6">{{PopBrand}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Requested Qty :</strong></label>
+            <p class="col-sm-6">{{PopReqqty}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Selected Qty :</strong></label>
+            <p class="col-sm-6">{{PopSelectedQty}}</p>
+          </div>
+        </div>
+
+        <div class="col-sm-12 mt-2p heightAuto-200px">
+          <table mat-table matSort [dataSource]="dataSource3" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="BatchNo">
+              <th mat-header-cell *matHeaderCellDef >Batch No</th>
+              <td mat-cell style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;" *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.BatchNo}}</td>
+            </ng-container>
+            <ng-container matColumnDef="BalanceQty">
+              <th mat-header-cell *matHeaderCellDef class="width-8p">Balance qty</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.BalanceQty}} </td>
+            </ng-container>
+            <ng-container matColumnDef="ExpiryDate">
+              <th mat-header-cell *matHeaderCellDef class="width-12p" >Expiry date</th>
+              <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.ExpiryDate | date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="RetestIntervalDate">
+              <th mat-header-cell *matHeaderCellDef class="width-12p" >RetestInterval date</th>
+              <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.RetestIntervalDate | date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CriticalIntervalDate">
+              <th mat-header-cell *matHeaderCellDef class="width-11p" >CriticalInterval date</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.CriticalIntervalDate | date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="ExpireInDays">
+              <th mat-header-cell *matHeaderCellDef class="width-8p">Expiry in days</th>
+              <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.ExpireInDays}} </td>
+            </ng-container>
+            <ng-container matColumnDef="RetestIntervalDays">
+              <th mat-header-cell *matHeaderCellDef   class="width-9p">Bal Re-test interval days in hand</th>
+              <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.RetestIntervalDays}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CriticalIntervalDay">
+              <th mat-header-cell *matHeaderCellDef class="width-10p" >Bal Critical interval days in hand</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.CriticalIntervalDay}} </td>
+            </ng-container>
+            <ng-container matColumnDef="TotalQty">
+              <th mat-header-cell *matHeaderCellDef >Total qty</th>
+              <td mat-cell  *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.TotalQty}} </td>
+            </ng-container>
+            <ng-container matColumnDef="QtyTaken">
+              <th mat-header-cell *matHeaderCellDef >Issue qty</th>
+              <td mat-cell contenteditable="true" *matCellDef="let element; let i = index;" (click)="myFunction(element)" (blur)="alertHide()" (keypress)="RestrictNegativeValues1($event)" (keyup)="changeValue1(i,'QtyTaken',$event,element);checkingTableQty(i,'QtyTaken',$event,element)" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center" data-toggle="tooltip" title="Select">{{element.QtyTaken}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns3;sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; let element;   let even = even;columns: displayedColumns3;" [ngClass]="{gray: even}"></tr>
+          </table>
+        </div>
+
+        <div class="col-sm-12" *ngIf="alertInfo">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-10" style="margin-left: 5%">
+            <p style="font-size: 14px;">
+              <span style="color:darkred;">Note</span>: <br /> i) This batch  {{alertBatchNo}}   can be issued till {{AlertRetestCriticalIntervalDate | date:'dd-MMM-y'}}  for {{AlertCriticalIntervalDays}} days,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+              ii) This batch no. will not be shown for issual from Re-test critical date {{AlertRetestCriticalIntervalDate | date:'dd-MMM-y'}} till the expiry date {{AlertExpDate | date:'dd-MMM-y'}}
+            </p>
+          </div>
+          <div class="col-sm-1"></div>
+        </div>
+
+
+        <div class="col-sm-12" style="margin-left: 31%;margin-top: 6%;">
+          <div class="col-sm-1" style="margin-left: 5%">
+            <button class="success" mat-raised-button (click)="BatchQtyCheck()">Ok</button>
+          </div>
+          <!--<div class="col-sm-1" style="margin-left: 5%;">
+            <button class="success" mat-raised-button  style="margin-right:12px;font-size:15px;color:orange;background-color:white">Clear</button>
+          </div>-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--/* Intra Operative Notes Popup */-->
+<div class="modal  mt-5p" role="dialog" [ngStyle]="{'display':IONotes}">
+  <div class="modal-dialog modal-md mt-0px width-70p ml-20p">
+    <div class="modal-content" style="height:500px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="IONotesClose()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Intra-operative Notes</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="row">
+                <div class="col-sm-7">
+                  <label style="margin-left: -15%;">Surgery Type :</label>
+                </div>
+                <div class="col-sm-5">
+                  <label>{{M_SurgeryType}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5" style="margin-left: 6%;">
+              <div class="row">
+                <div class="col-sm-7">
+                  <label style="font-size: 13px;">Surgery Procedure :</label>
+                </div>
+                <div class="col-sm-5">
+                  <label style="font-size: 13px;margin-left: -72%;">{{surgeryprocedureName}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3" style="margin-left: -16%;">
+              <button mat-raised-button type="button" *ngIf="removedOtNotes.length != 0" style="margin-left: 40%; background-color:#3dbb96; color:aliceblue;font-family: 'Proxima Nova Semibold';border-radius: 9px;" (click)="ViewunselectedOtNotes()" data-toggle="tooltip" title="Add IO notes">View unselected Ot Notes</button>
+            </div>
+            <div class="col-sm-1" style="margin-left: 5%;">
+              <button mat-raised-button type="button" *ngIf="!IsDischarge" style="background-color:#3dbb96; color:aliceblue;font-family: 'Proxima Nova Semibold';border-radius: 9px;margin-top: 1%;" (click)="AddIoNotes()" data-toggle="tooltip" title="Add IO notes">Add IO notes</button>
+            </div>
+          </div>
+        </div>
+        <div class="row ml-1p heightAuto-350px ml-1p position-sticky">
+
+          <table #IONotestable  mat-table  [dataSource]="IntraoperativeNotesSource" class="custom-table withoutbackgroung search-table table-bordered"
+                 cdkDropList
+                 [cdkDropListData]="IntraoperativeNotesSource"
+                  (cdkDropListDropped)="dropTable($event)">
+
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef class="width-3p">S.No</th>
+              <td mat-cell *matCellDef="let i = index" cdkDragHandle>{{i+1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Description">
+              <th mat-header-cell *matHeaderCellDef class="width-40p">Description</th>
+              <td mat-cell *matCellDef="let element;let id = index" (mousedown)="$event.stopPropagation()" [attr.contenteditable]="true">
+                <input class="form-control tableinputheight" value="{{element.OTNotesDescription}}"  (keyup)="changeIODesc(id,'OTNotesDescription',$event,element);">
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Value">
+              <th mat-header-cell *matHeaderCellDef class="width-20p">Value</th>
+              <td mat-cell *matCellDef="let element;let id = index" [attr.contenteditable]="element.UserInputType !== 'None'" (keyup)="changeInputValue(id,'GivenInputValue',$event,element);">
+                <div *ngIf="element.UserInputType == 'User selection'">
+                  <mat-select (selectionChange)="changeInputValues($event,element)" placeholder="Select">
+                    <mat-option *ngFor="let InputValue of element.InputValue" [value]="InputValue">{{InputValue}}</mat-option>
+                  </mat-select>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Others">
+              <th mat-header-cell *matHeaderCellDef>Others</th>
+              <td mat-cell *matCellDef="let element;let id = index;">{{element.Others}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef> Action </th>
+              <td mat-cell *matCellDef="let element; let i = index;">
+                <button mat-icon-button><mat-icon data-toggle="tooltip" title="Remove" (click)="removeDesc(i)" class="cursor" style="color: red;">delete</mat-icon> </button>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="IntraoperativeNotesColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: IntraoperativeNotesColumns"
+                  
+                cdkDrag [cdkDragData]="row"></tr>
+          </table>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--/* Unselected OTNotes Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':UnselectedIONotes}">
+  <div class="modal-dialog modal-md ">
+    <div class="modal-content imageheight">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="UnselectedIONotesClose()">&times;</button>
+        <h5 class="modal-title text-center">
+          <strong>View unselected Ot Notes</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row Management_dashboard_Tableheightsinsidepopup ml-1p">
+          <table mat-table matSort [dataSource]="UnselectedIONotesSource"  class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef class="width-3p">S.No</th>
+              <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Description">
+              <th mat-header-cell *matHeaderCellDef class="width-40p">Description</th>
+              <td mat-cell *matCellDef="let element;let id = index">{{element.OTNotesDescription}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Value">
+              <th mat-header-cell *matHeaderCellDef class="width-20p">Value</th>
+              <td mat-cell *matCellDef="let element;let id = index">
+                <div *ngIf="element.UserInputType == 'User selection'">
+                  <mat-select placeholder="Select">
+                    <mat-option *ngFor="let InputValue of element.InputValue" [value]="InputValue">{{InputValue}}</mat-option>
+                  </mat-select>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef class="width-20p"> Action </th>
+              <td mat-cell *matCellDef="let element; let i = index;">
+                <button mat-icon-button><mat-icon data-toggle="tooltip" title="Add" class="cursor" (click)="AddToIonotes(i)">create</mat-icon> </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="UnselectedIONotesColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let element; columns: UnselectedIONotesColumns"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----*Access Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Intra Opertaive - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

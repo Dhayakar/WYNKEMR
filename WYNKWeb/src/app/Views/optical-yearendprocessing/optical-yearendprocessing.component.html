@@ -1,0 +1,289 @@
+
+<form #YearEndProcess="ngForm">
+  <div class="col-sm-2"></div>
+  <div>
+    <div class="col-sm-8">
+      <h4 style="text-align:center;margin-top:12px;margin-bottom:-12px">
+        <label><b>Optical Year End Process</b></label>
+      </h4>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10" style="border:2px solid #51b8f2;background-color:white;border-radius:15px;margin-top:1%">
+      <br>
+
+      <div class="row">
+        <div class="col-sm-11"></div>
+        <div class="col-sm-1" style="margin-left:-4%">
+          <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input [(ngModel)]="M_Description" matInput name="Description" type="text" disabled>
+          </mat-form-field>
+          <mat-icon (click)="GetFinancial()" class="grab" style="font-size:30px" data-toggle="tooltip" title="Search">search</mat-icon>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="width:200px">
+            <mat-label>From Year</mat-label>
+            <!--<input [(ngModel)]="M_FromYear" matInput name="FromYear" type="text" disabled>-->
+            <input [(ngModel)]="M_FromYear" name="FromYear" matInput [matDatepicker]="picker" placeholder="From Year" disabled>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="width:200px">
+            <mat-label>To Year</mat-label>
+            <!--<input [(ngModel)]="M_ToYear" autocomplete="off" matInput name="ToYear" type="text" disabled>-->
+            <input [(ngModel)]="M_ToYear" name="ToYear" matInput [matDatepicker]="picker1" placeholder="To Year" disabled>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Acc Year</mat-label>
+            <input [(ngModel)]="M_AccYear" matInput name="AccYear" type="text" disabled>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:2%" *ngIf="Destination">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input [(ngModel)]="M_TDescription" matInput name="tDescription" type="text" disabled>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="width:200px">
+            <mat-label>From Year</mat-label>
+            <!--<input [(ngModel)]="M_FromYear" matInput name="FromYear" type="text" disabled>-->
+            <input [(ngModel)]="M_TFromYear" name="tFromYear" matInput [matDatepicker]="tpicker" placeholder="From Year" disabled>
+            <mat-datepicker-toggle matSuffix [for]="tpicker"></mat-datepicker-toggle>
+            <mat-datepicker #tpicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="width:200px">
+            <mat-label>To Year</mat-label>
+            <!--<input [(ngModel)]="M_ToYear" autocomplete="off" matInput name="ToYear" type="text" disabled>-->
+            <input [(ngModel)]="M_TToYear" name="tToYear" matInput [matDatepicker]="tpicker1" placeholder="To Year" disabled>
+            <mat-datepicker-toggle matSuffix [for]="tpicker1"></mat-datepicker-toggle>
+            <mat-datepicker #tpicker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Acc Year</mat-label>
+            <input [(ngModel)]="M_TAccYear" matInput name="tAccYear" type="text" disabled>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="Destination">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Store</mat-label>
+            <mat-select required [(ngModel)]="M_Store" name="Store">
+              <mat-option value="All Stores">All Stores</mat-option>
+              <mat-option *ngFor="let Store of Stores" [value]="Store">{{Store.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <button class="success" mat-raised-button (click)="ViewItemBalance()">View Item balance</button>
+        </div>
+      </div>
+
+      <!--<div class="row">
+    <p style="margin-left: 2%;color: orangered">Select the Financial year from where the Closing balance is to be transferred to the next financial year</p>
+  </div>-->
+      <div class="row" style="margin:12px">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-1" style="margin-top:1%;margin-right:2%;margin-left:1%">
+          <button class="success" (click)="OnSubmit()" mat-raised-button>Submit</button>
+        </div>
+        <div class="col-sm-1" style="margin-top:1%;margin-right:2%;margin-left:10px">
+          <button class="btn btn-warning" type="button" style="margin-right: 10px;font-size:15px;color:orange;background-color:white" (click)="Cancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1"></div>
+  </div>
+</form>
+
+
+
+
+<!--Financialmodal-->
+<div class="modal" role="dialog" [ngStyle]="{'display':Financialmodal}">
+  <div class="modal-dialog modal-lg" style="width:85%;padding-top:87px;padding-left:320px;margin-left: -3%;">
+    <div class="modal-content" style="height:292px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button class="close" type="reset" data-dismiss="modal" (click)="FinancialClose()">&times;</button>
+        <h2 class="modal-title" style="text-align:center">
+          <strong>Financial Year Details</strong>
+        </h2>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="col-sm-12" style="height:200px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;" #table1>
+            <div class="row">
+              <table mat-table matSort [dataSource]="dataSource" id="profes_table" class="mat-elevation-z8" style="width:100%;" #profes_table>
+                <ng-container matColumnDef="tapp">
+                  <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Action</th>
+                  <td mat-cell *matCellDef="let element" class="grab" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px">
+                    <button mat-icon-button [disabled]="element.FYStatus == 'Closed'" (click)="selecttype(element)">
+                      <mat-icon data-toggle="tooltip" title="Select" class="example-tab-icon">touch_app</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="FYDescription">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">FYDescription</th>
+                  <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.FYDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="FYFrom">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">FYFrom</th>
+                  <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.FYFrom|date:'dd-MMM-y'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="FYTo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">FYTo</th>
+                  <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.FYTo|date:'dd-MMM-y'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="FYAccYear">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">FYAccYear</th>
+                  <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.FYAccYear}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Status</th>
+                  <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.FYStatus}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+                <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns;" [ngClass]="{gray: even}"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--ItemBalancemodal-->
+<div class="modal" role="dialog" [ngStyle]="{'display':ItemBalancemodal}">
+  <div class="modal-dialog modal-lg" style="width:85%;padding-top:64px;padding-left:320px;margin-left: -3%;">
+    <div class="modal-content" style="height:520px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button class="close" type="reset" data-dismiss="modal" (click)="ItemBalanceClose()">&times;</button>
+        <h2 class="modal-title" style="text-align:center">
+          <strong>Item Balance Details</strong>
+        </h2>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12" *ngIf="showItemBalance">
+          <div class="row">
+            <label>Store Name</label> &nbsp;&nbsp; : {{StoreName}}
+          </div>
+          <div class="row" style="height:300px;overflow:auto;position:sticky;">
+            <table mat-table matSort [dataSource]="ItemBalanceSource" class="mat-elevation-z8" style="width:100%;">
+              <ng-container matColumnDef="SNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">S.No</th>
+                <td mat-cell *matCellDef="let element;let i = index; " style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="StoreName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Store Name</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.StoreName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="LensType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Lens Type</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.LensType}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Brand">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Brand</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.Brand}} </td>
+              </ng-container>
+              <ng-container matColumnDef="LensOption">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">LensOption</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.LensOption}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Model">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Model</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.Model}} </td>
+              </ng-container>
+              <ng-container matColumnDef="UOM">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">UOM</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px"> {{element.UOM}} </td>
+              </ng-container>
+              <ng-container matColumnDef={{closingFinancialYear}}>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">
+                  {{closingFinancialYear}}<br /> Closing Balance
+                </th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;"> {{element.ClosingBalance}} </td>
+              </ng-container>
+              <ng-container matColumnDef={{OpeningFinancialYear}}>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">{{OpeningFinancialYear}} <br /> Opening Balance</th>
+                <td mat-cell *matCellDef="let element" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;"> {{element.OPeningBalance}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="ItemBalancedisplayedColumns;sticky:true"></tr>
+              <tr mat-row *matRowDef="let element;  let even = even;  columns: ItemBalancedisplayedColumns;" [ngClass]="{gray: even}"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Optical Year End Process- View Access</h4>
+      </div>
+      <div class="modal-body" style="height:40px;margin-top:-10px;">
+        <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Add</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Edit</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Delete</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Export</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top:20%">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

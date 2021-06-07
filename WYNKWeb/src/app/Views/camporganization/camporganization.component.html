@@ -1,0 +1,359 @@
+<form #CampOrganization="ngForm" name="CampOrganization" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="col-sm-12 formborder">
+    <div class="row">
+      <h6>Camp Organization</h6>
+    </div>
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-2 mph-0 pb20">
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+
+          </div>
+          <div class="col-sm-8 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+            <button class="btn-text" matTooltip="Add Organization Type" (click)="addorganizationtype()">Add Organization Type</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="row">
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" class="width-135p">
+                <mat-label>Organization</mat-label>
+                <input autocomplete="off" required [(ngModel)]="M_CampName" name="Name" (keypress)="nameField($event)" matInput placeholder="" maxlength="100">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-1  ml-15p">
+              <button mat-icon-button [disabled]="isNextupdate && isNextDelete" type="button">
+                <mat-icon [disabled]="isNextupdate && isNextDelete" (click)="Searchorganization()" class="cursor" data-toggle="tooltip" title="Search">search</mat-icon>
+              </button>
+            </div>
+          </div>
+          <!--<mat-form-field appearance="outline">
+            <mat-label>Organization</mat-label>
+            <input autocomplete="off" required [(ngModel)]="M_CampName" name="Name" (keypress)="nameField($event)" matInput placeholder="" maxlength="100">
+          </mat-form-field>-->
+        </div>
+        <!--<div class="col-sm-1" style="margin-left:1%">
+          <mat-icon [disabled]="isNextupdate && isNextDelete" (click)="Searchorganization()" class="cursor" data-toggle="tooltip" title="Search">search</mat-icon>
+        </div>-->
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Address1</mat-label>
+            <textarea matInput [(ngModel)]="add1s" autocomplete="off" name="add1" placeholder="Address" required></textarea>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Address2</mat-label>
+            <textarea matInput [(ngModel)]="add2s" name="add2" placeholder="Address" autocomplete="off"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Address3</mat-label>
+            <textarea [(ngModel)]="add3s" name="add3" matInput placeholder="Address" autocomplete="off"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <mat-select required [(ngModel)]="Cityy" name="Cityy" (ngModelChange)="CityChange()">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let City of Cityname" [value]="City.Value">{{City.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <mat-select [(ngModel)]="M_location" name="Locations" [disabled]="disableLOC">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let Location of Locationname" [value]="Location.Value">{{Location.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <strong>
+              <input required [(ngModel)]="State" name="State" matInput placeholder="State Name" disabled>
+            </strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <strong>
+              <input required [(ngModel)]="Country" name="Country" matInput placeholder="Country Name" disabled>
+            </strong>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Contact Person</mat-label>
+            <input autocomplete="off" [(ngModel)]="cperson" name="cpersons" matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input (keypress)="numberOnly($event)" (keyup)="Restrictphone($event);" autocomplete="off" [(ngModel)]="phone1" name="phone1" matInput placeholder="Enter Number" minlength="1" maxlength="15" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput autocomplete="off" placeholder="Email" [(ngModel)]="email" [formControl]="email1" name="email">
+            <mat-error *ngIf="email1.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Website</mat-label>
+            <input autocomplete="off" [(ngModel)]="website" name="websites" matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Organization Type</mat-label>
+            <mat-select autocomplete="off" required [(ngModel)]="M_oragnizedby" name="M_oragnizedbys" placeholder="">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let City of Orgtypedata" [value]="City.Value">{{City.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!--<div class="col-sm-1">
+          <button mat-icon-button type="button">
+            <mat-icon class="grab" matTooltip="Add Organization Type" (click)="addorganizationtype()">add</mat-icon>
+          </button>
+        </div>-->
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" *ngIf="hideorgactivecoluimn">
+            <mat-label>Is Active</mat-label>
+            <mat-select [(ngModel)]="M_IsActiveOrg" name="Active">
+              <mat-option>Select</mat-option>
+              <mat-option value="true">Yes</mat-option>
+              <mat-option value="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button type="button" class="btn btn-warning-default" (click)="cancel()"> Cancel </button>
+        <button *ngIf="hidesubmitcoluimn" [disabled]="isNextButton" class="success btn btn-primary" (click)="submitfulldata(CampOrganization)"> Submit </button>
+        <button *ngIf="hideorgactivecoluimn" [disabled]="isNextButton" class="success btn btn-primary" (click)="Updatefulldata(CampOrganization)"> Submit </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-left">Camp Organization - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Update</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':OrganizationType}" data-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Organization Type</h6>
+      </div>
+      <div class="modal-body">
+        <form #CAMPORGANIZATION="ngForm" name="CAMPORGANIZATION" (keydown.enter)="$event.preventDefault()" novalidate>
+          <div class="row">
+            <div class="col-sm-4 ml-n1p">
+              <mat-form-field appearance="outline">
+                <mat-label>Organization</mat-label>
+                <input name="specs" [(ngModel)]="organizationtypedesc" matInput placeholder="Enter Organization" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+              <mat-icon [disabled]="isNextupdate && isNextDelete" (click)="Searchorganizationoneline()" class="cursor" data-toggle="tooltip" title="Search">search</mat-icon>
+            </div>
+            <div class="col-sm-2">
+              <mat-form-field appearance="outline" *ngIf="hideactivecoluimn">
+                <mat-label>Is Active</mat-label>
+                <mat-select [(ngModel)]="M_IsActive" name="Active">
+                  <mat-option>Select</mat-option>
+                  <mat-option value="true">Yes</mat-option>
+                  <mat-option value="false">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4" *ngIf="Hidetableupdate">
+              <mat-form-field appearance="outline">
+                <mat-label>Search..</mat-label>
+                <input matInput (keyup)="applyFilterevent($event)" placeholder="Search">
+              </mat-form-field>
+              <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef class="width-7p pr10">S.No</th>
+                  <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Name">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-checkbox (click)="Selectvalue(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Specialization">
+                  <th mat-header-cell *matHeaderCellDef style="width:100%">Organization</th>
+                  <td mat-cell *matCellDef="let element">{{element.Text}} </td>
+                </ng-container>
+                <!--<ng-container matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">{{element.status}} </td>
+          </ng-container>-->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns" [ngClass]="{gray: even}"></tr>
+              </table>
+            </div>
+          </div>
+          </form>
+          <div class="row">
+            <button type="button" (click)="Organizationclose()" class="btn btn-warning-default ml-2p">Close</button>
+            <button type="button" *ngIf="submitbutton" [disabled]="isNextButton" (click)="AddOrganization()" class="success btn btn-primary ml-3p">Submit</button>
+            <button type="button" *ngIf="updatebutton" [disabled]="isNextButton" (click)="UpdateOrganization()" class="success btn btn-primary ml-3p">Submit</button>
+            <button type="button" *ngIf="updatebutton" [disabled]="isNextDelete" (click)="DeleteOrganization()" class="btn btn-danger ml-3p">Delete</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Orgpopblock}" data-keyboard="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Organization Details</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4">
+
+          </div>
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Search..</mat-label>
+              <input matInput [(ngModel)]="searchvalue" name="svalues" (keyup)="applyFilter($event)" placeholder="Search">
+            </mat-form-field>
+          </div>
+
+        </div>
+        <div class="row">
+          <table mat-table matSort [dataSource]="dataSourceorg" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="SNo">
+              <th mat-header-cell *matHeaderCellDef class="width-7p pr10">Action</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-checkbox (click)="selectparticularorganization(element)"></mat-checkbox>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="orgName">
+              <th mat-header-cell *matHeaderCellDef>Organization Name</th>
+              <td mat-cell *matCellDef="let element">{{element.OrganizationName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="orgnizationtype">
+              <th mat-header-cell *matHeaderCellDef>Organization Type</th>
+              <td mat-cell *matCellDef="let element">{{element.OrganizationType}} </td>
+            </ng-container>
+            <ng-container matColumnDef="add1">
+              <th mat-header-cell *matHeaderCellDef>Address1</th>
+              <td mat-cell *matCellDef="let element">{{element.Address1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="add2">
+              <th mat-header-cell *matHeaderCellDef>Address2</th>
+              <td mat-cell *matCellDef="let element">{{element.Address2}} </td>
+            </ng-container>
+            <ng-container matColumnDef="city">
+              <th mat-header-cell *matHeaderCellDef>City</th>
+              <td mat-cell *matCellDef="let element">{{element.City}} </td>
+            </ng-container>
+            <ng-container matColumnDef="state">
+              <th mat-header-cell *matHeaderCellDef>State</th>
+              <td mat-cell *matCellDef="let element">{{element.State}} </td>
+            </ng-container>
+            <ng-container matColumnDef="country">
+              <th mat-header-cell *matHeaderCellDef>Country</th>
+              <td mat-cell *matCellDef="let element">{{element.Country}} </td>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+              <th mat-header-cell *matHeaderCellDef>Phone</th>
+              <td mat-cell *matCellDef="let element">{{element.Phone}} </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">{{element.Normalactive}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsorg;sticky: true"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumnsorg" [ngClass]="{gray: even}"></tr>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="modalcloseOk()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

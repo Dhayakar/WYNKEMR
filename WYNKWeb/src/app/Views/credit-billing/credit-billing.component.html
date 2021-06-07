@@ -1,0 +1,787 @@
+<div class="row">
+  <div class="col-sm-4">
+    <h5 class="card-header bg-success text-white rounded-top">
+      Credit Billing
+    </h5>
+  </div>
+</div>
+<div class="col-sm-12 ml-n1p border-blue border-radius bg-white">
+  <div class="row mt-1p" *ngIf="HideDateDetails">
+    <div class="col-sm-3 width-14p">
+      <mat-form-field appearance="outline">
+        <mat-select [(ngModel)]="M_PeriodDate" name="PeriodDate" (ngModelChange)="PeriodDateChange()">
+          <mat-option value="Today">Specific Date</mat-option>
+          <mat-option value="PeriodFrom">Specific Period</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-5 ml-n2p">
+      <div class="col-sm-6">
+        <mat-form-field appearance="outline">
+          <mat-label>From Date</mat-label>
+          <input [(ngModel)]="M_FromDate" name="FromDate" [max]="date" matInput [matDatepicker]="FromDate" placeholder="FromDate">
+          <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+          <mat-datepicker #FromDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 ml-n2p">
+        <mat-form-field appearance="outline">
+          <mat-label>To Date</mat-label>
+          <input [(ngModel)]="M_ToDate" [min]="M_FromDate" [max]="date" name="ToDate" matInput [matDatepicker]="ToDate" placeholder="ToDate" [disabled]="!PeriodFrom">
+          <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+          <mat-datepicker #ToDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-1 ml-n3p mt5">
+      <button type="button" class="btn btn-success" (click)="DateSearch(M_FromDate,M_ToDate)">Search</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="BillListTable">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10 heightAuto-300px">
+      <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+        <ng-container matColumnDef="BillDate">
+          <th mat-header-cell *matHeaderCellDef>Bill Date</th>
+          <td mat-cell *matCellDef="let element"> {{element.BillDate|date:'dd-MMM-y,HH:mm'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="BillNo">
+          <th mat-header-cell *matHeaderCellDef>Bill No</th>
+          <td mat-cell *matCellDef="let element"> {{element.BillNo}} </td>
+        </ng-container>
+        <ng-container matColumnDef="UIN">
+          <th mat-header-cell *matHeaderCellDef>UIN</th>
+          <td mat-cell *matCellDef="let element"> {{element.UIN}} </td>
+        </ng-container>
+        <ng-container matColumnDef="PatientName">
+          <th mat-header-cell *matHeaderCellDef>Patient Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.PatientName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Store">
+          <th mat-header-cell *matHeaderCellDef>Store</th>
+          <td mat-cell *matCellDef="let element"> {{element.StoreName}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns;" class="cursor" (click)="selecttype(element)"></tr>
+      </table>
+    </div>
+    <div class="col-sm-1"> </div>
+  </div>
+  <div *ngIf="Details">
+    <div class="row mt-2p">
+      <div class="col-sm-12">
+        <div class="col-sm-6 mph-0 pb20">
+          <span class="uinborder">
+            <strong>{{M_UIN}} / {{M_PatientName}} / {{M_Age}} / {{M_Gender}}</strong>
+          </span>
+        </div>
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="fontsize-14p">Invoice no</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{BillNo}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 ml-1p">
+              <label class="fontsize-14p">Invoice date</label>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{BillDate | date:"dd-MMM-y,HH:mm"}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 ml-n5p">
+              <label class="fontsize-14p" [ngClass]="BillAmountLabel == 'Amount to Refund'  ? 'ml-n2p' : 'ml-2p'">{{BillAmountLabel}}</label>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{M_BillPendingAmount | currency:Country}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <input id="tab-1" type="radio" name="tabs" checked="checked" />
+      <input id="tab-2" type="radio" name="tabs" />
+      <div class="tabs">
+        <label for="tab-1">General Details</label>
+        <label for="tab-2">Payment Details</label>
+      </div>
+      <div class="content">
+        <div class="tab  position-sticky">
+          <div class="col-sm-12 width-102p ml-n1p">
+            <div class="col-sm-12">
+              <h5 class="card-header bg-success text-white">
+                Item Details
+              </h5>
+            </div>
+          </div>
+          <div class="col-sm-12 heightAuto-300px">
+            <table mat-table matSort [dataSource]="ItemDetailedSource" class="custom-table withoutbackgroung search-table table-bordered">
+              <ng-container matColumnDef="SerialNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">S.No</th>
+                <td mat-cell *matCellDef="let j = index" class="width-4p text-center"> {{(j+1)}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Serialsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center padding-bot2px"> S.No </th>
+              </ng-container>
+              <ng-container matColumnDef="Drug">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Brand</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-7p text-left Padding-5px"> {{element.Drug}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Brandsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-9p text-center Padding-20px"> Drug </th>
+              </ng-container>
+              <ng-container matColumnDef="UOM">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">UOM</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-7p text-left Padding-5px"> {{element.UOM}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="UOMs">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-2p text-center Padding-20px"> UOM </th>
+              </ng-container>
+              <ng-container matColumnDef="Quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Quantity</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.Qty}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Quantitys">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center Padding-20px">Billed Qty </th>
+              </ng-container>
+              <ng-container matColumnDef="ReturnedQuantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Returned Quantity</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.ReturnQty}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="ReturnedQuantitys">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center Padding-20px"> Returned Qty </th>
+              </ng-container>
+              <ng-container matColumnDef="UnitPrice">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Unit Price</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.UnitPrice| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="UnitPrices">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Unit Price</th>
+              </ng-container>
+              <ng-container matColumnDef="Amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.Amount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Amounts">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Amount</th>
+              </ng-container>
+              <ng-container matColumnDef="Discount">
+                <th mat-header-cell *matHeaderCellDef class="width-4p text-center">%</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-4p text-end Padding-5px">{{element.Discount}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="DiscountAmount">
+                <th mat-header-cell *matHeaderCellDef class="width-6p text-center">Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-4p text-end Padding-5px">{{element.DiscountAmount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GrossAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Gross  Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.GrossAmount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GrossAmounts">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Gross  Amount</th>
+              </ng-container>
+              <ng-container matColumnDef="TaxDescription">
+                <th mat-header-cell *matHeaderCellDef class="width-8p text-center">Description</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.TaxDescription != null" class="col-sm-10 mt-8p">
+                      {{element.TaxDescription}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.CessDescription}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCessDescription}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GST">
+                <th mat-header-cell *matHeaderCellDef class="width-2p text-center top-0px">%</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.GST != null" class="col-sm-10 mt-12p">
+                      {{element.GST}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.Cess}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCess}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GSTValue">
+                <th mat-header-cell *matHeaderCellDef class="width-7p text-center top-0px">Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-1p text-end Padding-5px" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.GST != null" class="col-sm-10 mt-8p">
+                      {{element.GSTValue | number : '1.2-2'}}
+                    </div><br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.CessValue | number : '1.2-2'}}
+                    </div><br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCessValue | number : '1.2-2'}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
+              </ng-container>
+              <ng-container matColumnDef="TotalCost">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Total Cost</th>
+                <td mat-cell *matCellDef="let element ;let id = index;" class="text-end">{{element.TotalCost| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-end"> <strong>{{getCreditTotalCost | currency:Country}}</strong> </td>
+              </ng-container>
+              <ng-container matColumnDef="TotalCosts">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-8p text-center Padding-20px">Net Amount</th>
+              </ng-container>
+              <ng-container matColumnDef="header-row-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center"> Discount </th>
+              </ng-container>
+              <ng-container matColumnDef="header-row-third-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center"> Tax </th>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['Serialsymbol','Brandsymbol','UOMs','Quantitys','ReturnedQuantitys',
+                   'UnitPrices','Amounts','header-row-group','GrossAmounts','header-row-third-group','TotalCosts']"></tr>
+              <tr mat-header-row *matHeaderRowDef="ItemDetailedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row;  let even = even;  columns: ItemDetailedColumns;"></tr>
+              <tr mat-footer-row *matFooterRowDef="ItemDetailedColumns; sticky: true"></tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab  position-sticky width-100p">
+          <div class="col-sm-12">
+
+            <div class="row col-sm-12 mt-1p" *ngIf="PaidTableShow">
+              <div class="ml-2p text-left">
+                <h5 class="card-header bg-success text-white rounded-top">
+                  Payment History
+                </h5>
+              </div>
+              <div class="row position-sticky">
+                <div class="col-sm-12 heightAuto-200px ml-2p">
+                  <table mat-table matSort [dataSource]="dataSource4" class="custom-table withoutbackgroung search-table table-bordered ">
+                    <ng-container matColumnDef="PaymentMode">
+                      <th mat-header-cell *matHeaderCellDef>PaymentMode</th>
+                      <td mat-cell *matCellDef="let element">{{element.PaymentMode}}</td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="InstrumentNumber">
+                      <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+                      <td mat-cell *matCellDef="let element">{{element.InstrumentNumber}} </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="InstrumentDate">
+                      <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+                      <td mat-cell *matCellDef="let element">{{element.Instrumentdate| date:'dd-MMM-y'}} </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="BankName">
+                      <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                      <td mat-cell *matCellDef="let element">{{element.BankName}} </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ExpiryDate">
+                      <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+                      <td mat-cell *matCellDef="let element">{{element.Expirydate| date:'dd-MMM-y'}} </td>
+                      <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="Branch">
+                      <th mat-header-cell *matHeaderCellDef>Branch</th>
+                      <td mat-cell *matCellDef="let element">{{element.BankBranch}} </td>
+                      <td mat-footer-cell *matFooterCellDef><strong>Total</strong> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Amount">
+                      <th mat-header-cell *matHeaderCellDef>Amount</th>
+                      <td mat-cell *matCellDef="let element">{{element.Amount | number : '1.2-2'}} </td>
+                      <td mat-footer-cell *matFooterCellDef> {{getPaymentHistoryCost() | currency:Country}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns4"></tr>
+                    <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns4;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="displayedColumns4; sticky: true"></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row col-sm-12 mt-1p card mb-12">
+              <h5 class="card-header bg-success text-white">
+                Payment  details
+                <button (click)="AddPaymentDetailsNewgrid();" class="btnuserdefined btn-dark"><i matTooltip="Add Payment Details" class="fa fa-plus"></i></button>
+              </h5>
+              <div class="card-body">
+                <div class="row heightAuto-300px">
+                  <table mat-table [dataSource]="dataSource3" class="custom-table withoutbackgroung search-table table-bordered">
+
+                    <ng-container matColumnDef="PaymentMode">
+                      <th mat-header-cell *matHeaderCellDef>Payment Mode</th>
+                      <td mat-cell *matCellDef="let element;let id = index;" class="width-15p">
+                        <mat-form-field appearance="outline">
+                          <mat-select (selectionChange)="PaymentChange(id,$event,element)">
+                            <mat-option *ngFor="let Paymentsmode of Paymentsmodes" [value]="Paymentsmode.Value">
+                              {{Paymentsmode.Text}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="BankName">
+                      <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                      <td mat-cell *matCellDef="let element" contenteditable="false">
+                        <mat-form-field appearance="outline">
+                          <input (blur)="BankName($event,element)" (keypress)="nameField($event)" [disabled]="element.PaymentMode =='Cash'  " maxlength="100" matInput placeholder="Enter BankName" name="BankName" type="text">
+                        </mat-form-field>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="InstrumentNumber">
+                      <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+                      <td mat-cell *matCellDef="let element" contenteditable="false">
+                        <mat-form-field appearance="outline">
+                          <input (blur)="InstrumentNumber($event,element)" [disabled]="element.PaymentMode =='Cash'" maxlength="15" (keypress)="numberOnly($event)" matInput placeholder="Enter Instrument Number" name="InstrumentNumber" type="text">
+                        </mat-form-field>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="InstrumentDate">
+                      <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+                      <td mat-cell *matCellDef="let element" contenteditable="false">
+                        <mat-form-field appearance="outline">
+                          <input [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Credit Card'|| element.PaymentMode =='Debit card'"
+                                 type="datetime" name="InstrumentDate" autocomplete="off" [max]="maxInstrumentDate" matInput [matDatepicker]="InstrumentDate" (keypress)="numberOnly($event)" (dateChange)="dateofinstrument($event,element)" placeholder="InstrumentDate">
+                          <mat-datepicker-toggle matSuffix [for]="InstrumentDate"></mat-datepicker-toggle>
+                          <mat-datepicker #InstrumentDate></mat-datepicker>
+                        </mat-form-field>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ExpiryDate">
+                      <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+                      <td mat-cell *matCellDef="let element" contenteditable="false">
+                        <mat-form-field appearance="outline">
+                          <input (dateChange)="dateexpiry($event,element)" [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Demand Draft'|| element.PaymentMode =='Cheque' " autocomplete="off" [min]="MINExpiryDate"
+                                 name="ExpiryDate" matInput [matDatepicker]="ExpiryDate" placeholder="ExpiryDate" type="datetime" (keypress)="numberOnly($event)">
+                          <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
+                          <mat-datepicker #ExpiryDate></mat-datepicker>
+                        </mat-form-field>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Branch">
+                      <th mat-header-cell *matHeaderCellDef>Branch</th>
+                      <td mat-cell *matCellDef="let element" contenteditable="false">
+                        <mat-form-field appearance="outline">
+                          <input (blur)="Branch($event,element)"
+                                 [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card' || element.PaymentMode =='Credit Card'"
+                                 (keypress)="nameField($event)" maxlength="50" matInput name="Branch" placeholder="Branch" type="text">
+                        </mat-form-field>
+
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
+                    </ng-container>
+                    <ng-container matColumnDef="Amount">
+                      <th mat-header-cell *matHeaderCellDef>Amount</th>
+                      <td mat-cell *matCellDef="let element;let id = index" required (keyup)="Amount(id,'Amount',$event,element)" (keypress)="numberOnly($event)" [contentEditable]="disableRow">
+                        {{element.Amount| number : '1.2-2'}}
+
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef>
+                        <strong>
+                          {{PTotalAmount1() |currency:Country}}
+                        </strong>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Action">
+                      <th mat-header-cell *matHeaderCellDef>Action</th>
+                      <td mat-cell *matCellDef="let element;let id = index" contenteditable="false">
+                        <i class="fas fa-trash-alt icon-delete grab" title="Delete" (click)="removePaytype(i)"></i>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns3;sticky: true"></tr>
+                    <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumns3"></tr>
+                    <tr mat-footer-row *matFooterRowDef="displayedColumns3;"></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-sm-12 m-6" *ngIf="Details">
+  <div class="row">
+    <div class="col-sm-4 f-r">
+      <button type="button" class="btn btn-warning-default ml-2p" (click)="onCancel()">Cancel</button>
+      <button type="button" class="success btn btn-primary ml-5p" (click)="onSubmit()">Submit</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!--Print-->
+<div id="section1" style="display:none">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{CompanyName}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:28%"><strong>{{CompanyAddress1 + ' '+ CompanyAddress2 + ' '+ CompanyAddress3}}</strong></label></div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:1%"><strong>{{'Phone No:'+' '+ CompanyPhone1 + ',' + ' ' + 'Website:' + ' ' + CompanyWebsite}}</strong></label></div>
+      <div class="col-sm-1"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"><strong>Credit Billing</strong></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Invoice no </strong></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; {{BillNo}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Invoice date </strong></label>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; {{BillDate  | date :'dd-MMM-yyyy,HH:mm'}}
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Patient ID</strong></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; {{M_UIN}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Patient Name</strong></label>  &nbsp;&nbsp; : &nbsp;&nbsp;{{M_PatientName}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Age / Gender : </strong>{{M_Age}} / {{M_Gender}}</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-bottom:5px;">
+    <div class="row">
+      <label><strong>Item Details:</strong></label>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <table mat-table matSort [dataSource]="ItemDetailedSource" class="custom-table withoutbackgroung search-table table-bordered">
+        <ng-container matColumnDef="SerialNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">S.No</th>
+          <td mat-cell *matCellDef="let j = index" class="width-4p text-center"> {{(j+1)}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Serialsymbol">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center padding-bot2px"> S.No </th>
+        </ng-container>
+        <ng-container matColumnDef="Drug">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Brand</th>
+          <td mat-cell *matCellDef="let element;let id = index;" style="text-align:left" class="width-7p text-left Padding-5px"> {{element.Drug}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Brandsymbol">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-9p text-center Padding-20px"> Drug </th>
+        </ng-container>
+        <ng-container matColumnDef="UOM">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">UOM</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:left"  class="width-7p text-left Padding-5px"> {{element.UOM}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="UOMs">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-2p text-center Padding-20px"> UOM </th>
+        </ng-container>
+        <ng-container matColumnDef="Quantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Quantity</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:right"  class="text-end Padding-5px">{{element.Qty}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Quantitys">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center Padding-20px">Qty </th>
+        </ng-container>
+        <ng-container matColumnDef="ReturnedQuantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Returned Quantity</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:right"  class="text-end Padding-5px">{{element.ReturnQty}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="ReturnedQuantitys">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center Padding-20px"> Returned Qty </th>
+        </ng-container>
+        <ng-container matColumnDef="UnitPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Unit Price</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:right"  class="text-end Padding-5px">{{element.UnitPrice| number : '1.2-2'}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="UnitPrices">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Unit Price</th>
+        </ng-container>
+        <ng-container matColumnDef="Amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Amount</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:right"  class="text-end Padding-5px">{{element.Amount| number : '1.2-2'}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Amounts">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Amount</th>
+        </ng-container>
+        <ng-container matColumnDef="Discount">
+          <th mat-header-cell *matHeaderCellDef class="width-4p text-center">%</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:center"  class="width-4p text-end Padding-5px">{{element.Discount}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="DiscountAmount">
+          <th mat-header-cell *matHeaderCellDef class="width-6p text-center">Amount</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:center"  class="width-4p text-end Padding-5px">{{element.DiscountAmount| number : '1.2-2'}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="GrossAmount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Gross  Amount</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:right"  class="text-end Padding-5px">{{element.GrossAmount| number : '1.2-2'}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="GrossAmounts">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Gross  Amount</th>
+        </ng-container>
+        <ng-container matColumnDef="TaxDescription">
+          <th mat-header-cell *matHeaderCellDef class="width-8p text-center">Description</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:left"  class="text-end" contenteditable="false">
+            <div class="row">
+              <div *ngIf="element.TaxDescription != null" class="col-sm-10 mt-8p">
+                {{element.TaxDescription}}
+              </div>
+              <br />
+              <div *ngIf="element.Cess != null" class="col-sm-10">
+                {{element.CessDescription}}
+              </div>
+              <br />
+              <div *ngIf="element.AddCess != null" class="col-sm-10">
+                {{element.AddCessDescription}}
+              </div>
+            </div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="GST">
+          <th mat-header-cell *matHeaderCellDef class="width-2p text-center top-0px">%</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:center"  class="text-end" contenteditable="false">
+            <div class="row">
+              <div *ngIf="element.GST != null" class="col-sm-10 mt-12p">
+                {{element.GST}}
+              </div>
+              <br />
+              <div *ngIf="element.Cess != null" class="col-sm-10">
+                {{element.Cess}}
+              </div>
+              <br />
+              <div *ngIf="element.AddCess != null" class="col-sm-10">
+                {{element.AddCess}}
+              </div>
+            </div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="GSTValue">
+          <th mat-header-cell *matHeaderCellDef class="width-7p text-center top-0px">Amount</th>
+          <td mat-cell *matCellDef="let element;let id = index;"  style="text-align:center"  class="width-1p text-end Padding-5px" contenteditable="false">
+            <div class="row">
+              <div *ngIf="element.GST != null" class="col-sm-10 mt-8p">
+                {{element.GSTValue | number : '1.2-2'}}
+              </div><br />
+              <div *ngIf="element.Cess != null" class="col-sm-10">
+                {{element.CessValue | number : '1.2-2'}}
+              </div><br />
+              <div *ngIf="element.AddCess != null" class="col-sm-10">
+                {{element.AddCessValue | number : '1.2-2'}}
+              </div>
+            </div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef  style="text-align:center" ><b>Total</b></td>
+        </ng-container>
+        <ng-container matColumnDef="TotalCost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Total Cost</th>
+          <td mat-cell *matCellDef="let element ;let id = index;">{{element.TotalCost| number : '1.2-2'}}</td>
+          <td mat-footer-cell *matFooterCellDef> <strong>{{getCreditTotalCost | currency:Country}}</strong> </td>
+        </ng-container>
+        <ng-container matColumnDef="TotalCosts">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-8p text-center Padding-20px">Net Amount</th>
+        </ng-container>
+        <ng-container matColumnDef="header-row-group">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center"> Discount </th>
+        </ng-container>
+        <ng-container matColumnDef="header-row-third-group">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center"> Tax </th>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['Serialsymbol','Brandsymbol','UOMs','Quantitys','ReturnedQuantitys',
+                   'UnitPrices','Amounts','header-row-group','GrossAmounts','header-row-third-group','TotalCosts']"></tr>
+        <tr mat-header-row *matHeaderRowDef="ItemDetailedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row;  let even = even;  columns: ItemDetailedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="ItemDetailedColumns; sticky: true"></tr>
+      </table>
+    </div>
+    <div class="row">
+      <mat-label>
+        <strong>{{Country}} in Words :</strong> &nbsp;&nbsp;{{transformValue(getCreditTotalCost)}} {{Country}} only
+      </mat-label><br />
+    </div>
+  </div>
+  <br />
+  <div class="col-sm-12" style="margin-bottom:5px;">
+    <div class="row">
+      <label><strong>Payment Details:</strong></label>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-label><strong>Receipt No</strong></mat-label> &nbsp;&nbsp;:
+          </div>
+          <div class="col-sm-6" style="margin-left:-2%">
+            <mat-label style="margin-left:-20%">{{M_ReceiptNo}}</mat-label>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-label> <strong>Receipt Date</strong></mat-label>&nbsp;:
+          </div>
+          <div class="col-sm-6" style="margin-left:-12%">
+            <mat-label style="margin-left:-20%">{{M_ReceiptNoDate | date:'dd-MMM-y, HH:mm'}}</mat-label> &nbsp; Hrs
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12" style="margin-top:5px;">
+      <table mat-table matSort [dataSource]="dataSource4" class="table table-bordered">
+        <ng-container matColumnDef="PaymentMode">
+          <th mat-header-cell *matHeaderCellDef>PaymentMode</th>
+          <td mat-cell *matCellDef="let element">{{element.PaymentMode}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="InstrumentNumber">
+          <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+          <td mat-cell *matCellDef="let element">{{element.InstrumentNumber}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="InstrumentDate">
+          <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+          <td mat-cell *matCellDef="let element">{{element.Instrumentdate| date:'dd-MMM-y'}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="BankName">
+          <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+          <td mat-cell *matCellDef="let element">{{element.BankName}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+        <ng-container matColumnDef="Branch">
+          <th mat-header-cell *matHeaderCellDef>Branch</th>
+          <td mat-cell *matCellDef="let element">{{element.BankBranch}} </td>
+          <td mat-footer-cell *matFooterCellDef><strong>Total</strong> </td>
+        </ng-container>
+        <ng-container matColumnDef="ExpiryDate">
+          <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+          <td mat-cell *matCellDef="let element">{{element.Expirydate| date:'dd-MMM-y'}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="Amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let element"  style="text-align:right" >{{element.Amount | number : '1.2-2'}} </td>
+          <td mat-footer-cell *matFooterCellDef  style="text-align:right" >
+            <strong>
+              {{PTotalAmount1() |currency:Country}}
+            </strong>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns4"></tr>
+        <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns4;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns4; sticky: true"></tr>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-7"></div>
+      <div class="col-sm-5">
+        <label style="font-size:14px"><strong>For {{CompanyName}}</strong></label>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-9"></div>
+      <div class="col-sm-3">
+        <label style="font-size:14px"><strong>Authorised Signatory</strong></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Print Message Popup-->
+<div class="modal" role="dialog" [ngStyle]="{'display':printBlock}">
+  <div class="example-box">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h6 class="modal-title">Information</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong> Do you want to Print ?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="PrintSummary1()" class="btn btn-primary">Yes</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="printclose()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

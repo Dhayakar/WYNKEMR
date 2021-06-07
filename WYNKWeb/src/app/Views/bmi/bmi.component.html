@@ -1,0 +1,116 @@
+<div class="col-sm-12 fihdr-0">
+  <form #bmiForm="ngForm">
+
+
+    <div class="col-sm-12 borfiglau-0 pgtop20-0">
+      <h5 class="card-header bg-success text-white center">
+        Body Mass Index
+
+      </h5>
+      <div class="row pgtop20-0">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-2">
+          <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="row">
+          <input #bmiId name="M_ID" [(ngModel)]="M_ID" type="hidden">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <textarea [(ngModel)]="M_Desc" matInput #message name="M_Desc" maxlength="50" (keypress)="nameField($event)" placeholder="Description" required></textarea>
+              <mat-hint align="start" style="font-size:12px">Max 50 Character</mat-hint>
+              <mat-hint align="end" style="font-size:12px">{{message.value.length}}/50</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1">
+            <button (click)="SearchClick()" class="btn-text grab f-r">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>From range</mat-label>
+              <input [(ngModel)]="M_From" matInput name="M_From" maxlength="5" (keyup)="changeValueFrom($event);" (keypress)="numberOnlywithDot($event)" placeholder="From range" required>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>To range</mat-label>
+              <input [(ngModel)]="M_To" matInput name="M_To" maxlength="5" (keyup)="changeValueTo($event);" (keypress)="numberOnlywithDot($event)" placeholder="To range" required>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <!--<div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4  sub-section btn-wrap">
+            <div class="col-sm-1" *ngIf="bmiId.value!=0;else notShow">
+              <button type="submit" class="success btn btn-primary  ml-2p" (click)="onUpdate(bmiForm)">Submit </button>
+            </div>
+            <ng-template #notShow>
+              <div class="col-sm-1">
+                <button type="submit" class="success btn btn-primary  ml-2p" (click)="onSubmit(bmiForm)">
+                  Submit
+                </button>
+              </div>
+            </ng-template>
+            <button type="button" class="btn btn-warning-default" (click)="onCancel()"> Cancel </button>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+      </div>-->
+
+      <div class="col-sm-12 pb25">
+        <div class="content-right sub-section btn-wrap">
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-warning-default" (click)="cancel()"> Cancel </button>
+          </div>
+          <div class="col-sm-1" *ngIf="bmiId.value!=0;else notShow">
+            <button type="submit" class="success btn btn-primary  ml-2p" (click)="onUpdate(bmiForm)">Submit </button>
+          </div>
+          <ng-template #notShow>
+            <div class="col-sm-1">
+              <button type="submit" class="success btn btn-primary  ml-2p" (click)="onSubmit(bmiForm)">
+                Submit
+              </button>
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+  </form>
+</div>
+
+
+<!--Pop up-->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeEnd()">&times;</button>
+        <h4 class="modal-title">Body Mass Index</h4>
+      </div>
+      <p align="center">Confirm to cancel</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="CloseNO()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="CloseYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,293 @@
+<form #PendingCampSurgeryadvisedPatient="ngForm">
+
+  <h5 class="col-sm-5 card-header bg-success text-white">
+    Pending Camp Surgery advised Patients
+  </h5>
+  <div class="col-sm-12 borderline">
+
+    <div class="col-sm-12 mph-0">
+      <div class="col-sm-9 mph-0">
+      </div>
+      <div class="col-sm-2 mph-0">
+        <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+      </div>
+    </div>
+
+    <div class="col-sm-12" *ngIf="!hiddentable">
+      <div class="row">
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Camp Name</mat-label>
+            <mat-select autocomplete="off" required [(ngModel)]="M_CampName" name="CampName" placeholder="">
+              <mat-option value="0">All</mat-option>
+              <mat-option *ngFor="let MS of CampNames" [value]="MS">{{MS.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Date</mat-label>
+            <input [(ngModel)]="M_FromDate" name="FromDate" matInput [matDatepicker]="FromDate" placeholder="FromDate">
+            <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+            <mat-datepicker #FromDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input [(ngModel)]="M_ToDate" name="ToDate" matInput [matDatepicker]="ToDate" [min]="M_FromDate" placeholder="ToDate">
+            <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+            <mat-datepicker #ToDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+
+      <div class="col-sm-12 pb25">
+        <div class="content-right sub-section btn-wrap">
+          <button class="btn btn-warning-default" (click)="Cancel()"><strong>Cancel</strong></button>
+          <button class="success btn btn-primary" [disabled]="disSubmit" (click)="onSubmit(PendingCampSurgeryadvisedPatient)">Submit</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!--/////////////////////////////////////////////table/////////////// //////////////////////////////-->
+
+
+    <div class="container">
+      <input *ngIf="hiddentable" id="tab-1" type="radio" name="tabs" checked="checked" />
+      <input *ngIf="hiddentable" id="tab-2" type="radio" name="tabs" />
+
+
+      <div class="tabs">
+        <label for="tab-1" *ngIf="hiddentable">Pending Camp Surgery advised Patients</label>
+        <label for="tab-2" *ngIf="hiddentable">Campwise Summary count</label>
+      </div>
+
+
+
+      <div class="content">
+        <div class="tab position-sticky width-100p ">
+          <div class="col-sm-12" id="section">
+            <div class="col-sm-12">
+              <div class="col-sm-8">
+              </div>
+              <div class="col-sm-4">
+                <button type="button" (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+                <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>Company Name</label>
+                  </div>
+                  <div class="col-sm-1">
+                    <label>:</label>
+                  </div>
+                  <div class="col-sm-7">
+                    <label>{{companyname}}</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>Report Date & Time </label>
+                  </div>
+                  <div class="col-sm-1">
+                    <label>:</label>
+                  </div>
+                  <div class="col-sm-7">
+                    <label>{{M_TodayDate| date:"dd-MMM-y, HH:mm"}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2"></div>
+              <div class="col-sm-8">
+                <label>
+                  List of Pending Camp Surgery advised Patients for the period<label> &nbsp;{{M_FromDate| date:"dd-MMM-y"}} to {{M_ToDate| date:"dd-MMM-y"}}</label>
+                </label>
+              </div>
+              <div class="col-sm-2"></div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12 heightAuto-450px ml-n1p position-sticky ">
+                <table id="tableee" class="custom-table withoutbackgroung search-table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sl.No.</th>
+                      <th>CampName</th>
+                      <th>Date of visit</th>
+                      <th>UIN</th>
+                      <th>Patient Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Surgery Recommended</th>
+                      <th>Treatment & Advice</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let x of CampSurgeryunderwentpatients; index as i">
+                      <td>{{i+1}}</td>
+                      <td>{{x.CampName}}</td>
+                      <td>{{x.DateofRegistration|date:"dd-MMM-y"}}</td>
+                      <td>{{x.UIN}}</td>
+                      <td>{{x.Name}}</td>
+                      <td>{{x.Age}}</td>
+                      <td>{{x.Gender}}</td>
+                      <td>{{x.ICDSpeciality}}</td>
+                      <td>{{x.RegType}}</td>
+                    </tr>
+                  </tbody>
+
+
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab position-sticky width-100p ">
+
+          <div class="col-sm-12">
+            <div class="col-sm-8">
+            </div>
+            <div class="col-sm-4">
+
+              <button type="button" (click)="ConvertPDF1()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              <button (click)="ConvertEXCEL1()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-sm-4">
+                  <label>Company Name</label>
+                </div>
+                <div class="col-sm-1">
+                  <label>:</label>
+                </div>
+                <div class="col-sm-7">
+                  <label>{{companyname}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <label>Report Date & Time </label>
+                </div>
+                <div class="col-sm-1">
+                  <label>:</label>
+                </div>
+                <div class="col-sm-7">
+                  <label>{{M_TodayDate| date:"dd-MMM-y, HH:mm"}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+              <label>
+                Campwise Surgery count for the period<label> &nbsp;{{M_FromDate| date:"dd-MMM-y"}} to {{M_ToDate| date:"dd-MMM-y"}}</label>
+              </label>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+          <div class="col-sm-12 heightAuto-450px ml-n1p position-sticky ">
+            <table id="tableee1" class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>Sl.No.</th>
+                  <th>Camp Name</th>
+                  <th>Surgery Name</th>
+                  <th>Surgery count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let x of CampwiseSurgeryunderwentCount; index as i">
+                  <td>{{i+1}}</td>
+                  <td>{{x.CampName}}</td>
+                  <td>{{x.ICDSpeciality}}</td>
+                  <td>{{x.Surgerycount}}</td>
+
+                </tr>
+              </tbody>
+
+
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12" *ngIf="hiddentable">
+      <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-2"><button type="button" class="btn btn-warning-default" (click)="Cancel()">Cancel</button></div>
+        <div class="col-sm-4"></div>
+      </div>
+    </div>
+
+
+  </div>
+
+</form>
+<!--////////////////////////////////////////view asses//////////////////////////////////////////-->
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Pending Camp Surgery advised Patients  - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata ; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

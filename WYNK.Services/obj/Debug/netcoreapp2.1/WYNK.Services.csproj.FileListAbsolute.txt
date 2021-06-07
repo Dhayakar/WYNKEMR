@@ -1,0 +1,44 @@
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.deps.json
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.runtimeconfig.json
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.runtimeconfig.dev.json
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.dll
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.pdb
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\SMSand EMAILService.cs.dll
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Data.dll
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Helpers.dll
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Data.pdb
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\SMSand EMAILService.cs.pdb
+D:\WYNK\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Helpers.pdb
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.csprojAssemblyReference.cache
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.csproj.CoreCompileInputs.cache
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.RazorAssemblyInfo.cache
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.RazorAssemblyInfo.cs
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.AssemblyInfoInputs.cache
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.AssemblyInfo.cs
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.RazorTargetAssemblyInfo.cache
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.csproj.CopyComplete
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.dll
+D:\WYNK\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.deps.json
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.runtimeconfig.json
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Services.runtimeconfig.dev.json
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\SMSand EMAILService.cs.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Data.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Helpers.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Data.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\SMSand EMAILService.cs.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Debug\netcoreapp2.1\WYNK.Helpers.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.csprojAssemblyReference.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.csproj.CoreCompileInputs.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.RazorAssemblyInfo.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.RazorAssemblyInfo.cs
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.AssemblyInfoInputs.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.AssemblyInfo.cs
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.RazorTargetAssemblyInfo.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.csproj.CopyComplete
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Debug\netcoreapp2.1\WYNK.Services.pdb

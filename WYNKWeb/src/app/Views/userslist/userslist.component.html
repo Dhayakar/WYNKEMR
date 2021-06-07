@@ -1,0 +1,246 @@
+<form #UsersListForm="ngForm" style="margin-top:1%">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-sm-12" style="border:2px solid gray;  border-radius:6px;">
+        <div class="col-sm-12">
+          <div class="row">
+
+            <h1 align="center" style="margin-bottom:0px;text-align:center;border:2px solid gray;border-bottom-color:white;font-family:'Proxima Nova Semibold'">Users List</h1>
+
+          </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top:1%">
+          <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-5">
+            </div>
+            <div class="col-sm-1">
+              <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12" style="margin-top:1%;">
+          <div class="row">
+            <div class="col-sm-3" style="width:300px">
+
+
+              <mat-form-field appearance="outline" class="mat-width" style="font-family:'Proxima Nova Semibold'">
+                <mat-label>Organization</mat-label>
+                <input [(ngModel)]="orgname" name="orgname" matInput placeholder="Organization" disabled>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-1">
+
+              <mat-icon  class="grab" (click)="Submit()" data-toggle="tooltip" title="Search Users" style="font-size:30px">search</mat-icon>
+
+            </div>
+            <div class="col-sm-3" *ngIf="utextbox" style="width:200px">
+
+
+              <mat-form-field appearance="outline" class="mat-width" style="font-family:'Proxima Nova Semibold'">
+                <mat-label>User Name</mat-label>
+                <input [(ngModel)]="uname" name="uname" matInput placeholder="User Name" disabled>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3" *ngIf="utextbox" style="width:200px">
+
+
+              <mat-form-field appearance="outline" class="mat-width" style="font-family:'Proxima Nova Semibold'">
+                <mat-label>Role</mat-label>
+                <input [(ngModel)]="urole" name="urole" matInput placeholder="User Name" disabled>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-2" *ngIf="utextbox">
+
+
+              <mat-form-field appearance="outline" class="mat-width" style="font-family:'Proxima Nova Semibold'">
+                <mat-label style="font-family:'Proxima Nova Semibold';font-size: 14px;">Status</mat-label>
+                <mat-select style="font-family:'Proxima Nova Semibold';font-size: 14px;" [(ngModel)]="IsActive" name="IsActive" placeholder="Select">
+                  <mat-option>Select</mat-option>
+                  <mat-option value="Active">Active</mat-option>
+                  <mat-option value="In Active">In Active</mat-option>
+
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!--<div class="col-sm-1">
+      </div>
+
+      <div class="col-sm-1" style="margin-top:1%">
+        <button type="button" class="btn btn-success" (click)="Submit(UsersListForm)">View</button>
+      </div>
+      <div class="col-sm-1" style="margin-top:1%">
+        <button type="button" class="btn btn-danger" (click)="Cancel(UsersListForm)">Cancel</button>
+      </div>-->
+
+
+
+          </div>
+
+
+
+
+        </div>
+
+
+        <div class="col-sm-12" style="margin-top:1%" *ngIf="utextbox">
+          <div class="row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-1">
+              <button type="button" class="btn btn-success" (click)="onSubmit(UsersListForm)">Submit</button>
+            </div>
+            <div class="col-sm-1">
+              <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+            </div>
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-3">
+            </div>
+          </div>
+        </div>
+
+
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-3">
+                </div>
+
+
+
+                <div class="col-sm-6" style="border:2px solid #51b8f2;margin-top: 7px; border-radius: 9px;" *ngIf="TableData">
+                  <div class="row">
+                    <h1 style="text-align:center;background-color: #51b8f2;color:white;margin-bottom:0px;margin-top:0px"><label><b>Users List</b></label></h1>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label style="font-family:'Proxima Nova Semibold';font-size: 14px;">Search Criteria</mat-label>
+                        <input style="font-family:'Proxima Nova Semibold';font-size: 14px;" matInput [(ngModel)]="sriteria" name="scriteria" (keyup)="applyFilter($event.target.value)" placeholder="Search Criteria">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12" #table style="position: sticky;background-color: white;overflow:auto;height:241px;">
+
+                      <table mat-table matSort [dataSource]="dataSource" id="contentToConvert" class="table table-bordered" #contentToConvert style="overflow:auto">
+
+                        <!--<ng-container matColumnDef="SNO">
+      <th mat-header-cell *matHeaderCellDef style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;width:119px;text-align:center">S No</th>
+      <td mat-cell *matCellDef="let element ;let i = index;" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">{{i+1}}  </td>
+    </ng-container>-->
+
+                        <ng-container matColumnDef="Action">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;width:119px;text-align:center">Action</th>
+                          <td mat-cell style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px" *matCellDef="let element;let id = index;">
+                            <mat-checkbox (change)="selecttypei(element)"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="UserName">
+                          <th mat-header-cell *matHeaderCellDef style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;width:156px;text-align:left">User Name</th>
+                          <td mat-cell *matCellDef="let element ;let i = index;" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:14px;text-align:left">{{element.username}}  </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Role">
+                          <th mat-header-cell *matHeaderCellDef style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;width: 119px;text-align:left">Role</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:14px;text-align:left"> {{element.role }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Status">
+                          <th mat-header-cell *matHeaderCellDef style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;width: 129px;text-align:left">Status</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:14px;text-align:left"> {{element.status}} </td>
+
+                        </ng-container>
+
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+                        <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumns;" [ngClass]="{gray: even}"></tr>
+                      </table>
+
+                      <mat-paginator #usersPaginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons></mat-paginator>
+
+                    </div>
+
+                    <!--<div class="col-sm-12" [hidden]="Page">
+                      <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-1">
+                        </div>
+                        <div class="col-sm-4">
+                          <mat-paginator [pageSizeOptions]="[500,1000,2000]" showFirstLastButtons></mat-paginator>
+                        </div>
+                      </div>
+                    </div>-->
+                  </div>
+                </div>
+
+
+
+                <div class="col-sm-3">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+</form>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Users List - View Access</h4>
+      </div>
+      <div class="modal-body" style="height:40px;margin-top:-10px;">
+        <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova';font-size:14px;" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Add</th>
+              <th style="    background-color: #0c3e8f;
+    color: white;
+    font-family: 'Proxima Nova Semibold';
+    font-size: 14px;
+    text-align: center;
+    height: 40px">Edit</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Delete</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Export</th>
+              <th style="background-color:#0c3e8f;color:white;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top:20%">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

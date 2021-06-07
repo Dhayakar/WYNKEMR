@@ -1,0 +1,223 @@
+
+
+<div class="col-sm-12" style="border:1px solid lightgray;padding:2%;border-radius:10px">
+  <div class="col-sm-12">
+    <h6>
+      <strong>Consent Upload</strong>
+    </h6>
+  </div>
+  <div class="col-sm-12">
+    <div class="row mph-0">
+      <div class="col-sm-12">
+        <div class="col-sm-6 mph-0 pb20">
+          <!--<span class="uinborder">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>-->
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+          <!--<label>Allergy&nbsp;:<span class="uinborder">{{allergys}}</span></label>-->
+        </div>
+        <div class="col-sm-4 mph-0 f-r content-right pb20">
+          <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Module</mat-label>
+        <mat-select required [(ngModel)]="M_Module" name="MType" (ngModelChange)="getconsent()">
+          <mat-option>None</mat-option>
+          <mat-option value="Registration">Registration</mat-option>
+          <mat-option value="Surgery">Surgery Admission</mat-option>
+          <mat-option value="Counselling">Counselling</mat-option>
+          <mat-option value="PAC">Pre-Anesthetic Checkup</mat-option>
+          <mat-option value="Intra_operative">Intra_operative</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <table style="width: -webkit-fill-available;">
+      <tr>
+        <td>
+          <input type="file" id="uploadFile" (change)="onSelectFile1($event)" accept=".txt" /> &nbsp;<span style="color:blue">Accept only .txt files</span>
+          <br />
+          <textarea style="width:-webkit-fill-available;height: 250px;overflow: auto;font-size:16px;color:black; font-family: 'Proxima Nova Semibold';"></textarea>
+          <br />
+          <span style="color:blue" *ngIf="filesizehide">File size : {{filesize}} Bytes</span>
+          <!--<br />
+
+          <button type="button" class="btn btn-primary" [disabled]="disSubmit" (click)="SaveConcentdta($event,M_Module)">Save</button>-->
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-sm-12 pb25">
+    <div class="content-right sub-section btn-wrap">
+      <button type="button" class="btn btn-warning-default" (click)="Cancelconcent()"> Cancel </button>
+      <button [disabled]="disSubmit" class="success btn btn-primary" (click)="SaveConcentdta($event,M_Module)">
+        Submit
+      </button>
+    </div>
+  </div>
+  <div class="row" *ngIf="hidetable">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6" style="border: 1px solid gray;border-radius: 10px;">
+      <div class="row">
+        <h6 style="width: 95%;margin-left: 2%;">Past Consent Data</h6>
+      </div>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th style="text-align:center;width:10%">Sno</th>
+            <th style="text-align:center;width:28%">Module</th>
+            <th style="text-align:center;width:28%">Uploaded Date & Time</th>
+            <th style="text-align:center;width:10%">View</th>
+            <!--<th style="text-align:center;width:10%">Action</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mdata of historydata;let i=index">
+            <td>{{i+1}}</td>
+            <td>{{mdata.Description}}</td>
+            <td>{{mdata.date | date:'dd-MMM-y HH:mm:ss'}}</td>
+            <td><mat-icon style="color:blue" (click)="viewconsent(mdata.TOtalLines)">receipt</mat-icon></td>
+            <!--<td><mat-icon style="color:red">delete_forever</mat-icon></td>-->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ConsentYesblock}" style="top:40%;">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-body" style="padding:40px">
+        <p style="text-align:center;background-color:white;color:black">
+          Invalid Consent
+        </p>
+      </div>
+      <div class="modal-footer" style="text-align:center;padding:10px">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="ConsentYes()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Patient History - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+                      <h4 class="modal-title text-left">Consent - View Access</h4>
+                    </div>
+                    <div class="modal-body">
+                      <table align="center" class="table custom-table">
+                        <thead>
+                          <tr>
+                            <th>Submit</th>
+                            <!--<th>Edit</th>
+                            <th>Delete</th>
+                            <th>Export</th>
+                            <th>Print</th>-->
+
+                          </tr>
+                        </thead>
+                        <tbody>
+
+
+                          <tr *ngFor="let x of accessdata; index as i">
+                            <td>
+                              <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+                            </td>
+                            <!--<td>
+                              <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+                            </td>
+                            <td>
+                              <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+                            </td>
+                            <td>
+                              <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+                            </td>
+                            <td>
+                              <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+                            </td>-->
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':consentpopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseconsentOk()">&times;</button>
+        <h4 class="modal-title text-left">Old Consent</h4>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tr *ngFor="let lines of totallinesdata">
+            <td><strong>{{lines}}</strong></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseconsentOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

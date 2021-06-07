@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WYNK.Data", "WYNK.Data\WYNK.Data.csproj", "{BCEACC89-6DBD-4453-9185-D0AFF10B4929}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WYNK.Services", "WYNK.Services\WYNK.Services.csproj", "{EBAE48AB-6D9D-4344-BA17-DA0E7B424464}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WYNKWeb", "WYNKWeb\", "{9BA264DC-C512-474D-98FC-D324D599921E}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_64567"
+		Debug.AspNetCompiler.PhysicalPath = "WYNKWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64567\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_64567"
+		Release.AspNetCompiler.PhysicalPath = "WYNKWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64567\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "64567"
+		SlnRelativePath = "WYNKWeb\"
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMSand EMAILService.cs", "SMSand EMAILService.cs\SMSand EMAILService.cs.csproj", "{35AB05CB-E803-4F6F-9518-9D7EA47F6881}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WYNK.Helpers", "WYNK.Helpers\WYNK.Helpers.csproj", "{8F8B3994-5AE9-4EC3-81B1-2B085BADDB09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCEACC89-6DBD-4453-9185-D0AFF10B4929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCEACC89-6DBD-4453-9185-D0AFF10B4929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCEACC89-6DBD-4453-9185-D0AFF10B4929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCEACC89-6DBD-4453-9185-D0AFF10B4929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBAE48AB-6D9D-4344-BA17-DA0E7B424464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBAE48AB-6D9D-4344-BA17-DA0E7B424464}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBAE48AB-6D9D-4344-BA17-DA0E7B424464}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBAE48AB-6D9D-4344-BA17-DA0E7B424464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA264DC-C512-474D-98FC-D324D599921E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA264DC-C512-474D-98FC-D324D599921E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA264DC-C512-474D-98FC-D324D599921E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA264DC-C512-474D-98FC-D324D599921E}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{35AB05CB-E803-4F6F-9518-9D7EA47F6881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AB05CB-E803-4F6F-9518-9D7EA47F6881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AB05CB-E803-4F6F-9518-9D7EA47F6881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AB05CB-E803-4F6F-9518-9D7EA47F6881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F8B3994-5AE9-4EC3-81B1-2B085BADDB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F8B3994-5AE9-4EC3-81B1-2B085BADDB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F8B3994-5AE9-4EC3-81B1-2B085BADDB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F8B3994-5AE9-4EC3-81B1-2B085BADDB09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7619986-6D2D-4035-91BB-C8AD0E82B6BC}
+	EndGlobalSection
+EndGlobal

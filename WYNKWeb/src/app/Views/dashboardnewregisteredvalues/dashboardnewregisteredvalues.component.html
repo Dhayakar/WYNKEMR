@@ -1,0 +1,1552 @@
+ <!--*ngIf="HidenewData"-->
+
+
+
+<div class="col-sm-12" *ngIf="HidenewData">
+  <div class="row">
+    <div class="col-sm-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="M_View" [(value)]="M_View" name="View" (ngModelChange)="selectedvalue()">
+          <mat-option *ngFor="let Engage of View" [value]="Engage.Text">{{Engage.Text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Optometrist</mat-label>
+        <mat-select [(ngModel)]="M_OptometristDoctor" name="OptometristDoctor" (ngModelChange)="ODoctor()">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let Engage of optometristDoctor" [value]="Engage">{{Engage.Text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Doctor</mat-label>
+        <mat-select [(ngModel)]="M_EyeDoctor" name="EyeDoctor" (ngModelChange)="EDoctor()">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let Engage of EyeDoctor" [value]="Engage">{{Engage.Text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+    <div class="col-sm-2">
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Vision Care</mat-label>
+        <mat-select [(ngModel)]="M_VisionDoctor" name="Visiondoctors" (ngModelChange)="VDoctor()">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let visionEngage of Visonoctor" [value]="visionEngage">{{visionEngage.Text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+    </div>
+    <div *ngIf="PatientAssignStatus.length > 0" class="col-sm-2">
+      <button *ngIf="Assignedbutton && PatientAssignStatus.length > 0" class="Assigned" mat-raised-button (click)="Assigned()">Assign Patient</button>
+    </div>
+    <div class="col-sm-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Search..</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search">
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-sm-2">
+      <mat-form-field *ngIf="hideviewdrop && searchschedulehide" appearance="outline">
+        <mat-label>Search criteria</mat-label>
+        <mat-select [(ngModel)]="M_PeriodDate" name="PeriodDate" (ngModelChange)="PeriodDateChange()">
+          <!--<mat-option value="None">None</mat-option>-->
+          <mat-option value="Today">Today</mat-option>
+          <mat-option value="PeriodFrom">Specific Period</mat-option>
+          <mat-option value="Searchwise">Search</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2">
+      <mat-form-field *ngIf="hideviewdrop && selecteddate" appearance="outline">
+        <mat-label>Select Date</mat-label>
+        <input disabled [(ngModel)]="M_SelectedDate" name="SelectedDate" matInput [matDatepicker]="SelectedDate" placeholder="Date">
+        <mat-datepicker-toggle matSuffix [for]="SelectedDate"></mat-datepicker-toggle>
+        <mat-datepicker #SelectedDate></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="hideviewdrop && Fromdatehide" appearance="outline">
+        <mat-label>From Date</mat-label>
+        <input [(ngModel)]="M_FromDate" [max]="minToDate" name="FromDate" matInput [matDatepicker]="FromDate" placeholder="FromDate">
+        <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+        <mat-datepicker #FromDate></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="hideviewdrop && searchdatewise" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input [(ngModel)]="M_SearchPatientwise" name="Searchpatientwise" matInput placeholder="Date">
+      </mat-form-field>
+
+    </div>
+
+    <div class="col-sm-2">
+      <mat-form-field appearance="outline" *ngIf="hideviewdrop && Fromdatehide">
+        <mat-label>To Date</mat-label>
+        <input [(ngModel)]="M_ToDate" [max]="minToDate" name="ToDate" matInput [matDatepicker]="ToDate" placeholder="ToDate">
+        <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+        <mat-datepicker #ToDate></mat-datepicker>
+      </mat-form-field>
+
+      <button type="button" *ngIf="hideviewdrop && searchdatewise" (click)="SelectedSearchwise(M_SearchPatientwise)" class="btn btn-success">Search</button>
+    </div>
+
+    <div class="col-sm-2">
+      <button type="button" *ngIf="hideviewdrop && Seledbuttonhide" (click)="SelectedDateSearch(M_SelectedDate)" class="btn btn-success">Search</button>
+      <button type="button" *ngIf="hideviewdrop && Seledbuttonhide2" (click)="PeriodSearch(M_FromDate,M_ToDate)" class="btn btn-success">Search</button>
+    </div>
+
+  </div>
+</div>
+
+<!--<div class="col-sm-12">
+  <div class="col-sm-4"></div>
+  <div class="col-sm-4"></div>
+  <div class="col-sm-4"></div>
+</div>-->
+<mat-tab-group animationDuration="0ms" class="tabsss" style="border:1px solid white;border-radius:10px">
+  <mat-tab label="Patients" (click)="selectedvalue()">
+    <div class="col-sm-12">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <label style="left:1%">
+          <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+          <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="mat-elevation-z8" id="section">
+        <table mat-table [dataSource]="dataSource" class="custom-table  search-table" id="customersone">
+
+          <ng-container matColumnDef="ELEPatientUin">
+            <th mat-header-cell *matHeaderCellDef>UIN</th>
+            <td mat-cell *matCellDef="let element" class="grab" (click)="selectDrop(element)">{{element.UIN}}</td>
+          </ng-container>
+          <ng-container matColumnDef="ELEpatientname">
+            <th mat-header-cell *matHeaderCellDef>Patient Name</th>
+            <td mat-cell *matCellDef="let element">{{element.Name}} {{element.MName}} {{element.LName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="ELEdate">
+            <th mat-header-cell *matHeaderCellDef>Registered Date & Time</th>
+            <td mat-cell *matCellDef="let element">{{element.DOR| date:"dd-MMM-y HH:mm"}}</td>
+          </ng-container>
+          <ng-container matColumnDef="ELEAge">
+            <th mat-header-cell *matHeaderCellDef>Age</th>
+            <td mat-cell *matCellDef="let element">{{element.Age}}</td>
+          </ng-container>
+          <ng-container matColumnDef="ELEsex">
+            <th mat-header-cell *matHeaderCellDef>Gender</th>
+            <td mat-cell *matCellDef="let element">{{element.Sex}}</td>
+          </ng-container>
+          <ng-container matColumnDef="ELEStatus">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.Status}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ELEDocotr">
+            <th mat-header-cell *matHeaderCellDef>Doctor</th>
+            <td mat-cell *matCellDef="let element">{{element.AssDoctorID}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ELEConsultationFee">
+            <th mat-header-cell *matHeaderCellDef>Consultation Fee</th>
+            <td mat-cell *matCellDef="let element">{{element.ConsultationFee| number : '1.2-2'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ADATE">
+            <th mat-header-cell *matHeaderCellDef>Assigned Date & Time</th>
+            <td mat-cell *matCellDef="let element">
+              <!-- *ngIf="element.AssDoctorID == '0' || element.AssDoctorID == 'null' || element.AssDoctorID == ''"-->
+              <ng-container *ngIf="element.AssDoctorID != 0 && element.AssDoctorID != null && element.AssDoctorID != ''"> {{element.AssignedDate| date:"dd-MMM-y HH:mm"}} </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Statusvisist">
+            <th mat-header-cell *matHeaderCellDef>Visit Type</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.Statusvisits}}
+            </td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="APNAME">
+            <th mat-header-cell *matHeaderCellDef class="remove-this">Assign Patient</th>
+            <td mat-cell *matCellDef="let element" class="remove-this">
+              <input type="checkbox" (change)="$event ? selection.toggle(element) : null"
+                     (click)="selectType(element)" [checked]="selection.isSelected(element)"
+                     [disabled]="CheckBox || element.Status==='Cancelled'||element.Status==='Reassigned'||element.Status==='Closed'" />
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="ELECancel">
+            <th mat-header-cell *matHeaderCellDef class="remove-this">Cancel</th>
+            <td mat-cell *matCellDef="let element" class="remove-this">
+              <button mat-icon-button (click)="selectCancelType(element);cancelpatient(element)"
+                      [disabled]="selection.isSelected(element)||element.Status==='Cancelled'||element.Status==='Closed'">
+                <mat-icon data-toggle="tooltip" title="Cancel Patient" class="cancelicon">cancel</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="UploadNew">
+            <th mat-header-cell *matHeaderCellDef class="remove-this">Upload </th>
+            <td mat-cell *matCellDef="let element" class="remove-this">
+              <button mat-icon-button (click)="selectuploadnew(element)">
+                <mat-icon data-toggle="tooltip" title="Upload Files" style="color:dodgerblue;cursor: pointer;">cloud_upload</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="ViewNewUpload">
+            <th mat-header-cell *matHeaderCellDef class="remove-this">View</th>
+            <td mat-cell *matCellDef="let element" class="remove-this">
+              <button mat-icon-button (click)="selectviewitemsnew(element)">
+                <mat-icon data-toggle="tooltip" title="View Summary Files" style="color:black;cursor: pointer;">visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Newprint">
+            <th mat-header-cell *matHeaderCellDef class="remove-this">Print</th>
+            <td mat-cell *matCellDef="let element" class="remove-this">
+              <button mat-icon-button (click)="Printnewcard(element)">
+                <i class="fa fa-print" data-toggle="tooltip" title="Print Card"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <!--<ng-container matColumnDef="Progressbar">
+            <th mat-header-cell *matHeaderCellDef>Queue Status</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="progress" style="padding: 8px;margin: 0px;">
+                <div class="progress-bar progress-bar-striped" role="progressbar" data-toggle="tooltip" title="Registration" style="background-color:lawngreen;width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar progress-bar-striped" role="progressbar" data-toggle="tooltip" title="Patient History" style="background-color:purple;width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar progress-bar-striped" role="progressbar" data-toggle="tooltip" title="Refraction" style="background-color:deeppink;width: 35%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar progress-bar-striped" role="progressbar" data-toggle="tooltip" title="Findings" style="background-color:seagreen;width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+
+              </div>
+
+            </td>
+          </ng-container>-->
+          <!--Progressbar-->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row;  columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator #NewPaginator [pageSizeOptions]="[5, 10, 15, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+
+  </mat-tab>
+  <mat-tab label="Consultation Charges" (click)="Consultationchrgs()">
+    <div class="col-sm-12">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <label style="left:1%">
+          <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+          <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+        </label>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <table mat-table matSort [dataSource]="dataSourceco" class="custom-table  search-table">
+        <ng-container matColumnDef="Sno">
+          <th mat-header-cell *matHeaderCellDef>S No</th>
+          <td mat-cell *matCellDef="let element ;let i = index;">{{i + 1}}</td>
+        </ng-container>
+        <ng-container matColumnDef="UIN">
+          <th mat-header-cell *matHeaderCellDef>UIN</th>
+          <td mat-cell *matCellDef="let element">{{element.uin}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef>Patient Name </th>
+          <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="DateTime">
+          <th mat-header-cell *matHeaderCellDef>Date & time</th>
+          <td mat-cell *matCellDef="let element">{{element.Dttime | date:"dd-MMM-y HH:mm"}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Docname">
+          <th mat-header-cell *matHeaderCellDef>Doctor Name</th>
+          <td mat-cell *matCellDef="let element">{{element.dname}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Charges">
+          <th mat-header-cell *matHeaderCellDef>Consultation Charges</th>
+          <td mat-cell *matCellDef="let element">{{element.Charges | number : '1.2-2'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element"><button class="btn-text" matTooltip="Select" (click)="Clickconsul(element)"><i class="fas fa-info-circle"></i></button></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsco; sticky: true"></tr>
+        <tr mat-row *matRowDef="let element;  columns: displayedColumnsco;"></tr>
+      </table>
+      <mat-paginator #ConsultPaginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+
+
+<!--<div class="container">
+  <input id="tab-1" type="radio" name="tabs" checked="checked" />
+  <input id="tab-2" type="radio" name="tabs">
+
+  <div class="tabs">
+    <label for="tab-1" (click)="selectedvalue()">Patients</label>
+    <label for="tab-2" (click)="Consultationchrgs()">Consultation Charges</label>
+    <label style="left:1%">
+      <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+      <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+    </label>
+  </div>
+  <div class="content">
+
+    <div class="tab tablewidth">
+
+    </div>
+    <div class="tab tablewidth">
+
+
+    </div>
+  </div>
+
+  </div>-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosesss()">&times;</button>
+        <h4 class="modal-title">Confirm to cancel</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <mat-label>Enter reason for cancellation</mat-label>
+              <textarea [(ngModel)]="selecteCancellation" name="Cancellationreasons" required #message maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="modalcloseOk()">Cancel</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Submit</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':Reveiewcancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalReviewSuccessClosesss()">&times;</button>
+        <h4 class="modal-title">Confirm to cancel</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <mat-label>Enter reason for cancellation</mat-label>
+              <textarea [(ngModel)]="ReviewselecteCancellation" name="RCancellationreasons" required #Rmessage maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+              <mat-hint align="start">Max 250 Character</mat-hint>
+              <mat-hint align="end">{{Rmessage.value.length}}/250</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="modalReviewcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalReviewSuccesssOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':SurgeryReveiewcancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSReviewSuccessClosesss()">&times;</button>
+        <h4 class="modal-title">Confirm to cancel</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <mat-label>Enter reason for cancellation</mat-label>
+              <textarea [(ngModel)]="SurgReviewselecteCancellation" name="SRCancellationreasons" #messagesu maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+              <mat-hint align="start">Max 250 Character</mat-hint>
+              <mat-hint align="end">{{messagesu.value.length}}/250</mat-hint>
+            </mat-form-field>
+
+
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="modalSReviewcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSReviewSuccesssOk()">Ok</button>
+
+      </div>
+    </div>
+  </div>
+</div>-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ModalDatecheck}">
+  <div class="modal-dialog modal-sm" style="margin-left: 38%;margin-top:10%">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ModalDatecheckClosesss()">&times;</button>
+        <h4 class="modal-title" style="font-family:'Proxima Nova Semibold'">Information</h4>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:center;font-size:18px;font-family:'Proxima Nova Semibold'">
+          From Date should not be greater than To Date
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button autofocus class="btn btn-success" data-dismiss="modal" (click)="ModalDatecheckClosesss()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ModalDatecheckundefined}">
+  <div class="modal-dialog modal-sm" style="margin-left: 38%;margin-top:10%">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ModalDatecheckundefinedClosesss()">&times;</button>
+        <h4 class="modal-title" style="font-family:'Proxima Nova Semibold'">Information</h4>
+      </div>
+      <div class="modal-body">
+        <p style="text-align:center;font-size:18px;font-family:'Proxima Nova Semibold'">
+          Please select the  date !
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button autofocus class="btn btn-success" data-dismiss="modal" (click)="ModalDatecheckundefinedClosesss()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Uploadfilesblock}" style="z-index:auto">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="UploadfilesblockClosesss()">&times;</button>
+        <h4 class="modal-title">Upload files</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+
+          <div class="col-sm-5">
+            <mat-form-field appearance="outline">
+              <mat-label>Category</mat-label>
+              <mat-select [(ngModel)]="investname" name="investname" id="choicedPhotoselecteddropdown">
+                <mat-option value="Medicalprescription">Medical Prescription</mat-option>
+                <mat-option value="casesheet">Case sheet</mat-option>
+                <mat-option value="opticalprescription">Optical Prescription</mat-option>
+                <mat-option value="Others">Others</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+
+          <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5">
+
+              <div *ngFor="let progressInfo of progressInfos; let i = index" class="mb-2">
+                <span>{{ progressInfo.fileName }}</span>
+
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-info progress-bar-striped"
+                           role="progressbar"
+                           attr.aria-valuenow="{{ progressInfo.value }}"
+                           aria-valuemin="0"
+                           aria-valuemax="100"
+                           [ngStyle]="{ width: progressInfo.value + '%' }">
+                        {{ progressInfo.value }}%
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <label class="btn btn-default">
+                <input type="file" multiple (change)="selectFiles($event)" id="choicedPhotoSID" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="border:none">
+        <button autofocus class="btn btn-success" data-dismiss="modal" (click)="uploadFiles()">Upload</button>
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="UploadfilesblockClosesss()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Viewfilesblock}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ViewfilesblockClosesss()">&times;</button>
+        <h4 class="modal-title">View summary files - {{M_VVIewUIN}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row Management_dashboard_Tableheightsinsidepopup">
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th>Sno</th>
+                <th>Image_Category</th>
+                <!--<th>Description</th>-->
+                <!--<th>Images</th>-->
+                <!--<th>Pdf Files</th>-->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of imagedata; let i = index;">
+                <td>{{i+1}}</td>
+                <td>{{data.Imagecategory}}</td>
+                <td *ngFor="let image of data.Imagedesc; let id = index" style="width:5%">
+                  <img style="height:75px;width:75px;cursor:pointer" [src]="image" (click)="Viewimagess(image,data.ImageName)">
+                  <div *ngFor="let y of data.ImageName; let i = index">
+                    <div *ngIf="id == i">
+                      {{y}}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--<img id="myImg" src="assets/banner_image.jpg" alt="Snow" style="width:100%;max-width:300px" (click)="Viewimagess()">-->
+      </div>
+      <div class="modal-footer" style="border:none">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="ViewfilesblockClosesss()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Viewimagesblock}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!--<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ViewimagesblockClosesss()">&times;</button>
+      </div>-->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <button type="button" class="btn btn-primary" (click)="zoomin()">Zoom-In</button>
+          </div>
+          <div class="col-sm-3">
+            <button type="button" class="btn btn-primary" (click)="zoomout()">Zoom-Out</button>
+          </div>
+        </div>
+        <div class="row Image_Tableheightsinsidepopup">
+          <!--<div class="imagecaptionlabel">
+            <label>{{imagecaption}}</label>
+          </div>-->
+          <div>
+            <img id="choicedPhoto" src="{{getimages}}">
+          </div>
+
+        </div>
+
+
+      </div>
+      <div class="modal-footer" style="border:none">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="ViewimagesblockClosesss()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div id="dashboardsection" style="display:none;font-family:Calibri;font-size:16px">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3">
+      </div>
+      <div class="col-sm-6">
+        <div><h1 style="font-size:19px;text-align:center">{{PCompnayname}} </h1></div>
+        <div style="text-align:center">
+
+          {{cmpaddress1}} &nbsp;{{cmpaddress2}}<br />
+          {{cmpaddress3}}<br />
+
+        </div>
+        <div style="text-align:center">{{cmpphone}}</div>
+        <!--<div style="text-align:center"> consultant time : 8am - 9pm</div>-->
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:1%">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-4"><mat-label>Receipt No</mat-label></div>
+          <div class="col-sm-1">:</div>
+          <div class="col-sm-5"> {{recnumbvger}} </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"><mat-label>Receipt date</mat-label></div>
+          <div class="col-sm-1">:</div>
+          <div class="col-sm-5"> {{recdate| date:"dd-MMM-y HH:mm"}} </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"><mat-label>Patient ID</mat-label></div>
+          <div class="col-sm-1">:</div>
+          <div class="col-sm-5"> {{uinss}} </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"><mat-label>Patient name</mat-label></div>
+          <div class="col-sm-1">:</div>
+          <div class="col-sm-5"> {{NAMEPATIENT}} </div>
+          <div class="col-sm-2"></div>
+        </div>
+        <div class="row">
+
+          <div class="col-sm-4"><mat-label>Registered date</mat-label></div>
+          <div class="col-sm-1">:</div>
+          <div class="col-sm-5"> {{ DATEOFREG | date:"dd-MMM-y HH:mm" }} </div>
+          <div class="col-sm-2"></div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-5">
+            <ngx-barcode [bc-width]="1.5" [bc-font-size]="12"
+                         [bc-margin-right]="120"
+                         [bc-value]="uinss" [bc-display-value]="true"
+                         [bc-height]="22">
+            </ngx-barcode>
+          </div>
+          <div class="col-sm-7"></div>
+        </div>
+
+      </div>
+      <div class="col-sm-12" style="margin-top:1%">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-label>Registration Charges: {{ConsulationFee | currency:Country2}}  </mat-label><br />
+            <mat-label *ngIf="Hidepaymentdetails">{{Country2}} in Words :{{transform(ConsulationFee)}}only </mat-label><br />
+          </div>
+          <div class="col-sm-6">
+            <mat-label>Registered By :{{RegisteredBy}}</mat-label>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-bottom:2%" *ngIf="Hidepaymentdetails">
+    <div class="row">
+      <div class="col-sm-3"> </div>
+      <div class="col-sm-2"> </div>
+      <div class="col-sm-3">
+        Payment Details
+      </div>
+      <div class="col-sm-4"> </div>
+    </div>
+  </div>
+  <div class="col-sm-12" *ngIf="Hidepaymentdetails">
+    <table align="center" style="border-left:3px solid#51b8f2;margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sl.No</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Payment Mode</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Instruction No.</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Date</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Bank Name</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Branch Name</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Amount( in  )</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of paymenthistory; index as i">
+          <td style="text-align:center">{{i+1}}</td>
+          <td style="text-align:center">{{x.PaymentMode}}</td>
+          <td style="text-align:center">{{x.InstrumentNumber}}</td>
+          <td style="text-align:center">{{x.Instrumentdate| date:"dd-MMM-y"}}</td>
+          <td style="text-align:center">{{x.BankName}}</td>
+          <td style="text-align:center">{{x.BankBranch}}</td>
+          <td style="text-align:center">{{x.Amount| currency:Country2}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="text-align:center">Total Amount( in  )</td>
+          <td style="text-align:center"> {{ConsulationFee | currency:Country2}}</td>
+        </tr>
+      </tfoot>
+
+
+    </table>
+  </div>
+
+</div>
+<div class="modal" role="dialog" [ngStyle]="{'display':modalSuccess}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-sm-12">
+          <h4 class="modal-title">Registration-Card</h4>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <p style="text-align:center;background-color:white;color:black;font-size:17px;color:black">Do you want to print Registration-card</p>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="modalSuccesssssOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesPrintOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--consultation popup-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':printsconsult}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg diaclosmodal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Want to proceed payment?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="coopen()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-danger" data-dismiss="modal" (click)="coclose()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--payment pop-->
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':printpayment}">
+  <div class="modal-dialog modal-lg conpopmodal">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-12">
+              <h5 class="modal-title center">
+                Payment
+
+                <span>
+                  <button type="button" class="close" data-dismiss="modal" (click)="paymentClose()">&times;</button>
+                </span>
+              </h5>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="conbody-0" id="contentToConvert" #contentToConvert>
+
+          <div class="col-sm-12 pgtop20-0">
+            <div class="row">
+
+
+              <div class="col-sm-6">
+
+
+                <span class="uinborder">
+                  {{pid}} / {{pname}} / {{page}} / {{psex}}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="col-sm-12 pgtop20-0">
+            <div class="row">
+
+
+              <div class="col-sm-3">
+
+                <mat-label>Consulted by</mat-label>
+
+              </div>
+              <div class="col-sm-3">
+
+                <mat-label>{{cdoctor}}</mat-label>
+
+              </div>
+              <div class="col-sm-3">
+
+                <mat-label>Consulted date & time</mat-label>
+
+              </div>
+              <div class="col-sm-3">
+
+                <mat-label>{{cdate | date: 'dd-MMM-y HH:mm'}}</mat-label>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="col-sm-12 pgtop20-0">
+            <div class="row">
+
+
+              <div class="col-sm-3">
+
+                <mat-label>Consulting charges</mat-label>
+
+              </div>
+              <div class="col-sm-3">
+
+                <mat-label>{{ccharges}}</mat-label>
+
+              </div>
+
+
+            </div>
+          </div>
+
+
+
+          <div class="col-sm-12 pgtop20-0">
+            <div class="row">
+              <div class="col-sm-12">
+
+                <div class="row">-->
+<!--<div class="col-sm-1">
+</div>-->
+<!--<div class="col-sm-12 dividebar">
+  <div class="row">
+
+    <div class="col-sm-12">
+
+
+      <h5 class="card-header bg-success text-white schleft-0">
+        Payment Details
+
+        <label class="labelfloat">
+          <button accesskey="a" (click)="AddPaymentDetailsNewgrid();" matTooltip="Add" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">Add</button>
+        </label>
+      </h5>
+
+    </div>
+  </div>
+
+  <div class="row heightAuto-250px">
+
+    <table mat-table [dataSource]="dataSource3" class="custom-table withoutbackgroung search-table table-bordered">
+
+      <ng-container matColumnDef="PaymentMode">
+        <th mat-header-cell *matHeaderCellDef>Payment Mode</th>
+        <td mat-cell *matCellDef="let element;let id = index;">
+          <mat-form-field appearance="outline">
+            <mat-select (selectionChange)="PaymentChange(id,$event,element)">
+              <mat-option *ngFor="let Paymentsmode of Paymentsmodes" [value]="Paymentsmode.Value">
+                {{Paymentsmode.Text}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+      <ng-container matColumnDef="BankName">
+        <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash'">
+          <mat-form-field appearance="outline">
+            <input (blur)="BankName($event,element)" (keypress)="nameField($event)" [disabled]="element.PaymentMode =='Cash'  " maxlength="100" matInput placeholder="Enter BankName" name="BankName" type="text">
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+      <ng-container matColumnDef="InstrumentNumber">
+        <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash'">
+          <mat-form-field appearance="outline">
+            <input (blur)="InstrumentNumber($event,element)" [disabled]="element.PaymentMode =='Cash'" maxlength="15" (keypress)="numberOnly($event)" matInput placeholder="Enter Instrument Number" name="InstrumentNumber" type="text">
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+      <ng-container matColumnDef="InstrumentDate">
+        <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash' || element.PaymentMode !='Debit card'|| element.PaymentMode !='Credit Card'">
+          <mat-form-field appearance="outline">
+            <input [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card'|| element.PaymentMode =='Credit Card' "
+                   name="InstrumentDate" autocomplete="off" [min]="maxToDate" matInput [matDatepicker]="InstrumentDate" (dateChange)="dateofinstrument($event,element)" placeholder="InstrumentDate">
+            <mat-datepicker-toggle matSuffix [for]="InstrumentDate"></mat-datepicker-toggle>
+            <mat-datepicker #InstrumentDate></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+      <ng-container matColumnDef="ExpiryDate">
+        <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash'|| element.PaymentMode !='Demand Draft' ">
+          <mat-form-field appearance="outline">
+            <input (dateChange)="dateexpiry($event,element)" [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Demand Draft' " autocomplete="off" [min]="MINExpiryDate"
+                   name="ExpiryDate" matInput [matDatepicker]="ExpiryDate" placeholder="ExpiryDate" type="datetime">
+            <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
+            <mat-datepicker #ExpiryDate></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
+      </ng-container>
+      <ng-container matColumnDef="Branch">
+        <th mat-header-cell *matHeaderCellDef>Branch</th>
+        <td mat-cell *matCellDef="let element"
+            [contentEditable]="element.PaymentMode !='Cash'|| element.PaymentMode !='Debit card' || element.PaymentMode !='Credit Card'">
+          <mat-form-field appearance="outline">
+            <input (blur)="Branch($event,element)"
+                   [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card' || element.PaymentMode =='Credit Card'"
+                   (keypress)="nameField($event)" maxlength="50" matInput name="Branch" placeholder="Branch" type="text">
+          </mat-form-field>
+
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <ng-container matColumnDef="Amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element;let id = index" required (keyup)="Amount(id,'Amount',$event,element)" (keypress)="numberOnly($event)" [contentEditable]="disableRow">
+          {{element.Amount | number :'1.2-2'}}
+
+        </td>
+        <td mat-footer-cell *matFooterCellDef>-->
+<!--
+  {{PTotalAmount1() | currency:Country2}}
+-->
+<!--</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Action">
+                          <th mat-header-cell *matHeaderCellDef>Action</th>
+                          <td mat-cell *matCellDef="let element;let id = index" [contentEditable]="disableRow">
+                            <i class="fas fa-trash-alt icon-delete" title="Delete" (click)="removePaytype(i)"></i>
+                          </td>
+                          <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns3;sticky: true"></tr>
+                        <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumns3"></tr>
+                        <tr mat-footer-row *matFooterRowDef="displayedColumns3;"></tr>
+                      </table>
+
+
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+              </div>
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+          </div>
+
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+
+        <div class="col-sm-12 m-3">
+          <div class="col-sm-12 pb25">
+            <div class="col-sm-4  sub-section btn-wrap f-r">
+              <button type="button" class="btn btn-warning-default" (click)="onCancelCon()"> Cancel </button>
+
+              <button type="submit" class="success btn btn-primary  ml-2p" (click)="onSubmitCon()">
+                Submit
+              </button>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>-->
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpurchase}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-11">
+              <h4 class="modal-title">Consultation Bill</h4>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <strong><label>Bill Number:{{bilno}}</label></strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="modalSuccessssspurchaseOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':purchaseprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Do you want to Print?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button"  class="btn btn-danger" data-dismiss="modal" (click)="printclose()" >No</button>
+          <button (click)="printsss()" class="btn btn-success" data-dismiss="modal">Yes</button>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--print-->
+
+<div id="printss" style="display:none">
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px">{{cname}} </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6"> <label> {{caddres}}</label></div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"> <label>Tel-{{cph}},- {{cwe}}</label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"> Consultation Bill</div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+  <hr>
+
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-2">
+        <div class="row">
+          <label>Patient ID</label>
+        </div>
+        <div class="row">
+          <label>Patient Name</label>
+        </div>
+        <div class="row">
+          <label>Age / Gender</label>
+        </div>
+        <div class="row">
+          <label>Phone NO</label>
+        </div>
+      </div>
+      <div class="col-sm-3">
+
+        <div class="row">
+          <label>{{uinn}}</label>
+        </div>
+        <div class="row">
+          <label>{{name}}</label>
+        </div>
+        <div class="row">
+          <label>{{age}}yrs&nbsp;/&nbsp;{{gender}}</label>
+        </div>
+        <div class="row">
+          <label>{{phone}}</label>
+        </div>
+
+      </div>
+      <div class="col-sm-2"></div>
+      <div class="col-sm-2">
+        <div class="row">
+          <label>Invoice Number</label>
+        </div>
+        <div class="row">
+          <label>Invoice Date</label>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="row">
+          <label>{{billno}}</label>
+        </div>
+        <div class="row">
+          <label>{{billdt|date:"dd-MMM-y"}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="col-sm-12" style="margin-bottom:2%">
+    <div class="row">
+      <div class="col-sm-3"> </div>
+      <div class="col-sm-2"> </div>
+      <div class="col-sm-3">
+        Payment Details
+      </div>
+      <div class="col-sm-4"> </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <table align="center" style="border-left:3px solid#51b8f2;margin-top:-9px;font-size: 12px" class="table table-bordered">
+      <thead>
+        <tr>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Sl.No</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Payment Mode</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Instruction No.</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Date</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Bank Name</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Branch Name</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Expiry Date</th>
+          <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of payment; index as i">
+          <td style="text-align:center">{{i+1}}</td>
+          <td style="text-align:center">{{x.paymode}}</td>
+          <td style="text-align:center">{{x.instno}}</td>
+          <td style="text-align:center">{{x.instdt| date:"dd-MMM-y"}}</td>
+          <td style="text-align:center">{{x.bname}}</td>
+          <td style="text-align:center">{{x.branch}}</td>
+          <td style="text-align:center">{{x.expiry| date:"dd-MMM-y"}}</td>
+          <td style="text-align:center">{{x.amount| number : '1.2-2'}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style="text-align:center;font-family: 'Proxima Nova Semibold'; font-size: 15px;">Total Amount</td>
+          <td style="text-align:center">{{payamt | currency:Country2}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-6">
+        Rupees (in Words) :{{transform(payamt)}} &nbsp;only
+      </div>
+      <div class="col-sm-6"> </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!--///////////////////karthic//////////////////////////-->
+<!--pop_up BR-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':BRblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h4 class="modal-title text-left">Registration</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="BROk()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title center">Do you want to pay Consultation Fee ?</h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="BROk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="BRyes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':BRblock1}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content ">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title center">Already Consultation Fee paid</h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="BROk1()">ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!---------------------------------------payment POP-up----------------------->
+
+<div class="modal height-700px" role="dialog" [ngStyle]="{'display':paymentconfeeblock}">
+  <div class="modal-dialog modal-lg width-80P">
+    <div class="modal-content ">
+
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="paymentconfeeClose()">&times;</button>
+        <h5 class="modal-title">
+
+          Payment details
+
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+
+        <div class="col-sm-12 mb20">
+          <div class="row">
+            <div class="col-sm-6">
+              <span class="uinborder">
+                {{pid}} / {{pname}} / {{page}} / {{psex}}
+              </span>
+            </div>
+            <div class="col-sm-4">
+              <mat-label>{{cdoctor}}</mat-label>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Doctor Consultation Charge</mat-label>
+              <input [(ngModel)]="M_Consultationcharges" (keyup)="keyupConsultation()" matInput placeholder="Enter Consultation Charge" name="Consultationcharges" type="number" min="0" maxlength="9">
+            </mat-form-field>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <h5 class="card-header bg-success text-white">
+            Payment details
+            <button type="button" (click)="AddPaymentDetailsNewgrid();" class="btnuserdefined btn-dark"><i matTooltip="Add Payment Details" class="fa fa-plus"></i></button>
+          </h5>
+          <table mat-table [dataSource]="dataSourcepay" class="custom-table withoutbackgroung search-table table-bordered">
+
+            <ng-container matColumnDef="PaymentMode">
+              <th mat-header-cell *matHeaderCellDef>Payment Mode</th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="width-15p">
+                <mat-form-field appearance="outline">
+                  <mat-select (selectionChange)="PaymentChange(id,$event,element)">
+                    <mat-option *ngFor="let Paymentsmode of Paymentsmodes" [value]="Paymentsmode.Value">
+                      {{Paymentsmode.Text}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <ng-container matColumnDef="BankName">
+              <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+              <td mat-cell *matCellDef="let element" contenteditable="false">
+                <mat-form-field appearance="outline">
+                  <input (blur)="BankName($event,element)" (keypress)="nameField($event)" [disabled]="element.PaymentMode =='Cash'  " maxlength="100" matInput placeholder="Enter BankName" name="BankName" type="text">
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <ng-container matColumnDef="InstrumentNumber">
+              <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+              <td mat-cell *matCellDef="let element" contenteditable="false">
+                <mat-form-field appearance="outline">
+                  <input (blur)="InstrumentNumber($event,element)" [disabled]="element.PaymentMode =='Cash'" maxlength="15" (keypress)="numberOnly($event)" matInput placeholder="Enter Instrument Number" name="InstrumentNumber" type="text">
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <ng-container matColumnDef="InstrumentDate">
+              <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+              <td mat-cell *matCellDef="let element" contenteditable="false">
+                <mat-form-field appearance="outline">
+                  <input [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Credit Card'|| element.PaymentMode =='Debit card'"
+                         type="datetime" name="InstrumentDate" autocomplete="off" [max]="maxInstrumentDate" matInput [matDatepicker]="InstrumentDate" (keypress)="numberOnly($event)" (dateChange)="dateofinstrument($event,element)" placeholder="InstrumentDate">
+                  <mat-datepicker-toggle matSuffix [for]="InstrumentDate"></mat-datepicker-toggle>
+                  <mat-datepicker #InstrumentDate></mat-datepicker>
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <ng-container matColumnDef="ExpiryDate">
+              <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+              <td mat-cell *matCellDef="let element" contenteditable="false">
+                <mat-form-field appearance="outline">
+                  <input (dateChange)="dateexpiry($event,element)" [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Demand Draft'|| element.PaymentMode =='Cheque' " autocomplete="off" [min]="MINExpiryDate"
+                         name="ExpiryDate" matInput [matDatepicker]="ExpiryDate" placeholder="ExpiryDate" type="datetime" (keypress)="numberOnly($event)">
+                  <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
+                  <mat-datepicker #ExpiryDate></mat-datepicker>
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+            <ng-container matColumnDef="Branch">
+              <th mat-header-cell *matHeaderCellDef>Branch</th>
+              <td mat-cell *matCellDef="let element" contenteditable="false">
+                <mat-form-field appearance="outline">
+                  <input (blur)="Branch($event,element)"
+                         [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card' || element.PaymentMode =='Credit Card'"
+                         (keypress)="nameField($event)" maxlength="50" matInput name="Branch" placeholder="Branch" type="text">
+                </mat-form-field>
+
+              </td>
+              <td mat-footer-cell *matFooterCellDef>Total</td>
+            </ng-container>
+            <ng-container matColumnDef="Amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let element;let id = index" required (keyup)="Amount(id,'Amount',$event,element)" (keypress)="numberOnly($event)" [contentEditable]="disableRow">
+                {{element.Amount| number : '1.2-2'}}
+
+              </td>
+              <td mat-footer-cell *matFooterCellDef>
+
+                {{PTotalAmount1() |currency:Country2}}
+
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element;let id = index" contenteditable="false">
+                <i class="fas fa-trash-alt icon-delete grab" title="Delete" (click)="removePaytype(i)"></i>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnspay;sticky: true"></tr>
+            <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumnspay"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumnspay;"></tr>
+          </table>
+        </div>
+
+
+      </div>
+
+      <div class="modal-footer">
+        <div class="row pb25">
+          <div class="content-right sub-section btn-wrap">
+            <button class="btn btn-warning-default" (click)="PaymentCancel()">Cancel</button>
+            <button class="success btn btn-primary" (click)="onsubmitPayment()">Submit</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!--///////////////////karthic//////////////////////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblockCon}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h4 class="modal-title text-left">Payment</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseOkCon()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title center">Do You Want to Cancel ?</h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOkCon()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOkCon()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--///////////////////karthic//////////////////////////-->

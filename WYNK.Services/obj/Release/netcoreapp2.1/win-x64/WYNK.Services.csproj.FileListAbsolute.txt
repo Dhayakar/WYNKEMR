@@ -1,0 +1,50 @@
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\hostpolicy.dll
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\hostfxr.dll
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.exe
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.deps.json
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.runtimeconfig.json
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.runtimeconfig.dev.json
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.dll
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.pdb
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\SMSand EMAILService.cs.dll
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Data.dll
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Helpers.dll
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Data.pdb
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\SMSand EMAILService.cs.pdb
+D:\WYNK\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Helpers.pdb
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.csprojAssemblyReference.cache
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.csproj.CoreCompileInputs.cache
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.RazorAssemblyInfo.cache
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.RazorAssemblyInfo.cs
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\UserSecretsAssemblyInfo.cs
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.AssemblyInfoInputs.cache
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.AssemblyInfo.cs
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.RazorTargetAssemblyInfo.cache
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.csproj.CopyComplete
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.dll
+D:\WYNK\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\hostpolicy.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\hostfxr.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.exe
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.deps.json
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.runtimeconfig.json
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.runtimeconfig.dev.json
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Services.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\SMSand EMAILService.cs.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Data.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Helpers.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Data.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\SMSand EMAILService.cs.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\bin\Release\netcoreapp2.1\win-x64\WYNK.Helpers.pdb
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.csprojAssemblyReference.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.csproj.CoreCompileInputs.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.RazorAssemblyInfo.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.RazorAssemblyInfo.cs
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\UserSecretsAssemblyInfo.cs
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.AssemblyInfoInputs.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.AssemblyInfo.cs
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.RazorTargetAssemblyInfo.cache
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.csproj.CopyComplete
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.dll
+D:\LAZY_NEW_CMPS\WYNK.Services\obj\Release\netcoreapp2.1\win-x64\WYNK.Services.pdb

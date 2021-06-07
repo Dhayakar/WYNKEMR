@@ -1,0 +1,610 @@
+
+
+<div class="fihdr-0">
+
+  <form #IPINVESTIGATIONFORM="ngForm">
+    <div class="col-sm-12 borfiglau-0 pgtop20-0">
+      <div class="col-sm-12 ">
+
+
+        <h5 class="card-header bg-success text-white center">
+          Investigation Image Upload
+
+        </h5>
+      </div>
+
+
+      <div class="col-sm-12 pgtop20-0">
+
+
+
+        <div class="col-sm-12 mph-0">
+          <div class="row mph-0">
+            <div class="col-sm-12 mph-0">
+              <div class="col-sm-5 mph-0 pb20">
+                <span class="uinborder">
+                  <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                </span>
+                <button (click)="Clicksch()" class="btn-text grab f-r">
+                  <i class="fas fa-info-circle"> </i> Help
+                </button>
+              </div>
+
+
+              <div class="col-sm-2 mph-0 f-r content-right pb20">
+                <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+
+              </div>
+              <div class="col-sm-3 mph-0 f-r content-right pb20">
+                <button class="btn-text" (click)="getPatientDeatils()"><i class="fas fa-eye"></i> All Images</button>
+
+              </div>
+              <div class="col-sm-2 mph-0 f-r content-right pb20">
+                <button class="btn-text" (click)="getInvestigationdetails()"><i class="fas fa-eye"></i> Datewise History</button>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+      <div class="col-sm-12 pgtop20-0" [hidden]="!isHiddentbl">
+        <div class="row">
+
+
+          <div class="col-sm-5 borinv-0">
+            <div class="row">
+              <div class="col-sm-12">
+                <h5 class="card-header bg-success text-white">
+                  Investigation
+
+                </h5>
+              </div>
+
+            </div>
+
+
+            <div class="row pgtop20-0">
+
+
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline">
+                  <mat-label>Investigation</mat-label>
+                  <mat-select [(ngModel)]="investname" name="investname" (ngModelChange)="sumbit(investname)">
+                    <mat-option *ngFor="let Invest of InvestName" [value]="Invest">{{Invest.Text}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+
+              <div class="col-sm-6">
+                <mat-form-field appearance="outline">
+                  <mat-label>Remarks</mat-label>
+                  <textarea #messagele maxlength="250" [(ngModel)]="Remarks" name="Remarks" matInput rows="5" cols="10" placeholder="Enter Remarks"></textarea>
+                  <mat-hint align="start">Max 250 Characters</mat-hint>
+                  <mat-hint align="end">{{messagele.value.length}} / 250</mat-hint>
+                </mat-form-field>
+              </div>
+
+
+
+
+            </div>
+
+
+
+          </div>
+
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-6">
+
+
+
+
+
+            <div class="col-sm-6 borfiinvimg-0" [hidden]="!isHidden">
+
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <h5 class="card-header bg-success text-white">
+                    Investgation Images
+                  </h5>
+                </div>
+
+
+              </div>
+
+              <div class="col-sm-12 slimod-0" [hidden]="!isHidden">
+
+                <div class="slimod-0">
+
+
+                  <img id="OpticalBiometry" *ngFor='let url of urls' [src]="url" height="75" width="75" style="margin-left: 8px; border: 1px solid #51b8f2" #patientImage1> <br />
+
+                  <span><mat-icon *ngFor='let url of urls; index as i' data-toggle="tooltip" title="Remove" (click)="removeOptical(i)"> cancel </mat-icon></span>
+                  <span *ngFor='let url of urls; index as i'>{{resu}}</span>
+                  <input #userPhoto type='file' [disabled]="isDisabledimag" (change)="onSelectFile(investname, $event)" multiple>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-9" [hidden]="!isHiddendt">
+                    <mat-label>Uploaded Date & Time :</mat-label>
+                    {{date4 | date: 'dd-MMM-y HH:mm'}}
+                  </div>
+                  <div class="col-sm-3">
+                    <button class="btn btn-success" [disabled]="isDisabledup" style="color:green;background-color:white;" (click)="onUpload(investname)">Upload</button>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+      <div class="col-sm-12 pgtop20-0">
+        <div class="row">
+
+          <div class="col-sm-3" flex>
+            <mat-form-field appearance="outline">
+              <mat-label> Image Location</mat-label>
+              <mat-select [(ngModel)]="IsActive" name="IsActive" (ngModelChange)="onLoc()" required>
+                <mat-option value="Internal">Internal</mat-option>
+                <mat-option value="External">External</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Laboratory Name</mat-label>
+              <input [(ngModel)]="selectedLocation" name="selectedLocation" matInput placeholder="Enter Location" [disabled]="disableloc" [required]="requireloc">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Address1</mat-label>
+              <textarea [(ngModel)]="M_Address1" name="Address1" placeholder="Address" matInput #message1 maxlength="100" [disabled]="disablead1"></textarea>
+              <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+              <mat-hint align="end"><strong>{{message1.value.length}} /100</strong></mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3" flex>
+            <mat-form-field appearance="outline">
+              <mat-label>Address2</mat-label>
+              <textarea [(ngModel)]="M_Address2" name="Address2" placeholder="Address" matInput #message2 maxlength="100" [disabled]="disablead2"></textarea>
+              <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+              <mat-hint align="end"><strong>{{message2.value.length}} /100</strong></mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <div class="col-sm-12 pgtop20-0">
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Referred By</mat-label>
+              <input [(ngModel)]="RefferedBy" name="RefferedBy" matInput placeholder="Enter Name" [disabled]="disablere">
+            </mat-form-field>
+          </div>
+
+        </div>
+        <!--<div class="row" style="margin-top: 1%; margin-bottom: 2%">
+      <div class="col-sm-5">
+      </div>
+      <div class="col-sm-4">
+
+        <button style="font-size:14px;margin-right:1%" [disabled]="isDisabled" class="btn btn-success" (click)="onSubmit(IPINVESTIGATIONFORM)">Submit</button>
+        <button class="btn btn-warning" style="font-size:14px;color:orange;background-color:white;" (click)="onCancel()">Cancel</button>
+      </div>
+      <div class="col-sm-3">
+      </div>
+    </div>-->
+      </div>
+
+      <!--<div class="col-sm-12 templatebuttons">
+        <div class="col-xs-6 col-sm-6 col-sm-offset-3 col-xs-offset-3">
+          <button type="submit" class="success btn btn-primary  ml-2p" (click)="onSubmit(IPINVESTIGATIONFORM)">
+            Submit
+          </button>
+          <button type="button" class="btn btn-warning-default" (click)="onCancel()"> Cancel </button>
+
+
+
+        </div>
+      </div>-->
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4  sub-section btn-wrap">
+            <button type="submit" [disabled]="isDisabled" class="success btn btn-primary  ml-2p" (click)="onSubmit(IPINVESTIGATIONFORM)">
+              Submit
+            </button>
+            <button type="button" class="btn btn-warning-default" (click)="onCancel()"> Cancel </button>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':investigationblocks}">
+  <div class="modal-dialog modal-lg custhispopmodal">
+
+    <div class="modal-content">
+
+
+
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="Investigationexit()">&times;</button>
+        <h5 class="card-header bg-success text-white center">
+          Investigation Details
+        </h5>
+
+      </div>
+
+
+      <div class="modal-body">
+
+
+        <div class="col-sm-12">
+          <div class="row">
+
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-8">
+
+
+              <span class="uinborder">
+                <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+              </span>
+
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-12 custpopht-0" #table>
+
+
+
+            <table class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Image Uploaded Date</th>
+                  <th>External / Internal</th>
+                  <th>Uploaded By</th>
+                </tr>
+              </thead>
+              <tbody id="myTable">
+                <tr *ngFor="let INHistory  of totalInvdata;index as i">
+                  <td>
+                    <mat-icon class="example-tab-icon grab"
+                              (click)="LatestInvHistory(INHistory.visistdate, INHistory)">touch_app</mat-icon>
+                  </td>
+                  <td>{{INHistory.visistdate| date:"dd-MMM-y"}}</td>
+                  <td>{{INHistory.exterinternal}}</td>
+                  <td>{{INHistory.prescribedby}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':investigationblock}">
+  <div class="modal-dialog modal-lg invimgpop-0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Investigation Details</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="InvestigationClosessss()">&times;</button>
+      </div>
+      <div class="modal-body invimgpopbody-0">
+
+
+        <div class="col-sm-12 pgtop20-0">
+          <div class="row">
+            <div class="col-sm-4">
+
+            </div>
+
+            <div class="col-sm-4">
+              <mat-label class="fcolor">Uploaded Date: </mat-label>
+              {{invupl | date: 'dd-MMM-y'}}
+            </div>
+            <div class="col-sm-4">
+              <mat-label class="fcolor">Uploaded By : </mat-label>
+              {{invpes}}
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>S No</th>
+              <th>Description</th>
+              <th>Remarks</th>
+              <th>Images</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Images of totalInvImagesdata;index as i ">
+              <td>{{i + 1}}</td>
+              <td>{{Images.Desccmre}}</td>
+              <td>{{Images.remarks}}</td>
+              <td *ngFor="let image of Images.imgdtre"><img style="height:75px;width:75px;" [src]="image"></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="InvestigationClosessss()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':investigationblocktot}">
+  <div class="modal-dialog modal-lg invimgpop-0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Investigation Details</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="InvestigationClosesssstot()">&times;</button>
+      </div>
+      <div class="modal-body invimgpopbody-0">
+
+
+
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>S No</th>
+              <th>Description</th>
+              <th>Images</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of imagePathdy; index as i">
+              <td>{{i + 1}}</td>
+              <td>{{x.Desccmre}}</td>
+              <td *ngFor="let image of x.imgdtre; let id = index">
+                <img style="height:75px;width:75px;" [src]="image">
+
+                <div *ngFor="let y of x.imgdttm; let i = index">
+                  <div *ngIf="id == i">
+                    {{y | date: 'dd-MMM-y HH:mm'}}
+                  </div>
+                </div>
+
+                <div *ngFor="let y1 of x.remarks; let i = index">
+                  <div *ngIf="id == i && y1 != null && y1 != ''">
+                    <mat-label class="fcolor">Remarks : </mat-label>{{y1}}
+                  </div>
+                </div>
+
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="InvestigationClosesssstot()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':UINTemplate}">
+  <div class="modal-dialog modal-lg borimgpop-0">
+    <div class="modal-content invpopcont-0">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="UINTemplateClose()">&times;</button>
+
+        <h5 class="card-header bg-success text-white">
+          Patient Details
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Search Criteria</mat-label>
+                <input matInput [(ngModel)]="sriteria" name="scriteria" (keyup)="applyFilters($event.target.value)" placeholder="Search Criteria">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 custpopht-0">
+
+
+
+          <table mat-table matSort [dataSource]="dataSourcuin" class="custom-table withoutbackgroung search-table table-bordered Tablemaxht">
+            <ng-container matColumnDef="checked">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+              <td mat-cell *matCellDef="let element let i = index"> <mat-radio-button (click)="OnselectUin(element)"> </mat-radio-button></td>
+            </ng-container>
+            <ng-container matColumnDef="UIN">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>UIN</th>
+              <td mat-cell *matCellDef="let element"> {{element.UIN}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Age">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Age</th>
+              <td mat-cell *matCellDef="let element"> {{element.age}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Gender">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Gender</th>
+              <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Address1">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Address1</th>
+              <td mat-cell *matCellDef="let element"> {{element.addr1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Address2">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Address2</th>
+              <td mat-cell *matCellDef="let element"> {{element.addr2}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Address3">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Address3</th>
+              <td mat-cell *matCellDef="let element"> {{element.addr3}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Phone">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+              <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsuin;sticky:false"></tr>
+            <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumnsuin;"></tr>
+          </table>
+
+          <mat-paginator #InvPaginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons></mat-paginator>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Investigation Image Upload - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+

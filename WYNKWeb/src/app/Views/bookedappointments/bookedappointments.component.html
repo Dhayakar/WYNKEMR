@@ -1,0 +1,195 @@
+<div class="col-sm-12 dividebar">
+  <div class="row">
+    <h6>Booked Appointments</h6>
+  </div>
+  <div class="col-sm-12 mph-0">
+    <div class="row mph-0">
+      <div class="col-sm-12 mph-0">
+        <div class="col-sm-6 mph-0 pb20">
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+        </div>
+        <div class="col-sm-4 mph-0 f-r content-right pb20">
+          <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <mat-form-field appearance="outline">
+        <mat-label><strong>Eye Doctor</strong></mat-label>
+        <mat-select [(ngModel)]="M_EyeDoctor" name="EyeDoctor">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let Engage of EyeDoctor" [value]="Engage.Value">{{Engage.Text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-1">
+      <button type="button" class="btn btn-primary" (click)="getdoctorvalues()">View Appointments</button>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="Appointementsdatsource" class="custom-table withoutbackgroung search-table table-bordered">
+
+        <ng-container matColumnDef="AppointNAme">
+          <th mat-header-cell *matHeaderCellDef>Patient Name</th>
+          <td mat-cell *matCellDef="let element">{{element.Name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="AppointAGe">
+          <th mat-header-cell *matHeaderCellDef>Age</th>
+          <td mat-cell *matCellDef="let element">{{element.Age}}</td>
+        </ng-container>
+        <ng-container matColumnDef="AppointGender">
+          <th mat-header-cell *matHeaderCellDef>Gender </th>
+          <td mat-cell *matCellDef="let element">{{element.Gender}}</td>
+        </ng-container>
+        <ng-container matColumnDef="AppointDate">
+          <th mat-header-cell *matHeaderCellDef>Date & Time</th>
+          <td mat-cell *matCellDef="let element">{{element.Appointmentdate | date: "dd-MMM-y"}} &nbsp;{{element.Apptime}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="AppointcreatedDate">
+          <th mat-header-cell *matHeaderCellDef>Purpose</th>
+          <td mat-cell *matCellDef="let element">{{element.APpointmentreasons}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Appoinytstatusss">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">{{element.Appoinytstatus}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Appoinytbookedby">
+          <th mat-header-cell *matHeaderCellDef>Booked by</th>
+          <td mat-cell *matCellDef="let element">{{element.Appointmentbookedby}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Appoinytpreferreddoctor">
+          <th mat-header-cell *matHeaderCellDef>Preferred Doctor</th>
+          <td mat-cell *matCellDef="let element">{{element.Doctorid}}</td>
+        </ng-container>
+
+        <!--<ng-container matColumnDef="AppointmentAssign">
+          <th mat-header-cell *matHeaderCellDef>Re-Assign Patient</th>
+          <td mat-cell *matCellDef="let element">
+            <input type="checkbox" (change)="$event ? selection.toggle(element) : null"
+                   (click)="selectAppointmentType(element)"
+                   [disabled]="ChecboxAppointment ||element.Doctorid === ' '|| disSubmit" />
+          </td>
+        </ng-container>-->
+
+        <ng-container matColumnDef="AppointmentCancelMY">
+          <th mat-header-cell *matHeaderCellDef>Cancel</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="CancelAppojntment2(element)"
+                    [disabled]="element.Appoinytstatus==='Cancelled' || disDelete">
+              <mat-icon data-toggle="tooltip" title="Cancel Patient" class="cancelicon">cancel</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="APoointmentdisplayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let element;  columns: APoointmentdisplayedColumns;"></tr>
+      </table>
+      <mat-paginator #APpointPaginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons></mat-paginator>
+    </div>
+
+  </div>
+
+  <div class="col-sm-12 pb25">
+    <div class="content-right sub-section btn-wrap">
+      <button type="button" class="btn btn-warning-default" (click)="canceldata()">Cancel</button>
+      <!--<button class="success btn btn-primary" (click)="opencalendar()">Calendar</button>
+      <button class="success btn btn-primary" (click)="Doctortimings()">View Doctor Timings</button>-->
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':APpointmentanelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="messagesRClosesss()">&times;</button>
+        <h4 class="modal-title">Confirm to cancel</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-8">
+            <mat-form-field appearance="outline">
+              <mat-label>Enter reason for cancellation</mat-label>
+              <textarea [(ngModel)]="AppointmentCancellation" name="APpoinreasons" #messagesR maxlength="250" rows="10" cols="50" matInput placeholder="Enter Details"></textarea>
+              <mat-hint align="start">Max 250 Character</mat-hint>
+              <mat-hint align="end">{{messagesR.value.length}}/250</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="border:none">
+        <button type="reset" class="btn btn-danger" data-dismiss="modal" (click)="messagesRClosesss()">Close</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="messagesRClosesssok()">Submit</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Booked Appointments - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,223 @@
+
+
+<h1 mat-dialog-title>
+  Appointment Details
+</h1>
+
+<form #AppointmentDialogForm="ngForm">
+  <mat-dialog-content class="mat-typography">
+    <div class="col-sm-12">
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-5"> <label>Patient Name</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientname}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Age</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientage}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Gender</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientgender}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Address</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientaddress}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Phone</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientphone}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Appointment Date & Time</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientappointmentdate | date:"dd-MMM-yyyy"}}&nbsp;{{patientappointmenttime}} hrs</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Purpose</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientappointreasons}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Appointment Booked by</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientbookedby}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Appointment Created by</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientcreatedby}}</label></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-5"> <label>Patient Preferred Doctor</label></div>
+          <div class="col-sm-1"> :</div>
+          <div class="col-sm-6 appointmentdata"> <label>{{patientpreferreddoctor}}</label></div>
+        </div>
+
+
+      </div>
+      <div class="col-sm-2">
+        <img [src]="transformPatientimage()" class="appointmentimage">
+      </div>
+
+      <div class="col-sm-4" *ngIf="Hideappointmentdoctortimings">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <caption class="appointmentcaption">Doctor Consulting Hrs</caption>
+          <thead>
+            <tr>
+              <th rowspan="2">Sno</th>
+              <th rowspan="2">Day</th>
+              <th rowspan="2">First Session</th>
+              <th rowspan="2">Second Session</th>
+              <th colspan="2">Max Patients</th>
+            </tr>
+            <tr>
+              <th>First</th>
+              <th>Second</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of doctorbeakwise; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{data.Days}}</td>
+              <td>{{data.firstsessionstart}} hrs - {{data.firstsessionend}} hrs</td>
+              <!--<td></td>-->
+              <td>{{data.Secondsessionstart}} hrs - {{data.fsecondsessionend}} hrs</td>
+              <!--<td></td>-->
+              <td>{{data.Maxpatientsmorning}}</td>
+              <td>{{data.Maxpatientecening}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-primary" (click)="getdoctortimings()">View Doctor Timings</button>
+      </div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-primary" (click)="getapptcalender()">View Calender</button>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-sm-1"></div>
+
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Appointment status</mat-label>
+          <mat-select required [(ngModel)]="M_STatus" name="M_STatuss" (ngModelChange)="selectStatus()">
+            <mat-option>--Select--</mat-option>
+            <mat-option value="Confirmed">Confirmed</mat-option>
+            <mat-option value="Cancelled">Cancelled</mat-option>
+            <mat-option value="Scheduled">Re-schedule</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+
+
+        <mat-form-field *ngIf="hideAppointmentdate" appearance="outline">
+          <mat-label><strong>Appointment Date</strong></mat-label>
+          <input [(ngModel)]="RevueM_DatePicker1" name="ReveDatePicker1" matInput [min]="RminToDate" [matDatepicker]="RSelectedDate" (dateChange)="QDOBChange()" placeholder="Date">
+          <mat-datepicker-toggle matSuffix [for]="RSelectedDate"></mat-datepicker-toggle>
+          <mat-datepicker #RSelectedDate></mat-datepicker>
+          <mat-hint><b>{{Dayname}}</b></mat-hint>
+        </mat-form-field>
+
+
+        <!--<textarea [(ngModel)]="M_Appointmenttext" name="Apptext" rows="4" cols="50"></textarea>-->
+        <mat-form-field class="example-full-width" appearance="outline" style="width:100%" *ngIf="hideAppointmenttext">
+          <mat-label>Cancelled Reasons</mat-label>
+          <textarea [(ngModel)]="M_Appointmenttext" name="Apptext" matInput placeholder=""></textarea>
+        </mat-form-field>
+
+
+      </div>
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-4" style="margin-top:4%">
+            <mat-label *ngIf="hideAppointmentdate">Time (HH : MM) : </mat-label>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline" style="font-size:12px;width:100%;margin-top:2%" *ngIf="hideAppointmentdate">
+              <input [(ngModel)]="HH" name="HH" (keypress)="RestrictNegativeValues1($event)" (keyup)="Restrict($event);" matInput placeholder="HH">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1">
+            <p *ngIf="hideAppointmentdate" style="margin-top: 10px"><strong>:</strong></p>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline" style="font-size:12px;width:100%" *ngIf="hideAppointmentdate">
+              <input [(ngModel)]="MM" name="MM" (keypress)="RestrictNegativeValues1m($event)" (keyup)="Restrictm($event);" matInput placeholder="MM">
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+    </div>
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-2">
+          <div class="row">
+            <div class="col-sm-5">
+              <button autofocus class="btn btn-success" data-dismiss="modal" (click)="Submitappointment(AppointmentDialogForm)">Submit</button>
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-5">
+              <button class="btn btn-danger" mat-dialog-close style="background-color:orangered;color:white">Close</button>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="col-sm-4"></div>
+      </div>
+    </div>
+
+
+  </mat-dialog-actions>
+</form>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ModalConfirmpop}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ModalpopupClosesss()">&times;</button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          Notifying through SMS is not configured for Patients, Do you wish to Continue
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button autofocus class="btn btn-success" data-dismiss="modal" (click)="Modelpopsuccess()">Yes</button>
+        <button autofocus class="btn btn-danger" data-dismiss="modal" (click)="ModalpopupClosesss()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+

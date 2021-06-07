@@ -1,0 +1,90 @@
+
+07-06-2021 04:59:25 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 04:59:25 	Message : 	Successfully Logged-In
+
+07-06-2021 05:13:18 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:13:18 	Message : 	Successfully Logged-In
+
+07-06-2021 05:13:18 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:13:18 	Message : 	Successfully Logged-In
+
+07-06-2021 05:26:22 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:26:22 	Message : 	Successfully Logged-In
+
+07-06-2021 05:29:39 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:29:39 	Message : 	Successfully Logged-In
+
+07-06-2021 05:38:12 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:38:12 	Message : 	Successfully Logged-In
+
+07-06-2021 05:39:22 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:39:22 	Message : 	Successfully Logged-In
+
+07-06-2021 05:41:01 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:41:01 	Message : 	Successfully Logged-In
+
+07-06-2021 05:42:06 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:42:06 	Message : 	Successfully Logged-In
+
+07-06-2021 05:42:58 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:42:58 	Message : 	Successfully Logged-In
+
+07-06-2021 05:43:29 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:43:29 	Message : 	Successfully Logged-In
+
+07-06-2021 05:44:00 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:44:00 	Message : 	Successfully Logged-In
+
+07-06-2021 05:44:40 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:44:40 	Message : 	Successfully Logged-In
+
+07-06-2021 05:45:49 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:45:49 	Message : 	Successfully Logged-In
+
+07-06-2021 05:47:38 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:47:38 	Message : 	Successfully Logged-In
+
+07-06-2021 05:49:07 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:49:07 	Message : 	Successfully Logged-In
+
+07-06-2021 05:50:08 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:50:08 	Message : 	Successfully Logged-In
+
+07-06-2021 05:54:04 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 05:54:04 	Message : 	Successfully Logged-In
+
+07-06-2021 06:01:52 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 06:01:52 	Message : 	Successfully Logged-In
+
+07-06-2021 06:02:38 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 06:02:38 	Message : 	Successfully Logged-In
+
+07-06-2021 06:13:57 	Centris Mobility Project Services 	AllergyTran 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Sumbit
+07-06-2021 06:13:57 	AllergyTran 	{"ID":-2147482647,"CmpID":1062,"UIN":"CMPS-163-CLINIC","Description":5,"Type":1,"FromUTC":"2021-05-10T00:00:00","IsActive":true,"CreatedUTC":"2021-06-07T06:13:57.6309579Z","UpdatedUTC":null,"CreatedBy":29163,"UpdatedBy":null,"RegID":36267,"Period":"Week","Since":4}
+
+07-06-2021 06:19:30 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 06:19:30 	Message : 	Successfully Logged-In
+
+07-06-2021 06:25:49 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 06:25:49 	Message : 	Successfully Logged-In
+
+07-06-2021 07:23:06 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 07:23:06 	Message : 	Successfully Logged-In
+
+07-06-2021 07:34:37 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 07:34:37 	Message : 	Successfully Logged-In
+
+07-06-2021 07:37:47 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 07:37:47 	Message : 	Successfully Logged-In
+
+07-06-2021 07:41:35 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 07:41:35 	Message : 	Successfully Logged-In
+
+07-06-2021 08:05:13 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 08:05:13 	Message : 	Successfully Logged-In
+
+07-06-2021 08:21:01 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 08:21:01 	Message : 	Successfully Logged-In
+
+07-06-2021 09:09:32 	Centris Mobility Project Services 	Login Component 	User name : 	Garfield Sobers 	User ID : 	29163 	Mode : Submit
+07-06-2021 09:09:32 	Message : 	Successfully Logged-In

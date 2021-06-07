@@ -1,0 +1,929 @@
+<div class="col-sm-12">
+  <div class="row">
+    <h5 align="center" class="card-header bg-success text-white rounded-top">
+      <b>Discharge</b>
+    </h5>
+  </div>
+</div>
+<div class="col-sm-12 border-blue border-radius">
+  <div class="col-sm-12 m-3">
+    <div class="col-sm-12 mph-0 downmargin">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{M_UIN}} / {{M_Name}} / {{M_Age}} / {{M_Gender}}</strong>
+            </span>
+          </div>
+          <div class="col-sm-1 mph-0 pb20">
+            <button (click)="Clicksch()" class="success btn btn-primary">View</button>
+          </div>
+          <div class="col-sm-2 ml-2p mr-0 mt-1p pl-0 pr-0">
+            <button (click)="DischargedPatientDetails()" class="success btn btn-primary">Discharged Patients</button>
+          </div>
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form #SurgeryDischargeForm="ngForm" name="SurgeryDischargeForm">
+      <div class="container" style="box-shadow:none">
+        <input id="tab-1" class="PatientDetails" type="radio" name="tabs" checked="checked" />
+        <input id="tab-2" type="radio" name="tabs" />
+        <input id="tab-3" type="radio" name="tabs" />
+        <input id="tab-4" type="radio" name="tabs" />
+        <div class="tabs">
+          <label for="tab-1">Patient Details</label>
+          <label for="tab-2">Surgery Details</label>
+          <label for="tab-3">Discharge Details</label>
+          <label for="tab-4">Medicine Prescribed</label>
+        </div>
+        <div class="content">
+          <div class="tab" style="position: sticky;width: 100%;height: 309px;">
+            <div class="col-sm-12">
+              <div class="row m-0">
+                <div class="col-sm-4">
+                  <div class="row">
+                    <div class="col-sm-7  ml-n4p">
+                      <h5 class="card-header bg-success text-white">Systemic Conditions</h5>
+                    </div>
+                  </div>
+                  <div class="row heightAuto-200px position-sticky width-100p">
+                    <table align="center" class="custom-table withoutbackgroung search-table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="col-sm-1">No.</th>
+                          <th class="col-sm-4">Description</th>
+                          <th class="col-sm-3">From</th>
+                          <th class="col-sm-1">Months</th>
+                        </tr>
+                      </thead>
+                      <tbody id="myTable">
+                        <tr *ngFor="let SystemicConditionDetail of commonService.data.SystemicConditionDetails; index as i">
+                          <td>{{i+1}}</td>
+                          <td>{{SystemicConditionDetail.Description}}</td>
+                          <td>{{SystemicConditionDetail.FromDate| date:'dd-MMM-y'}}</td>
+                          <td>{{SystemicConditionDetail.ToMonths +'Months' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="row">
+                    <div class="col-sm-7  ml-n4p">
+                      <h5 class="card-header bg-success text-white">Diagnosis</h5>
+                    </div>
+                  </div>
+                  <div class="row heightAuto-200px position-sticky width-100p">
+                    <table align="center" class="custom-table withoutbackgroung search-table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Code</th>
+                          <th>Description</th>
+                          <th>OD</th>
+                          <th>OS</th>
+                          <th>OU</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let OcularConditionsDetail of commonService.data.OcularConditionsDetails; index as i">
+                          <td>{{OcularConditionsDetail.Code}}</td>
+                          <td>{{OcularConditionsDetail.Description}}</td>
+                          <td><mat-checkbox [(checked)]="OcularConditionsDetail.OD" [disabled]="true"></mat-checkbox></td>
+                          <td><mat-checkbox [(checked)]="OcularConditionsDetail.OS" [disabled]="true"></mat-checkbox></td>
+                          <td><mat-checkbox [(checked)]="OcularConditionsDetail.OU" [disabled]="true"></mat-checkbox></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-sm-4" >
+                  <div class="row">
+                    <div class="col-sm-7  ml-n4p">
+                      <h5 class="card-header bg-success text-white">Allergy</h5>
+                    </div>
+                  </div>
+                  <div class="row heightAuto-200px position-sticky width-100p">
+                    <table align="center" class="custom-table withoutbackgroung search-table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Allergy Type</th>
+                          <th>Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let PatientAllergys of commonService.data.PatientAllergys; index as i">
+                          <td>{{PatientAllergys.AllergyType}}</td>
+                          <td>{{PatientAllergys.Description}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab" style="position: sticky;width: 100%;height: 309px;">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Surgery Date</mat-label>
+                    <input value="{{M_SurgeryDate | date : 'dd-LLL-yyy, HH:mm'}}" name="SurgeryDate" matInput placeholder="" [disabled]="true">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Surgery</mat-label>
+                    <input [(ngModel)]="M_Surgery" name="Surgery" matInput placeholder="" [disabled]="true">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Surgery Description</mat-label>
+                    <input [(ngModel)]="M_SurgeryDescription" matInput name="SurgeryDescription" type="text" [disabled]="true">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Ocular</mat-label>
+                    <input [(ngModel)]="M_Ocular" matInput name="Ocular" type="text" [disabled]="true">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <div class="row">
+                    <div class="col-sm-7">
+                      <h5 class="card-header bg-success text-white">
+                        Surgeon & Medical staff details
+                      </h5>
+                    </div>
+                  </div>
+                  <div class="row col-sm-12 heightAuto-200px">
+                    <table mat-table matSort [dataSource]="SurgeronSource" class="custom-table withoutbackgroung search-table table-bordered">
+                      <ng-container matColumnDef="SNo">
+                        <th mat-header-cell *matHeaderCellDef class="width-7p pr10">S.No</th>
+                        <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="Name">
+                        <th mat-header-cell *matHeaderCellDef class="width-40p">Name</th>
+                        <td mat-cell *matCellDef="let element">{{element.Name}} </td>
+                      </ng-container>
+                      <ng-container matColumnDef="Specialization">
+                        <th mat-header-cell *matHeaderCellDef>Specialization</th>
+                        <td mat-cell *matCellDef="let element">{{element.Specialization}} </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="SurgeronColumns;sticky: true"></tr>
+                      <tr mat-row *matRowDef="let element; columns: SurgeronColumns" [ngClass]="{gray: even}"></tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-sm-1"></div>
+          
+              </div>
+            </div>
+          </div>
+          <div class="tab" style="position: sticky;width: 100%;height: 309px;">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Admission Date</mat-label>
+                    <input value="{{M_AdmissionDate | date : 'dd-LLL-yyy, HH:mm'}}" name="AdmissionDate" matInput placeholder="" [disabled]="true">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <!--<mat-form-field appearance="outline">
+                        <mat-label>Discharge Date</mat-label>
+                        <input required [(ngModel)]="M_DischargeDate" [min]="M_SurgeryDate" name="DischargeDate" (ngModelChange)="DischargeDate()" matInput [matDatepicker]="picker4" placeholder="" [disabled]="DischargedSummary">
+                        <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                      </mat-form-field>-->
+                  <input required [owlDateTimeTrigger]="picker4" autocomplete="off" [min]="M_SurgeryDate" class="form-control" (dateTimeChange)="DischargeDate()" [owlDateTime]="picker4" placeholder="Discharge Date" [(ngModel)]="M_DischargeDate" name="DischargeDate">
+                  <owl-date-time #picker4></owl-date-time>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Discharge Type</mat-label>
+                    <mat-select [(ngModel)]="M_DischargeType" name="DischargeType" (ngModelChange)="DischargeTypeChange()" [disabled]="DischargedSummary" required>
+                      <mat-option value="Discharged">Discharged</mat-option>
+                      <mat-option value="Dead">Expired</mat-option>
+                      <mat-option value="Abscond">Abscond</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Treatment & Advice</mat-label>
+                    <textarea matInput [disabled]="DischargedSummary" disabled="{{buttonDisabled}}" [(ngModel)]="M_TreatmentAdvice" name="TreatmentAdvice" placeholder="Treatment & Advice" maxlength="250"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3" *ngIf="DischargeAbscond">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Review Date</mat-label>
+                    <input [required]="IsRequired" [(ngModel)]="M_ReviewDate" name="ReviewDate" [min]="M_DischargeDate" matInput [matDatepicker]="picker5" placeholder="" [disabled]="ReviewDateEnable">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab" style="position: sticky;width: 100%;height: 309px;">
+            <div class="col-sm-12" *ngIf="!DischargedSummary">
+              <div class="col-sm-6">
+                <div *ngIf="DischargeAbscond">
+                  <div *ngIf="SubmitHide">
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Brand Name</mat-label>
+                          <input [(ngModel)]="M_brandname" name="brandname" matInput placeholder="Enter brand" [disabled]="true">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-1 mt-1p">
+                        <mat-icon class="cursor" (click)="SearchClick()" data-toggle="tooltip" title="Search Drug">search</mat-icon>
+                      </div>
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Medicine</mat-label>
+                          <input [(ngModel)]="M_medicinename" name="medicinename" matInput placeholder="Enter brand" [disabled]="true">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Manufacturer</mat-label>
+                          <input [(ngModel)]="M_manfname" name="manfname" matInput placeholder="Enter brand" [disabled]="true">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-1"></div>
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Drug Form</mat-label>
+                          <input [(ngModel)]="M_Drugformname" name="formname" matInput placeholder="Enter brand" [disabled]="true">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>UOM</mat-label>
+                          <input [(ngModel)]="MUOM" name="UOM" matInput placeholder="UOM" [disabled]="true">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-1"></div>
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Frequency</mat-label>
+                          <mat-select [(ngModel)]="frequencyname" name="frequencyname" (ngModelChange)="frequencyChange(selectedDays,frequencyname.Text)">
+                            <mat-option *ngFor="let Frequency of FrequencyName" [value]="Frequency">{{Frequency.Text}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Food</mat-label>
+                          <mat-select [(ngModel)]="foodname" name="foodname">
+                            <mat-option *ngFor="let Food of FoodName" [value]="Food">{{Food.Text}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-1"></div>
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Eye</mat-label>
+                          <mat-select [(ngModel)]="eye" name="eye" placeholder="Select">
+                            <mat-option value="Right Eye">Right Eye</mat-option>
+                            <mat-option value="Left Eye">Left Eye</mat-option>
+                            <mat-option value="Both Eyes">Both Eyes</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Quantity</mat-label>
+                          <input [(ngModel)]="MQuantity" name="Quantity" type="number" matInput placeholder="Enter Quantity" (keypress)="Rate($event)" [disabled]="isDisabledqu">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-6 ml-5p">
+                        <div class="col-sm-5">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Days</mat-label>
+                            <input [(ngModel)]="selectedDays" name="selectedDays" maxlength="3" matInput placeholder="Enter Days" type="number" (keypress)="Rate($event)" (keyup)="FindDays(selectedDays,frequencyname.Text)" onKeyDown="if(this.value.length==4 && event.keyCode>47 && event.keyCode < 58)return false;" oninput="validity.valid||(value='');">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-sm-4">
+                          <button type="button" [disabled]="buttonDisabled" (click)="onAddItem()" class="success btn btn-primary">ADD</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <mat-form-field appearance="outline">
+                          <mat-label>Prescribed by</mat-label>
+                          <mat-select [(ngModel)]="M_Prescribedby" name="Prescribed" [disabled]="DischargedSummary"  [required]="IsRequired">
+                            <mat-option *ngFor="let Doctor of Doctors" [value]="Doctor.Value">{{Doctor.Text}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="col-sm-12 heightAuto-300px position-sticky" *ngIf="this.dataSource.data.length>0">
+                  <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+                    <ng-container matColumnDef="MedicineName">
+                      <th mat-header-cell *matHeaderCellDef>Generic Name</th>
+                      <td mat-cell *matCellDef="let element">{{element.Brand}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Frequency">
+                      <th mat-header-cell *matHeaderCellDef>Frequency</th>
+                      <td mat-cell *matCellDef="let element">{{element.Frequency}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Eye">
+                      <th mat-header-cell *matHeaderCellDef>Eye</th>
+                      <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true" class="width-16p cursor">
+                        <input type="text" matInput value="{{element.Eye}}" [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="change($event,id,'Eye')">
+                          <mat-option *ngFor="let Ocular of OcularList" [value]="Ocular">
+                            {{Ocular}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="UOM">
+                      <th mat-header-cell *matHeaderCellDef>UOM</th>
+                      <td mat-cell *matCellDef="let element">{{element.UOM}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Food">
+                      <th mat-header-cell *matHeaderCellDef>Food</th>
+                      <td mat-cell *matCellDef="let element">{{element.Food}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Days">
+                      <th mat-header-cell *matHeaderCellDef>Days</th>
+                      <td mat-cell *matCellDef="let element">{{element.Days}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Quantity">
+                      <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                      <td mat-cell *matCellDef="let element">{{element.Quantity}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Delete">
+                      <th mat-header-cell *matHeaderCellDef> Action </th>
+                      <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon class="cursor" data-toggle="tooltip" title="Delete" (click)="removeBrand(i)">delete</mat-icon></td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                    <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns;" [ngClass]="{gray: even}"></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="DischargedSummary" style="height:300px;overflow:auto;position:sticky">
+              <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+                <ng-container matColumnDef="MedicineName">
+                  <th mat-header-cell *matHeaderCellDef>Generic Name</th>
+                  <td mat-cell *matCellDef="let element">{{element.Brand}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Frequency">
+                  <th mat-header-cell *matHeaderCellDef>Frequency</th>
+                  <td mat-cell *matCellDef="let element">{{element.Frequency}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Eye">
+                  <th mat-header-cell *matHeaderCellDef>Eye</th>
+                  <td mat-cell *matCellDef="let element;let id = index;" contenteditable="false">
+                    <input type="text" matInput value="{{element.Eye}}" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="change($event,id,'Eye')">
+                      <mat-option *ngFor="let Ocular of OcularList" [value]="Ocular">
+                        {{Ocular}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Food">
+                  <th mat-header-cell *matHeaderCellDef>Food</th>
+                  <td mat-cell *matCellDef="let element">{{element.Food}} </td>
+                </ng-container>
+                <ng-container matColumnDef="UOM">
+                  <th mat-header-cell *matHeaderCellDef>UOM</th>
+                  <td mat-cell *matCellDef="let element">{{element.UOM}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Days">
+                  <th mat-header-cell *matHeaderCellDef>Days</th>
+                  <td mat-cell *matCellDef="let element">{{element.Days}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Quantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                  <td mat-cell *matCellDef="let element">{{element.Quantity}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Delete">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon data-toggle="tooltip" title="Delete" (click)="removeBrand(i)">delete</mat-icon></td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns;" [ngClass]="{gray: even}"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="col-sm-12 m-3">
+  <div class="col-sm-12 pb25">
+    <div class="col-sm-4  sub-section btn-wrap f-r">
+      <button type="button" class="btn btn-warning-default" (click)="Cancel()"><strong>Cancel</strong></button>
+      <button type="submit" *ngIf="SubmitHide" [disabled]="isNextButton" (click)="onSubmit(SurgeryDischargeForm)" class="success btn btn-primary">Submit</button>
+      <button type="button" *ngIf="Print" [disabled]="isNextupdate" (click)="PrintSummary()" class="success btn btn-primary">Print</button>
+    </div>
+  </div>
+</div>
+
+<!--List Of Medicines-->
+<div class="modal" role="dialog" [ngStyle]="{'display':modalmed}">
+  <div class="modal-dialog modal-lg width-60p">
+    <div class="modal-content heightAuto-450px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessmed()">&times;</button>
+        <h5 class="modal-title text-center">
+          <strong>List Of Medicines</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 heightAuto-300px">
+            <div class="row">
+              <table mat-table [dataSource]="dataSourcem" id="contentToConvert" class="table table-bordered" #contentToConvert>
+                <ng-container matColumnDef="Brand">
+                  <th mat-header-cell *matHeaderCellDef>Brand</th>
+                  <td mat-cell *matCellDef="let element"> {{element.Brand}} </td>
+                </ng-container>
+                <ng-container matColumnDef="MedicineName">
+                  <th mat-header-cell *matHeaderCellDef class="width-12p">Generic Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.MedicineName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="DrugGroup">
+                  <th mat-header-cell *matHeaderCellDef class="width-15p">Drug Form</th>
+                  <td mat-cell *matCellDef="let element"> {{element.DrugGroup}} </td>
+                </ng-container>
+                <ng-container matColumnDef="UOM">
+                  <th mat-header-cell *matHeaderCellDef class="width-16p">UOM</th>
+                  <td mat-cell *matCellDef="let element"> {{element.uomName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Manufacturer">
+                  <th mat-header-cell *matHeaderCellDef class="width-12p">Manufacturer</th>
+                  <td mat-cell *matCellDef="let element"> {{element.Manufacturer}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Drugid">
+                  <th mat-header-cell *matHeaderCellDef>Drug ID</th>
+                  <td mat-cell *matCellDef="let element"> {{element.ID}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsm;sticky:false"></tr>
+                <tr mat-row *matRowDef="let element; let row;  let even = even;  columns: displayedColumnsm;" [ngClass]="{gray: even}" (click)="selecttypes(element)"></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Print-->
+<div id="section" style="display:none">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{CompanyName}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:28%"><strong>{{CompanyAddress1 + ' '+ CompanyAddress2 + ' '+ CompanyAddress3}}</strong></label></div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:1%"><strong>{{'Phone No:'+' '+ CompanyPhone1 + ',' + ' ' + 'Website:' + ' ' + CompanyWebsite}}</strong></label></div>
+      <div class="col-sm-1"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center;margin-left:2%"><strong>DISCHARGE SUMMARY</strong></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Patient ID : </strong>{{M_UIN}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Patient Name : </strong>{{M_Name}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Age / Gender : </strong>{{M_Age}} / {{M_Gender}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>DOA : </strong>{{M_AdmissionDate| date :'dd-MMM-yyyy,HH:mm'}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>DOS : </strong>{{M_SurgeryDate| date :'dd-MMM-yyyy,HH:mm'}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>DOD : </strong>{{M_DischargeDate| date :'dd-MMM-yyyy,HH:mm'}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Surgery : </strong>{{M_Surgery}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Surgery Description :&nbsp; </strong> {{M_SurgeryDescription}}</label>
+      </div>
+      <!--<div class="col-sm-4">
+        <label><strong>Allergy : </strong>{{M_Allergy}}</label>
+      </div>-->
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Ocular :&nbsp; </strong> {{M_Ocular}}</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-bottom:5px;">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row">
+          <label style="margin-left:14px"><strong>Systemic Conditions :</strong></label>
+        </div>
+        <div class="row col-sm-10">
+          <table align="center" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">No.</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">Description</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">From</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">Months</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let SystemicConditionDetail of commonService.data.SystemicConditionDetails; index as i">
+                <td style="text-align:center">{{i+1}}</td>
+                <td style="text-align:center">{{SystemicConditionDetail.Description}}</td>
+                <td style="text-align:center">{{SystemicConditionDetail.FromDate| date:'dd-MMM-y'}}</td>
+                <td style="text-align:center">{{SystemicConditionDetail.ToMonths +'   Months' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row">
+          <label style="margin-left:10px"><strong>Diagonsis :</strong></label>
+        </div>
+        <div class="row col-xs-5">
+          <table cellspacing="0" cellpadding="0" align="center" class="table table-bordered summary">
+            <thead>
+              <tr>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">No.</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let OcularConditionsDetail of commonService.data.OcularConditionsDetails; index as i">
+                <td style="text-align:center">{{i+1}}</td>
+                <td style="text-align:center">{{OcularConditionsDetail.Description}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <label style="margin-left:14px"><strong>Medicine Prescribed:</strong></label>
+    </div>
+    <div class="row col-sm-10">
+      <table align="center" style="border-left:1px black;margin-top:-9px;font-size: 12px" class="table table-bordered">
+        <thead>
+          <tr>
+            <!--<th style="text-align:center;background-color:#d3d3e8;color:black;">Brand</th>-->
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Generic Name</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">UOM</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Frequency</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Food</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Quantity</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Days</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let x of commonService.data.PrescribedMedicalPrescriptionTran; index as i">
+            <!--<td style="text-align:center">{{x.ICD_DESCRIPTION}}</td>-->
+            <td style="text-align:center">{{x.Brand}}</td>
+            <td style="text-align:center">{{x.UOM}}</td>
+            <td style="text-align:center">{{x.Frequency}}</td>
+            <td style="text-align:center">{{x.Food}}</td>
+            <td style="text-align:center">{{x.Quantity}}</td>
+            <td style="text-align:center">{{x.Days}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Treatment Advice : </strong>{{M_TreatmentAdvice}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Next Review Date : </strong>{{M_ReviewDate | date:"dd-MMM-y"}}</label>
+      </div>
+      <!--<div class="col-sm-4">
+      <label><strong>Doctor Name&nbsp;&nbsp;:&nbsp;&nbsp;{{M_SurgeonName}}<br />Reg No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp; {{M_SurgeonRegistrationNUmber}}</strong></label>
+    </div>-->
+    </div>
+    <br />    <br />
+    <div class="row">
+      <div class="col-sm-4"> </div>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <label><strong>Authorized Signatory</strong></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="section1" style="display:none">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{CompanyName}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:28%"><strong>{{CompanyAddress1 + ' '+ CompanyAddress2 + ' '+ CompanyAddress3}}</strong></label></div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:1%"><strong>{{'Phone No:'+' '+ CompanyPhone1 + ',' + ' ' + 'Website:' + ' ' + CompanyWebsite}}</strong></label></div>
+      <div class="col-sm-1"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center;margin-left:2%"><strong>DISCHARGE SUMMARY</strong></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Patient ID : </strong>{{M_UIN}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Patient Name : </strong>{{M_Name}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Age / Gender : </strong>{{M_Age}} / {{M_Gender}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>DOA : </strong>{{M_AdmissionDate| date :'dd-MMM-yyyy,HH:mm'}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>DOS : </strong>{{M_SurgeryDate| date :'dd-MMM-yyyy,HH:mm'}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>DOD : </strong>{{M_DischargeDate| date :'dd-MMM-yyyy,HH:mm'}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Surgery : </strong>{{M_Surgery}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Surgery Description : </strong> {{M_SurgeryDescription}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Ocular :&nbsp; </strong> {{M_Ocular}}</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-bottom:5px;">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row">
+          <label style="margin-left:14px"><strong>Systemic Conditions :</strong></label>
+        </div>
+        <div class="row col-sm-10">
+          <table align="center" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">No.</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">Description</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">From</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">Months</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let SystemicConditionDetail of commonService.data.SystemicConditionDetails; index as i">
+                <td style="text-align:center">{{i+1}}</td>
+                <td style="text-align:center">{{SystemicConditionDetail.Description}}</td>
+                <td style="text-align:center">{{SystemicConditionDetail.FromDate| date:'dd-MMM-y'}}</td>
+                <td style="text-align:center">{{SystemicConditionDetail.ToMonths +'   Months' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row">
+          <label style="margin-left:10px"><strong>Diagonsis :</strong></label>
+        </div>
+        <div class="row col-xs-5">
+          <table cellspacing="0" cellpadding="0" align="center" class="table table-bordered summary">
+            <thead>
+              <tr>
+                <th style="text-align:center;background-color:#d3d3e8;color:black;">No.</th>
+                <th style="text-align:center;background-color:#d3d3e8;color:black">Description</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let OcularConditionsDetail of commonService.data.OcularConditionsDetails; index as i">
+                <td style="text-align:center">{{i+1}}</td>
+                <td style="text-align:center">{{OcularConditionsDetail.Description}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <label style="margin-left:14px"><strong>Medicine Prescribed:</strong></label>
+    </div>
+    <div class="row col-sm-10">
+      <table align="center" style="border-left:1px black;margin-top:-9px;font-size: 12px" class="table table-bordered">
+        <thead>
+          <tr>
+            <!--<th style="text-align:center;background-color:#d3d3e8;color:black;">Brand</th>-->
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Generic Name</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">UOM</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Frequency</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Food</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Quantity</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Days</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let x of commonService.data.MedicalPrescriptionTranDetails; index as i">
+            <!--<td style="text-align:center">{{x.ICD_DESCRIPTION}}</td>-->
+            <td style="text-align:center">{{x.Brand}}</td>
+            <td style="text-align:center">{{x.UOM}}</td>
+            <td style="text-align:center">{{x.Frequency}}</td>
+            <td style="text-align:center">{{x.Food}}</td>
+            <td style="text-align:center">{{x.Quantity}}</td>
+            <td style="text-align:center">{{x.Days}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Treatment Advice : </strong>{{M_TreatmentAdvice}}</label>
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Next Review Date : </strong>{{M_ReviewDate | date:"dd-MMM-y"}}</label>
+      </div>
+    </div>
+    <br />    <br />
+    <div class="row">
+      <div class="col-sm-4"> </div>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4">
+        <label><strong>Authorized Signatory</strong></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Print Popup-->
+<div class="modal" role="dialog" [ngStyle]="{'display':print}">
+  <div class="example-box">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h6 class="modal-title">Information</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong> Do you want to Print ?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="PrintSummary1()" class="btn btn-primary">Yes</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="printclose()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----*Access Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title">Discharge - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+

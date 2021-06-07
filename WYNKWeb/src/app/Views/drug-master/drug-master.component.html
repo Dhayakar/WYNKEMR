@@ -1,0 +1,490 @@
+
+
+<div>
+  <form #DrugForm="ngForm" name="DrugForm" (keydown.enter)="$event.preventDefault()" novalidate>
+    <div class="col-sm-12 mt-1p">
+      <div class="row">
+        <h5 align="center" class="card-header bg-success text-white rounded-top">
+          Drug Master
+        </h5>
+      </div>
+    </div>
+    <div class="col-sm-12 border-blue border-radius">
+      <input #drugid name="D_DrugID" [(ngModel)]="M_DrugID" type="hidden">
+      <div class="col-sm-12">
+        <div class="col-sm-2 ml-n2p mt-1p f-r">
+          <button type="button" class="btn-text f-r" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+      <!--First Row-->
+      <div class="row col-sm-12">
+        <div class="col-sm-3">
+          <div class="col-sm-11 ml-n5p">
+            <mat-form-field appearance="outline">
+              <mat-label>Brand</mat-label>
+              <input [(ngModel)]="M_Brand" autocomplete="off" maxlength="100" matInput placeholder="Enter Brand" name="Brand" type="text" (keypress)="restricttab($event)" required>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1 ml-n4p">
+            <button type="button" [disabled]="isNextupdate && isNextDelete" (click)="SearchClick()" class="btn-text grab mt-2p ml-n5p">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Manufacturer</mat-label>
+            <mat-select [(ngModel)]="M_Manufacturer" name="Manufacturer">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let Manufacturer of Manufacturers" [value]="Manufacturer.Value">{{Manufacturer.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 ml-4p">
+          <div class="col-sm-11 ml-n3p">
+            <mat-form-field appearance="outline">
+              <mat-label>Generic Name</mat-label>
+              <mat-select [(ngModel)]="M_MedicineName" autocomplete="off" name="MedicineName" (ngModelChange)="DrugFormChange()" required>
+                <mat-option>Select</mat-option>
+                <mat-option *ngFor="let MedicineName of MedicineNames" [value]="MedicineName.Value">{{MedicineName.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1 ml-n5p">
+            <button mat-icon-button [disabled]="GenericAccess" type="button">
+              <mat-icon class="grab" matTooltip="Add Generic" (click)="GenericAccess !=true ? ClickDrugGroup():AccessDenied()">add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-2 width-20p">
+          <mat-form-field appearance="outline">
+            <mat-label>Drug Form</mat-label>
+            <mat-select [(ngModel)]="M_Drug" name="Drug">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let GenericGroupForms of GenericGroupForm" [value]="GenericGroupForms">{{GenericGroupForms.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <!--Second Row-->
+      <div class="row col-sm-12">
+        <div class="col-sm-2 width-21p">
+          <mat-form-field appearance="outline">
+            <mat-label>Drug classification</mat-label>
+            <mat-select [(ngModel)]="M_DrugCategory" name="DrugCategory" required>
+              <mat-option value="ImplantDrug">Implant Drug</mat-option>
+              <mat-option value="NonImplantDrug">Non-Implant Drug</mat-option>
+              <mat-option value="Others">Others</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 ml-4p width-20p">
+          <div class="col-sm-11 ml-n5p">
+            <mat-form-field appearance="outline">
+              <mat-label>U.O.M</mat-label>
+              <mat-select [(ngModel)]="M_Uom" name="Uom" required>
+                <mat-option>Select</mat-option>
+                <mat-option *ngFor="let UOM of UOMS" [value]="UOM.Value">{{UOM.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1 ml-n4p">
+            <button mat-icon-button type="button">
+              <mat-icon class="grab" matTooltip="Add Unit Of Measurement" (click)="ClickUom()">add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-2 ml-1p width-20p">
+          <mat-form-field appearance="outline">
+            <mat-label>Unit Price</mat-label>
+            <input [(ngModel)]="M_Rate" maxlength="9" autocomplete="off" matInput placeholder="" name="Rate" (keypress)="Rate($event,M_Rate)" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 width-20p ml-4p"  *ngIf="CountryDetail">
+          <mat-form-field appearance="outline">
+            <mat-label>HSN No</mat-label>
+            <input [(ngModel)]="M_HSNNo" maxlength="50" autocomplete="off" matInput placeholder="Enter HSN No" name="HSNNo" type="text" (keypress)="restrict($event)">
+          </mat-form-field>
+        </div>
+      </div>
+      <!--Third Row-->
+      <div class="col-sm-12 ml-n1p">
+        <div class="col-sm-5">
+          <mat-form-field appearance="outline">
+            <mat-label>Drug Sub-Description</mat-label>
+            <textarea #message6 maxlength="50" matInput autocomplete="off" placeholder="Drug Sub-Description" [(ngModel)]="M_Drugsubdescription" name="D_Drugsubdescription"></textarea>
+            <mat-hint align="start">Max 50 Character</mat-hint>
+            <mat-hint align="end">{{message6.value.length}}/50</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2 width-20p ml-n4p">
+          <mat-form-field appearance="outline">
+            <mat-label>Tracking Type</mat-label>
+            <mat-select [(ngModel)]="M_TrackingType" name="TrackingType" required>
+              <mat-option value="SerialNumberBased">Serial Number Based</mat-option>
+              <mat-option value="BatchNumberBased">Batch Number Based </mat-option>
+              <mat-option value="None">None</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <!--Side Effects-->
+      <div class="col-sm-12 ml-n1p mt-2p" *ngIf="hidesideeffectsandother">
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Side Effects</mat-label>
+            <textarea #message maxlength="500" matInput placeholder="Side Effects" [(ngModel)]="M_BindSideEffects" name="M_BindSideEffects" disabled></textarea>
+            <mat-hint align="start">Max 500 Character</mat-hint>
+            <mat-hint align="end">{{message.value.length}}/500</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Precautions</mat-label>
+            <textarea #message2 maxlength="500" matInput placeholder="Precautions" [(ngModel)]="M_BindPrecautions" name="M_BindPrecautions" disabled></textarea>
+            <mat-hint align="start">Max 500 Character</mat-hint>
+            <mat-hint align="end">{{message2.value.length}}/500</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Overdose</mat-label>
+            <textarea #message3 maxlength="500" matInput placeholder="Overdose" [(ngModel)]="M_BindOverdose" name="M_BindOverdose" disabled></textarea>
+            <mat-hint align="start">Max 500 Character</mat-hint>
+            <mat-hint align="end">{{message3.value.length}}/500</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2" *ngIf="drugid.value!=0">
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="M_IsActive" name="IsActive">
+              <mat-option value="true">Active</mat-option>
+              <mat-option value="false">InActive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Tax Specification-->
+      <div class="col-sm-12 m-3">
+        <div class="row">
+          <div class="col-sm-3 ml-2p">
+            <h5 align="center" class="card-header bg-success text-white rounded-top">
+              Tax description
+            </h5>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="col-sm-12 border-blue border-radius">
+            <div class="m-4">
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline">
+                  <mat-label> Tax Percentage</mat-label>
+                  <mat-select [(ngModel)]="M_Taxper" (ngModelChange)="bindtaxvalues(M_Taxper)" name="Taxper">
+                    <mat-option *ngFor="let Tax of Taxes" [value]="Tax.Value">{{Tax.Text}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2" *ngIf="hideGST">
+                <mat-form-field appearance="outline">
+                  <mat-label>Tax %</mat-label>
+                  <input [(ngModel)]="M_GST" matInput placeholder="GST %" name="GST" (keypress)="Rate($event);restricttab($event)" type="number" disabled>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2" *ngIf="CountryDetail">
+                <mat-form-field appearance="outline">
+                  <mat-label>CGST %</mat-label>
+                  <input [(ngModel)]="M_CGST" matInput placeholder="GST %" name="CGST" type="number" (keypress)="restricttab($event)" disabled>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2" *ngIf="CountryDetail">
+                <mat-form-field appearance="outline">
+                  <mat-label>SGST %</mat-label>
+                  <input [(ngModel)]="M_SGST" matInput placeholder="GST %" name="SGST" type="number" (keypress)="restricttab($event)" disabled>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2" *ngIf="hideIGST">
+                <mat-form-field appearance="outline">
+                  <mat-label>IGST %</mat-label>
+                  <input [(ngModel)]="M_IGST" matInput placeholder="" name="IGST" type="number" (keypress)="restricttab($event)" disabled>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Tax 1 %</mat-label>
+                  <input [(ngModel)]="M_CESSPercentage" matInput placeholder="CESS %" maxlength="6" name="M_CESSPercentage" type="number" disabled>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Tax 2 %</mat-label>
+                  <input [(ngModel)]="M_ADDCESS" matInput placeholder="Addl CESS %" maxlength="6" name="M_ADDCESS"  type="number" disabled>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Fourth Row with Other Specification-->
+      <div class="col-sm-12 m-3">
+        <div class="row">
+          <div class="col-sm-3  ml-2p">
+            <h5 align="center" class="card-header bg-success text-white rounded-top">
+              Other Specifications
+            </h5>
+          </div>
+        </div>
+        <div class="col-sm-12  border-blue border-radius">
+          <div class="row m-3">
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Power</mat-label>
+                <input [(ngModel)]="M_Power" matInput placeholder="Power" maxlength="15" name="M_Power">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+              <mat-form-field appearance="outline">
+                <mat-label>A Constant</mat-label>
+                <input [(ngModel)]="M_Aconstant" matInput placeholder="A Constant" maxlength="50" name="M_Aconstant">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Model Number</mat-label>
+                <input [(ngModel)]="M_ModelNo" matInput placeholder="Model Number" maxlength="20" name="M_ModelNo">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Optic Dia</mat-label>
+                <input [(ngModel)]="M_OpticDia" matInput placeholder="Optic Dia" maxlength="20" name="M_OpticDia">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row m-3">
+            <div class="col-sm-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Length</mat-label>
+                <input [(ngModel)]="M_Length" matInput placeholder="Length" maxlength="50" name="M_length">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>Drug Composition</mat-label>
+                <textarea #message5 maxlength="500" matInput placeholder="Drug Composition" [(ngModel)]="M_DrugComposition" name="D_DrugComposition"></textarea>
+                <mat-hint align="start">Max 500 Character</mat-hint>
+                <mat-hint align="end">{{message5.value.length}}/500</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Fifth Row-->
+      <div class="col-sm-12 mt-1p">
+        <div class="col-sm-4">
+          <img id="Drugimg" class="width-40p" *ngFor='let url of urls' [src]="url" height="100" width="50" #DrugImage1> <br />
+          <span><mat-icon *ngFor='let url of urls; index as i' data-toggle="tooltip" title="Drop Image" (click)="removeOptical(i,$event)"> cancel </mat-icon></span>
+          <input type='file' #file id="Druguploadfile" (change)="onSelectFile($event,file.files)" [(ngModel)]="drugimage" accept=".jpg">
+          <small><b> .png, .jpeg Images Supported</b></small>
+        </div>
+        <div class="col-sm-4" align="center" [hidden]="!isHiddenimg">
+          <h6 class="width-40p">Image</h6>
+          <img [src]="imagePath" class="width-60p border-radius" style="height:60%;width:60%;border-radius:8px;margin-left:8px">
+        </div>
+      </div>
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="col-sm-4 f-r  sub-section btn-wrap">
+            <button type="button" class="btn btn-warning-default" (click)="cancel()"><strong>Cancel</strong></button>
+            <button *ngIf="drugid.value!=0" type="button" mat-raised-button class="danger btn-danger-default " (click)="deleteclk(DrugForm,drugid.value)"><strong>Delete</strong></button>
+            <button type="button" *ngIf="drugid.value!=0" class="success btn btn-primary" [disabled]="isNextupdate" (click)="Updateclk(DrugForm,drugid.value)" mat-raised-button >Submit</button>
+            <button type="button" *ngIf="drugid.value == 0" [disabled]="isNextButton" class="success btn btn-primary" (click)="onSubmit(DrugForm)"> Submit </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+
+
+
+<!----*Cancel Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':Drugcancelblock}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseOk()">&times;</button>
+        <h6 class="modal-title">Do You Want to Cancel ?</h6>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!----*Access Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Drug Master - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!----*Generic Medicine Master Popup*---->
+<div class="modal" id="myModal" role="dialog" [ngStyle]="{'display':GenericMedicinepopup}">
+  <div class="modal-dialog  modal-lg width-90p pt15 ml-n2p padding-lef15p" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+          <h6 class="modal-title">Generic Medicine Master</h6>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="close f-r" data-dismiss="modal" (click)="GenericPopupclose()">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form #GenericMedcineForm="ngForm" name="GenericMedcineForm" (keydown.enter)="$event.preventDefault()" novalidate>
+          <div class="row">
+            <input #id name="ID" [(ngModel)]="M_ID" type="hidden">
+            <div class="col-sm-3">
+              <div class="col-sm-11 ml-n5p">
+                <mat-form-field appearance="outline">
+                  <mat-label>Generic Name</mat-label>
+                  <input name="DrugGroup" [(ngModel)]="M_DrugGroup" autocomplete="off" matInput placeholder="Generic Name" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-1 ml-n4p">
+                <button type="button" (click)="SeachDrugGroup()" class="btn-text grab mt-2p ml-n5p">
+                  <i class="fas fa-info-circle"> </i> Help
+                </button>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Drug Form</mat-label>
+                <mat-select [(ngModel)]="M_DrugForm" name="DrugGroupForm" required>
+                  <mat-option>Select</mat-option>
+                  <mat-option *ngFor="let GenericGroupForms of GenericGroupForm" [value]="GenericGroupForms">{{GenericGroupForms.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Retest Critical Interval(In Days)</mat-label>
+                <input name="M_RetestCriticalInterval" [(ngModel)]="M_RetestCriticalInterval" (keypress)="RestrictNegativeValues($event)" autocomplete="off" matInput placeholder="Retest Critical Interval(In Days)" maxlength="2" required>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Retest Interval(In Days)</mat-label>
+                <input name="M_RetestInterval" [(ngModel)]="M_RetestInterval" (keypress)="RestrictNegativeValues($event)" autocomplete="off" matInput placeholder="Retest Interval(In Days)" maxlength="2" (keyup)="CheckRetestInterval(M_RetestCriticalInterval,M_RetestInterval)" required>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>IsStepDown</mat-label>
+                <mat-select [(ngModel)]="M_IsStepDown" placeholder="IsStepDown" name="M_IsStepDown" required>
+                  <mat-option value="true">Yes</mat-option>
+                  <mat-option value="false">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row width-100p ml">
+            <table class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+              <thead>
+                <tr>
+                  <th>Side Effects</th>
+                  <th>Precaution</th>
+                  <th>Overdose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div>
+                      <mat-form-field appearance="outline">
+                        <textarea #message1 maxlength="500" matInput placeholder="Side Effects" autocomplete="off" [(ngModel)]="M_SideEffects" name="M_SideEffects"></textarea>
+                        <mat-hint align="start">Max 500 Character</mat-hint>
+                        <mat-hint align="end">{{message1.value.length}}/500</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </td>
+                  <td>
+                    <mat-form-field appearance="outline">
+                      <textarea #message2 maxlength="500" matInput placeholder="Precautions" autocomplete="off" [(ngModel)]="M_Precautions" name="M_Precautions"></textarea>
+                      <mat-hint align="start">Max 500 Character</mat-hint>
+                      <mat-hint align="end">{{message2.value.length}}/500</mat-hint>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <mat-form-field appearance="outline">
+                      <textarea #message3 maxlength="500" matInput placeholder="Overdose" autocomplete="off" [(ngModel)]="M_Overdose" name="M_Overdose"></textarea>
+                      <mat-hint align="start">Max 500 Character</mat-hint>
+                      <mat-hint align="end">{{message3.value.length}}/500</mat-hint>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row pb25 m-3">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-3">
+              <div class="content-right sub-section btn-wrap">
+                <button type="button" class="btn btn-warning-default" (click)="GenericCancel()"><strong>Cancel</strong></button>
+                <button *ngIf="hideupdate" type="button" class="danger btn-danger-default " (click)="Delete(id.value)"><strong>Delete</strong></button>
+                <button *ngIf="hideupdate" class="success btn btn-primary" (click)="UpdateDrugGroup(GenericMedcineForm,id.value)" >Submit</button>
+                <button *ngIf="hideSubmit" class="success btn btn-primary" (click)="AddDrugGroup(GenericMedcineForm)"> Submit </button>
+              </div>
+            </div>
+            <div class="col-sm-4"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

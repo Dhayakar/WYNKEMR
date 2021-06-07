@@ -1,0 +1,302 @@
+
+
+
+<form #AllegyMasterForm="ngForm">
+
+  <div class="col-sm-12">
+    <div class="row">
+
+      <div class="col-sm-12 tono">
+
+        <div class="row tonotop">
+          <h6>Allergy Master</h6>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+
+          </div>
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-2">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Type</mat-label>
+              <mat-select [(ngModel)]="M_Type" name="Type" (ngModelChange)="Type()">
+                <mat-option *ngFor="let Type of Types" [value]="Type.Value">{{Type.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-2">
+            <button (click)="AddType()" data-toggle="tooltip" title="Search Type" class="btn btn-primary-default btn-Excel buttonsfloat">Add Type</button>
+          </div>
+
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <mat-select [(ngModel)]="M_Description" name="Description" [disabled]="Desc">
+                <mat-option *ngFor="let Description of Descriptions" [value]="Description.Value">{{Description.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-2">
+            <button (click)="AddDescription()" [disabled]="Desc" data-toggle="tooltip" title="Search Description" class="btn btn-primary-default btn-Excel buttonsfloat">Add Description</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</form>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Allergy Master - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modelType}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesstype()">&times;</button>
+        <h5 class="modal-title">
+          Type
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Type</mat-label>
+              <input [(ngModel)]="masterType" name="masterType" matInput placeholder="Type">
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button (click)="Clicktype()" data-toggle="tooltip" title="Type" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeist">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tabletype">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table matSort [dataSource]="dataSourcesqt" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttypet(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>Type</th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqt"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqt"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button class="btn btn-warning-default ml-2p" (click)="oncanceltype()">Cancel</button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatet" id="update" (click)="onupdatetype()">Submit</button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitt" id="submitCategory" (click)="onSubmittype()">Submit</button>
+            <button mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletet" (click)="onDeletetype()">Delete</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modeldescription}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessdescription()">&times;</button>
+        <h5 class="modal-title">
+          Description
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <input [(ngModel)]="DescriptionType" name="DescriptionType" matInput placeholder="Description">
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button (click)="ClickDescription()" data-toggle="tooltip" title="Description" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisd">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tableDescription">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table matSort [dataSource]="dataSourcesqd" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttyped(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>Type</th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqd"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqd"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-4  sub-section btn-wrap f-r">
+            <button class="btn btn-warning-default ml-2p" (click)="oncancelDescription()">Cancel</button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdated" id="update" (click)="onupdateDescription()">Submit</button>
+            <button type="submit" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitd" id="submit" (click)="onSubmitDescription()">Submit</button>
+            <button mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeleted" (click)="onDeleteDescription()">Delete</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

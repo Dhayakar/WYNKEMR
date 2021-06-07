@@ -1,0 +1,546 @@
+<h5 class="col-sm-5 card-header bg-success text-white">Investigation IP Billing</h5>
+<div class="col-sm-12 borderline">
+  <!--------------------------------------------------------------------------------------------------->
+
+
+  <form #InvestigationIPBilling="ngForm">
+
+
+
+
+
+    <div class="col-sm-12 mph-0 mt40">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{M_UIN}} / {{M_Name}} {{M_MiddleName}} {{M_LastName}} / {{M_Age}} / {{M_Gender}} </strong>
+            </span>
+            <button [disabled]="DisableSearch" (click)="Clickschinv()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+          <!--<div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="getINVPrescdetails()"><i class="fas fa-eye"></i> Unbilled Prescription</button>
+
+          </div>-->
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="col-sm-12 mt5 mb5">
+      <div class="row">
+
+        <div class="col-sm-4">
+          <div class="row" [hidden]="!isHiddenpb">
+            <div class="col-sm-4">
+              <div class="row">
+                <mat-label>INV NO</mat-label>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <mat-label>:</mat-label>
+            </div>
+            <div class="col-sm-6">
+              <mat-label>{{INVPRESNO}}</mat-label>
+            </div>
+          </div>
+
+          <div class="row" [hidden]="!isHiddenpb">
+            <div class="col-sm-4">
+              <div class="row">
+                <mat-label>Prescribed by</mat-label>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <mat-label>:</mat-label>
+            </div>
+            <div class="col-sm-6">
+              <mat-label>{{Prescribedname}}</mat-label>
+            </div>
+          </div>
+
+          <div class="row" [hidden]="!isHiddenpb">
+            <div class="col-sm-4">
+              <div class="row">
+                <mat-label>Prescribed Date</mat-label>
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <mat-label>:</mat-label>
+            </div>
+            <div class="col-sm-6">
+              <mat-label>{{Prescribeddt | date: 'dd-MMM-y HH:mm'}}</mat-label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="col-sm-12 mb10" [hidden]="!isHiddenin">
+      <div class="card mb-3">
+        <h5 class="card-header bg-success text-white">
+          Investigation Details
+        </h5>
+        <div class="col-sm-12 ">
+          <table mat-table matSort [dataSource]="dataSource1" class="custom-table withoutbackgroung search-table table-bordered">
+
+            <ng-container matColumnDef="SerialNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">S.No</th>
+              <td mat-cell *matCellDef="let j = index"> {{(j+1)}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Serialsymbol">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> SNo </th>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="Investigation">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Investigation</th>
+              <td mat-cell *matCellDef="let element;let id = index;" contenteditable="false"
+                  (keypress)="RestrictValues($event)" class="text-left" (keyup)="changeText(id,'UOM',$event)">
+                {{element.Investigation}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef>Total </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Investigationsymbol">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Investigation </th>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="Amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Investigation Charges</th>
+              <td style="width:8%" mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="true"
+                  (keypress)="RestrictNegativeValues1($event)"
+                  (keyup)="changeValues(id,'Amount',$event);changeValueDiscountAmount(id,element,'DiscountAmount')
+                          ;changeValueGrossAmount(id,element,'GrossAmount');changeValueTotal(id,element,'TotalCost')
+                          ;changeGStAmount(id,element,'GSTAmount');changeCESSAmount(id,element,'CESSAmount')
+                          ;changeAdditionalCESSAmount(id,element,'AdditionalCESSAmount')">
+                {{element.Amount|number:'1.2-2'}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef class="text-end"><b>{{getTotalAmount() | currency:Country2}}</b> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Amountsymbol">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                Investigation Charges
+              </th>
+            </ng-container>
+
+            <ng-container matColumnDef="Discount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>%</th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="true"
+                  (keypress)="RestrictNegativeValues1($event)"
+                  (keyup)="Restrict($event);changeValue(id,'Discount',$event);changeValueDiscountAmount(id,element,'DiscountAmount')
+                          ;changeValueGrossAmount(id,element,'GrossAmount');changeValueTotal(id,element,'TotalCost');changeGStAmount(id,element,'GSTAmount')
+                          ;changeCESSAmount(id,element,'CESSAmount')
+                          ;changeAdditionalCESSAmount(id,element,'AdditionalCESSAmount')">
+                {{element.Discount}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="DiscountAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Amount<br />
+              </th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false"
+                  (keyup)="changeValue(id,'DiscountAmount',$event);changeDis(id,element);">
+                {{element.DiscountAmount| number : '1.2-2'}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef class="text-end"><b>{{getTotalDiscountAmount()| currency:Country2}}</b> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="GrossAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Gross Amount</th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">{{element.GrossAmount| number : '1.2-2'}}</td>
+              <td mat-footer-cell *matFooterCellDef class="text-end"><b>{{getTotalGrossAmount()| currency:Country2}}</b> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="GrossAmountsymbol">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                Gross Amount<br />
+              </th>
+            </ng-container>
+
+            <ng-container matColumnDef="TaxDescription">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="text-left">
+                <ng-container class="height-4px text-center">
+                  {{element.TaxDescription}}
+                  <button class="btn-text" (click)="ClickschTax(element)"><i class="fas fa-info-circle"></i></button>
+                </ng-container> <br />
+                <ng-container *ngIf="element.CESSDescription != null" class="height-4px text-center fontsize-12p"> {{element.CESSDescription}}</ng-container> <br />
+                <ng-container *ngIf="element.AdditionalCESSDescription != null" class="height-4px text-center fontsize-12p"> {{element.AdditionalCESSDescription}}</ng-container>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="GST">
+              <th mat-header-cell *matHeaderCellDef>%</th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="text-end">
+                <ng-container> {{element.GST| number : '1.2-2'}} </ng-container> <br />
+                <ng-container *ngIf="element.CESS != null"> {{element.CESS| number : '1.2-2'}} </ng-container> <br />
+                <ng-container *ngIf="element.AdditionalCESS != null"> {{element.AdditionalCESS| number : '1.2-2'}} </ng-container>
+              </td>
+              <td mat-footer-cell *matFooterCellDef class="text-end"> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="GSTValue1">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let element;let id = index;" class="text-end">
+                <ng-container>{{element.GSTAmount | number : '1.2-2'}}</ng-container> <br />
+                <ng-container *ngIf="element.CESSAmount != null"> {{element.CESSAmount| number : '1.2-2'}}</ng-container> <br />
+                <ng-container *ngIf="element.AdditionalCESSAmount != null"> {{element.AdditionalCESSAmount| number : '1.2-2'}}</ng-container>
+              </td>
+              <td mat-footer-cell *matFooterCellDef class="text-end"><b>{{GetTaxAmount()|currency:Country2}}</b></td>
+            </ng-container>
+
+            <ng-container matColumnDef="TotalCost">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Net Amount</th>
+              <td mat-cell *matCellDef="let element ;let id = index;" class="text-end" contenteditable="false">{{element.TotalCost| number : '1.2-2'}}</td>
+              <td mat-footer-cell *matFooterCellDef class="text-end" contenteditable="false">
+                <b> {{getTotalCost()| currency:Country2}}</b>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="TotalCostSymbol">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                Net Amount
+              </th>
+            </ng-container>
+
+            <ng-container matColumnDef="Delete">
+              <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Action </th>
+              <td mat-cell *matCellDef="let element; let i = index;"> <mat-icon data-toggle="tooltip" title="Drop" style="color:red" class="grab" (click)="removeDrug(i)">delete</mat-icon></td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Actionymbol">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                Action
+              </th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"> Discount </th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-third-group1">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">
+                Tax
+              </th>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['Serialsymbol','Investigationsymbol',
+                        'Amountsymbol','header-row-group','GrossAmountsymbol','header-row-third-group1','TotalCostSymbol','Actionymbol']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></tr>
+            <tr mat-row *matRowDef="let i=index; let element; let row;  let even = even;  columns: displayedColumns1;" [ngClass]="{gray: even}"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns1; sticky: true"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button [disabled]="DisableOnSubmit" class="success btn btn-primary" (click)="onSubmit(InvestigationIPBilling)">Submit</button>
+        <button class="btn btn-warning-default" (click)="onCancel()"><strong>Cancel</strong></button>
+        <!--<button mat-button [disabled]="DisableReprint" (click)="Clicksch1()" class="btn btn-primary">Re print</button>-->
+      </div>
+    </div>
+
+
+  </form>
+
+</div>
+
+
+
+
+
+
+<!--////////////////pop-up//////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':InvIPBillPopUp}">
+  <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px">
+    <div class="modal-content" style="height:450px">
+
+      <div class="modal-header">
+        <button class="close" (click)="InvIPBillPopUpClose()">&times;</button>
+        <h5 class="modal-title">
+          <strong>Investigation IP Billing Details</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+
+          <div class="row mt-10">
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Search</mat-label>
+                <input id="myInput" type="text" matInput placeholder="Search">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <table class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>UIN</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                </tr>
+              </thead>
+              <tbody id="myTable">
+                <tr *ngFor="let element of GetRegDetails; index as i">
+                  <td><mat-checkbox [(ngModel)]="element.checked" (click)="selecttype(element)"></mat-checkbox></td>
+                  <td>{{element.UIN}}</td>
+                  <td>{{element.Name}} {{element.MiddleName}} {{element.LastName}}</td>
+                  <td>{{element.Age}}</td>
+                  <td>{{element.Gender}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--////////////////pop-up Unbilled Prescription//////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':modalsInvUnbilled}">
+  <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px">
+
+    <div class="modal-content" style="height:450px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessfi()">&times;</button>
+        <h5 class="modal-title">
+          <strong> Investigation Prescription Details </strong>
+        </h5>
+      </div>
+
+
+      <div class="modal-body">
+
+
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-7 mt5">
+              <span class="uinborder">
+                <strong>{{M_UIN}} / {{M_Name}} {{M_MiddleName}} {{M_LastName}} / {{M_Age}} / {{M_Gender}} </strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-12 mt10">
+
+            <table class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Prescribed date</th>
+                  <th>Prescribed by</th>
+                  <th>Remarks</th>
+                  <th>View Prescription</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let hi of bills; index as i">
+                  <td><mat-radio-button (click)="selecttyp(hi)"></mat-radio-button></td>
+                  <td>{{hi.PrescribedDate | date: 'dd-MMM-y'}}</td>
+                  <td>{{hi.PrescribedBy}}</td>
+                  <td>{{hi.Remarks}}</td>
+                  <td>
+                    <button mat-icon-button (click)="selectviewinvP(hi)">
+                      <mat-icon data-toggle="tooltip" title="View Prescription Details" style="color:black;cursor: pointer;">visibility</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!--////////////////pop-upTAX//////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':InvIPBillPopUpTax}">
+  <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px">
+    <div class="modal-content" style="height:350px;width: 450px;margin-left:295px;margin-top: 100px;">
+
+      <div class="modal-header">
+        <button class="close" (click)="InvIPBillPopUpCloseTax()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Tax Details</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12 Management_dashboard_Tableheightsinsidepopup">
+          <div class="row">
+            <table class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Tax Description</th>
+                  <th>Tax Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let element of GetTaxDetails; index as i">
+                  <td><mat-checkbox [(ngModel)]="element.checked" (click)="selectTax(element)"></mat-checkbox></td>
+                  <td>{{element.TaxDescription}}</td>
+                  <td>{{element.GSTPercentage}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--////////////////////////////////////////view asses//////////////////////////////////////////-->
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Investigation IP Billing  - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata ; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!--////////////////pop-up inv view Prescription//////////-->
+<div class="modal" role="dialog" [ngStyle]="{'display':modalsInvPView}">
+  <div class="modal-dialog modal-lg" style="width:78%;padding-top:10px">
+
+    <div class="modal-content" style="height:450px">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessinvview()">&times;</button>
+        <h5 class="modal-title">
+          <strong> Investigation Prescription </strong>
+        </h5>
+      </div>
+
+
+      <div class="modal-body">
+
+
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-7 mt10">
+              <span class="uinborder">
+                <strong>{{M_UIN}} / {{M_Name}} {{M_MiddleName}} {{M_LastName}} / {{M_Age}} / {{M_Gender}} </strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-12 mt10">
+
+            <table class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>SNo</th>
+                  <th>Investigation</th>
+                  <th>Investigation Charges</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let hi of InvpView; index as i">
+                  <td>{{i+1}}</td>
+                  <td>{{hi.Investigation}}</td>
+                  <td>{{hi.Amount}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

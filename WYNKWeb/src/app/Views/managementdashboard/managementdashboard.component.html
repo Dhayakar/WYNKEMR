@@ -1,0 +1,2559 @@
+<div class="col-sm-12">
+  <div class="row">
+    <h6>Management Dashboard</h6>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Category wise</mat-label>
+        <mat-select [(ngModel)]="M_Newcheck" name="M_Newchecks">
+          <mat-option><mat-checkbox (change)="setpopulation($event.checked)" [checked]="Patientpopulation">Patient Population</mat-checkbox></mat-option>
+          <mat-option><mat-checkbox (change)="setrevenue($event.checked)" [checked]="revenue">Revenue</mat-checkbox></mat-option>
+          <mat-option><mat-checkbox (change)="setsurgery($event.checked)" [checked]="sperformed">Surgery Performed</mat-checkbox></mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="row" id="sortable">
+      <div class="col-sm-4 ui-state-default" *ngIf="HidePatietpoulationbasedonselection">
+        <h6><strong>Patient Population</strong></h6>
+        <div class="row">
+          <div class="col-sm-4">
+            <i class="fa fa-refresh fa-spin" matTooltip="Click to Refresh"></i>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>For the Day</mat-label>
+              <input [(ngModel)]="MFromDate" name="FromDate" matInput placeholder="For the Day" disabled class="Management_dashboard_highlightboxes">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Month till Date</mat-label>
+              <input [(ngModel)]="MTODate" name="TODate" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row Management_dashboard_Tableheights" style="height: 253px;">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes tablcolumnwith"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalpatientFORTHEDAYdata}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totalpatientmONTHdata}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>New</b></td>
+                <td>{{NewFortheDay}}</td>
+                <td>{{NewMonthtilldate}}</td>
+              </tr>
+              <tr>
+                <td><b>Review</b></td>
+                <td>{{ReviewfortheDay}}</td>
+                <td>{{ReviewMonthtilldate}}</td>
+              </tr>
+              <tr>
+                <td><b>Surgery-Review</b></td>
+                <td>{{SURReviewforday}}</td>
+                <td>{{SURReviewMonthtilldate}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+      </div>
+      <div class="col-sm-4 ui-state-default" *ngIf="Hiderevenuebasedonselection">
+        <h6><strong>Revenue</strong></h6>
+        <div class="row">
+          <div class="col-sm-4">
+            <i class="fa fa-refresh fa-spin" matTooltip="Click to Refresh"></i>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>For the Day</mat-label>
+              <input [(ngModel)]="RFromDate" name="RFromDate" matInput placeholder="For the Day" disabled class="Management_dashboard_highlightboxes">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Month till Date</mat-label>
+              <input [(ngModel)]="MRATODate" name="MRATODate" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row Management_dashboard_Tableheights" style="height: 253px;">
+
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes tablcolumnwith"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenueforday | currency:Country2}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenuemonth | currency:Country2}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let revnue of GetrevueValues">
+                <td><b>{{revnue.Revenuedesc}}</b></td>
+                <td style="width:39%">{{revnue.NewRevenueAmount | currency:Country2}}</td>
+                <td>{{revnue.OLDRevenueAmount | currency:Country2}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="col-sm-4 ui-state-default" *ngIf="HideSurgeryperformbasedonselection">
+        <h6><strong>Surgery Performed</strong></h6>
+        <div class="row">
+          <div class="col-sm-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Company-Wise</mat-label>
+              <mat-select [(ngModel)]="M_COmpany" name="M_companydetails" (ngModelChange)="Changecompanywise()">
+                <mat-option value="Main">Main  Branch</mat-option>
+                <mat-option value="across">Across Branches</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <i class="fa fa-refresh fa-spin" matTooltip="Click to Refresh"></i>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>For the Day</mat-label>
+              <input [(ngModel)]="MRSFromDate" name="MRSFromDate" matInput placeholder="For the Day" disabled class="Management_dashboard_highlightboxes">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Month till Date</mat-label>
+              <input [(ngModel)]="MRStoDate" name="MRStoDate" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="Management_dashboard_Tableheights" style="height:201px;">
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th><b> Total</b></th>
+                <th>
+                  Total Count
+                  <br />({{totalpatientcountforday}})
+                </th>
+                <th>Total Amount<br />({{totalSurgeforday | currency:Country2}})</th>
+                <th>Total Count<br />({{totalpatientcountmonth}})</th>
+                <th>Total Amount<br />({{totalSurgmonth | currency:Country2}})</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let Sdata of Surgdata">
+                <td><b>{{Sdata.SpecialityDescription}}</b></td>
+                <td data-toggle="tooltip" title="View" class="grab">{{Sdata.patientcountforday}}</td>
+                <td data-toggle="tooltip" title="View" style="cursor:pointer" (click)="GetCountSurgDaydetails(Sdata.SpecialityDescription,Sdata.CountForday)"><a>{{Sdata.CountForday | currency:Country2}}</a></td>
+                <td data-toggle="tooltip" title="View" class="grab">{{Sdata.patientcountformonth}}</td>
+                <td data-toggle="tooltip" title="View" style="cursor:pointer" (click)="GetCountSurgMonthdetails(Sdata.SpecialityDescription,Sdata.CountForMonth)"><a>{{Sdata.CountForMonth | currency:Country2}}</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="row ui-state-default">
+    <h6><strong>Key Performance Indicator [KPI]</strong></h6>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline">
+          <mat-label>KPI</mat-label>
+          <mat-select [(ngModel)]="M_MMDD" name="MMDD" (ngModelChange)="ChangeKPI()">
+            <mat-option value="None">None</mat-option>
+            <mat-option value="Population">Patient Population</mat-option>
+            <mat-option value="Revenue">Revenue</mat-option>
+            <mat-option value="Surgery">Surgery-Performed</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2" *ngIf="Periodhide">
+        <mat-form-field appearance="outline">
+          <mat-label>Period</mat-label>
+          <mat-select [(ngModel)]="Period" name="MMPeriodDD" (ngModelChange)="Changeperiod()">
+            <mat-option value="None">None</mat-option>
+            <mat-option value="Specific">Specific Period</mat-option>
+            <mat-option value="Month">Month Comparison</mat-option>
+            <mat-option value="Quarterly">Quarterly Comparison</mat-option>
+            <mat-option value="Half">Half-Yearly Comparison</mat-option>
+            <mat-option value="Annual">Annual Comparison</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="RevenuePeriodhide" class="col-sm-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Period</mat-label>
+          <mat-select [(ngModel)]="RevenuePeriod" name="RMMPeriodDD" (ngModelChange)="ChangeRevenueperiod()">
+            <mat-option value="RNone">None</mat-option>
+            <mat-option value="RSpecific">Specific Period</mat-option>
+            <mat-option value="RMonth">Month Comparison</mat-option>
+            <mat-option value="RQuarterly">Quarterly Comparison</mat-option>
+            <mat-option value="RHalf">Half-Yearly Comparison</mat-option>
+            <mat-option value="RAnnual">Annual Comparison</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="Surgeryeriodhide" class="col-sm-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Period</mat-label>
+          <mat-select [(ngModel)]="surgeryPeriod" name="surgRMMPeriodDD" (ngModelChange)="Changesurgeryperiod()">
+            <mat-option value="SurgeryRNone">None</mat-option>
+            <mat-option value="SurgeryRSpecific">Specific Period</mat-option>
+            <mat-option value="SurgeryRMonth">Month Comparison</mat-option>
+            <mat-option value="SurgeryRQuarterly">Quarterly Comparison</mat-option>
+            <mat-option value="SurgeryRHalf">Half-Yearly Comparison</mat-option>
+            <mat-option value="SurgeryRAnnual">Annual Comparison</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-2 margintopdatepicker">
+
+
+        <div class='input-group date' *ngIf="Hidesurgeryfromandtodate">
+          <input [(ngModel)]="M_Surgery_DatePicker1" name="SurgDatePicker1" placeholder="Datepicker"
+                 class="form-control"
+                 #sdp="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',isAnimated: true }">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="sdp.toggle()" [attr.aria-expanded]="sdp.isOpen"></span>
+          </span>
+        </div>
+
+
+
+        <div class='input-group date' *ngIf="Hidefromandtodate">
+          <input [(ngModel)]="M_DatePicker1" name="DatePicker1" placeholder="Datepicker"
+                 class="form-control"
+                 #dp="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',isAnimated: true }">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen"></span>
+          </span>
+        </div>
+        <div class='input-group date' *ngIf="HideMonthcomparison">
+          <input [(ngModel)]="Monthcamparisonfromdate" name="Monthcamparisonfromdates" placeholder="Datepicker"
+                 class="form-control"
+                 #dpM="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                 (onShown)="onOpenCalendar($event)">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dpM.toggle()" [attr.aria-expanded]="dpM.isOpen"></span>
+          </span>
+        </div>
+
+        <div class='input-group date' *ngIf="HidesurgeryMonthcomparison">
+          <input [(ngModel)]="SurgeryMonthcamparisonfromdate" name="surgMonthcamparisonfromdates" placeholder="Datepicker"
+                 class="form-control"
+                 #sdpM="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                 (onShown)="onOpenCalendar($event)">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="sdpM.toggle()" [attr.aria-expanded]="sdpM.isOpen"></span>
+          </span>
+        </div>
+
+        <div class='input-group date' *ngIf="HideRevenuefromandtodate">
+          <input [(ngModel)]="RevueM_DatePicker1" name="ReveDatePicker1" placeholder="Datepicker"
+                 class="form-control"
+                 #dpRF="bsDatepicker"
+                 [maxDate]="maxDateRf"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',isAnimated: true }">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dpRF.toggle()" [attr.aria-expanded]="dpRF.isOpen"></span>
+          </span>
+        </div>
+        <div class='input-group date' *ngIf="RevenueHideMonthcomparison">
+          <input [(ngModel)]="RevenueMonthcamparisonfromdate" name="RevenueMonthcamparisonfromdates" placeholder="Datepicker"
+                 class="form-control"
+                 #dpRM="bsDatepicker"
+                 [maxDate]="maxDateRMf"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                 (onShown)="onOpenCalendar($event)">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dpRM.toggle()" [attr.aria-expanded]="dpRM.isOpen"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-sm-1 margintopdatepicker">
+        <mat-label *ngIf="Hidefromandtodate" style="color:green">to</mat-label>
+        <mat-label *ngIf="Hidesurgeryfromandtodate" style="color:green">to</mat-label>
+        <mat-label *ngIf="HideMonthcomparison" style="color:green">vs</mat-label>
+        <mat-label *ngIf="HidesurgeryMonthcomparison" style="color:green">vs</mat-label>
+        <mat-label *ngIf="HideRevenuefromandtodate" style="color:green;margin-left:2%">to</mat-label>
+        <mat-label *ngIf="RevenueHideMonthcomparison" style="color:green;margin-left:2%">vs</mat-label>
+      </div>
+
+      <div class="col-sm-2 margintopdatepicker">
+        <div class='input-group date' *ngIf="Hidefromandtodate">
+          <input [(ngModel)]="M_DatePickerr" name="DatePickerr1" placeholder="Datepicker"
+                 class="form-control"
+                 #dp="bsDatepicker"
+                 [maxDate]="maxDatett"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',isAnimated: true }">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen"></span>
+          </span>
+        </div>
+
+
+
+        <div class='input-group date' *ngIf="Hidesurgeryfromandtodate">
+          <input [(ngModel)]="M_Surgery_DatePickerto" name="surgeryDatePickerr1" placeholder="Datepicker"
+                 class="form-control"
+                 #sdp="bsDatepicker"
+                 [maxDate]="maxDatett"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',isAnimated: true }">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="sdp.toggle()" [attr.aria-expanded]="sdp.isOpen"></span>
+          </span>
+        </div>
+
+        <div class='input-group date' *ngIf="HideMonthcomparison">
+          <input [(ngModel)]="MonthcamparisonfromdateTO" name="Monthcamparisonfromdatest" placeholder="Datepicker"
+                 class="form-control"
+                 #dpM="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                 (onShown)="onOpenCalendarTO($event)">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar" (click)="dpM.toggle()" [attr.aria-expanded]="dpM.isOpen"></span>
+          </span>
+        </div>
+
+
+        <div class='input-group date' *ngIf="HidesurgeryMonthcomparison">
+          <input [(ngModel)]="SurgeryMonthcamparisontodate" name="SurgeryMonthcamparisontodatess" placeholder="Datepicker"
+                 class="form-control"
+                 #sdpM="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                 (onShown)="onOpenCalendarTO($event)">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar" (click)="sdpM.toggle()" [attr.aria-expanded]="sdpM.isOpen"></span>
+          </span>
+        </div>
+
+        <div class='input-group date' *ngIf="HideRevenuefromandtodate">
+          <input [(ngModel)]="RevenueM_DatePickerr" name="ReveDatePickerr1" placeholder="Datepicker"
+                 class="form-control"
+                 #dpRT="bsDatepicker"
+                 [maxDate]="maxDateRMt"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',isAnimated: true }">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dpRT.toggle()" [attr.aria-expanded]="dpRT.isOpen"></span>
+          </span>
+        </div>
+        <div class='input-group date' *ngIf="RevenueHideMonthcomparison">
+          <input [(ngModel)]="RevenueMonthcamparisonfromdateTO" name="RevenueMonthcamparisonfromdateTOs" placeholder="Datepicker"
+                 class="form-control"
+                 #dpRt="bsDatepicker"
+                 [maxDate]="maxDatef"
+                 bsDatepicker
+                 [bsConfig]="{ dateInputFormat: 'MMM-YYYY',isAnimated: true }"
+                 (onShown)="onOpenCalendarTO($event)">
+          <span class="input-group-addon">
+            <span class="fa fa-calendar grab" (click)="dpRt.toggle()" [attr.aria-expanded]="dpRt.isOpen"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-sm-1">
+        <button *ngIf="RevenueHideMonthcomparison" class="btn btn-success" (click)="GetRevenueMonthcomparison(RevenueMonthcamparisonfromdate,RevenueMonthcamparisonfromdateTO)">Submit</button>
+        <button *ngIf="HideRevenuefromandtodate" class="btn btn-success" (click)="GetRevenuespecificperiodetails(RevueM_DatePicker1,RevenueM_DatePickerr)">Submit</button>
+        <button *ngIf="Hidefromandtodate" class="btn btn-success" (click)="Getspecificperiodetails(M_DatePicker1,M_DatePickerr)">Submit</button>
+        <button *ngIf="Hidesurgeryfromandtodate" class="btn btn-success" (click)="Getspecificsurgeryperiodetails(M_Surgery_DatePicker1,M_Surgery_DatePickerto)">Submit</button>
+        <button *ngIf="HideMonthcomparison" class="btn btn-success" (click)="GetMonthcomparison(Monthcamparisonfromdate,MonthcamparisonfromdateTO)">Submit</button>
+        <button *ngIf="HidesurgeryMonthcomparison" class="btn btn-success" (click)="GetSurgeryMonthcomparison(SurgeryMonthcamparisonfromdate,SurgeryMonthcamparisontodate)">Submit</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline" *ngIf="Hidequarterlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="country" name="squarterlys" (ngModelChange)="Populatevaluebasedonquarterly()">
+            <mat-option *ngFor="let country of countries" [value]="country">{{country}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="Hidesurgeryquarterlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="RevenueFcountry" name="squarterlys" (ngModelChange)="revenuequarterlyfrom()">
+            <mat-option *ngFor="let country of countries" [value]="country">{{country}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="outline" *ngIf="Revenuequarterlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="RevenueFcountry" name="RevenueFcountryss" (ngModelChange)="revenuequarterlyfrom()">
+            <mat-option *ngFor="let RevenueFcountry of RevenueAFcountry" [value]="RevenueFcountry">{{RevenueFcountry}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="HidesurgeryHalfyearlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="HFcountry" name="HFcountryss" (ngModelChange)="revenuehalffrom()">
+            <mat-option *ngFor="let HFcountry of HFcountries" [value]="HFcountry">{{ HFcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="HideRevenueHalfyearlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="HFcountry" name="HFcountryss" (ngModelChange)="revenuehalffrom()">
+            <mat-option *ngFor="let HFcountry of HFcountries" [value]="HFcountry">{{ HFcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="HideHalfyearlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="HFcountry" name="HFcountryss" (ngModelChange)="Populatevaluebasedonhalfrom()">
+            <mat-option *ngFor="let HFcountry of HFcountries" [value]="HFcountry">{{ HFcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" *ngIf="HideRevenueAnnualyearlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="AFcountry" name="AFcountrys" (ngModelChange)="revenuebasedonAnnualfrom()">
+            <mat-option *ngFor="let AFcountry of AFcountries" [value]="AFcountry">{{ AFcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="Hidesurgeryannaulcomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="AFcountry" name="AFcountrys" (ngModelChange)="revenuebasedonAnnualfrom()">
+            <mat-option *ngFor="let AFcountry of AFcountries" [value]="AFcountry">{{ AFcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="HideAnnualyearlycomparison">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="AFcountry" name="AFcountrys" (ngModelChange)="PopulatevaluebasedonAnnualfrom()">
+            <mat-option *ngFor="let AFcountry of AFcountries" [value]="AFcountry">{{ AFcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+
+
+      <div class="col-sm-2" *ngIf="HideRevenueAnnualyearlycomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Annual</mat-label>
+          <!--<mat-select [(ngModel)]="AFcitys" [value]="AFcityss">
+            <mat-option *ngFor="let AFcity of AFcities" [value]="AFcity"> {{ AFcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="AFcitys" name="afcitiess" matInput placeholder="Year" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-2" *ngIf="Hidesurgeryannaulcomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Annual</mat-label>
+          <input disabled [(ngModel)]="AFcitys" name="afcitiess" matInput placeholder="Year" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+
+      <div class="col-sm-2" *ngIf="HideAnnualyearlycomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Annual</mat-label>
+          <!--<mat-select [(ngModel)]="AFcitys" [value]="AFcityss">
+            <mat-option *ngFor="let AFcity of AFcities" [value]="AFcity"> {{ AFcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="AFcitys" name="afcitiess" matInput placeholder="Year" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-2" *ngIf="Revenuequarterlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Qtly</mat-label>
+          <!--<mat-select [(ngModel)]="RevenueFcity" [value]="RevenueFcity">
+            <mat-option *ngFor="let RevenueFcity of RevenueAFcity" [value]="RevenueFcity"> {{ RevenueFcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="RevenueFcity" name="RevenueFcityss" matInput placeholder="month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="Hidesurgeryquarterlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Qtly</mat-label>
+          <input disabled [(ngModel)]="RevenueFcity" name="RevenueFcityss" matInput placeholder="month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="Hidequarterlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Qtly</mat-label>
+          <input disabled [(ngModel)]="city" name="Quarterlypatientpopulation" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="HideHalfyearlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Half-yearly</mat-label>
+          <!--<mat-select [(ngModel)]="HFcitys" [value]="HFcity">
+            <mat-option *ngFor="let HFcity of HFcities" [value]="HFcity"> {{ HFcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="HFcitys" name="hfcities" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="HideRevenueHalfyearlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Hfly</mat-label>
+          <!--<mat-select [(ngModel)]="HFcitys" [value]="HFcity">
+            <mat-option *ngFor="let HFcity of HFcities" [value]="HFcity"> {{ HFcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="HFcitys" name="hfcities" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="HidesurgeryHalfyearlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Hfly</mat-label>
+          <!--<mat-select [(ngModel)]="HFcitys" [value]="HFcity">
+            <mat-option *ngFor="let HFcity of HFcities" [value]="HFcity"> {{ HFcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="HFcitys" name="hfcities" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+
+      <!---------------------------Annual Comparision-->
+
+      <div class="col-sm-1" *ngIf="HideRevenueAnnualyearlycomparison">
+
+        <input [(ngModel)]="AnnualfromYear" name="Years" placeholder="Year"
+               class="form-control"
+               #dprevenueannualfromYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarrevenueannualfromyear($event)">
+      </div>
+
+      <div class="col-sm-1" *ngIf="Hidesurgeryannaulcomparison">
+
+        <input [(ngModel)]="AnnualfromYear" name="Years" placeholder="Year"
+               class="form-control"
+               #dprevenueannualfromYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarrevenueannualfromyear($event)">
+      </div>
+
+      <div class="col-sm-1" *ngIf="HideAnnualyearlycomparison">
+        <input [(ngModel)]="AnnualfromYear" name="Years" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationpatientannualfromYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationannualfromyear($event)">
+      </div>
+      <div class="col-sm-1 margintopdatepicker" *ngIf="Hidequarterlycomparison">
+        <input [(ngModel)]="Year" name="Years" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationyear($event)">
+      </div>
+
+      <div class="col-sm-1 margintopdatepicker" *ngIf="Hidesurgeryquarterlycomparison">
+        <input [(ngModel)]="RevenuefromYear" name="Years" placeholder="Year"
+               class="form-control"
+               #sdppatientpopulationYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationyear($event)">
+      </div>
+
+      <div class="col-sm-1" *ngIf="Revenuequarterlycomparison">
+        <input [(ngModel)]="RevenuefromYear" name="RevenuefromYears" placeholder="Datepicker"
+               class="form-control"
+               #dpRYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarRevenueQuarterlyyear($event)">
+      </div>
+
+
+
+      <!--------------------------half Yearly comparison-->
+
+
+      <div class="col-sm-1" *ngIf="HideRevenueHalfyearlycomparison">
+        <input [(ngModel)]="RevenueHalfyear" name="RevenueHalfyears" placeholder="Year"
+               class="form-control"
+               #dpRveneuehalffromYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarRevenuehalffromyear($event)">
+      </div>
+
+      <div class="col-sm-1" *ngIf="HidesurgeryHalfyearlycomparison">
+        <input [(ngModel)]="RevenueHalfyear" name="RevenueHalfyears" placeholder="Year"
+               class="form-control"
+               #dpRveneuehalffromYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarRevenuehalffromyear($event)">
+      </div>
+
+
+      <div class="col-sm-1" *ngIf="HideHalfyearlycomparison">
+        <input [(ngModel)]="Halfyear" name="Halfyears" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationhalfyear="bsDatepicker"
+               [maxDate]="maxDateRMpatienthalffrom"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationhalfyear($event)">
+      </div>
+
+
+      <div class="col-sm-1 margintopdatepicker">
+        <mat-label *ngIf="Revenuequarterlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="HideRevenueAnnualyearlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="Hidesurgeryannaulcomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="Hidequarterlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="HideHalfyearlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="HideRevenueHalfyearlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="HidesurgeryHalfyearlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="HideAnnualyearlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+        <mat-label *ngIf="Hidesurgeryquarterlycomparison" style="color:green;margin-left:2%">vs</mat-label>
+      </div>
+
+      <div class="col-sm-2" *ngIf="HideAnnualyearlycomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="ATcountry" name="ATcountryss" (ngModelChange)="PopulatevaluebasedonAnnualto()">
+            <mat-option *ngFor="let ATcountry of ATcountriest" [value]="ATcountry">{{ATcountry}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
+      <div class="col-sm-2" *ngIf="Hidesurgeryquarterlycomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="RevenueTcountry" name="RevenueTcountryss" (ngModelChange)="revenuequarterlyto()">
+            <mat-option *ngFor="let RevenueTcountry of RevenueATcountry" [value]="RevenueTcountry"> {{ RevenueTcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="HideRevenueAnnualyearlycomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="ATcountry" name="ATcountryss" (ngModelChange)="revenuebasedonAnnualto()">
+            <mat-option *ngFor="let ATcountry of ATcountriest" [value]="ATcountry">{{ATcountry}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2" *ngIf="Hidesurgeryannaulcomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="ATcountry" name="ATcountryss" (ngModelChange)="revenuebasedonAnnualto()">
+            <mat-option *ngFor="let ATcountry of ATcountriest" [value]="ATcountry">{{ATcountry}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2" *ngIf="Hidequarterlycomparison">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="tcountry" name="squarterlys" (ngModelChange)="Populatevaluebasedonquarterlyto()">
+            <mat-option *ngFor="let tcountry of countriest" [value]="tcountry">{{tcountry}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-2" *ngIf="HideHalfyearlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="HTcountry" name="HTOsquarterlys" (ngModelChange)="Populatevaluebasedonhalto()">
+            <mat-option *ngFor="let HTcountry of HTcountriest" [value]="HTcountry"> {{ HTcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-2" *ngIf="HideRevenueHalfyearlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="HTcountry" name="HTOsquarterlys" (ngModelChange)="revenuehalto()">
+            <mat-option *ngFor="let HTcountry of HTcountriest" [value]="HTcountry"> {{ HTcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-2" *ngIf="HidesurgeryHalfyearlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="HTcountry" name="HTOsquarterlys" (ngModelChange)="revenuehalto()">
+            <mat-option *ngFor="let HTcountry of HTcountriest" [value]="HTcountry"> {{ HTcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <div class="col-sm-2" *ngIf="Revenuequarterlycomparison;">
+        <mat-form-field appearance="outline">
+          <mat-label>Month</mat-label>
+          <mat-select [(ngModel)]="RevenueTcountry" name="RevenueTcountryss" (ngModelChange)="revenuequarterlyto()">
+            <mat-option *ngFor="let RevenueTcountry of RevenueATcountry" [value]="RevenueTcountry"> {{ RevenueTcountry }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
+
+      <div class="col-sm-2">
+        <mat-form-field appearance="outline" *ngIf="Hidequarterlycomparison">
+          <mat-label>Qtly</mat-label>
+          <input disabled [(ngModel)]="cityTO" name="Tosquarterlys" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="Revenuequarterlycomparison">
+          <mat-label>Revenue-Qtly</mat-label>
+          <input disabled [(ngModel)]="RevenueTcity" name="RevenueTcityss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" *ngIf="Hidesurgeryquarterlycomparison">
+          <mat-label>Qtly</mat-label>
+          <input disabled [(ngModel)]="RevenueTcity" name="RevenueTcityss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" *ngIf="HideHalfyearlycomparison">
+          <mat-label>Half-yearly</mat-label>
+          <!--<mat-select [(ngModel)]="HTcity" name="HTcitytos">
+            <mat-option *ngFor="let HTcity of HTcitiestr" [value]="HTcity"> {{ HTcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="HTcity" name="HTcitytos" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="HideRevenueHalfyearlycomparison">
+          <mat-label>elHflyat</mat-label>
+          <!--<mat-select [(ngModel)]="RHTcity" name="HTcitytos">
+            <mat-option *ngFor="let HTcity of HTcitiestr" [value]="HTcity"> {{ HTcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="RHTcity" name="RHTcitysss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="HidesurgeryHalfyearlycomparison">
+          <mat-label>elHflyat</mat-label>
+          <input disabled [(ngModel)]="RHTcity" name="RHTcitysss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="HideAnnualyearlycomparison">
+          <mat-label>Annualla</mat-label>
+          <!--<mat-select [(ngModel)]="ATcitys" name="ATcityss" >
+            <mat-option *ngFor="let ATcity of ATcitiestr" [value]="ATcity"> {{ ATcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="ATcitys" name="ATcitysss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="HideRevenueAnnualyearlycomparison">
+          <mat-label>laAnnual</mat-label>
+          <!--<mat-select [(ngModel)]="ATcitys" name="ATcityss">
+            <mat-option *ngFor="let ATcity of ATcitiestr" [value]="ATcity"> {{ ATcity }}</mat-option>
+          </mat-select>-->
+          <input disabled [(ngModel)]="ATcitys" name="ATcitysss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="Hidesurgeryannaulcomparison">
+          <mat-label>laAnnual</mat-label>
+          <input disabled [(ngModel)]="ATcitys" name="ATcitysss" matInput placeholder="Month" class="Management_dashboard_highlightboxes">
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-1 margintopdatepicker">
+        <input [(ngModel)]="YearT" name="Yearst" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationtoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationtoyear($event)" *ngIf="Hidequarterlycomparison">
+
+        <input [(ngModel)]="RevenueTo" name="RRRHalfyearst" placeholder="Year"
+               class="form-control"
+               #sdprevenuehalftoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarRevenuehalftoyear($event)" *ngIf="Hidesurgeryquarterlycomparison">
+
+        <input [(ngModel)]="RevenueHalfyearT" name="RRRHalfyearst" placeholder="Year"
+               class="form-control"
+               #dprevenuehalftoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarRevenuehalftoyear($event)" *ngIf="HideRevenueHalfyearlycomparison">
+
+        <input [(ngModel)]="RevenueHalfyearT" name="RRRHalfyearst" placeholder="Year"
+               class="form-control"
+               #dprevenuehalftoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarRevenuehalftoyear($event)" *ngIf="HidesurgeryHalfyearlycomparison">
+
+        <input [(ngModel)]="HalfyearT" name="Halfyearst" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationhalftoyear="bsDatepicker"
+               [maxDate]="maxDateRMto"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationhalftoyear($event)" *ngIf="HideHalfyearlycomparison">
+
+
+        <input [(ngModel)]="RevenueTo" name="RevenueToss" placeholder="Year"
+               class="form-control"
+               #dprevenuequarterlytoyear="bsDatepicker"
+               [maxDate]="maxDateRMto"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarrevenueQuarterlytoyear($event)" *ngIf="Revenuequarterlycomparison">
+
+        <input [(ngModel)]="AnnualyearT" name="AnnualyearTsas" placeholder="Year"
+               class="form-control"
+               #dprevenueannualtoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarrevenueannualtoyear($event)" *ngIf="HideRevenueAnnualyearlycomparison">
+
+        <input [(ngModel)]="AnnualyearT" name="AnnualyearTsas" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationpatientannualtoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationannualtoyear($event)" *ngIf="HideAnnualyearlycomparison">
+
+        <input [(ngModel)]="AnnualyearT" name="AnnualyearTsas" placeholder="Year"
+               class="form-control"
+               #dppatientpopulationpatientannualtoYear="bsDatepicker"
+               [maxDate]="maxDateRMYear"
+               bsDatepicker
+               [bsConfig]="{ dateInputFormat: 'YYYY',isAnimated: true }"
+               (onShown)="onOpenCalendarpatientpopulationannualtoyear($event)" *ngIf="Hidesurgeryannaulcomparison">
+      </div>
+      <div class="col-sm-1">
+        <button *ngIf="Revenuequarterlycomparison" class="btn btn-success" (click)="GetRevenueQuartercomparison(RevenueFcity,RevenuefromYear,RevenueTcity,RevenueTo)">Submit</button>
+        <button *ngIf="Hidesurgeryquarterlycomparison" class="btn btn-success" (click)="GetSurgeryQuartercomparison(RevenueFcountry,RevenuefromYear,RevenueTcountry,RevenueTo,RevenueFcity,RevenueTcity)">Submit</button>
+        <button *ngIf="Hidequarterlycomparison" class="btn btn-success" (click)="GetQuartercomparison(city,Year,cityTO,YearT)">Submit</button>
+        <button *ngIf="HideRevenueHalfyearlycomparison" class="btn btn-success" (click)="GetRevenueHalfcomparison(HFcitys,RevenueHalfyear,RHTcity,RevenueHalfyearT)">Submit</button>
+
+        <button *ngIf="HidesurgeryHalfyearlycomparison" class="btn btn-success" (click)="GetsurgeryHalfcomparison(HFcountry,RevenueHalfyear,HTcountry,RevenueHalfyearT,HFcitys,RHTcity)">Submit</button>
+
+        <button *ngIf="HideHalfyearlycomparison" class="btn btn-success" (click)="GetHalfcomparison(HFcitys,Halfyear,HTcity,HalfyearT)">Submit</button>
+        <button *ngIf="HideRevenueAnnualyearlycomparison" class="btn btn-success" (click)="GetRevenueAnnualcomparison(AFcitys,AnnualfromYear,ATcitys,AnnualyearT)">Submit</button>
+
+        <button *ngIf="Hidesurgeryannaulcomparison" class="btn btn-success" (click)="GetsurgeryAnnualcomparison(AFcountry,AnnualfromYear,ATcountry,AnnualyearT,AFcitys,ATcitys)">Submit</button>
+
+        <button *ngIf="HideAnnualyearlycomparison" class="btn btn-success" (click)="GetAnnualcomparison(AFcitys,AnnualfromYear,ATcitys,AnnualyearT)">Submit</button>
+      </div>
+    </div>
+  </div>
+  <div class="row ui-state-default" *ngIf="HidefromandtodateDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6><strong>Data Representation</strong></h6>
+      <div class="row">
+        <h1><strong>Patient Population from <span>{{Populationfromdate}}</span> vs <span>{{PopulationTodate}}</span></strong></h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{KPITOTAL}}</th>
+                <th class="Management_dashboard_highlightboxes">View Patients</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>New</b></td>
+                <td>{{NewKPIDATA}}</td>
+                <td>
+                  <button mat-button (click)="ViewData()">
+                    <mat-icon data-toggle="tooltip" title="View New Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                    <!--<i class="fa fa-check-circle grab" style="font-size:28px;color:green" data-toggle="tooltip" title="View New Data"></i>-->
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Review</b></td>
+                <td>{{REVIEWKPIDATA}}</td>
+                <td>
+                  <button mat-button (click)="ViewReviewData()">
+                    <mat-icon data-toggle="tooltip" title="View Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                    <!--<i class="fa fa-check-circle grab" style="font-size:28px;color:green" data-toggle="tooltip" title="View Review Data"></i>-->
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Surgery-Review</b></td>
+                <td>{{SURGKPIDATA}}</td>
+                <td>
+                  <button mat-button (click)="ViewSurreviewData()">
+                    <mat-icon data-toggle="tooltip" title="View Surgery-Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                    <!--<i class="fa fa-check-circle grab" style="font-size:28px;color:green" data-toggle="tooltip" title="View Surgery-Review Data"></i>-->
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 representationheight">
+      <h6><strong>Graphical Representation</strong></h6>
+      <div class="row">
+        <div class="col-sm-7">
+          <mat-form-field appearance="outline">
+            <mat-label>Chart Types</mat-label>
+            <mat-select [(ngModel)]="piestyles" name="piestyle" (ngModelChange)="ChangePiechartstyle()">
+              <mat-option value="PieNone">None</mat-option>
+              <mat-option value="PieChart">3D PieChart</mat-option>
+              <mat-option value="Line">Variable Radius Chart</mat-option>
+              <mat-option value="Bar">Bar Chart</mat-option>
+              <mat-option value="Doughnut">Doughnut Chart</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div id="chartdiv" *ngIf="Hidepiechart"></div>
+        <div id="chartdivLIne" *ngIf="HideLinechart"></div>
+        <div id="chartdivBAR" *ngIf="HideBarchart"></div>
+        <div id="chartdivDOUGNUT" *ngIf="HideDoughnutchart"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row ui-state-default" *ngIf="HideMonthdateDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1><strong>Patient Population <span>{{MonthKpiFromDate}}</span> vs <span>{{MonthKpiTODate}}</span></strong></h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="MonthKpiFromDate" name="MonthKpiFromDates" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1 margintopdatepicker">
+          <mat-label style="color:forestgreen">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="MonthKpiTODate" name="MonthKpiTODates" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{MonthTotalFrom}}</th>
+                <th class="Management_dashboard_highlightboxes">{{MonthTotalto}}</th>
+                <th class="Management_dashboard_highlightboxes">View Patients</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>New</b></td>
+                <td>{{MonthNewKpiFrom}}</td>
+                <td>{{MonthNewKpiTO}}</td>
+                <td>
+                  <button mat-button (click)="ViewMonthNewData()">
+                    <mat-icon data-toggle="tooltip" title="View New Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Review</b></td>
+                <td>{{MonthReviewFrom}}</td>
+                <td>{{MonthKpiReviewto}}</td>
+                <td>
+                  <button mat-button (click)="ViewReviewMonthData()">
+                    <mat-icon data-toggle="tooltip" title="View Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Surgery-Review</b></td>
+                <td>{{MonthSurgeryKpiFrom}}</td>
+                <td>{{MonthSurgeryKpito}}</td>
+                <td>
+                  <button mat-button (click)="ViewMonthSurreviewData()">
+                    <mat-icon data-toggle="tooltip" title="View Surgery-Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="Mchartdiv" *ngIf="MHidepiechart"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="HideQuarterlydateDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1><strong>Patient Population <span>{{fromquatermonth}}</span> vs <span>{{toquartermonth}}</span></strong></h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="fromquatermonth" name="fromquatermonths" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="toquartermonth" name="toquartermonths" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalfromcount}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totaltocount}}</th>
+                <th class="Management_dashboard_highlightboxes">View Patients</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>New</b></td>
+                <td>{{NewFromCount}}</td>
+                <td>{{NewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewQuarterNewData()">
+                    <mat-icon data-toggle="tooltip" title="View New Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Review</b></td>
+                <td>{{ReviewFromCount}}</td>
+                <td>{{REviewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewQuarterReviewMonthData()">
+                    <mat-icon data-toggle="tooltip" title="View Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Surgery-Review</b></td>
+                <td>{{SurgereviewfromCount}}</td>
+                <td>{{SurgereviewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewQuarterSurreviewData()">
+                    <mat-icon data-toggle="tooltip" title="View Surgery-Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="Qchartdiv" *ngIf="QHidepiechart"></div>
+      </div>
+    </div>
+  </div>
+  <!----------------------------------Half-Yaerly COmaprision-->
+  <div class="row" *ngIf="HideHalfyearlDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1><strong>Patient Population <span>{{fromquatermonth}}</span> vs <span>{{toquartermonth}}</span></strong></h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="fromquatermonth" name="fromquatermonths" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="toquartermonth" name="toquartermonths" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalfromcount}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totaltocount}}</th>
+                <th class="Management_dashboard_highlightboxes">View Patients</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>New</b></td>
+                <td>{{NewFromCount}}</td>
+                <td>{{NewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewhalfNewData()">
+                    <mat-icon data-toggle="tooltip" title="View New Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Review</b></td>
+                <td>{{ReviewFromCount}}</td>
+                <td>{{REviewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewhalfReviewMonthData()">
+                    <mat-icon data-toggle="tooltip" title="View Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Surgery-Review</b></td>
+                <td>{{SurgereviewfromCount}}</td>
+                <td>{{SurgereviewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewhalfSurreviewData()">
+                    <mat-icon data-toggle="tooltip" title="View Surgery-Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="Hchartdiv" *ngIf="HalfHidepiechart"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="HideAnnualDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1><strong>Patient Population <span>{{fromquatermonth}}</span> vs <span>{{toquartermonth}}</span></strong></h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="fromquatermonth" name="fromquatermonths" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="toquartermonth" name="toquartermonths" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalfromcount}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totaltocount}}</th>
+                <th class="Management_dashboard_highlightboxes">View Patients</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>New</b></td>
+                <td>{{NewFromCount}}</td>
+                <td>{{NewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewAnnaulNewData()">
+                    <mat-icon data-toggle="tooltip" title="View New Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Review</b></td>
+                <td>{{ReviewFromCount}}</td>
+                <td>{{REviewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewAnnaulReviewMonthData()">
+                    <mat-icon data-toggle="tooltip" title="View Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Surgery-Review</b></td>
+                <td>{{SurgereviewfromCount}}</td>
+                <td>{{SurgereviewtoCount}}</td>
+                <td>
+                  <button mat-button (click)="ViewAnnaulSurreviewData()">
+                    <mat-icon data-toggle="tooltip" title="View Surgery-Review Patients" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="Achartdiv" *ngIf="AnnualHidepiechart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!----------------------------------------------Revenue data Representation-->
+
+  <div class="row" *ngIf="HidesurgeryRevenuespecificDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Surgery Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Surgery Performed between <span>{{Revenuespecificfromdate| date:"dd-MMM-y"}}</span>
+            vs <span>{{RevenuespecificTodate| date:"dd-MMM-y"}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-12 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">Total Patient Count<br />{{patienttotalcount}}</th>
+                <th class="Management_dashboard_highlightboxes">Total Amount<br />{{totalrevenuespecific}}</th>
+                <!--<th class="Management_dashboard_highlightboxes" style="width:1%">
+    <button mat-button class="revenueheader" (click)="SeeTotaldata(Revenuespecificfromdate,RevenuespecificTodate)">
+      <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+    </button>
+  </th>-->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of revenuedata">
+                <td><b>{{r.Revenuedesc}}</b></td>
+                <td>{{r.patientcountformonth}}</td>
+                <td>{{r.RevenueAmount}}</td>
+                <!--<td>
+                  <button mat-button (click)="SeeRevenuedata(r.Revenuedesc,r.serviceid,Revenuespecificfromdate,RevenuespecificTodate)">
+                    <mat-icon data-toggle="tooltip" title="View Revenue" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="Rchartdivs" *ngIf="surgeryRevenueHidepiechart" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="HideRevenueMonthDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Revenue - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="Revenuespecificfromdate" name="Revenuespecificfromdatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="RevenuespecificTodate" name="RevenuespecificTodatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenuefordayMonthcompare}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenuemonthMonthcompare}}</th>
+                <th class="Management_dashboard_highlightboxes">
+                  <button mat-button class="revenueheader" (click)="SeeRevenuemonthTotaldata(Revenuespecificfromdate,RevenuespecificTodate)">
+                    <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonths  of GetrevueValuesss">
+                <td><b>{{RevenueMonths.Revenuedesc}}</b></td>
+                <td>{{RevenueMonths.NewRevenueAmount}}</td>
+                <td>{{RevenueMonths.OLDRevenueAmount}}</td>
+                <td>
+                  <button mat-button (click)="SeeRevenueMonthdata(RevenueMonths.Revenuedesc,RevenueMonths.serviceid,Revenuespecificfromdate,RevenuespecificTodate)">
+                    <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="MonthRchartdiv" *ngIf="RevenueHidepiechart" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="HideRevenueQuarterlyDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Revenue - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="Revenuespecificfromdate" name="Revenuespecificfromdatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="RevenuespecificTodate" name="RevenuespecificTodatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{Quareterlytotalrevenueforday}}</th>
+                <th class="Management_dashboard_highlightboxes">{{Quarterlytotalrevenuemonth}}</th>
+                <th class="Management_dashboard_highlightboxes">
+                  <button mat-button class="revenueheader" (click)="SeeRevenueQuarterlyotaldata(RevenueFcity,RevenuefromYear,RevenueTcity,RevenueTo)">
+                    <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let QRevenueMonths  of quarterlyGetrevueValues">
+                <td><b>{{QRevenueMonths.Revenuedesc}}</b></td>
+                <td>{{QRevenueMonths.NewRevenueAmount}}</td>
+                <td>{{QRevenueMonths.OLDRevenueAmount}}</td>
+                <td>
+                  <button mat-button (click)="SeeRevenueQuarterlydata(QRevenueMonths.Revenuedesc,QRevenueMonths.serviceid,RevenueFcity,RevenuefromYear,RevenueTcity,RevenueTo)">
+                    <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="QRchartdiv" *ngIf="RevenueHidepiechart" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="HideRevenueHalfyearlyDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Revenue - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="Revenuespecificfromdate" name="Revenuespecificfromdatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="RevenuespecificTodate" name="RevenuespecificTodatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenueforday}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenuemonth}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonth  of GetrevueValues">
+                <td><b>{{RevenueMonth.Revenuedesc}}</b></td>
+                <td>{{RevenueMonth.NewRevenueAmount}}</td>
+                <td>{{RevenueMonth.OLDRevenueAmount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div *ngIf="RevenueHidepiechart">
+          <canvas id="Rchartdiv" width="400" height="400"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="HideRevenueAnnualDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Revenue - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="Revenuespecificfromdate" name="Revenuespecificfromdatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="RevenuespecificTodate" name="RevenuespecificTodatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenueforday}}</th>
+                <th class="Management_dashboard_highlightboxes">{{totalrevenuemonth}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonth  of GetrevueValues">
+                <td><b>{{RevenueMonth.Revenuedesc}}</b></td>
+                <td>{{RevenueMonth.NewRevenueAmount}}</td>
+                <td>{{RevenueMonth.OLDRevenueAmount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="RAnnualchartdiv" *ngIf="RevenueAnnualHidepiechart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!----------------------------------------------Surgery data Representation-->
+
+  <div class="row" *ngIf="HidesurgeryMonthDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Surgery - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <!--<div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>From Month</mat-label>
+            <input [(ngModel)]="Revenuespecificfromdate" name="Revenuespecificfromdatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-label style="color:forestgreen;">vs</mat-label>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>TO Month</mat-label>
+            <input [(ngModel)]="RevenuespecificTodate" name="RevenuespecificTodatess" matInput placeholder="Month till Date" disabled class="Management_dashboard_highlightboxes">
+          </mat-form-field>
+        </div>
+      </div>-->
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientstoday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthtoMonthcompare | currency:Country2}}</th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientsforday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthfromMonthcompare| currency:Country2}}</th>
+
+                <!--<th class="Management_dashboard_highlightboxes">
+                  <button mat-button class="revenueheader" (click)="SeeRevenuemonthTotaldata(Revenuespecificfromdate,RevenuespecificTodate)">
+                    <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </th>-->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonths  of surgreydata">
+                <td><b>{{RevenueMonths.SpecialityDescription}}</b></td>
+                <td>{{RevenueMonths.patientcountformonth}}</td>
+                <td>{{RevenueMonths.CountForMonth | currency:Country2}}</td>
+                <td>{{RevenueMonths.patientcountforday}}</td>
+                <td>{{RevenueMonths.CountForday | currency:Country2}}</td>
+
+                <!--<td>
+                  <button mat-button (click)="SeeRevenueMonthdata(RevenueMonths.Revenuedesc,RevenueMonths.serviceid,Revenuespecificfromdate,RevenuespecificTodate)">
+                    <mat-icon data-toggle="tooltip" title="View Total" style="color:black;cursor: pointer;">visibility</mat-icon>
+                  </button>
+                </td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="SurgeryMonthRchartdiv" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="HidesurgeryquarterlyDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Surgery - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientstoday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthtoMonthcompare | currency:Country2}}</th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientsforday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthfromMonthcompare| currency:Country2}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonths  of surgreydata">
+                <td><b>{{RevenueMonths.SpecialityDescription}}</b></td>
+                <td>{{RevenueMonths.patientcountformonth}}</td>
+                <td>{{RevenueMonths.CountForMonth | currency:Country2}}</td>
+                <td>{{RevenueMonths.patientcountforday}}</td>
+                <td>{{RevenueMonths.CountForday | currency:Country2}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="SurgeryMonthRchartdiv" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="HidesurgeryhalfyearlyDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Surgery - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientstoday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthtoMonthcompare | currency:Country2}}</th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientsforday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthfromMonthcompare| currency:Country2}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonths  of surgreydata">
+                <td><b>{{RevenueMonths.SpecialityDescription}}</b></td>
+                <td>{{RevenueMonths.patientcountformonth}}</td>
+                <td>{{RevenueMonths.CountForMonth | currency:Country2}}</td>
+                <td>{{RevenueMonths.patientcountforday}}</td>
+                <td>{{RevenueMonths.CountForday | currency:Country2}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="SurgeryMonthRchartdiv" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="HidesurgeryannualDatarepresentation">
+    <div class="col-sm-6 representationheight">
+      <h6>Data Representation</h6>
+      <div class="row">
+        <h1>
+          <strong>
+            Surgery - <span>{{Revenuespecificfromdate}}</span> vs
+            <span>{{RevenuespecificTodate}}</span>
+          </strong>
+        </h1>
+        <hr />
+      </div>
+      <div class="row">
+        <div class="col-sm-10 Management_dashboard_Tableheights">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%" id="show">
+            <thead>
+              <tr>
+                <th class="Management_dashboard_highlightboxes"><b>Total</b></th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientstoday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthtoMonthcompare | currency:Country2}}</th>
+                <th class="Management_dashboard_highlightboxes">Patient`s Count <br />{{Totalpatientsforday}}</th>
+                <th class="Management_dashboard_highlightboxes">Amount<br />{{totalrevenuemonthfromMonthcompare| currency:Country2}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let RevenueMonths  of surgreydata">
+                <td><b>{{RevenueMonths.SpecialityDescription}}</b></td>
+                <td>{{RevenueMonths.patientcountformonth}}</td>
+                <td>{{RevenueMonths.CountForMonth | currency:Country2}}</td>
+                <td>{{RevenueMonths.patientcountforday}}</td>
+                <td>{{RevenueMonths.CountForday | currency:Country2}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 representationheight">
+      <h6>Graphical Representation</h6>
+      <div class="row" style="margin-top:8%">
+        <div id="SurgeryMonthRchartdiv" style="height:415px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<!--//////SurgeryTotalDetails//////-->
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':SurgeryTotalDetails}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="GettotalSurgMonthdetailsClose()">&times;</button>
+        <h6>Surgery Performed in  {{Monthnames}} - {{yearvalue}}</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <p style="font-size:17px;color:black"><b>Type of Surgery - {{surgdescription}}</b></p>
+          </div>
+          <div class="col-sm-8">
+            <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+            <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+          </div>                    
+        </div>
+        <div class="heightAuto-250px">
+          <table class="custom-table withoutbackgroung search-table table-bordered" id="customersone">
+            <thead>
+              <tr>
+                <th>SNo</th>
+                <th>Branch</th>
+                <th>Doctor</th>
+                <th>Patient Count</th>
+                <!--<th>Surgery Type</th>-->
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let datas of TSurgdet;let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{datas.companybranch}}</td>
+                <td>{{datas.fDoctorname}} &nbsp; {{datas.lDoctorname}}</td>
+                <td>{{datas.patientcount}}</td>
+                <!--<td>{{datas.specialitydescription}}</td>-->
+                <td>{{datas.amount | currency:Country2}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4">Total</td>
+                <td>{{totalamountcount | currency:Country2}}</td>                
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="GettotalSurgMonthdetailsClose()">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--///revenuew sepecific details-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':RevenuesecificperiodTotalDetails}" style="top:10%">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="width: -webkit-fill-available;">
+      <div class="modal-header">
+        <h4 class="modal-title">Revenue</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="RevenuesecificperiodTotalDetailsClose()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <p style="text-align:center;font-size:15px">
+            <b>
+              Revenue from
+              <span>{{rfromdate}}</span>&nbsp;to &nbsp; <span>{{rtodate}}</span>
+            </b>
+          </p>
+        </div>
+        <div style="position:sticky;height:300px;overflow:auto">
+          <table style="width:-webkit-fill-available" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">SNo</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">UIN</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Age</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Gender</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Address</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Phone</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let datas of revenuewtotalbreakupdetail;let i = index">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{i + 1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.UIN}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Name}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Age}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Gender}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Address1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Phone}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Specilaitydescription}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Specilatyamount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="RevenuesecificperiodTotalDetailsClose()">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!------------Reveue Month comaprision-->
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':RevenueMonthTotalDetails}" style="top:5%">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="width: -webkit-fill-available;">
+      <div class="modal-header">
+        <h4 class="modal-title">Revenue</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="RevenueMonthTotalDetailsclose()">&times;</button>
+      </div>
+      <div class="modal-body" style="height:500px;overflow:auto">
+        <div class="row">
+          <p style="text-align:center;font-size:15px">
+            <b>
+              Revenue from
+              <span>{{rfromdate}}</span>&nbsp;vs &nbsp; <span>{{rtodate}}</span>
+            </b>
+          </p>
+        </div>
+
+        <div style="position:sticky;height:300px;overflow:auto">
+          <table style="width:-webkit-fill-available" class="table table-bordered table-striped">
+            <caption>Revenue for Month : {{rfromdate}}</caption>
+            <thead>
+
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">SNo</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">UIN</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Age</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Gender</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Address</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Phone</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let datas of revenuewtotalbreakupdetail;let i = index">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{i + 1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.UIN}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Name}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Age}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Gender}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Address1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Phone}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Specilaitydescription}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{datas.Specilatyamount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="position:sticky;height:300px;overflow:auto;margin-top:1%">
+          <table style="width:-webkit-fill-available" class="table table-bordered table-striped">
+            <caption>Revenue for Month : {{rtodate}}</caption>
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">SNo</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">UIN</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Age</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Gender</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Address</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Phone</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Description</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';;text-align:center">Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rdatas of torevenuewtotalbreakupdetail;let i = index">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{i + 1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.UIN}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Name}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Age}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Gender}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Address1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Phone}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Specilaitydescription}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{rdatas.Specilatyamount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="RevenueMonthTotalDetailsclose()">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" role="dialog" [ngStyle]="{'display':RevenuesecificperiodError}" style="top:10%">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: -webkit-fill-available;">
+      <div class="modal-header">
+        <h4 class="modal-title">Information</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="RevenuesecificperiodErorClose()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <p style="text-align:center;font-size:15px">
+            <b>
+              No Data found !
+            </b>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="RevenuesecificperiodErorClose()">OK</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---------------------------Patient Population New Data-->
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':PatientPopulationnnewdata}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="PatientPopulationnnewdataClose()">&times;</button>
+        <h4 class="modal-title text-left">Patients Details</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Patient Population from <span style="color:blue">{{Fdatess}} </span> to <span style="color:blue">{{Tdatess}}</span></h2>
+        <div class="row">
+          <div class="col-sm-2">
+            <input class="form-control" id="myInput" type="text" placeholder="Search ...">
+          </div>
+          <div class="col-sm-2 Managementfloaf_Right">
+            <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+          </div>
+          <div class="col-sm-2 Managementfloaf_Right">
+            <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+          </div>
+        </div>
+        <div class="row Management_dashboard_Tableheightsinsidepopup">
+          <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+            <thead>
+              <tr>
+                <th>SNo</th>
+                <th>UIN</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Phone</th>
+                <th>E-Mail</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr *ngFor="let Popup of dataTochpopyup;index as i">
+                <td>{{i+1}}</td>
+                <td>{{Popup.UIN}}</td>
+                <td>{{Popup.Name}}</td>
+                <td>{{Popup.Age}}</td>
+                <td>{{Popup.gender}}</td>
+                <td>{{Popup.Phone}}</td>
+                <td>{{Popup.email}}</td>
+                <td>{{Popup.Address}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="PatientPopulationnnewdataClose()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':PatientPopulationnMonthcomparisaiondata}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="PatientPopulationnMonthcomparisaiondataClose()">&times;</button>
+        <h4 class="modal-title text-left">Patients Details - Monthly Comparision</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Patient Population - <span style="color:blue">{{Monthfrommonth}} </span> vs <span style="color:blue">{{MonthtoMonth}}</span></h2>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="myInputMN" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{Monthfrommonth}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="myTableMN">
+                  <tr *ngFor="let Popup of MonthfromNewdata;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popup.UIN}}</td>
+                    <td>{{Popup.Name}}</td>
+                    <td>{{Popup.Age}}</td>
+                    <td>{{Popup.gender}}</td>
+                    <td>{{Popup.Phone}}</td>
+                    <td>{{Popup.email}}</td>
+                    <td>{{Popup.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="myInputMNto" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{MonthtoMonth}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="myTableMNto">
+                  <tr *ngFor="let Popups of MonthTONewdata;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popups.UIN}}</td>
+                    <td>{{Popups.Name}}</td>
+                    <td>{{Popups.Age}}</td>
+                    <td>{{Popups.gender}}</td>
+                    <td>{{Popups.Phone}}</td>
+                    <td>{{Popups.email}}</td>
+                    <td>{{Popups.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="PatientPopulationnMonthcomparisaiondataClose()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':PatientPopulationnquarterlycomparisaiondata}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="PatientPopulationnquarterlycomparisaiondataClose()">&times;</button>
+        <h4 class="modal-title text-left">Patients Details - Quarterly Comparision</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Patient Population - <span style="color:blue">{{Qmonthfrom}} </span> vs <span style="color:blue">{{QMonthto}}</span></h2>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="QmyInput" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{Qmonthfrom}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="QmyTable">
+                  <tr *ngFor="let Popup of DataQuarterlyFrom;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popup.UIN}}</td>
+                    <td>{{Popup.Name}}</td>
+                    <td>{{Popup.Age}}</td>
+                    <td>{{Popup.gender}}</td>
+                    <td>{{Popup.Phone}}</td>
+                    <td>{{Popup.email}}</td>
+                    <td>{{Popup.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="QmyInputt" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{QMonthto}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="QmyTablet">
+                  <tr *ngFor="let Popups of DataQuarterlyto;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popups.UIN}}</td>
+                    <td>{{Popups.Name}}</td>
+                    <td>{{Popups.Age}}</td>
+                    <td>{{Popups.gender}}</td>
+                    <td>{{Popups.Phone}}</td>
+                    <td>{{Popups.email}}</td>
+                    <td>{{Popups.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="PatientPopulationnquarterlycomparisaiondataClose()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':PatientPopulationnhalfcomparisaiondata}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="PatientPopulationnhalfcomparisaiondataClose()">&times;</button>
+        <h4 class="modal-title text-left">Patients Details - Half Yearly Comparision</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Patient Population - <span style="color:blue">{{Qmonthfrom}} </span> vs <span style="color:blue">{{QMonthto}}</span></h2>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="QmyInputR" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{Qmonthfrom}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="QmyTableR">
+                  <tr *ngFor="let Popup of DataQuarterlyFrom;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popup.UIN}}</td>
+                    <td>{{Popup.Name}}</td>
+                    <td>{{Popup.Age}}</td>
+                    <td>{{Popup.gender}}</td>
+                    <td>{{Popup.Phone}}</td>
+                    <td>{{Popup.email}}</td>
+                    <td>{{Popup.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="QmyInputRt" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{QMonthto}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="QmyTableRt">
+                  <tr *ngFor="let Popups of DataQuarterlyto;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popups.UIN}}</td>
+                    <td>{{Popups.Name}}</td>
+                    <td>{{Popups.Age}}</td>
+                    <td>{{Popups.gender}}</td>
+                    <td>{{Popups.Phone}}</td>
+                    <td>{{Popups.email}}</td>
+                    <td>{{Popups.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="PatientPopulationnhalfcomparisaiondataClose()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':PatientPopulationnAnnualcomparisaiondata}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="PatientPopulationnAnnualcomparisaiondataClose()">&times;</button>
+        <h4 class="modal-title text-left">Patients Details - Annual Comparision</h4>
+      </div>
+      <div class="modal-body">
+        <h2>Patient Population - <span style="color:blue">{{Qmonthfrom}} </span> vs <span style="color:blue">{{QMonthto}}</span></h2>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="QmyInputannualR" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{Qmonthfrom}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="QmyTableannuR">
+                  <tr *ngFor="let Popup of DataQuarterlyFrom;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popup.UIN}}</td>
+                    <td>{{Popup.Name}}</td>
+                    <td>{{Popup.Age}}</td>
+                    <td>{{Popup.gender}}</td>
+                    <td>{{Popup.Phone}}</td>
+                    <td>{{Popup.email}}</td>
+                    <td>{{Popup.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <input class="form-control" id="QmyInputannualRt" type="text" placeholder="Search ...">
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>
+              <div class="col-sm-4 Managementfloaf_Right">
+                <button class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              </div>
+            </div>
+            <div class="row Management_dashboard_Tableheightsinsidepopup">
+              <table class="custom-table withoutbackgroung search-table table-bordered" width="97%">
+                <caption class="appointmentcaption">{{QMonthto}}</caption>
+                <thead>
+                  <tr>
+                    <th>SNo</th>
+                    <th>UIN</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>E-Mail</th>
+                    <th>Address</th>
+                  </tr>
+                </thead>
+                <tbody id="QmyTableannuRt">
+                  <tr *ngFor="let Popups of DataQuarterlyto;index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{Popups.UIN}}</td>
+                    <td>{{Popups.Name}}</td>
+                    <td>{{Popups.Age}}</td>
+                    <td>{{Popups.gender}}</td>
+                    <td>{{Popups.Phone}}</td>
+                    <td>{{Popups.email}}</td>
+                    <td>{{Popups.Address}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="PatientPopulationnAnnualcomparisaiondataClose()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

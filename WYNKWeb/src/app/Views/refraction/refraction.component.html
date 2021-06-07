@@ -1,0 +1,3068 @@
+
+<form #RefractionForm="ngForm" onkeydown="return (event.keyCode!=13);">
+
+  <div class="col-sm-12">
+
+
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+            <span class="uinborder">
+              <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+            </span>
+          </div>
+
+          <div class="col-sm-2 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt10">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-label class="refcol">Doctor Name : </mat-label>
+          {{Doname}}
+        </div>
+        <div class="col-sm-3">
+          <mat-label class="refcol">Registration number :</mat-label>
+          {{regno}}
+        </div>
+        <div class="col-sm-3">
+          <mat-label class="refcol">Optometrist Name : </mat-label>
+          {{optoname}}
+        </div>
+        <div class="col-sm-3">
+          <mat-label class="refcol">VCT Name : </mat-label>
+          {{vctname}}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12" *ngIf="paediatricpatientnot">
+      <div class="row">
+
+
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    Visual Acuity
+                    <mat-radio-button value="1" class="ml-1p" [checked]="M_normalpatient == true">Normal</mat-radio-button>
+                    <mat-radio-button value="2" class="ml-1p" (change)="radioChangePaediatric($event)">Paediatric</mat-radio-button>
+                    <label class="labelfloat">
+                      <button type="button" (click)="Addcategory()" matTooltip="Category Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Category Master</button>
+                      <button type="button" (click)="Adddistance()" matTooltip="Distance Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Distance Master</button>
+                      <button type="button" (click)="AddNear()" matTooltip="Near Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Near Master</button>
+                      <button type="button" (click)="Addpinhole()" matTooltip="Pinhole Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Pinhole Master</button>
+                      <button type="button" (click)="Addcharttype()" matTooltip="Chart type  Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Chart Type Master</button>
+                      <button type="button" (click)="Visualhistory()" matTooltip="View Visual Acuity History" class="btn btn-primary-default btn-Excel buttonsfloat">View V/A History</button>
+                    </label>
+                  </h5>
+
+                  <div class="card-body">
+
+                    <div class="row heightAuto-230px">
+
+
+                      <table mat-table [dataSource]="dataSourcesvisualacuity" class="custom-table vawithoutbackgroung search-table">
+
+
+
+                        <ng-container matColumnDef="Category">
+                          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Category</th>
+                          <td mat-cell *matCellDef="let element ;let i = index;" class="width-3p">
+                            <mat-select value="{{element.SubCategory}}" disabled>
+                              <mat-option *ngFor="let Categorys of Categorysname" [value]="Categorys.Value">{{Categorys.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Categorys">
+                          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                            Category
+                          </th>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="DistanceOD">
+                          <th mat-header-cell *matHeaderCellDef> Distance </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressDistanceOD(i)" (keyup.ArrowLeft)="arrowleftdistance(i,$event,element)" (keyup.arrowright)="arrowrightdistance(i,$event,element)" (keyup.ArrowDown)="arrowdowndistance(i,$event,element)" (keyup.ArrowUp)="arrowupdistance(i,$event,element)" [attr.contenteditable]="element.PinAxisOS != '' || element.PinAxisOS == '' || element.DistSph != '' || element.DistSph == ''" #DistanceOD>
+                            <mat-select #DistanceODD (focus)="DistanceODD.open()" (keyup.enter)="saveDistanceOD(i,$event,element)" (openedChange)="someMethod(i,$event,element)" (selectionChange)="ChangeDistance(i,$event,element);changePinhole(element);DistanceODD.close()" value="{{element.DistSph}}" [disabled]="element.OD">
+                              <input matInput #inputdistance class="search" (keyup.ArrowLeft)="arrowleftdistanceenter(i,$event,element)" (keyup.arrowright)="arrowrightdistanceenter(i,$event,element)" (input)="FIlterdataDistanceOD($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="NearOD">
+                          <th mat-header-cell *matHeaderCellDef> Near </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPress(i)" (keyup.ArrowLeft)="arrowleftnear(i,$event,element)" (keyup.arrowright)="arrowrightnear(i,$event,element)" (keyup.ArrowDown)="arrowdownnear(i,$event,element)" (keyup.ArrowUp)="arrowupnear(i,$event,element)" [attr.contenteditable]="element.NearCyl == '' || element.NearCyl != ''" #NearODD>
+                            <mat-select (openedChange)="someMethodnear(i,$event,element)" #NearOD (focus)="NearOD.open()" (selectionChange)="ChangeNear(i,$event,element);NearOD.close()" (keyup.enter)="saveNearOD(i,$event,element)" value="{{element.NearCyl}}" [disabled]="element.OD">
+                              <input matInput #inputnear class="search" (keyup.ArrowLeft)="arrowleftnearenter(i,$event,element)" (keyup.arrowright)="arrowrightnearenter(i,$event,element)" (input)="FIlterdataNearOD($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let VAsnear of VAnamenear" [value]="VAsnear.Value">{{VAsnear.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="NearDescriptionOD">
+                          <th mat-header-cell *matHeaderCellDef> Near Desc </th>
+                          <td mat-cell *matCellDef="let element; let id = index;">
+                            <input matInput value="{{element.N_V_DESC}}" maxlength="50" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftneardesc(id,$event,element)" (keyup.arrowright)="arrowrightneardesc(id,$event,element)" (keyup.ArrowDown)="arrowdownneardesc(id,$event,element)" (keyup.ArrowUp)="arrowupneardesc(id,$event,element)" (keyup.enter)="NearDescription(id,$event,element)" (keyup)="changeValueNearDescription(id,'N_V_DESC',$event);" autocomplete="off" #NearDescriptionOD [disabled]="element.OD">
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PowerGlassOD">
+                          <th mat-header-cell *matHeaderCellDef> Power Glass </th>
+                          <td mat-cell *matCellDef="let element; let id = index;">
+                            <input matInput value="{{element.PowerGlass}}" maxlength="50" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftpg(id,$event,element)" (keyup.arrowright)="arrowrightpg(id,$event,element)" (keyup.ArrowDown)="arrowdownpg(id,$event,element)" (keyup.ArrowUp)="arrowuppg(id,$event,element)" (keyup.enter)="DescriptionPowerGlassOD(id,$event,element)" (keyup)="changeValuePowerGlass(id,'PowerGlass',$event)" autocomplete="off" [disabled]="element.parentDesc == 'Un Aided' || element.OD" #PowerGlassOD>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PinholeOD">
+                          <th mat-header-cell *matHeaderCellDef style="border-right:2px solid gray">
+                            Pinhole
+                          </th>
+                          <td style="border-right:2px solid gray" mat-cell *matCellDef="let element;let id = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressPinholeOD(id)" (keyup.ArrowLeft)="arrowleftpl(id,$event,element)" (keyup.arrowright)="arrowrightpl(id,$event,element)" (keyup.ArrowDown)="arrowdownpl(id,$event,element)" (keyup.ArrowUp)="arrowuppl(id,$event,element)" [attr.contenteditable]="element.DistSph != '' && element.PinAxis == '' || element.PinAxis != ''" #PinholeODD>
+                            <mat-select (openedChange)="someMethodPinhole(id,$event,element)" #PinholeOD (focus)="PinholeOD.open()" (selectionChange)="ChangePinhole(id,$event,element);PinholeOD.close()" (keyup.enter)="savePinholeOD(id,$event,element)" value="{{element.PinAxis}}" [disabled]="element.DistSph == '' || element.OD">
+                              <input matInput #inputPinhole class="search" (keyup.ArrowLeft)="arrowleftpinholeenter(id,$event,element)" (keyup.arrowright)="arrowrightpinholeenter(id,$event,element)" (input)="FIlterdataDistanceOD($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="DistanceOS">
+                          <th mat-header-cell *matHeaderCellDef> Distance </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressDistanceOS(i)" (keyup.ArrowLeft)="arrowdistanceosleft(i,$event,element)" (keyup.arrowright)="arrowdistanceosright(i,$event,element)" (keyup.ArrowDown)="arrowdistanceosdown(i,$event,element)" (keyup.ArrowUp)="arrowdistanceosup(i,$event,element)" [attr.contenteditable]="element.DistSphOS != '' || element.DistSphOS == ''" #DistanceOS>
+                            <mat-select (openedChange)="someMethodDistance(i,$event,element)" #DistanceOSS (focus)="DistanceOSS.open()" (selectionChange)="ChangeDistanceOS(i,$event,element);changePinholeOS(element);DistanceOSS.close()" (keyup.enter)="saveDistanceOS(i,$event,element)" value="{{element.DistSphOS}}" [disabled]="element.OS">
+                              <input matInput #inputDistanceOS class="search" (input)="FIlterdataDistanceOD($event.target.value)" (keyup.ArrowLeft)="arrowdistanceosleftenter(i,$event,element)" (keyup.arrowright)="arrowdistanceosrightenter(i,$event,element)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="NearOS">
+                          <th mat-header-cell *matHeaderCellDef> Near </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressNearOS(i)" (keyup.ArrowLeft)="arrownearosleft(i,$event,element)" (keyup.arrowright)="arrownearosright(i,$event,element)" (keyup.ArrowDown)="arrownearosdown(i,$event,element)" (keyup.ArrowUp)="arrownearosup(i,$event,element)" [attr.contenteditable]="element.NearCylOS == '' || element.NearCylOS != ''" #NearOS>
+                            <mat-select (openedChange)="someMethodNearOS(i,$event,element)" #NearOSS (focus)="NearOSS.open()" (selectionChange)="ChangeNearOS(i,$event,element);NearOSS.close()" (keyup.enter)="saveNearOS(i,$event,element)" value="{{element.NearCylOS}}" [disabled]="element.OS">
+                              <input matInput #inputNearOS class="search" (keyup.ArrowLeft)="arrownearosleftenter(i,$event,element)" (keyup.arrowright)="arrownearosrightenter(i,$event,element)" (input)="FIlterdataNearOD($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let VAsnear of VAnamenear" [value]="VAsnear.Value">{{VAsnear.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="NearDescriptionOS">
+                          <th mat-header-cell *matHeaderCellDef> Near Desc </th>
+                          <td mat-cell *matCellDef="let element; let id = index;">
+                            <input matInput value="{{element.N_V_DESCOS}}" maxlength="50" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftneardescos(id,$event,element)" (keyup.arrowright)="arrowrightneardescos(id,$event,element)" (keyup.ArrowDown)="arrowdownneardescos(id,$event,element)" (keyup.ArrowUp)="arrowupneardescos(id,$event,element)" (keyup.enter)="NearDescriptionOSSS(id,$event,element)" (keyup)="changeValueNearDescriptionOS(id,'N_V_DESCOS',$event);" autocomplete="off" #NearDescriptionOS [disabled]="element.OS">
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PowerGlassOS">
+                          <th mat-header-cell *matHeaderCellDef> Power Glass </th>
+                          <td mat-cell *matCellDef="let element; let id = index;">
+                            <input matInput value="{{element.PowerGlassOS}}" maxlength="50" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftospg(id,$event,element)" (keyup.arrowright)="arrowrightospg(id,$event,element)" (keyup.ArrowDown)="arrowdownospg(id,$event,element)" (keyup.ArrowUp)="arrowupospg(id,$event,element)" (keyup.enter)="DescriptionPowerGlassOS(id,$event,element)" (keyup)="changeValuePowerGlassOS(id,'PowerGlassOS',$event);" autocomplete="off" [disabled]="element.parentDesc == 'Un Aided' || element.OS" #PowerGlassOS>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="PinholeOS">
+                          <th mat-header-cell *matHeaderCellDef>
+                            Pinhole
+                          </th>
+                          <td mat-cell *matCellDef="let element;let id = index;" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressPinholeOS(id)" (keyup.ArrowLeft)="arrowleftospl(id,$event,element)" (keyup.arrowright)="arrowrightospl(id,$event,element)" (keyup.ArrowDown)="arrowdownospl(id,$event,element)" (keyup.ArrowUp)="arrowupospl(id,$event,element)" [attr.contenteditable]="element.DistSphOS != ''  && element.PinAxisOS == '' || element.PinAxisOS != ''" #PinholeOSS>
+                            <mat-select (openedChange)="someMethodpinholeOS(id,$event,element)" #PinholeOS (focus)="PinholeOS.open()" (selectionChange)="ChangePinholeOS(id,$event,element);PinholeOS.close()" (keyup.enter)="savePinholeOS(id,$event,element)" value="{{element.PinAxisOS}}" [disabled]="element.DistSphOS == '' || element.OS">
+                              <input matInput #inputpinholeOS class="search" (keyup.ArrowLeft)="arrowleftosplenter(id,$event,element)" (input)="FIlterdataDistanceOD($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Charttype">
+                          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Chart Type</th>
+                          <td mat-cell *matCellDef="let element ;let id = index;" class="width-2p" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="selectKeyPressCharttype(id)" (keyup.ArrowLeft)="arrowleftchartype(id,$event,element)" (keyup.arrowright)="arrowrightchartype(id,$event,element)" (keyup.ArrowDown)="arrowdownchartype(id,$event,element)" (keyup.ArrowUp)="arrowupchartype(id,$event,element)" [attr.contenteditable]="element.ChartType != ''  || element.ChartType == ''" #Charttypee>
+                            <mat-select (openedChange)="someMethodCharttype(id,$event,element)" #Charttype (focus)="Charttype.open()" (selectionChange)="ChangeCharttype(id,$event,element);Charttype.close()" (keyup.enter)="saveCharttype(id,$event,element)" value="{{element.ChartType}}">
+                              <input matInput #Charttypeinput class="search" (keyup.ArrowLeft)="arrowleftcharttypeenter(id,$event,element)" (keyup.arrowright)="arrowrightcharttypeenter(id,$event,element)" (input)="FIlterdataChartType($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let CTs of Chartype" [value]="CTs.Value">{{CTs.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Charttypes">
+                          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                            Chart Type
+                          </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remark">
+                          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Remark</th>
+                          <td mat-cell *matCellDef="let element ;let id = index;" class="width-2p">
+                            <textarea maxlength="250" matInput cols="4" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftremark(id,$event,element)" (keyup.arrowright)="arrowrightremark(id,$event,element)" (keyup.ArrowDown)="arrowdownRemark(id,$event,element)" (keyup.ArrowUp)="arrowupRemark(id,$event,element)" (keyup.enter)="Descriptionremark(id,$event,element)" (keyup)="changeValueremark(id,'Remarks',$event);" autocomplete="off" #Remark value="{{element.Remarks}}"></textarea>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remarks">
+                          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                            Remark
+                          </th>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="OD">
+                          <th mat-header-cell *matHeaderCellDef [attr.colspan]="5" style="border-right:2px solid gray"> OD </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OS">
+                          <th mat-header-cell *matHeaderCellDef [attr.colspan]="5"> OS </th>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="['Categorys','OD','OS','Charttypes','Remarks'];sticky:true"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnvisualacuity;sticky:true"></tr>
+                        <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumnvisualacuity;" [ngClass]="{gray: even}"></tr>
+
+
+                      </table>
+
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12" *ngIf="paediatricpatientshow">
+      <div class="row">
+
+
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    Visual Acuity
+                    <mat-radio-button class="ml-1p" (change)="radioChangeNormal($event)">Normal</mat-radio-button>
+                    <mat-radio-button class="ml-1p" [checked]="M_paediatric == true">Paediatric</mat-radio-button>
+                    <label class="labelfloat">
+                      <button type="button" (click)="Addcharttype()" matTooltip="Chart type  Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Chart Type Master</button>
+                      <button type="button" (click)="Visualpaediatrichistory()" matTooltip="View Visual Acuity History" class="btn btn-primary-default btn-Excel buttonsfloat">View V/A History</button>
+                    </label>
+
+
+                  </h5>
+                  <div class="card-body">
+
+                    <div class="row heightAuto-110px">
+
+
+                      <table mat-table [dataSource]="dataSourcesvisualacuitypaediatric" class="custom-table vawithoutbackgroung search-table">
+
+
+
+                        <ng-container matColumnDef="Central">
+                          <th mat-header-cell *matHeaderCellDef> Central </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" class="width-1p">
+                            <mat-checkbox (change)="changeCentral($event.checked)" [(ngModel)]="M_Central" name="Central" [disabled]="Central || element.OD"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Steady">
+                          <th mat-header-cell *matHeaderCellDef> Steady  </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" class="width-1p">
+                            <mat-checkbox (change)="changeSteady($event.checked)" [(ngModel)]="M_Steady" name="Steady" [disabled]="Steady || element.OD"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Maintained">
+                          <th mat-header-cell *matHeaderCellDef> Maintained  </th>
+                          <td mat-cell *matCellDef="let element; let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeMaintained($event.checked)" [(ngModel)]="M_Maintained" name="Maintained" [disabled]="Maintained || element.OD"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Uncentral">
+                          <th mat-header-cell *matHeaderCellDef> Uncentral </th>
+                          <td mat-cell *matCellDef="let element; let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeUncentral($event.checked)" [(ngModel)]="M_Uncentral" name="Uncentral" [disabled]="Uncentral || element.OD"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Unsteady">
+                          <th mat-header-cell *matHeaderCellDef>Unsteady</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeUnsteady($event.checked)" [(ngModel)]="M_Unsteady" name="Unsteady" [disabled]="Unsteady || element.OD"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Unmaintained">
+                          <th mat-header-cell *matHeaderCellDef style="border-right:2px solid gray">Unmaintained  </th>
+                          <td mat-cell *matCellDef="let element; let id = index;" style="border-right:2px solid gray" class="width-1p">
+                            <mat-checkbox (change)="changeUnmaintained($event.checked)" [(ngModel)]="M_Unmaintained" name="Unmaintained" [disabled]="Unmaintained || element.OD"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CentralOS">
+                          <th mat-header-cell *matHeaderCellDef> Central </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" class="width-1p">
+                            <mat-checkbox (change)="changeCentralOS($event.checked)" [(ngModel)]="M_CentralOS" name="CentralOS" [disabled]="CentralOS || element.OS"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="SteadyOS">
+                          <th mat-header-cell *matHeaderCellDef> Steady  </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" class="width-1p">
+                            <mat-checkbox (change)="changeSteadyOS($event.checked)" [(ngModel)]="M_SteadyOS" name="SteadyOS" [disabled]="SteadyOS || element.OS"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MaintainedOS">
+                          <th mat-header-cell *matHeaderCellDef> Maintained  </th>
+                          <td mat-cell *matCellDef="let element; let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeMaintainedOS($event.checked)" [(ngModel)]="M_MaintainedOS" name="MaintainedOS" [disabled]="MaintainedOS || element.OS"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="UncentralOS">
+                          <th mat-header-cell *matHeaderCellDef> Uncentral </th>
+                          <td mat-cell *matCellDef="let element; let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeUncentralOS($event.checked)" [(ngModel)]="M_UncentralOS" name="UncentralOS" [disabled]="UncentralOS || element.OS"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="UnsteadyOS">
+                          <th mat-header-cell *matHeaderCellDef>Unsteady</th>
+                          <td mat-cell *matCellDef="let element;let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeUnsteadyOS($event.checked)" [(ngModel)]="M_UnsteadyOS" name="UnsteadyOS" [disabled]="UnsteadyOS || element.OS"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="UnmaintainedOS">
+                          <th mat-header-cell *matHeaderCellDef>Unmaintained  </th>
+                          <td mat-cell *matCellDef="let element; let id = index;" class="width-1p">
+                            <mat-checkbox (change)="changeUnmaintainedOS($event.checked)" [(ngModel)]="M_UnmaintainedOS" name="UnmaintainedOS" [disabled]="UnmaintainedOS || element.OS"></mat-checkbox>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Charttype">
+                          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Chart Type</th>
+                          <td mat-cell *matCellDef="let element ;let id = index;" class="width-3p">
+                            <mat-select (openedChange)="someMethodCharttypepaediatric(id,$event,element)" #Charttypepaediatric (focus)="Charttypepaediatric.open()" (selectionChange)="ChangeCharttypepaediatric(id,$event,element);Charttypepaediatric.close()" (keyup.enter)="saveCharttypepaediatric(id,$event,element)" value="{{element.ChartType}}">
+                              <input matInput #Charttypeinputpaediatric class="search" (input)="FIlterdataChartType($event.target.value)" autocomplete="off">
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let CTs of Chartype" [value]="CTs.Value">{{CTs.Text}}</mat-option>
+                            </mat-select>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Charttypes">
+                          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                            Chart Type
+                          </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remark">
+                          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Remark</th>
+                          <td mat-cell *matCellDef="let element ;let id = index;" class="width-3p">
+                            <textarea maxlength="250" matInput cols="4" class="form-control tableinputheight" autocomplete="off" (keyup)="changeValueremarkpae(id,'Remarks',$event);" value="{{element.Remarks}}"></textarea>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Remarks">
+                          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                            Remark
+                          </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OD">
+                          <th mat-header-cell *matHeaderCellDef [attr.colspan]="6" style="border-right:2px solid gray"> OD </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OS">
+                          <th mat-header-cell *matHeaderCellDef [attr.colspan]="6"> OS </th>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="['OD','OS','Charttypes','Remarks'];sticky:true"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnvisualacuitypaediatric;sticky:true"></tr>
+                        <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumnvisualacuitypaediatric;" [ngClass]="{gray: even}"></tr>
+
+
+                      </table>
+
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-1p">
+      <div class="row">
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    PGP
+                    <label class="labelfloat">
+                      <button type="button" (click)="PGPhistory()" matTooltip="View View Pgp History" class="btn btn-primary-default btn-Excel buttonsfloat">View PGP History</button>
+                    </label>
+                  </h5>
+                  <div class="card-body">
+
+                    <div class="row heightAuto-120px">
+
+
+                      <table mat-table [dataSource]="dataSourcesPGP" class="custom-table vawithoutbackgroung search-table table-bordered ">
+
+
+                        <ng-container matColumnDef="Sph">
+                          <th mat-header-cell *matHeaderCellDef> SPH </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.DistSph}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValueSph(i,'DistSph',$event);" (keyup.enter)="NearSph(i)" autocomplete="off" (keyup.ArrowLeft)="arrowleftsphd(i)" (keyup.arrowright)="arrowleftsph(i)" #Sph [disabled]="element.OD">
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Cyl">
+                          <th mat-header-cell *matHeaderCellDef> CYL </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.NearCyl}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearCyl(i)" (keyup)="changeValueCyl(i,'NearCyl',$event);" (keyup.ArrowLeft)="arrowleftCYL(i)" (keyup.arrowright)="arrowrightCYL(i)" autocomplete="off" #Cyl [disabled]="element.OD">
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Axis">
+                          <th mat-header-cell *matHeaderCellDef> AXIS </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.PinAxis}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearAxis(i)" (keyup)="changeValueAxis(i,'PinAxis',$event);" (keyup.ArrowLeft)="arrowleftAXIS(i)" (keyup.arrowright)="arrowrightAXIS(i)" autocomplete="off" #Axis [disabled]="element.OD">
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Add">
+                          <th mat-header-cell *matHeaderCellDef style="border-right:2px solid gray"> ADD </th>
+                          <td mat-cell *matCellDef="let element; let i = index;" style="border-right:2px solid gray">
+                            <input matInput value="{{element.Add}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearAdd(i)" (keyup)="changeValueAdd(i,'Add',$event);" (keyup.ArrowLeft)="arrowleftAdd(i)" (keyup.arrowright)="arrowrightAdd(i)" autocomplete="off" #Add [disabled]="element.OD">
+                          </td>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="SphOS">
+                          <th mat-header-cell *matHeaderCellDef> SPH </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.DistSphOS}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearSphOS(i)" (keyup)="changeValueSphOS(i,'DistSphOS',$event);" (keyup.ArrowLeft)="arrowleftSphOS(i)" (keyup.arrowright)="arrowrightSphOS(i)" autocomplete="off" #SphOS [disabled]="element.OS">
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="CylOS">
+                          <th mat-header-cell *matHeaderCellDef> CYL </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.NearCylOS}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearCylOS(i)" (keyup)="changeValueCylOS(i,'NearCylOS',$event);" (keyup.ArrowLeft)="arrowleftCylOS(i)" (keyup.arrowright)="arrowrightCylOS(i)" autocomplete="off" #CylOS [disabled]="element.OS"> 
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AxisOS">
+                          <th mat-header-cell *matHeaderCellDef> AXIS </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.PinAxisOS}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearAxisOS(i)" (keyup)="changeValueAxisOS(i,'PinAxisOS',$event);" (keyup.ArrowLeft)="arrowleftAxisOS(i)" (keyup.arrowright)="arrowrightAxisOS(i)" autocomplete="off" #AxisOS [disabled]="element.OS">
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AddOS">
+                          <th mat-header-cell *matHeaderCellDef> ADD </th>
+                          <td mat-cell *matCellDef="let element; let i = index;">
+                            <input matInput value="{{element.AddOS}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="NearAddOS(i)" (keyup)="changeValueAddOS(i,'AddOS',$event);" (keyup.ArrowLeft)="arrowleftAddOS(i)" (keyup.arrowright)="arrowrightAddOS(i)" autocomplete="off" #AddOS [disabled]="element.OS">
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Detail">
+                          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Details</th>
+                          <td mat-cell *matCellDef="let element ;let i = index;">
+                            <textarea maxlength="250" matInput cols="4" value="{{element.Details}}" type="text" class="form-control tableinputheight" (keyup.enter)="Details(i)" (keyup)="changeValueDetails(i,'Details',$event);" (keyup.ArrowLeft)="arrowleftDetails(i)" (keyup.arrowright)="arrowrightDetails(i)" autocomplete="off" #Detail></textarea>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Details">
+                          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                            Details
+                          </th>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="OD">
+                          <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" style="border-right:2px solid gray"> OD </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OS">
+                          <th mat-header-cell *matHeaderCellDef [attr.colspan]="4"> OS </th>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="['OD','OS','Details'];sticky:true"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnPGP;sticky:true"></tr>
+                        <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumnPGP;" [ngClass]="{gray: even}"></tr>
+
+
+                      </table>
+
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-1p">
+      <div class="row">
+
+
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    Refraction
+                    <label class="labelfloat">
+                      <button type="button" (click)="Addinstrutment()" matTooltip="Instrument Master" class="btn btn-primary-default btn-Excel buttonsfloat">Instrument Master</button>
+                      <button type="button" (click)="Refractionhistory()" matTooltip="View Refraction History" class="btn btn-primary-default btn-Excel buttonsfloat">View refraction History</button>
+                    </label>
+                  </h5>
+                  <div class="card-body">
+
+                    <div class="row heightAuto-250px">
+
+                      <table class="custom-table vawithoutbackgroung search-table table-bordered">
+
+                        <tr>
+                          <th rowspan="3">Instrument</th>
+                          <th colspan="6" style="border-right:2px solid gray">OD</th>
+                          <th colspan="6">OS</th>
+                        </tr>
+
+                        <tr>
+                          <th colspan="3">DRY</th>
+                          <th colspan="3" style="border-right:2px solid gray">WET</th>
+                          <th colspan="3">DRY</th>
+                          <th colspan="3">WET</th>
+                        </tr>
+
+
+
+                        <tr>
+
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th style="border-right:2px solid gray">AXIS</th>
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                        </tr>
+
+                        <tbody>
+                          <tr *ngFor="let rext of REFRACTIONEXT;index as i">
+                            <td class="vistable">
+                              <mat-select value="{{rext.SubCategory}}" disabled>
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let INSTRUMENTS of INSTRUMENTSNAME" [value]="INSTRUMENTS.Value">{{INSTRUMENTS.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #CylSph matInput value="{{rext.Sphdry}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="DescriptionSph(i)" (keyup)="changeValuesphod(i,'Sphdry',$event);" (keyup.ArrowLeft)="arrowleftDescriptionSph(i)" (keyup.arrowright)="arrowrightDescriptionSph(i)" (keyup.ArrowDown)="arrowdownDescriptionSph(i)" (keyup.ArrowUp)="arrowupDescriptionSph(i)" autocomplete="off" [disabled]="rext.OD">
+                            </td>
+                            <td>
+                              <input #Cyldry matInput value="{{rext.Cyldry}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuecylod(i,'Cyldry',$event);" (keyup.enter)="Descriptioncyl(i)" (keyup.ArrowLeft)="arrowleftDescriptioncyl(i)" (keyup.arrowright)="arrowrightDescriptioncyl(i)" (keyup.ArrowDown)="arrowdownDescriptioncyl(i)" (keyup.ArrowUp)="arrowupDescriptioncyl(i)" autocomplete="off" [disabled]="rext.OD">
+                            </td>
+                            <td>
+                              <input #CylAxis matInput value="{{rext.Axisdry}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValueaxisod(i,'Axisdry',$event);" (keyup.enter)="Descriptionaxisod(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisod(i)" (keyup.arrowright)="arrowrightDescriptionaxisod(i)" (keyup.ArrowDown)="arrowdownDescriptionaxisod(i)" (keyup.ArrowUp)="arrowupDescriptionaxisod(i)" autocomplete="off" [disabled]="rext.OD">
+                            </td>
+                            <td>
+                              <input #sphodwet matInput value="{{rext.Sphwet}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuesphodwet(i,'Sphwet',$event);" (keyup.enter)="Descriptionsphodwet(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphodwet(i)" (keyup.arrowright)="arrowrightDescriptionsphodwet(i)" (keyup.ArrowDown)="arrowdownDescriptionsphodwet(i)" (keyup.ArrowUp)="arrowupDescriptionsphodwet(i)" autocomplete="off" [disabled]="rext.OD">
+                            </td>
+                            <td>
+                              <input #cylodwet matInput value="{{rext.Cylwet}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuecylodwet(i,'Cylwet',$event);" (keyup.enter)="Descriptioncylodwet(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylodwet(i)" (keyup.arrowright)="arrowrightDescriptioncylodwet(i)" (keyup.ArrowDown)="arrowdownDescriptioncylodwet(i)" (keyup.ArrowUp)="arrowupDescriptioncylodwet(i)" autocomplete="off" [disabled]="rext.OD">
+                            </td>
+                            <td style="border-right:2px solid gray">
+                              <input #axisodwet matInput value="{{rext.Axiswet}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValueaxisodwet(i,'Axiswet',$event);" (keyup.enter)="Descriptionaxisodwet(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisodwet(i)" (keyup.arrowright)="arrowrightDescriptionaxisodwet(i)" (keyup.ArrowDown)="arrowdownDescriptionaxisodwet(i)" (keyup.ArrowUp)="arrowupDescriptionaxisodwet(i)" autocomplete="off" [disabled]="rext.OD">
+                            </td>
+                            <td>
+                              <input #sphos matInput value="{{rext.Sphdryos}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuesphos(i,'Sphdryos',$event);" (keyup.enter)="Descriptionsphos(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphos(i)" (keyup.arrowright)="arrowrightDescriptionsphos(i)" (keyup.ArrowDown)="arrowdownDescriptionsphos(i)" (keyup.ArrowUp)="arrowupDescriptionsphos(i)" autocomplete="off" [disabled]="rext.OS">
+                            </td>
+                            <td>
+                              <input #cylos matInput value="{{rext.Cyldryos}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuecylos(i,'Cyldryos',$event);" (keyup.enter)="Descriptioncylos(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylos(i)" (keyup.arrowright)="arrowrightDescriptioncylos(i)" (keyup.ArrowDown)="arrowdownDescriptioncylos(i)" (keyup.ArrowUp)="arrowupDescriptioncylos(i)" autocomplete="off" [disabled]="rext.OS">
+                            </td>
+                            <td>
+                              <input #axisos matInput value="{{rext.Axisdryos}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValueaxisos(i,'Axisdryos',$event);" (keyup.enter)="Descriptionaxisos(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisos(i)" (keyup.arrowright)="arrowrightDescriptionaxisos(i)" (keyup.ArrowDown)="arrowdownDescriptionaxisos(i)" (keyup.ArrowUp)="arrowupDescriptionaxisos(i)" autocomplete="off" [disabled]="rext.OS">
+                            </td>
+                            <td>
+                              <input #sphoswet matInput value="{{rext.Sphwetos}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuesphoswet(i,'Sphwetos',$event);" (keyup.enter)="Descriptionsphoswet(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphoswet(i)" (keyup.arrowright)="arrowrightDescriptionsphoswet(i)" (keyup.ArrowDown)="arrowdownDescriptionsphoswet(i)" (keyup.ArrowUp)="arrowupDescriptionsphoswet(i)" autocomplete="off" [disabled]="rext.OS">
+                            </td>
+                            <td>
+                              <input #cyloswet matInput value="{{rext.Cylwetos}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuescyloswet(i,'Cylwetos',$event);" (keyup.enter)="Descriptioncyloswet(i)" (keyup.ArrowLeft)="arrowleftDescriptioncyloswet(i)" (keyup.arrowright)="arrowrightDescriptioncyloswet(i)" (keyup.ArrowDown)="arrowdownDescriptioncyloswet(i)" (keyup.ArrowUp)="arrowupDescriptioncyloswet(i)" autocomplete="off" [disabled]="rext.OS">
+                            </td>
+                            <td>
+                              <input #axisoswet matInput value="{{rext.Axiswetos}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuesaxisoswet(i,'Axiswetos',$event);" (keyup.enter)="Descriptionaxisoswet(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswet(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswet(i)" (keyup.ArrowDown)="arrowdownDescriptionaxisoswet(i)" (keyup.ArrowUp)="arrowupDescriptionaxisoswet(i)" autocomplete="off" [disabled]="rext.OS">
+                            </td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-1p">
+      <div class="row">
+
+
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    Acceptance
+                  </h5>
+                  <div class="card-body">
+
+
+
+                    <div class="row heightAuto-150px">
+
+                      <table class="custom-table vawithoutbackgroung search-table table-bordered">
+
+                        <tr>
+                          <th colspan="6" style="border-right:2px solid gray">OD</th>
+                          <th colspan="6">OS</th>
+                          <th rowspan="3">BPD</th>
+                          <th colspan="2">MPD</th>
+                          <th rowspan="3">Remarks</th>
+
+                        </tr>
+
+                        <tr>
+                          <th colspan="4">Distance Vision</th>
+                          <th colspan="2" style="border-right:2px solid gray">Near Vision</th>
+                          <th colspan="4">Distance Vision</th>
+                          <th colspan="2">Near Vision</th>
+                          <th colspan="1" class="acc">OD</th>
+                          <th colspan="1" class="acc">OS</th>
+                        </tr>
+
+                        <tr>
+
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                          <th>V/A</th>
+                          <th>SPH</th>
+                          <th style="border-right:2px solid gray">V/A</th>
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                          <th>V/A</th>
+                          <th>SPH</th>
+                          <th>V/A</th>
+                          <th colspan="1" class="accw"></th>
+                          <th colspan="1"></th>
+                        </tr>
+
+                        <tbody>
+                          <tr *ngFor="let Accep of ACCEPTANCE;index as i">
+
+                            <td>
+                              <input #DistSphaccep matInput value="{{Accep.DistSph}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup.enter)="DescriptionDistSphaccep(i)" (keyup)="changeValueDistSphaccep(i,'DistSph',$event);" (keyup.ArrowLeft)="arrowleftDescriptionDistSphaccep(i)" (keyup.arrowright)="arrowrightDescriptionDistSphaccep(i)" autocomplete="off" [disabled]="Accep.OD">
+                            </td>
+                            <td>
+                              <input #NearCylaccep matInput value="{{Accep.NearCyl}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValueNearCylaccep(i,'NearCyl',$event);" (keyup.enter)="DescriptionNearCylaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionNearCylaccep(i)" (keyup.arrowright)="arrowrightDescriptionNearCylaccep(i)" autocomplete="off" [disabled]="Accep.OD">
+                            </td>
+                            <td>
+                              <input #PinAxisaccep matInput value="{{Accep.PinAxis}}" maxlength="10" type="text" class="form-control tableinputheight" (keyup)="changeValuePinAxisaccep(i,'PinAxis',$event);" (keyup.enter)="DescriptionPinAxisaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisodaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisodaccep(i)" autocomplete="off" [disabled]="Accep.OD">
+                            </td>
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphodwetaccep(i)" (keyup.arrowright)="arrowrightDescriptionsphodwetaccep(i)" [attr.contenteditable]="Accep.Add == '' || Accep.Add != ''" #Addaccep>
+                              <mat-select #DistanceODDaccep (focus)="DistanceODDaccep.open()" (keyup.enter)="saveDistanceODaccep(i)" (openedChange)="someMethodaccep(i)" (selectionChange)="ChangeDistanceaccep(i,$event);DistanceODDaccep.close()" value="{{Accep.Add}}" [disabled]="Accep.OD">
+                                <input matInput #Accepinputdistance class="search" (keyup.ArrowLeft)="arrowleftnearenteraccep(i)" (keyup.arrowright)="arrowrightnearenteraccep(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #DistSphNVODaccep matInput maxlength="10" value="{{Accep.DistSphNVOD}}" type="text" class="form-control tableinputheight" (keyup)="changeValueDistSphNVODaccep(i,'DistSphNVOD',$event);" (keyup.enter)="DescriptionDistSphNVODaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylodwetaccep(i)" (keyup.arrowright)="arrowrightDescriptioncylodwetaccep(i)" autocomplete="off" [disabled]="Accep.OD">
+                            </td>
+                            <td style="border-right:2px solid gray" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddNVODaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisodwetaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisodwetaccep(i)" [attr.contenteditable]="Accep.AddNVOD == '' || Accep.AddNVOD != ''" #AddNVODaccep>
+                              <mat-select #DistanceODDacceptance (focus)="DistanceODDacceptance.open()" (keyup.enter)="saveDistanceODacceptance(i)" (openedChange)="someMethodacceptance(i)" (selectionChange)="ChangeDistanceacceptance(i,$event);DistanceODDacceptance.close()" value="{{Accep.AddNVOD}}" [disabled]="Accep.OD">
+                                <input matInput #Accepinputdistancee class="search" (input)="FIlterdataNearODacc($event.target.value)" (keyup.ArrowLeft)="arrowleftnearenteracceptance(i)" (keyup.arrowright)="arrowrightnearenteracceptance(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAsnear1 of VAnamenear1" [value]="VAsnear1.Value">{{VAsnear1.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #DistSphOSaccep matInput maxlength="10" value="{{Accep.DistSphOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValueDistSphOSaccep(i,'DistSphOS',$event);" (keyup.enter)="DescriptionDistSphOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphosaccep(i)" (keyup.arrowright)="arrowrightDescriptionsphosaccep(i)" autocomplete="off" [disabled]="Accep.OS">
+                            </td>
+                            <td>
+                              <input #NearCylOSaccep maxlength="10" matInput value="{{Accep.NearCylOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValueNearCylOSaccep(i,'NearCylOS',$event);" (keyup.enter)="DescriptionNearCylOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylosaccep(i)" (keyup.arrowright)="arrowrightDescriptioncylosaccep(i)" autocomplete="off" [disabled]="Accep.OS">
+                            </td>
+                            <td>
+                              <input #PinAxisOSaccep maxlength="10" matInput value="{{Accep.PinAxisOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValuePinAxisOSaccep(i,'PinAxisOS',$event);" (keyup.enter)="DescriptionPinAxisOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisosaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisosaccep(i)" autocomplete="off" [disabled]="Accep.OS">
+                            </td>
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphoswetaccepaccep(i)" (keyup.arrowright)="arrowrightDescriptionsphoswetaccep(i)" [attr.contenteditable]="Accep.AddOS == '' || Accep.AddOS != ''" #AddOSaccep>
+                              <mat-select #DistanceODDaccepos (focus)="DistanceODDaccepos.open()" (keyup.enter)="saveDistanceODaccepos(i)" (openedChange)="someMethodaccepos(i)" (selectionChange)="ChangeDistanceaccepos(i,$event);DistanceODDaccepos.close()" value="{{Accep.AddOS}}" [disabled]="Accep.OS">
+                                <input matInput #Accepinputdistanceos class="search" (keyup.ArrowLeft)="arrowleftnearenteraccepos(i)" (keyup.arrowright)="arrowrightnearenteraccepos(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #DistSphNVOSaccep maxlength="10" matInput value="{{Accep.DistSphNVOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesDistSphNVOSaccep(i,'DistSphNVOS',$event);" (keyup.enter)="DescriptionDistSphNVOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptioncyloswetaccep(i)" (keyup.arrowright)="arrowrightDescriptioncyloswetaccep(i)" autocomplete="off" [disabled]="Accep.OS">
+                            </td>
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddNVOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetaccep(i)" [attr.contenteditable]="Accep.AddNVOS == '' || Accep.AddNVOS != ''" #AddNVOSaccep>
+                              <mat-select #DistanceODDacceptanceos (focus)="DistanceODDacceptanceos.open()" (keyup.enter)="saveDistanceODacceptanceos(i)" (openedChange)="someMethodacceptanceos(i)" (selectionChange)="ChangeDistanceacceptanceos(i,$event);DistanceODDacceptanceos.close()" value="{{Accep.AddNVOS}}" [disabled]="Accep.OS">
+                                <input matInput #Accepinputdistanceeos class="search" (input)="FIlterdataNearODacc($event.target.value)" (keyup.ArrowLeft)="arrowleftnearenteracceptanceos(i)" (keyup.arrowright)="arrowrightnearenteracceptanceos(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAsnear1 of VAnamenear1" [value]="VAsnear1.Value">{{VAsnear1.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+
+                            <td>
+                              <input #PDaccep maxlength="5" matInput value="{{Accep.PD}}" type="text" class="form-control tableinputheight" (keypress)="numberOnlypdno($event)" (keyup)="numberOnlypd(i,'PD',$event);changeValuesPDcommon(i,'PD',$event);" (keyup.enter)="DescriptionPDaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetpdaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetpdaccep(i)" autocomplete="off">
+                            </td>
+
+                            <td>
+                              <input #MPDODaccep maxlength="5" matInput value="{{Accep.MPDOD}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesMPDODcommon(i,'MPDOD',$event);MPDOD(i,$event);" (keyup.enter)="DescriptionMPDODaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetmpdaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetmpdaccep(i)" [ngStyle]="myStyles(Accep)" [disabled]="MPDDD" autocomplete="off">
+                            </td>
+
+                            <td>
+                              <input #MPDOSaccep maxlength="5" matInput value="{{Accep.MPDOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesMPDOScommon(i,'MPDOS',$event);MPDOS(i,$event);" (keyup.enter)="DescriptionMPDOSaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetmpdosaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetmpdosaccep(i)" [ngStyle]="myStyles(Accep)" [disabled]="MPDDD" autocomplete="off">
+                            </td>
+
+                            <td>
+                              <input #Remarksaccep matInput maxlength="250" value="{{Accep.Remarks}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesRemarksaccep(i,'Remarks',$event);" (keyup.enter)="DescriptionRemarksaccep(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetremarksaccep(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetremarksosaccep(i)" autocomplete="off">
+                            </td>
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-1p">
+      <div class="row">
+
+
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    Optical prescription
+                  </h5>
+                  <div class="card-body">
+
+
+
+                    <div class="row heightAuto-150px">
+
+                      <table class="custom-table vawithoutbackgroung search-table table-bordered">
+
+                        <tr>
+                          <th colspan="6" style="border-right:2px solid gray">OD</th>
+                          <th colspan="6">OS</th>
+                          <th rowspan="3">BPD</th>
+                          <th colspan="2">MPD</th>
+                          <th rowspan="3">Remarks</th>
+
+                        </tr>
+
+                        <tr>
+                          <th colspan="4">Distance Vision</th>
+                          <th colspan="2" style="border-right:2px solid gray">Near Vision</th>
+                          <th colspan="4">Distance Vision</th>
+                          <th colspan="2">Near Vision</th>
+                          <th colspan="1" class="acc">OD</th>
+                          <th colspan="1" class="acc">OS</th>
+                        </tr>
+
+
+
+                        <tr>
+
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                          <th>V/A</th>
+                          <th>SPH</th>
+                          <th style="border-right:2px solid gray">V/A</th>
+                          <th>SPH</th>
+                          <th>CYL</th>
+                          <th>AXIS</th>
+                          <th>V/A</th>
+                          <th>SPH</th>
+                          <th>V/A</th>
+                          <th colspan="1" class="accw"></th>
+                          <th colspan="1"></th>
+                        </tr>
+
+                        <tbody>
+                          <tr *ngFor="let FINAL of FINALPRESCRIPTION;index as i">
+
+                            <td>
+                              <input #DistSphFINAL matInput maxlength="10" value="{{FINAL.DistSph}}" type="text" class="form-control tableinputheight" (keyup.enter)="DescriptionDistSphFINAL(i)" (keyup)="changeValueDistSphFINAL(i,'DistSph',$event);" (keyup.ArrowLeft)="arrowleftDescriptionSphFINAL(i)" (keyup.arrowright)="arrowrightDescriptionSphFINAL(i)" autocomplete="off" [disabled]="FINAL.OD">
+                            </td>
+                            <td>
+                              <input #NearCylFINAL matInput maxlength="10" value="{{FINAL.NearCyl}}" type="text" class="form-control tableinputheight" (keyup)="changeValueNearCylFINAL(i,'NearCyl',$event);" (keyup.enter)="DescriptionNearCylFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylFINAL(i)" (keyup.arrowright)="arrowrightDescriptioncylFINAL(i)" autocomplete="off" [disabled]="FINAL.OD">
+                            </td>
+                            <td>
+                              <input #PinAxisFINAL matInput maxlength="10" value="{{FINAL.PinAxis}}" type="text" class="form-control tableinputheight" (keyup)="changeValuePinAxisFINAL(i,'PinAxis',$event);" (keyup.enter)="DescriptionPinAxisFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisodFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisodFINAL(i)" autocomplete="off" [disabled]="FINAL.OD">
+                            </td>
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphodwetFINAL(i)" (keyup.arrowright)="arrowrightDescriptionsphodwetFINAL(i)" [attr.contenteditable]="FINAL.Add == '' || FINAL.Add != ''" #AddFINAL>
+                              <mat-select #DistanceODDfinal (focus)="DistanceODDfinal.open()" (keyup.enter)="saveDistanceODfinal(i)" (openedChange)="someMethodfinal(i)" (selectionChange)="ChangeDistancefinal(i,$event);DistanceODDfinal.close()" value="{{FINAL.Add}}" [disabled]="FINAL.OD">
+                                <input matInput #Accepinputdistancefinal class="search" (keyup.ArrowLeft)="arrowleftnearenterfinal(i)" (keyup.arrowright)="arrowrightnearenterfinal(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #DistSphNVODFINAL maxlength="10" matInput value="{{FINAL.DistSphNVOD}}" type="text" class="form-control tableinputheight" (keyup)="changeValueDistSphNVODFINAL(i,'DistSphNVOD',$event);" (keyup.enter)="DescriptionDistSphNVODFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylodwetFINAL(i)" (keyup.arrowright)="arrowrightDescriptioncylodwetFINAL(i)" autocomplete="off" [disabled]="FINAL.OD">
+                            </td>
+                            <td style="border-right:2px solid gray" id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddNVODFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisodwetFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisodwetFINAL(i)" [attr.contenteditable]="FINAL.AddNVOD == '' || FINAL.AddNVOD != ''" #AddNVODFINAL>
+                              <mat-select #DistanceODDfinalp (focus)="DistanceODDfinalp.open()" (keyup.enter)="saveDistanceODfinalp(i)" (openedChange)="someMethodfinalp(i)" (selectionChange)="ChangeDistancefinalp(i,$event);DistanceODDfinalp.close()" value="{{FINAL.AddNVOD}}" [disabled]="FINAL.OD">
+                                <input matInput #Accepinputdistancefinalp class="search" (input)="FIlterdataNearODacc($event.target.value)" (keyup.ArrowLeft)="arrowleftnearenterfinalp(i)" (keyup.arrowright)="arrowrightnearenterfinalp(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAsnear1 of VAnamenear1" [value]="VAsnear1.Value">{{VAsnear1.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #DistSphOSFINAL maxlength="10" matInput value="{{FINAL.DistSphOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValueDistSphOSFINAL(i,'DistSphOS',$event);" (keyup.enter)="DescriptionDistSphOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphosFINAL(i)" (keyup.arrowright)="arrowrightDescriptionsphosFINAL(i)" autocomplete="off" [disabled]="FINAL.OS">
+                            </td>
+                            <td>
+                              <input #NearCylOSFINAL maxlength="10" matInput value="{{FINAL.NearCylOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValueNearCylOSFINAL(i,'NearCylOS',$event);" (keyup.enter)="DescriptionNearCylOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptioncylosFINAL(i)" (keyup.arrowright)="arrowrightDescriptioncylosFINAL(i)" autocomplete="off" [disabled]="FINAL.OS">
+                            </td>
+                            <td>
+                              <input #PinAxisOSFINAL maxlength="10" matInput value="{{FINAL.PinAxisOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValuePinAxisOSFINAL(i,'PinAxisOS',$event);" (keyup.enter)="DescriptionPinAxisOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisosFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisosFINAL(i)" autocomplete="off" [disabled]="FINAL.OS">
+                            </td>
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionsphoswetFINAL(i)" (keyup.arrowright)="arrowrightDescriptionsphoswetFINAL(i)" [attr.contenteditable]="FINAL.AddOS == '' || FINAL.AddOS != ''" #AddOSFINAL>
+                              <mat-select #DistanceODDfinalos (focus)="DistanceODDfinalos.open()" (keyup.enter)="saveDistanceODfinalos(i)" (openedChange)="someMethodfinalos(i)" (selectionChange)="ChangeDistancefinalos(i,$event);DistanceODDfinalos.close()" value="{{FINAL.AddOS}}" [disabled]="FINAL.OS">
+                                <input matInput #Accepinputdistancefinalos class="search" (keyup.ArrowLeft)="arrowleftnearenterfinalos(i)" (keyup.arrowright)="arrowrightnearenterfinalos(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAs of VAname" [value]="VAs.Value">{{VAs.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+                            <td>
+                              <input #DistSphNVOSFINAL maxlength="10" matInput value="{{FINAL.DistSphNVOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesDistSphNVOSFINAL(i,'DistSphNVOS',$event);" (keyup.enter)="DescriptionDistSphNVOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptioncyloswetFINAL(i)" (keyup.arrowright)="arrowrightDescriptioncyloswetFINAL(i)" autocomplete="off" [disabled]="FINAL.OS">
+                            </td>
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" (keyup.enter)="DescriptionAddNVOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetFINAL(i)" [attr.contenteditable]="FINAL.AddNVOS == '' || FINAL.AddNVOS != ''" #AddNVOSFINAL>
+                              <mat-select #DistanceODDfinalpos (focus)="DistanceODDfinalpos.open()" (keyup.enter)="saveDistanceODfinalpos(i)" (openedChange)="someMethodfinalpos(i)" (selectionChange)="ChangeDistancefinalpos(i,$event);DistanceODDfinalpos.close()" value="{{FINAL.AddNVOS}}" [disabled]="FINAL.OS">
+                                <input matInput #Accepinputdistancefinalpos class="search" (input)="FIlterdataNearODacc($event.target.value)" (keyup.ArrowLeft)="arrowleftnearenterfinalpos(i)" (keyup.arrowright)="arrowrightnearenterfinalpos(i)" autocomplete="off">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let VAsnear1 of VAnamenear1" [value]="VAsnear1.Value">{{VAsnear1.Text}}</mat-option>
+                              </mat-select>
+                            </td>
+
+                            <td>
+                              <input #PDFINAL maxlength="5" matInput value="{{FINAL.PD}}" type="text" class="form-control tableinputheight" (keypress)="numberOnlypdno($event)" (keyup)="numberOnlypd(i,'PD',$event);changeValuesPDcommon(i,'PD',$event)" (keyup.enter)="DescriptionPDFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetpdFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetpdFINAL(i)" autocomplete="off">
+                            </td>
+
+                            <td>
+                              <input #MPDODFINAL maxlength="5" matInput value="{{FINAL.MPDOD}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesMPDODcommon(i,'MPDOD',$event);MPDOD(i,$event);" (keyup.enter)="DescriptionMPDODFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetmpdFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetmpdFINAL(i)" [ngStyle]="myStylesfin(FINAL)" [disabled]="MPDDD" autocomplete="off">
+                            </td>
+
+                            <td>
+                              <input #MPDOSFINAL maxlength="5" matInput value="{{FINAL.MPDOS}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesMPDOScommon(i,'MPDOS',$event);MPDOS(i,$event);" (keyup.enter)="DescriptionMPDOSFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetmpdosFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetmpdosFINAL(i)" [ngStyle]="myStylesfin(FINAL)" [disabled]="MPDDD" autocomplete="off">
+                            </td>
+
+                            <td>
+                              <input #RemarksFINAL matInput value="{{FINAL.Remarks}}" type="text" class="form-control tableinputheight" (keyup)="changeValuesRemarksFINAL(i,'Remarks',$event);" (keyup.enter)="DescriptionRemarksFINAL(i)" (keyup.ArrowLeft)="arrowleftDescriptionaxisoswetremarksFINAL(i)" (keyup.arrowright)="arrowrightDescriptionaxisoswetremarksFINAL(i)" autocomplete="off">
+                            </td>
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 mt-1p">
+      <div class="row">
+
+
+        <div class="tab-content tab-wrap">
+          <div id="ocular" class="tab-pane fade in active">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card mb-3">
+                  <h5 class="card-header">
+                    Color vision
+                    <label class="labelfloat">
+                      <button type="button" (click)="cvhistory()" matTooltip="View Color Vision History" class="btn btn-primary-default btn-Excel buttonsfloat">View Color Vision History</button>
+                    </label>
+                  </h5>
+
+                  <div class="card-body">
+
+                    <div class="row heightAuto-150px">
+
+                      <table class="custom-table vawithoutbackgroung search-table table-bordered">
+
+                        <tr>
+                          <th rowspan="2">No of Slides</th>
+                          <th colspan="3" style="border-right:2px solid gray">OD</th>
+                          <th colspan="3">OS</th>
+                        </tr>
+                        <tr>
+                          <th>Normal</th>
+                          <th>Defective</th>
+                          <th style="border-right:2px solid gray">Description</th>
+                          <th>Normal</th>
+                          <th>Defective</th>
+                          <th>Description</th>
+                        </tr>
+
+                        <tbody>
+                          <tr *ngFor="let color of ColorVision;index as i">
+
+                            <td id="tablepress" (keypress)="DistanceODtablepress($event)" #noofslides contenteditable="true" (keyup.arrowright)="arrowrightnoofslides(i)" (keyup.ArrowLeft)="arrowleftnoofslides(i)" (keyup.enter)="selectKeyslidesmySelect(i)">
+                              <mat-select [(ngModel)]="cvnoofslid" name="cvnoofslid" #slides (selectionChange)="Changenoofslides(i,cvnoofslid);changeValuecvnormal(i,'CV_normal',$event);changeValuecvnormalos(i,'CV_normalOS',$event);changeValuecvdefective(i,'CV_defective',$event);changeValuecvdefectiveos(i,'CV_defectiveOS',$event)">
+                                <mat-option>None</mat-option>
+                                <mat-option value="1">1</mat-option>
+                                <mat-option value="2">2</mat-option>
+                                <mat-option value="3">3</mat-option>
+                                <mat-option value="4">4</mat-option>
+                                <mat-option value="5">5</mat-option>
+                                <mat-option value="6">6</mat-option>
+                                <mat-option value="7">7</mat-option>
+                                <mat-option value="8">8</mat-option>
+                                <mat-option value="9">9</mat-option>
+                                <mat-option value="10">10</mat-option>
+                                <mat-option value="11">11</mat-option>
+                                <mat-option value="12">12</mat-option>
+                                <mat-option value="13">13</mat-option>
+                                <mat-option value="14">14</mat-option>
+                                <mat-option value="15">15</mat-option>
+                                <mat-option value="16">16</mat-option>
+                                <mat-option value="17">17</mat-option>
+                                <mat-option value="18">18</mat-option>
+                                <mat-option value="19">19</mat-option>
+                                <mat-option value="20">20</mat-option>
+                                <mat-option value="21">21</mat-option>
+                                <mat-option value="22">22</mat-option>
+                                <mat-option value="23">23</mat-option>
+                                <mat-option value="24">24</mat-option>
+                                <mat-option value="25">25</mat-option>
+                                <mat-option value="26">26</mat-option>
+                                <mat-option value="27">27</mat-option>
+                                <mat-option value="28">28</mat-option>
+                                <mat-option value="29">29</mat-option>
+                                <mat-option value="30">30</mat-option>
+                                <mat-option value="31">31</mat-option>
+                                <mat-option value="32">32</mat-option>
+                                <mat-option value="33">33</mat-option>
+                                <mat-option value="34">34</mat-option>
+                                <mat-option value="35">35</mat-option>
+                                <mat-option value="36">36</mat-option>
+                                <mat-option value="37">37</mat-option>
+                                <mat-option value="38">38</mat-option>
+                              </mat-select>
+                            </td>
+
+                            <td>
+                              <input maxlength="10" [(ngModel)]="ODinputcol" name="ODinputcol" matInput type="text" class="form-control tableinputheight" (keyup.enter)="Descriptionnormal(i)" (keyup.ArrowLeft)="arrowleftnormal(i)" (keyup.arrowright)="arrowrightnoraml(i)" autocomplete="off" [disabled]="NormalODCV || color.OD" #clrnormal>
+                            </td>
+                            <td>
+                              <input maxlength="10" [(ngModel)]="ODinputab" matInput type="text" class="form-control tableinputheight" (blur)="onDefective2($event);changeValuecvdefective(i,'CV_defective',$event);changeValuecvnormal(i,'CV_normal',$event);" (keyup)="changeValueonDefective2($event);changeValuecvnormal(i,'CV_normal',$event);changeValuecvdefective(i,'CV_defective',$event)" (keypress)="ODdefective($event)" name="txthour" id="txthour" (keyup.enter)="Descriptiondefective(i)" (keyup.ArrowLeft)="arrowleftcolordefective(i)" (keyup.arrowright)="arrowrightcolordefective(i)" autocomplete="off" #colordefective [disabled]="Allcv || color.OD">
+                            </td>
+                            <td style="border-right:2px solid gray">
+                              <textarea maxlength="50" [(ngModel)]="ODDescriptioncol" name="ODDescriptioncol" type="text" matInput rows="3" cols="3" class="form-control" (keyup)="changeValuedesctext(i,'Desc_Text',$event);" (keyup.enter)="Descriptiondesctext(i)" (keyup.ArrowLeft)="arrowleftcolordesctext(i)" (keyup.arrowright)="arrowrightcolordesctext(i)" autocomplete="off" #colordesctext [disabled]="Allcv || color.OD"></textarea>
+                            </td>
+                            <td>
+                              <input maxlength="10" [(ngModel)]="OSinputcol" name="OSinputcol" matInput type="text" class="form-control tableinputheight" (keyup.enter)="Descriptionnormalos(i)" (keyup.ArrowLeft)="arrowleftcolornormalos(i)" (keyup.arrowright)="arrowrightcolornormalos(i)" autocomplete="off" [disabled]="NormalOSCV || color.OS" #colornormalos>
+                            </td>
+                            <td>
+                              <input maxlength="10" [(ngModel)]="OSinputab" matInput type="text" class="form-control tableinputheight" (blur)="onDefectiveos2();changeValuecvdefectiveos(i,'CV_defectiveOS',$event);changeValuecvnormalos(i,'CV_normalOS',$event);" (keyup)="changeValueonDefectiveos2($event);changeValuecvnormalos(i,'CV_normalOS',$event);changeValuecvdefectiveos(i,'CV_defectiveOS',$event);" name="txthour1" id="txthour1" (keypress)="OSdefective($event)" (keyup.enter)="Descriptiondefectiveos(i)" (keyup.ArrowLeft)="arrowleftcolordefectiveos(i)" (keyup.arrowright)="arrowrightcolordefectiveos(i)" autocomplete="off" #colordefectiveos [disabled]="Allcv || color.OS">
+                            </td>
+                            <td>
+                              <textarea maxlength="50" [(ngModel)]="OSDescriptioncol" name="OSDescriptioncol" matInput rows="3" cols="3" type="text" class="form-control tableinputheight" (keyup)="changeValuedesctextos(i,'Desc_TextOS',$event);" (keyup.enter)="Descriptiondesctextos(i)" (keyup.ArrowLeft)="arrowleftcolordesctextos(i)" (keyup.arrowright)="arrowrightcolordesctextos(i)" autocomplete="off" #colordesctextos [disabled]="Allcv || color.OS"></textarea>
+                            </td>
+
+                          </tr>
+                        </tbody>
+
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 pgtop20-0 mt-1p">
+      <div class="row">
+
+        <div class="col-sm-6">
+          <div class="row">
+
+
+            <div class="tab-content tab-wrap">
+              <div class="tab-pane fade in active">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card mb-3">
+                      <h5 class="card-header">
+                        Cover Test
+                        <label class="labelfloat">
+                          <button type="button" (click)="Addstrabismus();" matTooltip="Add strabismus" class="btn btn-primary-default btn-Excel buttonsfloat">Strabismus</button>
+                          <button type="button" (click)="Addstrabismusmaster()" matTooltip="strabismus Master" class="btn btn-primary-default btn-Excel buttonsfloat">Strabismus Master</button>
+                        </label>
+                      </h5>
+                      <div class="card-body">
+
+                        <div class="row heightAuto-150px">
+
+
+                          <table mat-table [dataSource]="dataSourcesquint" class="custom-table withoutbackgroung search-table table-bordered">
+
+                            <ng-container matColumnDef="SNo">
+                              <th mat-header-cell *matHeaderCellDef>  S.No </th>
+                              <td mat-cell *matCellDef="let element; let id = index"> {{id+1}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="StrabismusType">
+                              <th mat-header-cell *matHeaderCellDef> Strabismus Type </th>
+                              <td mat-cell *matCellDef="let element; let i = index;">
+                                <mat-select (selectionChange)="ChangeStrabismus(i,$event)" value="{{element.SquintType}}">
+                                  <input class="search" (input)="FIlterdata($event.target.value)">
+                                  <mat-option *ngFor="let Description of Descriptionname" [value]="Description.Value">
+                                    {{Description.Text}}
+                                  </mat-option>
+                                </mat-select>
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ISOD">
+                              <th mat-header-cell *matHeaderCellDef>
+                                OD
+                              </th>
+                              <td mat-cell *matCellDef="let element; let i = index;">
+                                <mat-checkbox (change)="onChangeOD(element,i, element.checkStatusOD,$event)" [(checked)]="element.OD" [disabled]="element.chkOD"></mat-checkbox>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="ISOS">
+                              <th mat-header-cell *matHeaderCellDef> OS </th>
+                              <td mat-cell *matCellDef="let element; let i = index;">
+                                <mat-checkbox (change)="onChangeOS(element,i, element.checkStatusOS,$event)" [(checked)]="element.OS" [disabled]="element.chkOS"></mat-checkbox>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="ISOU">
+                              <th mat-header-cell *matHeaderCellDef> OU </th>
+                              <td mat-cell *matCellDef="let element; let i = index;">
+                                <mat-checkbox (change)="onChangeOU(element,i, element.checkStatusOU,$event)" [(checked)]="element.OU" [disabled]="element.chkOU"></mat-checkbox>
+                              </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Description">
+                              <th mat-header-cell *matHeaderCellDef> Strabismus Description </th>
+                              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true">
+                                <input type="text" matInput  class="form-control tableinputheight" value="{{element.SquintDiagnosisDescription}}" (keyup)="changeValue(i,'SquintDiagnosisDescription',$event);">
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Delete">
+                              <th mat-header-cell *matHeaderCellDef>Action</th>
+                              <td mat-cell *matCellDef="let element;let i = index;">
+                                <button mat-icon-button (click)="removesquint(i,element)">
+                                  <mat-icon data-toggle="tooltip" title="remove" class="grab">delete</mat-icon>
+                                </button>
+                              </td>
+                            </ng-container>
+
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnssquint"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnssquint;"></tr>
+                          </table>
+
+                        </div>
+
+                      </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+
+        <div class="col-sm-6">
+          <div class="row">
+
+
+            <div class="tab-content tab-wrap">
+              <div class="tab-pane fade in active">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card mb-3">
+                      <h5 class="card-header">
+                        Amsler
+                      </h5>
+                      <div class="card-body">
+
+                        <div class="row heightAuto-150px">
+
+                          <table mat-table [dataSource]="dataSourcesamsler" class="custom-table withoutbackgroung search-table table-bordered ">
+
+
+                            <ng-container matColumnDef="NormalOD">
+                              <th mat-header-cell *matHeaderCellDef> Normal </th>
+                              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true">
+                                <mat-checkbox [(ngModel)]="NormalOD" name="NormalOD" [disabled]="NormalODdis || element.OD" (change)="NormalODchange($event.checked)"></mat-checkbox>
+                              </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="AbnormalOD">
+                              <th mat-header-cell *matHeaderCellDef> Abnormal </th>
+                              <td mat-cell *matCellDef="let element; let i = index;" contenteditable="true">
+                                <mat-checkbox [(ngModel)]="AbnormalOD" name="AbnormalOD" [disabled]="AbnormalODdis || element.OD" (change)="AbnormalODchange($event.checked)"></mat-checkbox>
+                              </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="DescriptionOD">
+                              <th mat-header-cell *matHeaderCellDef style="border-right:2px solid gray"> Description </th>
+                              <td mat-cell *matCellDef="let element; let id = index;" contenteditable="true" style="border-right:2px solid gray">
+                                <textarea type="text" rows="3" cols="3" matInput maxlength="50" value="{{element.Desc_Text}}" class="form-control tableinputheight" (keyup)="changeValueDescriptionOD(id,'Desc_Text',$event);" [disabled]="element.OD"></textarea>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="NormalOS">
+                              <th mat-header-cell *matHeaderCellDef> Normal </th>
+                              <td mat-cell *matCellDef="let element; let id = index;" contenteditable="true">
+                                <mat-checkbox [(ngModel)]="NormalOS" name="NormalOS" [disabled]="NormalOSdis || element.OS" (change)="NormalOSchange($event.checked)"></mat-checkbox>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="AbnormalOS">
+                              <th mat-header-cell *matHeaderCellDef> Abnormal </th>
+                              <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true">
+                                <mat-checkbox [(ngModel)]="AbnormalOS" name="AbnormalOS" [disabled]="AbnormalOSdis || element.OS" (change)="AbnormalOSchange($event.checked)"></mat-checkbox>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="DescriptionOS">
+                              <th mat-header-cell *matHeaderCellDef> Description </th>
+                              <td mat-cell *matCellDef="let element; let id = index;" contenteditable="true">
+                                <textarea rows="3" cols="3" type="text" matInput maxlength="50" value="{{element.Desc_TextOS}}" class="form-control tableinputheight" (keyup)="changeValueDescriptionOS(id,'Desc_TextOS',$event);" [disabled]="element.OS"></textarea>
+                              </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="OD">
+                              <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" style="border-right:2px solid gray"> OD </th>
+                            </ng-container>
+
+                            <ng-container matColumnDef="OS">
+                              <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> OS </th>
+                            </ng-container>
+
+
+                            <tr mat-header-row *matHeaderRowDef="['OD','OS'];sticky:true"></tr>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnamsler;sticky:true"></tr>
+                            <tr mat-row *matRowDef="let row;  let even = even;columns: displayedColumnamsler;" [ngClass]="{gray: even}"></tr>
+
+
+                          </table>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 m-3">
+      <div class="col-sm-12 pb25">
+        <div class="col-sm-5  sub-section btn-wrap f-r">
+          <button type="button" class="btn btn-warning-default" (click)="CancelClk()"> Cancel </button>
+          <button type="button" class="success btn btn-primary  ml-2p" [disabled]="alldisabled" (click)="onSubmitrefraction()">Submit</button>
+          <button type="button" class="btn btn-primary ml-2p" (click)="printrec()" [disabled]="printvalue">Print</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</form>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':refractionprintvalue}">
+  <div class="example-box">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content" cdkDrag>
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong> Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printsss()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printcloserefraction()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Print HTML-->
+
+<div id="printss" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div><strong>{{company}}</strong></div>
+        <div><strong>{{Addresss}}</strong></div>
+        <div><strong>Phone No:{{phoness}} &nbsp; Website:{{webbb}}</strong></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div><strong>Optical Prescription</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Patient ID &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{UINNO}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Patient Name&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{patcont}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Age&nbsp; /&nbsp; Gender&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{patientage}}&nbsp;/&nbsp;{{patientgender}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Date&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{ Daterec | date:"dd-MMM-y" }}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:30px">
+
+    <table class="custom-table withoutbackgroung search-table table-bordered" border="1" style="white-space: nowrap;border-collapse:collapse;width:100%">
+      <thead>
+        <tr>
+          <th rowspan="2" colspan="3">OD withRX</th>
+          <th>DV</th>
+          <th>NV</th>
+
+          <th rowspan="2" colspan="2">OS withRX</th>
+          <th>DV</th>
+          <th>NV</th>
+        </tr>
+        <tr>
+
+          <td>{{ODadd}}</td>
+          <td> {{ODDadd}}</td>
+          <td> {{OSadd}}</td>
+          <td> {{OSSadd}}</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th rowspan="2">DV</th>
+          <th>SPH</th>
+          <th>CYL</th>
+          <th>AXIS</th>
+          <th>V/A</th>
+          <th>SPH</th>
+          <th>CYL</th>
+          <th>AXIS</th>
+          <th>V/A</th>
+        </tr>
+        <tr>
+          <td scope="row">{{ODdsp}}</td>
+          <td> {{ODnearcyl}}</td>
+          <td> {{ODpinaxis}}</td>
+          <td> {{ODadd}}</td>
+          <td> {{OSdsp}}</td>
+          <td> {{OSnearcyl}}</td>
+          <td> {{OSpinaxis}}</td>
+          <td> {{OSadd}}</td>
+        </tr>
+        <tr>
+          <th scope="row">NV</th>
+          <td> {{ODDdsp}}</td>
+          <td></td>
+          <td></td>
+          <td> {{ODDadd}}</td>
+          <td> {{OSSdsp}}</td>
+          <td></td>
+          <td></td>
+          <td> {{OSSadd}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-3">
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Remarks</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{re}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Binocular PD</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{pud}}&nbsp;MM</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Monocular PD</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>OD&nbsp;{{pud1}}&nbsp;MM&nbsp; OS&nbsp;{{pud2}}&nbsp;MM</mat-label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-sm-3">
+
+      </div>
+
+      <div class="col-sm-3">
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Patient Allergy</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{patientdesc}}</mat-label>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family: 'Proxima Nova Semibold'">
+                <strong>Prescribed by</strong>
+              </mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{docont}}</mat-label>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'">
+                <strong>Registration No</strong>
+              </mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{doctorregno}}</mat-label>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!--Re-Print Popup-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':refractionprint1}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong> Do you want to Print?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printreprint()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclose1()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Re-print HTML-->
+
+<div id="demo" style="display:none">
+
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div><strong>{{comapnyy}}</strong></div>
+        <div><strong>{{Addressss}}</strong></div>
+        <div><strong>Phone No:{{phonesss}} &nbsp; Website:{{webbbb}}</strong></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div><strong>Optical Prescription</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Patient ID &nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{UINNOO}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Patient Name&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{patcontre}}</mat-label>
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Age / Gender&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{Getage}}/{{patientgenderr}}</mat-label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-4">
+        <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Date&nbsp;</strong></mat-label>
+        <mat-label><strong>:&nbsp;</strong></mat-label>
+        <mat-label>{{ Daterecc | date:"dd-MMM-y" }}</mat-label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:30px">
+
+    <table class="custom-table withoutbackgroung search-table table-bordered" border="1" style="white-space: nowrap;border-collapse:collapse;width:100%">
+      <thead>
+        <tr>
+          <th rowspan="2" colspan="3">OD withRX</th>
+          <th>DV</th>
+          <th>NV</th>
+
+          <th rowspan="2" colspan="2">OS withRX</th>
+          <th>DV</th>
+          <th>NV</th>
+        </tr>
+        <tr>
+
+          <td>{{ODDDadd}}</td>
+          <td> {{ODDDDadd}}</td>
+          <td> {{OSSSadd}}</td>
+          <td> {{OSSSSadd}}</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th rowspan="2">DV</th>
+          <th>SPH</th>
+          <th>CYL</th>
+          <th>AXIS</th>
+          <th>V/A</th>
+          <th>SPH</th>
+          <th>CYL</th>
+          <th>AXIS</th>
+          <th>V/A</th>
+        </tr>
+        <tr>
+          <td scope="row">{{ODDDdsp}}</td>
+          <td> {{ODDnearcyl}}</td>
+          <td> {{ODDpinaxis}}</td>
+          <td> {{ODDDadd}}</td>
+          <td> {{OSSSdsp}}</td>
+          <td> {{OSSnearcyl}}</td>
+          <td> {{OSSpinaxis}}</td>
+          <td> {{OSSSadd}}</td>
+        </tr>
+        <tr>
+          <th scope="row">NV</th>
+          <td> {{ODDDDdsp}}</td>
+          <td></td>
+          <td></td>
+          <td> {{ODDDDadd}}</td>
+          <td> {{OSSSSdsp}}</td>
+          <td></td>
+          <td></td>
+          <td> {{OSSSSadd}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+      <div class="col-sm-3">
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Remarks</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{ree}}</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Binocular PD</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{pudd}}&nbsp;MM</mat-label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Monocular PD</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>OD&nbsp;{{pudd1}}&nbsp;MM&nbsp; OS&nbsp;{{pudd2}}&nbsp;MM</mat-label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-sm-3">
+
+      </div>
+
+      <div class="col-sm-3">
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'"><strong>Patient Allergy</strong></mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{patientdescc}}</mat-label>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family: 'Proxima Nova Semibold'">
+                <strong>Prescribed by</strong>
+              </mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{docontre}}</mat-label>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              <mat-label style="font-family:'Proxima Nova Semibold'">
+                <strong>Registration No</strong>
+              </mat-label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-label>{{doregno}}</mat-label>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+<!--Visual History-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewvisualhistory}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewvisualhistory()">&times;</button>
+        <h5 class="modal-title">
+          Visual Acuity History
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInput" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row heightAuto-300px">
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="2">S.No</th>
+              <th rowspan="2">Name</th>
+              <th rowspan="2">Role</th>
+              <th rowspan="2">Date</th>
+              <th colspan="2">Category</th>
+              <th colspan="5">OD</th>
+              <th colspan="5">OS</th>
+              <th rowspan="2">Chart Type</th>
+              <th rowspan="2">Remarks</th>
+            </tr>
+            <tr>
+              <th>OD</th>
+              <th>OS</th>
+              <th>Distance</th>
+              <th>Near</th>
+              <th>Near Desc</th>
+              <th>Power Glass</th>
+              <th>Pinhole</th>
+              <th>Distance</th>
+              <th>Near</th>
+              <th>Near Desc</th>
+              <th>Power Glass</th>
+              <th>Pinhole</th>
+            </tr>
+
+            <tbody id="myTable">
+              <tr *ngFor="let s of Visual;index as i">
+                <td>{{i+1}}</td>
+                <td>{{s.Name}}</td>
+                <td>{{s.Role}}</td>
+                <td>{{s.Date | date:"dd-MMM-y HH:mm"}}</td>
+                <td>{{s.SubCategory}}</td>
+                <td>{{s.SubCatgry}}</td>
+                <td>{{s.DistSph}}</td>
+                <td>{{s.NearCyl}}</td>
+                <td>{{s.N_V_DESC}}</td>
+                <td>{{s.PowerGlass}}</td>
+                <td>{{s.PinAxis}}</td>
+                <td>{{s.DistSphh}}</td>
+                <td>{{s.NearCyll}}</td>
+                <td>{{s.N_V_DESCC}}</td>
+                <td>{{s.PowerGlasss}}</td>
+                <td>{{s.PinAxiss}}</td>
+                <td>{{s.ChartType}}</td>
+                <td>{{s.Remarks}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--PGP-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewpgp}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewpgp()">&times;</button>
+        <h5 class="modal-title">
+          PGP History
+        </h5>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInputpgp" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+
+        <div class="row heightAuto-300px">
+
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="2">S.No</th>
+              <th rowspan="2">Name</th>
+              <th rowspan="2">Role</th>
+              <th rowspan="2">Date</th>
+              <th colspan="4">OD</th>
+              <th colspan="4">OS</th>
+              <th rowspan="2">Details</th>
+            </tr>
+            <tr>
+              <th>Sph</th>
+              <th>Cyl</th>
+              <th>Axis</th>
+              <th>Add</th>
+              <th>Sph</th>
+              <th>Cyl</th>
+              <th>Axis</th>
+              <th>Add</th>
+            </tr>
+
+            <tbody id="myTablepgp">
+              <tr *ngFor="let p of pgp;index as i">
+                <td>{{i+1}}</td>
+                <td>{{p.Name}}</td>
+                <td>{{p.Role}}</td>
+                <td>{{p.Date | date:"dd-MMM-y HH:mm"}}</td>
+                <td>{{p.DistSph}}</td>
+                <td>{{p.NearCyl}}</td>
+                <td>{{p.PinAxis}}</td>
+                <td>{{p.Add}}</td>
+                <td>{{p.DistSph1}}</td>
+                <td>{{p.NearCyl1}}</td>
+                <td>{{p.PinAxis1}}</td>
+                <td>{{p.Add1}}</td>
+                <td>{{p.Details}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Color Vision-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewcv}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewpcv()">&times;</button>
+        <h5 class="modal-title">
+          Color Vision History
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInputcv" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row heightAuto-300px">
+
+
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="2">S.No</th>
+              <th rowspan="2">Name</th>
+              <th rowspan="2">Role</th>
+              <th rowspan="2">Date</th>
+              <th colspan="3">OD</th>
+              <th colspan="3">OS</th>
+            </tr>
+            <tr>
+              <th>Normal</th>
+              <th>Defective</th>
+              <th>Description</th>
+              <th>Normal</th>
+              <th>Defective</th>
+              <th>Description</th>
+            </tr>
+
+            <tbody id="myTablecv">
+              <tr *ngFor="let c of cv;index as i">
+                <td>{{i+1}}</td>
+                <td>{{c.Name}}</td>
+                <td>{{c.Role}}</td>
+                <td>{{c.Date | date:"dd-MMM-y HH:mm"}}</td>
+                <td>{{c.CV_normal}}</td>
+                <td>{{c.CV_defective}}</td>
+                <td>{{c.Desc_Text}}</td>
+                <td>{{c.CV_normal1}}</td>
+                <td>{{c.CV_defective1}}</td>
+                <td>{{c.Desc_Text1}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Refraction-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewrec}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewrec()">&times;</button>
+        <h5 class="modal-title">
+          Refraction History
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInputr" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row heightAuto-300px">
+
+
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="3">S.No</th>
+              <th rowspan="3">Name</th>
+              <th rowspan="3">Role</th>
+              <th rowspan="3">Date</th>
+              <th colspan="2" class="acc">Instrument</th>
+              <th colspan="6">OD</th>
+              <th colspan="6">OS</th>
+            </tr>
+
+            <tr>
+              <th colspan="2"></th>
+              <th colspan="3">DRY</th>
+              <th colspan="3">WET</th>
+              <th colspan="3">DRY</th>
+              <th colspan="3">WET</th>
+            </tr>
+
+
+
+            <tr>
+              <th>OD</th>
+              <th>OS</th>
+              <th>Sph</th>
+              <th>Cyl</th>
+              <th>Axis</th>
+              <th>Sph</th>
+              <th>Cyl</th>
+              <th>Axis</th>
+              <th>Sph</th>
+              <th>Cyl</th>
+              <th>Axis</th>
+              <th>Sph</th>
+              <th>Cyl</th>
+              <th>Axis</th>
+            </tr>
+
+            <tbody id="myTabler">
+              <tr *ngFor="let r of ref;index as i">
+                <td>{{i+1}}</td>
+                <td>{{r.Name}}</td>
+                <td>{{r.Role}}</td>
+                <td>{{r.Date | date:"dd-MMM-y HH:mm"}}</td>
+                <td>{{r.SubCategory}}</td>
+                <td>{{r.SubCatgry}}</td>
+                <td>{{r.DistSph2}}</td>
+                <td>{{r.NearCyl2}}</td>
+                <td>{{r.PinAxis2}}</td>
+                <td>{{r.DistSph}}</td>
+                <td>{{r.NearCyl}}</td>
+                <td>{{r.PinAxis}}</td>
+                <td>{{r.DistSph3}}</td>
+                <td>{{r.NearCyl3}}</td>
+                <td>{{r.PinAxis3}}</td>
+                <td>{{r.DistSph1}}</td>
+                <td>{{r.NearCyl1}}</td>
+                <td>{{r.PinAxis1}}</td>
+
+              </tr>
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--visualacuitypaediatric-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewvisualacuitypaediatric}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewvisualacuitypaediatric()">&times;</button>
+        <h5 class="modal-title">
+          Visual Acuity History
+        </h5>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-6 mph-0 pb20">
+                  <span class="uinborder">
+                    <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input id="myInputvap" type="text" matInput placeholder="Search">
+            </mat-form-field>
+          </div>
+        </div>
+
+
+        <div class="row heightAuto-300px">
+
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+
+            <tr>
+              <th rowspan="2">S.No</th>
+              <th rowspan="2">Name</th>
+              <th rowspan="2">Role</th>
+              <th rowspan="2">Date</th>
+              <th colspan="6">OD</th>
+              <th colspan="6">OS</th>
+              <th rowspan="2">Chart Type</th>
+              <th rowspan="2">Remarks</th>
+            </tr>
+            <tr>
+              <th>Central</th>
+              <th>Steady</th>
+              <th>Maintained</th>
+              <th>Uncentral</th>
+              <th>Unsteady</th>
+              <th>Unmaintained</th>
+              <th>Central</th>
+              <th>Steady</th>
+              <th>Maintained</th>
+              <th>Uncentral</th>
+              <th>Unsteady</th>
+              <th>Unmaintained</th>
+            </tr>
+
+            <tbody id="myTablevap">
+              <tr *ngFor="let vpc of Visualpaediatric;index as i">
+                <td>{{i+1}}</td>
+                <td>{{vpc.Name}}</td>
+                <td>{{vpc.Role}}</td>
+                <td>{{vpc.Date | date:"dd-MMM-y HH:mm"}}</td>
+                <td><mat-checkbox [(checked)]="vpc.Central" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.Steady" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.Maintained" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.Uncentral" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.Unsteady" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.Unmaintained" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.CentralOS" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.SteadyOS" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.MaintainedOS" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.UncentralOS" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.UnsteadyOS" disabled="true"></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="vpc.UnmaintainedOS" disabled="true"></mat-checkbox></td>
+                <td>{{vpc.ChartType}}</td>
+                <td>{{vpc.Remarks}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalcategory}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesscategory()">&times;</button>
+        <h5 class="modal-title">
+          Category
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Category</mat-label>
+              <input [(ngModel)]="mastercategory" name="mastercategory" matInput placeholder="Category" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="Category" (click)="Clickcategory()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeis">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tablecategory">
+
+            <mat-form-field>
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesqc" matSort class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttype(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqc"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqc;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelcategory()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdate" id="update" (click)="onupdatecategory()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmit" id="submitCategory" (click)="onSubmitcategory()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDelete" (click)="onDeletecategory()">Delete</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modaldistance}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessdistance()">&times;</button>
+        <h5 class="modal-title">
+          Distance
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Distance</mat-label>
+              <input [(ngModel)]="masterDistance" name="masterDistance" matInput placeholder="Distance" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="Distance" (click)="ClickDistance()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisd">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-3" *ngIf="tableDistance">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter1($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesqd" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttyped(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqd"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqd;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelDistance()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdated" id="update" (click)="onupdateDistance()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitd" id="submit" (click)="onSubmitDistance()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeleted" (click)="onDeleteDistance()">Delete</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalNear}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessNear()">&times;</button>
+        <h5 class="modal-title">
+          Near
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Distance</mat-label>
+              <input [(ngModel)]="masterNear" name="masterNear" matInput placeholder="Near" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="Near" (click)="ClickNear()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisn">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-3" *ngIf="tableNear">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter2($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesqn" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttypen(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqn"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqn"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelNear()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdaten" id="update" (click)="onupdateNear()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitn" id="submit" (click)="onSubmitNear()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeleten" (click)="onDeleteNear()">Delete</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalPinhole}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessPinhole()">&times;</button>
+        <h5 class="modal-title">
+          Pinhole
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Distance</mat-label>
+              <input [(ngModel)]="masterPinhole" name="masterPinhole" matInput placeholder="Pinhole" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="Pinhole" (click)="ClickPinhole()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisp">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-5 " *ngIf="tablepinhole">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter3($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesqp" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttypep(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqp"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqp"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelpinhole()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatep" id="update" (click)="onupdatepinhole()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitp" id="submit" (click)="onSubmitpinhole()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletep" (click)="onDeletepinhole()">Delete</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalinstrutment}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessinstrutment()">&times;</button>
+        <h5 class="modal-title">
+          Instrument
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Instrument</mat-label>
+              <input [(ngModel)]="masterinstrutment" name="masterinstrutment" matInput placeholder="instrument" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="instrument" (click)="Clickinstrutment()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisi">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-5 " *ngIf="tableinstrutment">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter4($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesqi" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttypei(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqi"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqi;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelinstrutment()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatei" id="update" (click)="onupdateinstrutment()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmiti" id="submit" (click)="onSubmitinstrutment()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletei" (click)="onDeleteinstrutment()">Delete</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalcharttype}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesscharttype()">&times;</button>
+        <h5 class="modal-title">
+          Chart Type
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label> Chart Type</mat-label>
+              <input [(ngModel)]="mastercharttype" name="mastercharttype" matInput placeholder="Chart Type" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="Chart Type" (click)="ClickChartType()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisc">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tablecharttype">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter5($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesqcc" matSort class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttypec(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnssqcc"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnssqcc;"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelcharttype()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatec" id="updatec" (click)="onupdatecharttype()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitc" id="submitcharttype" (click)="onSubmitcharttype()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletec" (click)="onDeletecharttype()">Delete</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
+        <h4 class="modal-title">Do you want to cancel?</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger cursor" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="reset" class="btn btn-success cursor" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <h4 class="modal-title">Refraction - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success cursor" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" role="dialog" [ngStyle]="{'display':modalstrabismus}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessstrabismus()">&times;</button>
+        <h5 class="modal-title">
+          Strabismus
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>strabismus</mat-label>
+              <input [(ngModel)]="masterstrabismus" name="masterstrabismus" matInput placeholder="strabismus" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="strabismus" (click)="Clickstrabismus()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+          <div class="col-sm-2" *ngIf="Activeisstrabismus">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tablestrabismus">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilterstrabismus($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesstrabismus" matSort class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox (click)="selecttypestrabismus(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsstrabismus"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsstrabismus"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelstrabismus()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatestrabismus" id="updatestrabismus" (click)="onupdatestrabismus()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitstrabismus" id="submitstrabismus" (click)="onSubmitstrabismus()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletestrabismus" (click)="onDeletestrabismus()">Delete</button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!---------------------------One eyed patient ------------------------------->
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':oneeyepatient}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content" cdkDrag>
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">One eyed patient - {{eye}}</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h5 class="modal-title center">Want to continue for both eyes?</h5>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button type="button" (click)="continueeyeno()" class="btn btn-danger">No</button>
+          <button type="button"  class="btn btn-success" data-dismiss="modal" (click)="continueeyeyes()" cdkFocusInitial>Yes</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+

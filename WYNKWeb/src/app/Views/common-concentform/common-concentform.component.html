@@ -1,0 +1,38 @@
+
+
+<div class="col-sm-12">
+  <div class="row">
+    <h1 style="font-size: 19px; text-align: center; font-family: 'proxima-nova'">Consent</h1>
+  </div>
+  <div class="row">
+    <table style="width: -webkit-fill-available;">
+      <tr>
+        <td>
+          <input type="file" (change)="onSelectFile1($event)" />
+          <br />
+          <textarea style="width:-webkit-fill-available;height: 250px;overflow: auto;font-size:16px;color:black; font-family: 'Proxima Nova Semibold';"></textarea>
+          <br />
+          <button type="button" class="btn btn-primary" (click)="SaveConcentdta($event)">Save</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':ConsentYesblock}" style="top:40%;left:38%">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-body" style="padding:40px">
+        <p style="text-align:center;background-color:white;color:black">
+          Upload Consent
+        </p>
+      </div>
+      <div class="modal-footer" style="text-align:center;padding:10px">
+
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="ConsentYes()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

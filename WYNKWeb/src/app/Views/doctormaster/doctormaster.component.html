@@ -1,0 +1,351 @@
+<form #DoctorForm="ngForm" name="DoctorForm" (keydown.enter)="$event.preventDefault()" novalidate>
+  <div class="col-sm-12">
+    <div class="row">
+      <h5 align="center" class="card-header bg-success text-white rounded-top">
+        <b>Doctor &nbsp; Master</b>
+      </h5>
+    </div>
+  </div>
+  <input #doctorid name="D_DoctorID" [(ngModel)]="M_DoctorID" type="hidden">
+  <input #specialityid name="D_SpecialityId" [(ngModel)]="M_SpecialityId" type="hidden">
+  <div class="col-sm-12 border-blue border-radius">
+    <div class="col-sm-12 m-3">
+      <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3 f-r">
+          <button type="button" class="btn-text f-r" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Salutation</mat-label>
+            <mat-select [(ngModel)]="M_title" name="title" required>
+              <mat-option *ngFor="let title of Titles" [value]="title.Value">{{title.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <div class="col-sm-10 ml-n7p">
+            <mat-form-field appearance="outline" class="width-125p">
+              <mat-label>First Name</mat-label>
+              <input [(ngModel)]="M_firstname" maxlength="100" matInput placeholder="Enter First Name" (keypress)="nameField($event)" name="EmployeeName" autocomplete="off" type="text" required>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-1 mt-3p ml-8p">
+            <mat-icon [disabled]="isNextupdate && isNextDelete" (click)="ClickName()" class="cursor" data-toggle="tooltip" title="Search Doctor">search</mat-icon>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Middle Name</mat-label>
+            <input [(ngModel)]="M_MiddleName" maxlength="100" autocomplete="off" matInput placeholder="Enter Middle Name" (keypress)="nameField($event)" name="MiddleName" type="text">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input [(ngModel)]="M_LastName" maxlength="100" autocomplete="off" matInput placeholder="Enter Last Name" (keypress)="nameField($event)" name="LastName" type="text" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input #DOB [(ngModel)]="M_Dateofbirth" autocomplete="off" [max]="maxDate()" name="MDateofbirth" matInput [matDatepicker]="MDateofbirth" placeholder="Date of birth" (dateChange)="DateMonthyear()" >
+            <mat-datepicker-toggle matSuffix [for]="MDateofbirth"></mat-datepicker-toggle>
+            <mat-datepicker #MDateofbirth></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select required [(ngModel)]="M_Gender" name="Gender" autocomplete="off">
+              <mat-option value="Male">Male</mat-option>
+              <mat-option value="Female">Female</mat-option>
+              <mat-option value="Transgender">Transgender</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 mt-n5p" *ngIf="hidewebcamtrue">
+          <div class="row">
+            <div class="mt-n5p ml-7p" *ngIf="ViewpatientImage">
+              <div class="row">
+                <div>
+                  <webcam [width]="60" [height]="70" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"></webcam>
+                </div>
+                <div class="col-3 ml-15p mt-n20p height-50px" snapshot *ngIf="webcamImage">
+                  <img #patientImage height="70" width="100" [src]="webcamImage.imageAsDataUrl" /> <br />
+                  <span><mat-icon data-toggle="tooltip" title="Drop Image" class="cursor" (click)="removeWebUploadImage()"> cancel </mat-icon></span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-1p ml-10p height-50px" *ngIf="!ViewpatientImage">
+              <img id="patientUploadImage" *ngFor='let url of urls; index as i' [lightbox]="i" [src]="url.data.thumb" height="70" width="50" style="margin-left: 8px;border:1px solid #51b8f2;width: 42%;" #patientUploadImage> <br />
+              <span><mat-icon *ngFor='let url of urls; index as i' data-toggle="tooltip" title="Drop Image" class="cursor" (click)="removepatientUploadImage(i,$event)"> cancel </mat-icon></span>
+            </div>
+          </div>
+          <div class="row ml-18p" *ngIf="ImageChooseOptions">
+            <div class="col-2 ml-n16p">
+              <div class="mt-1p">
+                <mat-icon class="cursor refcol" (click)="triggerSnapshot();">camera_enhance</mat-icon>
+              </div>
+            </div>
+            <div class="col-3 mt-n8p">
+              <input type='file' id="Docuploadfile" #file (change)="onSelectFile($event,file.files)" [(ngModel)]="Patimage" name="Patsimage" accept=".jpg">
+              <small><b> .png, .jpeg Images Supported</b></small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" hintLabel="Max 250 characters">
+            <mat-label>Address1</mat-label>
+            <textarea matInput [(ngModel)]="add1s" autocomplete="off" name="add1" placeholder="Address" #add1 maxlength="250" required></textarea>
+            <mat-hint align="end">{{add1.value?.length || 0}}/250</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" hintLabel="Max 250 characters">
+            <mat-label>Address2</mat-label>
+            <textarea matInput [(ngModel)]="add2s" name="add2" #add2 placeholder="Address" maxlength="250" autocomplete="off"></textarea>
+            <mat-hint align="end">{{add2.value?.length || 0}}/250</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" hintLabel="Max 250 characters">
+            <mat-label>Address3</mat-label>
+            <textarea [(ngModel)]="add3s" name="add3" matInput #add3 placeholder="Address" autocomplete="off"></textarea>
+            <mat-hint align="end">{{add3.value?.length || 0}}/250</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input required matInput autocomplete="off" placeholder="Email" [(ngModel)]="email" [formControl]="email1" name="email">
+            <mat-error *ngIf="email1.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mt-1p">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone No:1</mat-label>
+            <input (keypress)="numberOnly($event)" autocomplete="off" [(ngModel)]="phone1" name="phone1" matInput placeholder="Enter Number" minlength="1" maxlength="15" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone No:2</mat-label>
+            <input (keypress)="numberOnly($event)" autocomplete="off" [(ngModel)]="phone2" name="phone2" matInput placeholder="Enter Number" minlength="1" maxlength="15">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <div class="col-sm-12">
+            <div class="col-sm-10  ml-n12p">
+              <mat-form-field appearance="outline" class="width-135p">
+                <mat-label>Specialization</mat-label>
+                <mat-select required [(ngModel)]="Speciality" autocomplete="off" name="Speciality" multiple (ngModelChange)="SpecialityChange()">
+                  <mat-option *ngFor="let special of specials" [value]="special">{{special.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-1  ml-15p">
+              <button mat-icon-button [disabled]="SpecialityAccess" type="button">
+                <mat-icon class="grab" matTooltip="Add Speciality" (click)="SpecialityAccess !=true ? ClickCode():AccessDenied()">add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="col-sm-12">
+            <div class="col-sm-10 ml-n12p">
+              <mat-form-field appearance="outline" class="width-135p">
+                <mat-label>Engagement Type</mat-label>
+                <mat-select [(ngModel)]="Engage" name="engagementtype">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let Engage of EngagementType" [value]="Engage.Value">{{Engage.Text}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-1 ml-15p">
+              <button mat-icon-button [disabled]="EngageAccess" type="button">
+                <mat-icon class="grab" matTooltip="Add Engagement" (click)="EngageAccess !=true ? EngageClickPop():AccessDenied()">add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <mat-select [(ngModel)]="Cityy" name="Cityy" (ngModelChange)="CityChange()">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let City of Cityname" [value]="City.Value">{{City.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <mat-select [(ngModel)]="M_location" name="Locations" [disabled]="disableLOC">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let Location of Locationname" [value]="Location.Value">{{Location.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <strong>
+              <input [(ngModel)]="State" name="State" matInput placeholder="State Name" disabled>
+            </strong>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <strong>
+              <input [(ngModel)]="Country" name="Country" matInput placeholder="Country Name" disabled>
+            </strong>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Registration Number</mat-label>
+            <input [(ngModel)]="registrationNumber" (keypress)="RegNoField($event)" autocomplete="off" name="registrationNumber" matInput placeholder="Enter Registration Number" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3" *ngIf="doctorid.value!=0">
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="M_IsActive" name="IsActive">
+              <mat-option value="true">Active</mat-option>
+              <mat-option value="false">InActive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 m-3">
+    <div class="col-sm-12 pb25">
+      <div class="col-sm-4  sub-section btn-wrap f-r">
+        <button type="button" class="btn btn-warning-default" (click)="CancelClk()"><strong>Cancel</strong></button>
+        <button type="button" *ngIf="doctorid.value!=0" class="btn btn-warning-default" [disabled]="isNextDelete" (click)="deleteclk(doctorid.value)"><strong>Delete</strong></button>
+        <button type="submit" [disabled]="isNextupdate" *ngIf="doctorid.value != 0" (click)="Updateclk(DoctorForm,doctorid.value)" class="success btn btn-primary">Submit</button>
+        <button type="submit" [disabled]="isNextButton" *ngIf="doctorid.value == 0" (click)="onSubmit(DoctorForm)" class="success btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!----*Cancel Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}" style="z-index:auto">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseOk()">&times;</button>
+        <h6 class="modal-title">Do You Want to Cancel ?</h6>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning-default" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+        <button type="button" class="success btn btn-primary" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----*Access Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}" data-keyboard="false">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title">Doctor Master - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class=" table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----*Speciality Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':specialityAdd}" data-keyboard="false">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Speciality</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4 ml-n1p">
+            <mat-form-field appearance="outline">
+              <mat-label>Speciality</mat-label>
+              <input name="specs" [(ngModel)]="specs" matInput placeholder="Enter Doctor Speciality" required>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" (click)="Specialityclose()" class="btn btn-warning-default ml-2p">Close</button>
+          <button type="button" (click)="AddSpecial()" class="success btn btn-primary ml-3p">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!----*Enagagement Popup*---->
+<div class="modal" role="dialog" [ngStyle]="{'display':Engagepopup}" data-keyboard="false">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Engagement Type</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4 ml-n1p">
+            <mat-form-field appearance="outline">
+              <mat-label>Engagement Type</mat-label>
+              <input name="Engagements" [(ngModel)]="M_Engagementtype" (keypress)="nameField($event)" matInput placeholder="Enter Engagement type" required>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" (click)="Engagementtypeclose()" class="btn btn-warning-default ml-2p">Close</button>
+          <button type="button" (click)="SubmitEngage()" class="success btn btn-primary ml-3p">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

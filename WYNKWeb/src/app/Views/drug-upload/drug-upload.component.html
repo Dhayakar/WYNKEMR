@@ -1,0 +1,295 @@
+
+<div class="col-sm-12">
+  <div class="col-sm-12">
+    <div class="row">
+      <h5 align="center" class="card-header bg-success text-white rounded-top">
+        <b>Drug Upload</b>
+      </h5>
+    </div>
+  </div>
+  <div class="container">
+    <div class="col-sm-12 border-radius">
+      <div class="row mt-1p">
+        <div class="col-sm-2">
+          <button class="btn btn-primary" (click)="GetExcelFormat()">Download Excel Format</button>
+        </div>
+        <div class="col-sm-3 f-r">
+          <button type="button" class="btn-text f-r" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-8">
+              <input type="file" id="Uploadfile" #Uploadfile (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
+            </div>
+            <div class="col-sm-1">
+              <button type="button" class="btn btn-info" (click)="Upload()">Upload</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label>Total Items</label> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;:&nbsp;{{TotoalItems}} <br />
+          <label>Uploaded items </label> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;:&nbsp;{{Uploadeditems}}<br />
+          <label>Items unable to upload</label> &nbsp; &nbsp; &nbsp;&nbsp;:&nbsp;{{UnUplodeditems}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="custom-table withoutbackgroung search-table table-bordered">
+            <thead>
+              <tr>
+                <th>Brand</th>
+                <th>Generic Name</th>
+                <th>Manufacturer</th>
+                <th>UOM</th>
+                <th>Drug Group</th>
+                <th>Selling Price</th>
+                <th>Drug Tracker</th>
+                <th>Drug Category</th>
+                <th>HSNO</th>
+                <th>Drug Sub Description</th>
+                <th>A Constant</th>
+                <th>Optic Dia</th>
+                <th>Model No</th>
+                <th>Length</th>
+                <th>Drug Composition</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let Drugdata of DrugExcellist; index as i">
+                <td>{{Drugdata.Brand}}</td>
+                <td>{{Drugdata.GenericName}}</td>
+                <td>{{Drugdata.Manufacturer}}</td>
+                <td>{{Drugdata.UOM}}</td>
+                <td>{{Drugdata.DrugGroup}}</td>
+                <td>{{Drugdata.Rate}}</td>
+                <td contenteditable="true">
+                  <div>
+                    <mat-form-field>
+                      <mat-select name="food" [value]="Drugdata.DrugTracker" (selectionChange)="DrugTracker($event,i,'DrugTracker')">
+                        <mat-option value="SERIAL NUMBER BASED">SERIAL NUMBER BASED</mat-option>
+                        <mat-option value="BATCH NUMBER BASED">BATCH NUMBER BASED</mat-option>
+                        <mat-option value="NONE">NONE</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </td>
+                <td contenteditable="true">
+                  <div>
+                    <mat-form-field>
+                      <mat-select name="food" [value]="Drugdata.DrugCategory" (selectionChange)="DrugCategory($event,i,'DrugCategory')">
+                        <mat-option value="IMPLANTDRUG">IMPLANTDRUG</mat-option>
+                        <mat-option value="NONIMPLANTDRUG">NONIMPLANTDRUG</mat-option>
+                        <mat-option value="OTHERS">OTHERS</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </td>
+                <td>{{Drugdata.HSNO}}</td>
+                <td>{{Drugdata.DrugSubDescription}}</td>
+                <td>{{Drugdata.AConstant}}</td>
+                <td>{{Drugdata.OpticDia}}</td>
+                <td>{{Drugdata.ModelNo}}</td>
+                <td>{{Drugdata.Length}}</td>
+                <td>{{Drugdata.DrugComposition}}</td>
+                <td>
+                  <div *ngIf="Drugdata.Status == 'Uploaded'"><i class="fa fa-check-circle" style="font-size:15px;color:green"></i> &nbsp;{{Drugdata.Status}}</div>
+                  <div *ngIf="Drugdata.Status == 'Duplicate'"><i class="fa fa-warning" style="font-size:15px;color:red"></i>&nbsp;{{Drugdata.Status}}</div>
+                  <div *ngIf="Drugdata.Status == 'Error'"><i class="fa fa-warning" style="font-size:15px;color:red"></i>&nbsp;{{Drugdata.Status}}</div>
+                  <div *ngIf="Drugdata.Status == 'InValid'"><i class="fa fa-warning" style="font-size:15px;color:red"></i>&nbsp; Invalid </div>
+                  <div *ngIf="Drugdata.Status == 'Pending'"> Pending </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 pb25 ml-12p mt-1p">
+    <div class="col-sm-4  sub-section btn-wrap f-r">
+      <button type="button" class="btn btn-warning-default" (click)="oncancel()">Cancel</button>
+      <button (click)="onSubmit()" [disabled]="isNextButton" class="success btn btn-primary">Submit</button>
+    </div>
+  </div>
+</div>
+
+  <!----*Access Popup*---->
+  <div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+          <h4 class="modal-title">Drug  Upload- View Access</h4>
+        </div>
+        <div class="modal-body">
+          <table align="center" class=" table custom-table">
+            <thead>
+              <tr>
+                <th>Add</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Export</th>
+                <th>Print</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let x of accessdata; index as i">
+                <td><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+                <td><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!----*Sample Template*---->
+  <div class="co-sm-12" style="display:none">
+    <div class="row" id="Template">
+      <table class="custom-table withoutbackgroung search-table table-bordered" style="margin-top:5%">
+        <thead>
+          <tr>
+            <th>Brand *</th>
+            <th>GenericName *</th>
+            <th>Manufacturer *</th>
+            <th>UOM *</th>
+            <th>DrugGroup *</th>
+            <th>Rate *</th>
+            <th>DrugCategory *</th>
+            <th>DrugTracker *</th>
+            <th>HSNO</th>
+            <th>DrugSubDescription</th>
+            <th>AConstant</th>
+            <th>OpticDia</th>
+            <th>ModelNo</th>
+            <th>Length</th>
+            <th>DrugComposition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>number</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+            <th>varchar</th>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <table class="custom-table withoutbackgroung search-table table-bordered" style="margin-top:5%">
+        <thead>
+          <tr>
+            <th>Brand</th>
+            <th>GenericName</th>
+            <th>Manufacturer</th>
+            <th>UOM</th>
+            <th>DrugGroup</th>
+            <th>Rate</th>
+            <th>DrugCategory</th>
+            <th>DrugTracker</th>
+            <th>HSNO</th>
+            <th>DrugSubDescription</th>
+            <th>AConstant</th>
+            <th>OpticDia</th>
+            <th>ModelNo</th>
+            <th>Length</th>
+            <th>DrugComposition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Zymar</td>
+            <td>Gatifloxacin</td>
+            <td>TataGroups</td>
+            <td>Tabelts</td>
+            <td>Nos</td>
+            <td>150</td>
+            <td>NonImplantDrug</td>
+            <td>Batch Number Based</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Zymaxid </td>
+            <td>Gatifloxacin</td>
+            <td>TataGroups</td>
+            <td>Tabelts</td>
+            <td>Nos</td>
+            <td>150</td>
+            <td>NonImplantDrug</td>
+            <td>Batch Number Based</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>ToricLens</td>
+            <td>Lens</td>
+            <td>TataGroups</td>
+            <td>Pieces</td>
+            <td>Nos</td>
+            <td>150</td>
+            <td>ImplantDrug</td>
+            <td>Serial Number Based</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Surgical Gloves</td>
+            <td>Others</td>
+            <td>TataGroups</td>
+            <td>Pieces</td>
+            <td>Nos</td>
+            <td>10</td>
+            <td>NonImplantDrug</td>
+            <td>None</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

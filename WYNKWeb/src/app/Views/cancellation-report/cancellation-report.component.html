@@ -1,0 +1,212 @@
+
+<div class="col-sm-12">
+  <div>
+    <h4 style="text-align:center">
+      <label style="font-family:'Proxima Nova Semibold'"><b> Cancellation Report </b></label>
+    </h4>
+  </div>
+</div>
+
+<div class="col-sm-12">
+  <div class="row" style="margin-bottom:1%">
+
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-5">
+    </div>
+    <div class="col-sm-1">
+      <button class="btn btn-primary" (click)="Getformaccess()">View Access</button>
+    </div>
+
+  </div>
+  <div class="row" style="border:2px solid #51b8f2; border-radius:8px;margin-top:-1% ">
+
+    <form #cancellationReportForm="ngForm">
+      <div class="col-sm-12" style="margin-top:1%">
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>From Date</mat-label>
+            <input [(ngModel)]="CRFromDate" [max]="maxDate()" (dateChange)="CheckToDate()" name="FromDate" matInput [matDatepicker]="FromDate" placeholder="From Date" required>
+            <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+            <mat-datepicker #FromDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>To Date</mat-label>
+            <input [(ngModel)]="CRToDate" [max]="maxDate()" (dateChange)="CheckToDate()" name="ToDate" matInput [matDatepicker]="ToDate" placeholder="To Date" required>
+            <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+            <mat-datepicker #ToDate></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!--<div class="col-sm-5">
+          <mat-radio-group [(ngModel)]="CR_arrValue" name="CR_arrValue" class="example-radio-group">
+            <mat-radio-button class="example-radio-button" style="font-family:'Proxima Nova Semibold'" *ngFor="let arr of arrs" [value]="arr" (click)="getData($event,arr,CR_arrValue,cancellationReportForm)">
+              {{arr}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>-->
+
+        <div class="col-sm-5">
+          <!--<mat-radio-group [(ngModel)]="CR_arrValue" name="CR_arrValue" (click)="getData(CR_arrValue.)" aria-label="Select an option">-->
+          <mat-radio-button style="margin-right:6%;margin-top:1%" (click)="getData(1)">Cancelled by Front-Desk</mat-radio-button>
+          <mat-radio-button style="margin-right:1%;margin-top:1%" (click)="getData(2)">Cancelled by Doctor</mat-radio-button>
+          <mat-radio-button style="margin-right:5%;margin-top:1%" (click)="getData(3)">Cancelled by Optometrist</mat-radio-button>
+          <mat-radio-button style="margin-right:1%;margin-top:1%" (click)="getData(4)">Cancelled by Vision</mat-radio-button>
+
+        </div>
+
+        <!--<div class="col-sm-1" style="margin-top:1%">
+          <button type="button" class="btn btn-success" (click)="Submit(CRFromDate,CRToDate)">Submit</button>
+        </div>-->
+        <!--<div class="col-sm-1" *ngIf="Search">
+          <mat-form-field appearance="outline" style="margin-left:1%; font-size: 11px">
+            <mat-label>Search Criteria</mat-label>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Criteria">
+          </mat-form-field>
+        </div>-->
+        <div class="col-sm-1" style="margin-top:1%">
+          <button [disabled]="disprint" mat-raised-button matTooltip="Print" id="cmd" (click)="modalSuccesPrintOk()"><i class="fa fa-print" style="color:cornflowerblue;font-size:36px"></i></button>
+        </div>
+        <div class="col-sm-1" style="margin-top:1%">
+          <button [disabled]="disprint" mat-raised-button matTooltip="Export to Excel" (click)="fireEvent()"><img style="height:35px;width:45px;" src="assets/excel.svg" /></button>
+        </div>
+
+
+        <div class="col-sm-1" style="margin-top:1%">
+          <button type="button" class="btn btn-danger" (click)="Cancel()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="row" style="overflow:auto; height:400px;position:sticky" id="section" #table>
+        <h1 style="text-align:center;font-family:'Proxima Nova Semibold';background-color:white;color:black;font-size:16px;"><b>Company :  <span style="color:blue">{{cmpname}}</span></b></h1>
+        <h2 style="text-align:center;font-family:'Proxima Nova Semibold';background-color:white;color:black;font-size:16px;"><b>Cancellation Report from <span style="color:blue">{{fromdate}}</span>  to  <span style="color:blue">{{todat}}</span></b></h2>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">S No</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">UIN</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Name</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Age</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Gender</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Cancelled Date</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Cancellation Reasons</th>
+              <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center">Staff</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cancel of fromdeskcount ;let i = index">
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{i + 1}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{cancel.UIN}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{cancel.FName}} {{cancel.MName}} {{cancel.lName}}</td>
+              <td style="color: #212121;font-family: 'Proxima Nova Semibold';font-size: 13px;text-align: center">{{cancel.Age}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{cancel.Gender}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{cancel.CancelledDateTime | date :"dd-MMM-yyyy"}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{cancel.CancelledReasons}}</td>
+              <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center">{{cancel.Doctorname}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+    </form>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':CancelReportBlock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title" style="font-family:'Proxima Nova Semibold'">Cancellation Report</h4>
+      </div>
+      <div class="modal-body" style="    height: 40px;
+    margin-top: -10px;
+">
+        <h5 style="    background-color: none;
+    font-size: 20px;
+    font-family: 'Proxima Nova Semibold'">
+          Do You Want Cancel?
+        </h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="CancelNO()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="CancelYES()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':secificperiodError}" style="top:10%">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: -webkit-fill-available;">
+      <div class="modal-header">
+        <h4 class="modal-title">Information</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="esecificperiodErorClose()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <p style="text-align:center;font-size:15px">
+            <b>
+              No Data found !
+            </b>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="esecificperiodErorClose()">OK</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Doctor Consulting Hrs  - View Access</h4>
+      </div>
+      <div class="modal-body" style="height:40px;margin-top:-10px;">
+        <table align="center" style="border-left:3px solid#51b8f2;font-family:'Proxima Nova Semibold';font-size:14px;" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Add</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Edit</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Delete</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Export</th>
+              <th style=" color:black;font-family:'Proxima Nova Semibold';font-size:14px;text-align:center;height:40px">Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let x of accessdata; index as i">
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox></td>
+              <td style="text-align:center;"><mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer" style="margin-top:20%">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

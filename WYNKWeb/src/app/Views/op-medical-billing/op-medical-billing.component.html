@@ -1,0 +1,1400 @@
+
+<div class="row">
+  <div class="col-sm-4">
+    <h5 class="card-header bg-success text-white rounded-top">
+      OutPatient Medical Billing
+    </h5>
+  </div>
+  <div class="col-sm-7"></div>
+</div>
+<div class="col-sm-12 ml-n1p border-blue border-radius bg-white">
+  <div *ngIf="PendingPrescription" class="row mt-1p">
+    <div class="col-sm-2 width-15p  Padding-0px ml-2p">
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select required [(ngModel)]="M_Status" name="Status">
+          <mat-option value="Open">Open</mat-option>
+          <mat-option value="Closed">Closed</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-2 ml-1p width-15p  Padding-0px">
+      <mat-form-field appearance="outline">
+        <mat-label>Store</mat-label>
+        <mat-select required [(ngModel)]="M_Store" name="Store">
+          <mat-option *ngFor="let Store of Stores" [value]="Store.Value">{{Store.Text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-3 width-14p">
+      <mat-form-field appearance="outline">
+        <mat-select [(ngModel)]="M_PeriodDate" name="PeriodDate" (ngModelChange)="PeriodDateChange()">
+          <mat-option value="Today">Today</mat-option>
+          <mat-option value="PeriodFrom">Specific Period</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-5 ml-n2p">
+      <div class="col-sm-6">
+        <mat-form-field appearance="outline">
+          <mat-label>From Date</mat-label>
+          <input [(ngModel)]="M_FromDate" (dateChange)="CheckToDate()" name="FromDate" [max]="maxToDate" matInput [matDatepicker]="FromDate" placeholder="FromDate">
+          <mat-datepicker-toggle matSuffix [for]="FromDate"></mat-datepicker-toggle>
+          <mat-datepicker #FromDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 ml-n2p">
+        <mat-form-field appearance="outline">
+          <mat-label>To Date</mat-label>
+          <input [(ngModel)]="M_ToDate" [min]="minToDate" [max]="maxToDate" (dateChange)="CheckToDate()" name="ToDate" matInput [matDatepicker]="ToDate" placeholder="ToDate" [disabled]="!PeriodFrom">
+          <mat-datepicker-toggle matSuffix [for]="ToDate"></mat-datepicker-toggle>
+          <mat-datepicker #ToDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-1 ml-n3p">
+      <button type="button" class="btn btn-success" (click)="DateSearch(M_FromDate,M_ToDate,M_Status)">Search</button>
+    </div>
+  </div>
+  <div *ngIf="MedicalPrescriptionTable" class="m-6 mt-1p">
+    <div class="row width-15p">
+      <mat-form-field appearance="outline">
+        <mat-label>Search Criteria</mat-label>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Criteria">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10 heightAuto-300px">
+          <table mat-table matSort [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="PrescribedDate">
+              <th mat-header-cell *matHeaderCellDef>Prescription Date</th>
+              <td mat-cell *matCellDef="let element"> {{element.PrescribedDate|date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="PrescribedDoctor">
+              <th mat-header-cell *matHeaderCellDef>Prescribed By</th>
+              <td mat-cell *matCellDef="let element"> {{element.PrescribedDoctor}} </td>
+            </ng-container>
+            <ng-container matColumnDef="UIN">
+              <th mat-header-cell *matHeaderCellDef>UIN</th>
+              <td mat-cell *matCellDef="let element"> {{element.UIN}} </td>
+            </ng-container>
+            <ng-container matColumnDef="PatientName">
+              <th mat-header-cell *matHeaderCellDef>Patient Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.PatientName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns;" (click)="selecttype(element)"></tr>
+          </table>
+        </div>
+        <div class="col-sm-1"> </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="Details">
+    <div class="row mt-2p">
+      <div class="col-sm-12">
+        <div class="col-sm-6 mph-0 pb20">
+          <span class="uinborder">
+            <strong>{{M_UIN}} / {{M_PatientName}} / {{M_Age}} / {{M_Gender}}</strong>
+          </span>
+        </div>
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-6" *ngIf="Print">
+              <label class="fontsize-14p">Invoice no</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{M_InvoiceNo}}
+            </div>
+            <div class="col-sm-6">
+              <label class="fontsize-14p">Prescribed by</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{M_Doctor}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6" *ngIf="Print">
+              <label class="fontsize-14p">Invoice date</label>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{M_InvoiceDate | date:"dd-MMM-y,HH:mm"}}
+            </div>
+            <div class="col-sm-6">
+              <label class="fontsize-14p">Prescribed date</label>&nbsp;:&nbsp;&nbsp;&nbsp;{{M_Date | date:"dd-MMM-y,HH:mm"}}
+            </div>
+          </div>
+          <!--<div class="row" *ngIf="M_PendingAmount != undefined">
+            <div class="col-sm-6">
+              <label class="fontsize-14p">Pending Amount</label>&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{M_PendingAmount}}
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <input id="tab-1" type="radio" name="tabs" checked="checked" />
+      <input id="tab-2" type="radio" name="tabs" />
+      <div class="tabs">
+        <label for="tab-1">General Details</label>
+        <label for="tab-2">Payment Details</label>
+      </div>
+      <div class="content">
+        <div class="tab  position-sticky">
+          <div class="col-sm-12 width-102p ml-n1p">
+            <div class="col-sm-12">
+              <h5 class="card-header bg-success text-white">
+                Item Details
+                <button *ngIf="TableShow" type="button" (click)="AddExtraDrug();" class="btnuserdefined btn-dark"><i matTooltip="Add Items" class="fa fa-plus"></i></button>
+              </h5>
+            </div>
+          </div>
+          <div class="col-sm-12 heightAuto-300px ml-n2p" *ngIf="TableShow">
+            <table mat-table matSort [dataSource]="dataSource1" class="custom-table withoutbackgroung search-table table-bordered ml-2p">
+              <ng-container matColumnDef="SerialNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">S.No</th>
+                <td mat-cell *matCellDef="let j = index" class="width-4p"> {{(j+1)}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Serialsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p"> SNo </th>
+              </ng-container>
+              <ng-container matColumnDef="Drug">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Brand</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-9p Padding-5px" contenteditable="false" (keypress)="RestrictValues($event)" (keyup)="changeText(id,'Drug',$event)">
+                  <div class="input-icons mt-5p">
+                    <mat-form-field appearance="outline">
+                      <mat-select value="{{element.DrugID}}" (selectionChange)="DrugDetailsSearch($event,id,element)">
+                        <input matInput #inputdrug class="search" (input)="Filterdatainputdrug($event.target.value)" autocomplete="off">
+                        <mat-option *ngFor="let DrugName of DrugNameList" [value]="DrugName.Value">{{DrugName.Text}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Brandsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-18p"> Drug </th>
+              </ng-container>
+              <ng-container matColumnDef="UOM">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">UOM</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-7p text-left Padding-5px" contenteditable="false" (keypress)="RestrictValues($event)" (keyup)="changeText(id,'UOM',$event)"> {{element.UOM}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="UOMsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="text-center width-2p"> UOM </th>
+              </ng-container>
+              <ng-container matColumnDef="Quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Prescribed Quantity</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end">{{element.Quantity}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Quantitysymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center padding-bot2px">
+                  Presc. qty
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="AvailQuantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">AvailQuantity</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end">{{element.AvailQuantity}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="AvailQuantitysymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center padding-bot2px">
+                  Avlbl qty
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="Reqqty">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Requested Quantity</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="true"
+                    (keypress)="RestrictNegativeValues($event)" (keyup)="ActchangeValue(id,'Reqqty',$event,element);
+                          changeValueAmount(id,element,'Amount');changeValueGrossAmount(id,element,'GrossAmount');
+                          changeValueTotal(id,element,'TotalCost');changeGStAmount(id,element,'GSTValue');
+                          changeValueDiscountAmount(id,element,'DiscountAmount');ChangeCess(element);">
+                  {{element.Reqqty}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="RequestedQtys">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center padding-bot2px">
+                  Req. qty
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="UnitPrice">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Unit Price</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false" (keypress)="RestrictNegativeValues($event)" (keyup)="changeValue(id,'UnitPrice',$event);changeValueAmount(id,element,'Amount');changeValueGrossAmount(id,element,'GrossAmount');changeValueTotal(id,element,'TotalCost')">{{element.UnitPrice| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="UNITsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center padding-bot2px">
+                  Unit Price
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="Amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">
+                  Amount
+                </th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">{{element.Amount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-end">{{getTotalAmount()| currency:Country2}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Amountsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center padding-bot2px">
+                  Amount
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="Discount">
+                <th mat-header-cell *matHeaderCellDef class="width-4p text-center top-0px">%</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-4p text-end" contenteditable="true" (keypress)="RestrictNegativeValues1($event)" (keyup)="Restrict($event);changeValue(id,'Discount',$event);changeValueDiscountAmount(id,element,'DiscountAmount');changeValueGrossAmount(id,element,'GrossAmount');changeValueTotal(id,element,'TotalCost');changeGStAmount(id,element,'GSTValue');ChangeCess(element)">{{element.Discount}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="DiscountAmount">
+                <th mat-header-cell *matHeaderCellDef class="width-6p text-center top-0px">
+                  Amount
+                </th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-4p text-end" contenteditable="false" (keyup)="changeValue(id,'DiscountAmount',$event);changeDis(id,element);">{{element.DiscountAmount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-end">{{getTotalDiscountAmount()| currency:Country2}} </td>
+              </ng-container>
+              <ng-container matColumnDef="GrossAmount">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Gross Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">{{element.GrossAmount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-end">{{getTotalGrossAmount()| currency:Country2}} </td>
+              </ng-container>
+              <ng-container matColumnDef="GrossAmountsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center padding-bot2px">
+                  Gross Amount
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="TaxDescription">
+                <th mat-header-cell *matHeaderCellDef class="width-9p text-center top-0px">Desc.</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.TaxDescription != null" class="col-sm-10 mt-8p">
+                      {{element.TaxDescription}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.CessDescription}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCessDescription}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="GST">
+                <th mat-header-cell *matHeaderCellDef class="width-5p text-center top-0px">%</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.GST != null" class="col-sm-10 mt-12p">
+                      {{element.GST | number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.Cess | number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCess | number : '1.2-2'}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="GSTValue">
+                <th mat-header-cell *matHeaderCellDef class="width-7p text-center top-0px">
+                  Amount
+                </th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.GST != null" class="col-sm-10 mt-8p">
+                      {{element.GSTValue | number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.CessValue| number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCessValue| number : '1.2-2'}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="text-end"> {{getTotalGSTValue()| currency:Country2}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Cess%">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Cess %</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">{{element.Cess| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Cesssymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-5p text-center padding-bot2px">
+                  Tax %
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="AddCess%">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Add Cess %</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">{{element.AddCess| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="AddCesssymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-6p text-center padding-bot2px">
+                  Add Tax %
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="TotalCost">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Total Cost</th>
+                <td mat-cell *matCellDef="let element ;let id = index;" class="text-end" contenteditable="false">{{element.TotalCost| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef contenteditable="false" class="text-end">{{getTotalCost() | currency:Country2}} </td>
+              </ng-container>
+              <ng-container matColumnDef="TotalCostSymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-12p text-center">
+                  Net Amount
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="Delete">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Action </th>
+                <td mat-cell *matCellDef="let element; let i = index;">
+                  <div class="col-sm-12">
+                    <div class="row">
+                      <div class="col-sm-7 ml-n9p">
+                        <button mat-icon-button [disabled]="element.IsSerial == null"> <mat-icon data-toggle="tooltip" title="Add/Edit" class="grab" (click)="element.IsSerial == true ? SerialList(element,i): element.IsSerial == null ? null : BatchList(element,i)">new_releases</mat-icon></button>
+                      </div>
+                      <div class="col-sm-5">
+                        <button mat-icon-button><mat-icon data-toggle="tooltip" title="Remove" (click)="removeDrug(i)">delete</mat-icon> </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Actionymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="text-center">
+                  Action
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="header-row-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center"> Discount </th>
+              </ng-container>
+              <ng-container matColumnDef="header-row-third-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center"> Tax </th>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['Serialsymbol','Brandsymbol','UOMsymbol','Quantitysymbol',
+                  'AvailQuantitysymbol','RequestedQtys','UNITsymbol','Amountsymbol','header-row-group','GrossAmountsymbol','header-row-third-group',
+                  'TotalCostSymbol','Actionymbol']; sticky: true"></tr>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></tr>
+              <tr mat-row *matRowDef="let i=index; let element; let row;  let even = even;  columns: displayedColumns1;" [ngStyle]="{'border': element.IsAvailable == true ? 'none' : '2px solid red'}"></tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns1; sticky: true"></tr>
+            </table>
+          </div>
+          <div class="col-sm-12 heightAuto-300px" *ngIf="Print">
+            <table mat-table matSort [dataSource]="dataSource2" class="custom-table withoutbackgroung search-table table-bordered position-sticky">
+              <ng-container matColumnDef="SerialNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">S.No</th>
+                <td mat-cell *matCellDef="let j = index" class="width-4p text-center"> {{(j+1)}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Serialsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center padding-bot2px"> S.No </th>
+              </ng-container>
+              <ng-container matColumnDef="Drug">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Brand</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-7p text-left Padding-5px"> {{element.Drug}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Brandsymbol">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-9p text-center Padding-20px"> Drug </th>
+              </ng-container>
+              <ng-container matColumnDef="UOM">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">UOM</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-7p text-left Padding-5px"> {{element.UOM}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="UOMs">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-2p text-center Padding-20px"> UOM </th>
+              </ng-container>
+              <ng-container matColumnDef="Quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Quantity</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.Reqqty}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Quantitys">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-4p text-center Padding-20px"> Qty </th>
+              </ng-container>
+              <ng-container matColumnDef="UnitPrice">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Unit Price</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.UnitPrice| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="UnitPrices">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Unit Price</th>
+              </ng-container>
+              <ng-container matColumnDef="Amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.Amount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="Amounts">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Amount</th>
+              </ng-container>
+              <ng-container matColumnDef="Discount">
+                <th mat-header-cell *matHeaderCellDef class="width-4p text-center">%</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-4p text-end Padding-5px">{{element.Discount}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="DiscountAmount">
+                <th mat-header-cell *matHeaderCellDef class="width-6p text-center">Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-4p text-end Padding-5px">{{element.DiscountAmount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GrossAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Gross  Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end Padding-5px">{{element.GrossAmount| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GrossAmounts">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-7p text-center Padding-20px">Gross  Amount</th>
+              </ng-container>
+              <ng-container matColumnDef="TaxDescription">
+                <th mat-header-cell *matHeaderCellDef class="width-8p text-center">Description</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.TaxDescription != null" class="col-sm-10 mt-8p">
+                      {{element.TaxDescription}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.CessDescription}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCessDescription}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GST">
+                <th mat-header-cell *matHeaderCellDef class="width-2p text-center top-0px">%</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="text-end" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.GST != null" class="col-sm-10 mt-12p">
+                      {{element.GST | number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.Cess | number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCess | number : '1.2-2'}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <ng-container matColumnDef="GSTValue">
+                <th mat-header-cell *matHeaderCellDef class="width-7p text-center top-0px">Amount</th>
+                <td mat-cell *matCellDef="let element;let id = index;" class="width-1p text-end Padding-5px" contenteditable="false">
+                  <div class="row">
+                    <div *ngIf="element.GST != null" class="col-sm-10 mt-8p">
+                      {{element.GSTValue | number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.Cess != null" class="col-sm-10">
+                      {{element.CessValue| number : '1.2-2'}}
+                    </div>
+                    <br />
+                    <div *ngIf="element.AddCess != null" class="col-sm-10">
+                      {{element.AddCessValue| number : '1.2-2'}}
+                    </div>
+                  </div>
+                </td>
+                <td mat-footer-cell *matFooterCellDef><strong>Total</strong></td>
+              </ng-container>
+              <ng-container matColumnDef="TotalCost">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}">Total Cost</th>
+                <td mat-cell *matCellDef="let element ;let id = index;" class="text-end">{{element.TotalCost| number : '1.2-2'}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-end"> {{printTotal | currency:Country2}} </td>
+              </ng-container>
+              <ng-container matColumnDef="TotalCosts">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="width-8p text-center Padding-20px">Net Amount</th>
+              </ng-container>
+              <ng-container matColumnDef="header-row-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center"> Discount </th>
+              </ng-container>
+              <ng-container matColumnDef="header-row-third-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center"> Tax </th>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['Serialsymbol','Brandsymbol','UOMs','Quantitys',
+                   'UnitPrices','Amounts','header-row-group','GrossAmounts','header-row-third-group','TotalCosts']"></tr>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+              <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumns2;" [ngClass]="{gray: even}"></tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns2; sticky: true"></tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab position-sticky">
+          <div class="col-sm-12 width-135p" *ngIf="PaidTableShow">
+            <div class="ml-2p text-left">
+              <h6 class="col-sm-3">Payment History</h6>
+            </div>
+            <div class="row position-sticky" style="position:sticky" *ngIf="PaidTableShow">
+              <div class="col-sm-12 heightAuto-200px ml-2p">
+                <table mat-table matSort [dataSource]="PrintPaySource" class="custom-table withoutbackgroung search-table table-bordered">
+                  <ng-container matColumnDef="PaymentMode">
+                    <th mat-header-cell *matHeaderCellDef>PaymentMode</th>
+                    <td mat-cell *matCellDef="let element">{{element.PaymentMode}}</td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="InstrumentNumber">
+                    <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+                    <td mat-cell *matCellDef="let element">{{element.InstrumentNumber}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="InstrumentDate">
+                    <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+                    <td mat-cell *matCellDef="let element">{{element.Instrumentdate| date:'dd-MMM-y'}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="BankName">
+                    <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                    <td mat-cell *matCellDef="let element">{{element.BankName}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Branch">
+                    <th mat-header-cell *matHeaderCellDef>Branch</th>
+                    <td mat-cell *matCellDef="let element">{{element.BankBranch}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="ExpiryDate">
+                    <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+                    <td mat-cell *matCellDef="let element">{{element.Expirydate| date:'dd-MMM-y'}} </td>
+                    <td mat-footer-cell *matFooterCellDef><strong>Total</strong></td>
+                  </ng-container>
+                  <ng-container matColumnDef="Amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let element">{{element.Amount | number : '1.2-2'}} </td>
+                    <td mat-footer-cell *matFooterCellDef>
+                      {{PaidTotal | currency:Country2 }}
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="PrintPayDisplay;sticky: true"></tr>
+                  <tr mat-row *matRowDef="let element;  let even = even; columns: PrintPayDisplay"></tr>
+                  <tr mat-footer-row *matFooterRowDef="PrintPayDisplay;sticky: true"></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-1p ml-1p"  *ngIf="!PaidTableShow">
+            <label class="fontsize-14p">Amount</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{getTotalCost() | currency:Country2}}
+          </div>
+          <div class="row col-sm-12 mt-1p width-110p" *ngIf="!PaidTableShow">
+              <div class="card mb-12">
+                <h5 class="card-header bg-success text-white">
+                  Payment  details
+                  <button (click)="AddPaymentDetailsNewgrid();" class="btnuserdefined btn-dark"><i matTooltip="Add Payment Details" class="fa fa-plus"></i></button>
+                </h5>
+                <div class="card-body">
+                  <div class="row heightAuto-200px">
+                    <table mat-table [dataSource]="dataSource3" class="custom-table withoutbackgroung search-table table-bordered">
+                      <ng-container matColumnDef="PaymentMode">
+                        <th mat-header-cell *matHeaderCellDef>Payment Mode</th>
+                        <td mat-cell *matCellDef="let element;let id = index;">
+                          <mat-form-field appearance="outline">
+                            <mat-select (selectionChange)="PaymentChange(id,$event,element)">
+                              <mat-option *ngFor="let Paymentsmode of Paymentsmodes" [value]="Paymentsmode.Value">
+                                {{Paymentsmode.Text}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef> </td>
+                      </ng-container>
+                      <ng-container matColumnDef="BankName">
+                        <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash'">
+                          <mat-form-field appearance="outline">
+                            <input (blur)="BankName($event,element)" (keypress)="nameField($event)" [disabled]="element.PaymentMode =='Cash'  " maxlength="100" matInput placeholder="Enter BankName" name="BankName" type="text">
+                          </mat-form-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef> </td>
+                      </ng-container>
+                      <ng-container matColumnDef="InstrumentNumber">
+                        <th mat-header-cell *matHeaderCellDef>Instrument Number</th>
+                        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash'">
+                          <mat-form-field appearance="outline">
+                            <input (blur)="InstrumentNumber($event,element)" [disabled]="element.PaymentMode =='Cash'" maxlength="15" (keypress)="numberOnly($event)" matInput placeholder="Enter Instrument Number" name="InstrumentNumber" type="text">
+                          </mat-form-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef> </td>
+                      </ng-container>
+                      <ng-container matColumnDef="InstrumentDate">
+                        <th mat-header-cell *matHeaderCellDef>Instrument Date</th>
+                        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash' || element.PaymentMode !='Debit card'|| element.PaymentMode !='Credit Card'">
+                          <mat-form-field appearance="outline">
+                            <input [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card'|| element.PaymentMode =='Credit Card' "
+                                   name="InstrumentDate" autocomplete="off" [min]="maxToDate" matInput [matDatepicker]="InstrumentDate" (dateChange)="dateofinstrument($event,element)" placeholder="InstrumentDate">
+                            <mat-datepicker-toggle matSuffix [for]="InstrumentDate"></mat-datepicker-toggle>
+                            <mat-datepicker #InstrumentDate></mat-datepicker>
+                          </mat-form-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef> </td>
+                      </ng-container>
+                      <ng-container matColumnDef="ExpiryDate">
+                        <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+                        <td mat-cell *matCellDef="let element" [contentEditable]="element.PaymentMode !='Cash'|| element.PaymentMode !='Demand Draft' ">
+                          <mat-form-field appearance="outline">
+                            <input (dateChange)="dateexpiry($event,element)" [disabled]="element.PaymentMode =='Cash'|| element.PaymentMode =='Demand Draft' " autocomplete="off" [min]="MINExpiryDate"
+                                   name="ExpiryDate" matInput [matDatepicker]="ExpiryDate" placeholder="ExpiryDate" type="datetime">
+                            <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
+                            <mat-datepicker #ExpiryDate></mat-datepicker>
+                          </mat-form-field>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
+                      </ng-container>
+                      <ng-container matColumnDef="Branch">
+                        <th mat-header-cell *matHeaderCellDef>Branch</th>
+                        <td mat-cell *matCellDef="let element"
+                            [contentEditable]="element.PaymentMode !='Cash'|| element.PaymentMode !='Debit card' || element.PaymentMode !='Credit Card'">
+                          <mat-form-field appearance="outline">
+                            <input (blur)="Branch($event,element)"
+                                   [disabled]="element.PaymentMode =='Cash' || element.PaymentMode =='Debit card' || element.PaymentMode =='Credit Card'"
+                                   (keypress)="nameField($event)" maxlength="50" matInput name="Branch" placeholder="Branch" type="text">
+                          </mat-form-field>
+
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+                      <ng-container matColumnDef="Amount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let element;let id = index" required (keyup)="Amount(id,'Amount',$event,element)" (keypress)="numberOnly($event)" [contentEditable]="disableRow">
+                          {{element.Amount | number :'1.2-2'}}
+
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>
+                          <strong>
+                            {{PTotalAmount1() | currency:Country2 }}
+                          </strong>
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element;let id = index" [contentEditable]="disableRow">
+                          <i class="fas fa-trash-alt icon-delete" title="Delete" (click)="removePaytype(i)"></i>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns3;sticky: true"></tr>
+                      <tr mat-row *matRowDef="let element;  let even = even; columns: displayedColumns3"></tr>
+                      <tr mat-footer-row *matFooterRowDef="displayedColumns3;"></tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<div class="col-sm-12 m-6" *ngIf="Details">
+  <div class="row">
+    <div class="col-sm-4 f-r">
+      <button type="button" class="btn btn-warning-default ml-2p" (click)="onCancel()">Cancel</button>
+      <button *ngIf="!Print" type="button" class="success btn btn-primary ml-5p" (click)="onSubmit()">Submit</button>
+      <button *ngIf="Print" type="button" class="success btn btn-primary ml-5p" (click)="PrintSummary1()">Print</button>
+    </div>
+  </div>
+</div>
+<!--<div class="col-sm-12 m-6" *ngIf="Print">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-success" (click)="PrintSummary1()">Print</button>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+</div>-->
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':BatchInfo}" style="height:500px;margin-top:-35px;">
+  <div class="modal-dialog modal-lg" style="width:88%;padding-top:10px;padding-left:290px;margin-left:-2%">
+
+    <div class="modal-content">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="BatchInfoClose()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Batch Details</strong>
+        </h5>
+
+      </div>
+
+
+      <div class="modal-body">
+        <div style="overflow:auto; height:300px">
+
+          <div class="col-sm-12">
+            <table mat-table matSort [dataSource]="dataSource4" id="contentToConvert" class="table table-bordered">
+
+              <ng-container matColumnDef="DrugId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#51b8f2;color: white;text-align: center;width: 20%">Drug</th>
+                <td mat-cell *matCellDef="let element;let id = index;"> {{element.DrugName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="itemBatchNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#51b8f2;color: white;text-align: center;width: 15%">Batch No</th>
+                <td mat-cell *matCellDef="let element;let id = index;"> {{element.itemBatchNo}} </td>
+              </ng-container>
+              <ng-container matColumnDef="balanceQty">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#51b8f2;color: white;text-align: center;width: 13%">Balance Qty</th>
+                <td mat-cell *matCellDef="let element;let id = index;" style="text-align: center;"> {{element.balanceQty}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ExpiryDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#51b8f2;color: white;text-align: center;width: 11%;">Expiry Date</th>
+                <td mat-cell *matCellDef="let element;let id = index;"> {{element.ExpiryDate| date:'dd-MMM-y'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ExpiryInDays">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color:#51b8f2;color: white;text-align: center;width: 14%">Expired (In Days)</th>
+                <td mat-cell *matCellDef="let element;let id = index;" style="text-align: center;"> {{element.ExpireInDays}} </td>
+              </ng-container>
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns4;sticky:false"></tr>
+              <tr mat-row *matRowDef="let row;  let even = even;  columns: displayedColumns4;" [ngClass]="{gray: even}"></tr>
+
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>-->
+
+<!--Print-->
+<div id="section1" style="display:none">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-6">
+        <label style="font-size:16px"><strong>{{CompanyName}}</strong> </label>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:28%"><strong>{{CompanyAddress1 + ' '+ CompanyAddress2 + ' '+ CompanyAddress3}}</strong></label></div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-7"> <label style="text-align:center;margin-left:1%"><strong>{{'Phone No:'+' '+ CompanyPhone1 + ',' + ' ' + 'Website:' + ' ' + CompanyWebsite}}</strong></label></div>
+      <div class="col-sm-1"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4"><label style="text-align:center"><strong>OutPatient Medical Billing</strong></label></div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Invoice no </strong></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; {{M_InvoiceNo}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Invoice date </strong></label>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; {{M_InvoiceDate  | date :'dd-MMM-yyyy, HH:mm'}}
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Patient ID</strong></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; {{M_UIN}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Patient Name</strong></label>  &nbsp;&nbsp; : &nbsp;&nbsp;{{M_PatientName}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Age / Gender : </strong>{{M_Age}} / {{M_Gender}}</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label><strong>Prescribed by</strong></label> : &nbsp; {{M_Doctor}}
+      </div>
+      <div class="col-sm-4">
+        <label><strong>Prescribed date</strong></label>&nbsp;: &nbsp; {{M_Date | date :'dd-MMM-yyyy, HH:mm'}}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-bottom:5px;">
+    <div class="row">
+      <label><strong>Item Details:</strong></label>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <table align="center" style="border-left:1px black;margin-top:-9px;font-size: 12px" class="table table-bordered">
+        <thead>
+          <tr>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">S.No</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Medicine</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">UOM</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Quantity</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Unit Price</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">
+              <div style="height: 13px;margin-top: -11px;">
+                Amount
+              </div><br />
+              <!--<div style="height: 4px;margin-top:-6px">
+                ( in {{Country2| currency}} )
+              </div>-->
+            </th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;" colspan="2">Discount</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">
+              <div style="height: 13px;margin-top: -11px;">
+                Gross  Amount
+              </div><br />
+              <!--<div style="height: 14px;margin-top:2px">
+                ( in {{Country2| currency}} )
+              </div>-->
+            </th>
+
+            <th style="text-align:center;background-color:#d3d3e8;color:black;" colspan="3">Tax </th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;width:10%">
+              <div style="height: 13px;margin-top: -11px;">
+                Net  Amount
+              </div><br />
+              <!--<div style="height: 14px;margin-top:2px">
+                ( in {{Country2| currency}} )
+              </div>-->
+            </th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;width:4%"> % </th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">
+              <div style="height: 13px;margin-top: -11px;">
+                Amount
+              </div><br />
+              <!--<div style="height: 8px;margin-top: -15px;">
+                ( in {{Country2| currency}} )
+              </div>-->
+            </th>
+            <th></th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;">Desc.</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;width:10%">%</th>
+            <th style="text-align:center;background-color:#d3d3e8;color:black;width:10%">
+              <div style="height: 13px;margin-top: -11px;">
+                Amount
+              </div><br />
+              <!--<div style="height: 8px;margin-top: -15px;">
+                ( in {{Country2| currency}} )
+              </div>-->
+            </th>
+            <th></th>
+          </tr>
+
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let x of commonService.data.GetClosedDetails; index as i">
+            <td style="text-align:center">{{i+1}}</td>
+            <td style="text-align:left">{{x.Drug}}</td>
+            <td style="text-align:left">{{x.UOM}}</td>
+            <td style="text-align:right">{{x.Reqqty}}</td>
+            <td style="text-align:right">{{x.UnitPrice| number : '1.2-2'}}</td>
+            <td style="text-align:right">{{x.Amount| number : '1.2-2'}}</td>
+            <td style="text-align:right">
+              <div *ngIf="x.Discount != 0" class="col-sm-10 mt-8p">
+                {{x.Discount}}
+              </div>
+            </td>
+            <td style="text-align:right">
+              <div *ngIf="x.DiscountAmount != 0" class="col-sm-10 mt-8p">
+                {{x.DiscountAmount| number : '1.2-2'}}
+              </div>
+            </td>
+            <td style="text-align:right">{{x.GrossAmount| number : '1.2-2'}}</td>
+            <td style="text-align:center">
+              <div class="row">
+                <div *ngIf="x.TaxDescription != null" class="col-sm-10 mt-8p">
+                  {{x.TaxDescription}}
+                </div>
+                <br />
+                <div *ngIf="x.Cess != null" class="col-sm-10">
+                  {{x.CessDescription}}
+                </div>
+                <br />
+                <div *ngIf="x.AddCess != null" class="col-sm-10">
+                  {{x.AddCessDescription}}
+                </div>
+              </div>
+            </td>
+            <td style="text-align:center">
+              <div class="row">
+                <div *ngIf="x.GST != null" class="col-sm-10 mt-12p">
+                  {{x.GST}}
+                </div>
+                <br />
+                <div *ngIf="x.Cess != null" class="col-sm-10">
+                  {{x.Cess}}
+                </div>
+                <br />
+                <div *ngIf="x.AddCess != null" class="col-sm-10">
+                  {{x.AddCess}}
+                </div>
+              </div>
+            </td>
+            <td style="text-align:right">
+              <div class="row">
+                <div *ngIf="x.GST != null" class="col-sm-10 mt-8p">
+                  {{x.GSTValue | number : '1.2-2'}}
+                </div><br />
+                <div *ngIf="x.Cess != null" class="col-sm-10">
+                  {{x.CessValue | number : '1.2-2'}}
+                </div><br />
+                <div *ngIf="x.AddCess != null" class="col-sm-10">
+                  {{x.AddCessValue | number : '1.2-2'}}
+                </div>
+              </div>
+            </td>
+            <td style="text-align:right">{{x.TotalCost | number : '1.2-2'}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align:center"><strong>Total</strong></td>
+            <td style="text-align:right">{{printTotal| currency:Country2}}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="row">
+      <mat-label>
+        <strong>{{Country2}} in Words :</strong> &nbsp;&nbsp;{{transformValue(printTotal)}} {{Country2}} only
+      </mat-label><br />
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-bottom:5px;" *ngIf="PaidTableListShow">
+    <div class="row">
+      <label><strong>Payment Details:</strong></label>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-label><strong>Receipt No</strong></mat-label> &nbsp;&nbsp;:
+          </div>
+          <div class="col-sm-6" style="margin-left:-2%">
+            <mat-label style="margin-left:-20%">{{M_ReceiptNo}}</mat-label>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-label> <strong>Receipt Date</strong></mat-label>&nbsp;:
+          </div>
+          <div class="col-sm-6" style="margin-left:-12%">
+            <mat-label style="margin-left:-20%">{{M_ReceiptNoDate | date:'dd-MMM-y, HH:mm'}}</mat-label> &nbsp; Hrs
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:5px;">
+      <table align="center" style="border-left:1px black;margin-top:-9px;font-size: 12px" class="table table-bordered">
+        <thead>
+          <tr>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Sl.No</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Payment Mode</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Instrument No.</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Instrument Date</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Bank Name</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Branch</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Expiry Date</th>
+            <th style="text-align:center;background-color:#f0f5fa;color:gray">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let x of PaymentPaidList; index as i">
+            <td style="text-align:center">{{i+1}}</td>
+            <td style="text-align:left">{{x.PaymentMode}}</td>
+            <td style="text-align:left">{{x.InstrumentNumber}}</td>
+            <td style="text-align:left">{{x.Instrumentdate| date:"dd-MMM-y"}}</td>
+            <td style="text-align:left">{{x.BankName}}</td>
+            <td style="text-align:left">{{x.BankBranch}}</td>
+            <td style="text-align:left">{{x.Expirydate| date:"dd-MMM-y"}}</td>
+            <td style="text-align:right">{{x.Amount| number : '1.2-2'}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align:center"><strong>Total</strong></td>
+            <td style="text-align:right">{{PaidTotal| currency:Country2}}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-7"></div>
+      <div class="col-sm-5">
+        <label style="font-size:14px"><strong>For {{CompanyName}}</strong></label>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-9"></div>
+      <div class="col-sm-3">
+        <label style="font-size:14px"><strong>Authorised Signatory</strong></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Expire Alert-->
+<div class="modal" role="dialog" [ngStyle]="{'display':ExpireAlert}" style="margin-left:-80px;">
+  <div class="modal-dialog modal-lg" style="width:58%;padding-top:15px;padding-left:200px">
+    <div class="modal-content" style="height:350px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="ExpireAlertClose()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Expire Alert</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div style="height:200px;width:auto;position:sticky;overflow:auto;">
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#51b8f2;color:white">S.No</th>
+                <th style="background-color:#51b8f2;color:white">Drug Name</th>
+                <th style="background-color:#51b8f2;color:white">Batch No</th>
+                <th style="background-color:#51b8f2;color:white">Expires In Days</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Expireslist; index as i">
+                <td>{{i+1}}</td>
+                <td>{{item.DrugName}}</td>
+                <td>{{item.BatchNo}}</td>
+                <td>{{item.ExpiresInDays}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Print Popup-->
+<div class="modal" role="dialog" [ngStyle]="{'display':print}">
+  <div class="example-box">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h6 class="modal-title">Information</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <p><strong> Do you want to Print ?</strong></p>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="PrintSummary1()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclose()" cdkFocusInitial>No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Out Of Stock Alert-->
+<div class="modal" role="dialog" [ngStyle]="{'display':modalmed}">
+  <div class="modal-dialog modal-lg" style="width:87%;padding-top:15px;padding-left:200px">
+    <div class="modal-content" style="height:586px">
+      <div class="modal-header" style="background-color:#51b8f2;color:white;">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessmed()">&times;</button>
+        <h5 class="modal-title" style="text-align:center">
+          <strong>Out Of Stock Medicines</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+
+        <div *ngIf="OutOfDrugsView" style="height:200px;width:auto;position:sticky;overflow:auto;">
+          <h5 style="text-align:center">
+            <strong>Batch Details</strong>
+          </h5>
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">S.No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Batch No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Expiry Date</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Available Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of druglist; index as i">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{i+1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.DrugName}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.BatchNumber}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.ExpiryDate |  date:'dd-MMM-y'}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.BalanceQuantity}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="OutOfSerialView" style="height:176px;width:auto;position:sticky;overflow:auto;margin-top: -28px;">
+          <h5 style="text-align:center">
+            <strong>Serials Details</strong>
+          </h5>
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">S.No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Serial No</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Seriallist; index as i">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{i+1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.Brand}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.SerialNo}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="OutOfOtherView" style="height:158px;width:auto;position:sticky;overflow:auto;margin-top: 5px;">
+          <h5 style="text-align:center">
+            <strong>Other Drug Details</strong>
+          </h5>
+          <table style="border-left:1px black;font-size: 12px" class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">S.No</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Name</th>
+                <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px;text-align: center;">Avail.Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of OutOtherDrugsList; index as i">
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{i+1}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.Brand}}</td>
+                <td style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align: center;">{{item.AvailableQty}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--/* Batch Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':BatchModel}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="BatchModelClose()">&times;</button>
+        <h6 class="modal-title text-center">
+          <strong>Available Batch List</strong>
+        </h6>
+      </div>
+      <div class="modal-body">
+
+        <div class="row border-blue border-radius Padding-5px">
+          <div class="col-sm-4">
+            <div class="col-sm-4">
+              <label><strong>Brand :</strong></label>
+            </div>
+            <div class="col-sm-6">
+              <p>{{PopBrand}}</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Requested Qty :</strong></label>
+            <p class="col-sm-6">{{PopReqqty}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Selected Qty :</strong></label>
+            <p class="col-sm-6">{{PopSelectedQty}}</p>
+          </div>
+        </div>
+
+        <div class="row heightAuto-200px mt-1p ml-0 width-100p">
+          <table mat-table matSort [dataSource]="BatchDetailsSource" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="BatchNo">
+              <th mat-header-cell *matHeaderCellDef>Batch No</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.BatchNo}}</td>
+            </ng-container>
+            <ng-container matColumnDef="BalanceQty">
+              <th mat-header-cell *matHeaderCellDef class="width-8p">Balance qty</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.BalanceQty}} </td>
+            </ng-container>
+            <ng-container matColumnDef="ExpiryDate">
+              <th mat-header-cell *matHeaderCellDef class="width-12p">Expiry date</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.ExpiryDate | date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="RetestIntervalDate">
+              <th mat-header-cell *matHeaderCellDef>Re-test Interval date</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.RetestIntervalDate | date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CriticalIntervalDate">
+              <th mat-header-cell *matHeaderCellDef>Critical Interval date</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.CriticalIntervalDate | date:'dd-MMM-y'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="ExpireInDays">
+              <th mat-header-cell *matHeaderCellDef>Expiry in days</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.ExpireInDays}} </td>
+            </ng-container>
+            <ng-container matColumnDef="RetestIntervalDays">
+              <th mat-header-cell *matHeaderCellDef>Bal Re-test interval days in hand</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.RetestIntervalDays}} </td>
+            </ng-container>
+            <ng-container matColumnDef="CriticalIntervalDay">
+              <th mat-header-cell *matHeaderCellDef>Bal Critical interval days in hand</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.CriticalIntervalDay}} </td>
+            </ng-container>
+            <ng-container matColumnDef="TotalQty">
+              <th mat-header-cell *matHeaderCellDef>Total qty</th>
+              <td mat-cell *matCellDef="let element" data-toggle="tooltip" title="Select">{{element.TotalQty}} </td>
+            </ng-container>
+            <ng-container matColumnDef="QtyTaken">
+              <th mat-header-cell *matHeaderCellDef>Issue qty</th>
+              <td mat-cell contenteditable="true" *matCellDef="let element; let i = index;" (click)="myFunction(element)" (blur)="alertHide()" (keypress)="RestrictNegativeValues1($event)" (keyup)="changeValue1(i,'QtyTaken',$event,element);checkingTableQty(i,'QtyTaken',$event,element)" style="color:#212121;font-family:'Proxima Nova Semibold';font-size:13px;text-align:center" data-toggle="tooltip" title="Select">{{element.QtyTaken}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="BatchDetailsCoulmns;sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; let element;   let even = even;columns: BatchDetailsCoulmns;" [ngClass]="{gray: even}"></tr>
+          </table>
+        </div>
+
+        <div class="row" *ngIf="alertInfo">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-10 mt-5p">
+            <p class="fontsize-14p">
+              <span style="color:darkred;">Note</span>: <br /> i) This batch  {{alertBatchNo}}   can be issued till {{AlertRetestCriticalIntervalDate | date:'dd-MMM-y'}}  for {{AlertCriticalIntervalDays}} days,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+              ii) This batch no. will not be shown for issual from Re-test critical date {{AlertRetestCriticalIntervalDate | date:'dd-MMM-y'}} till the expiry date {{AlertExpDate | date:'dd-MMM-y'}}
+            </p>
+          </div>
+          <div class="col-sm-1"></div>
+        </div>
+
+        <div class="row mt-6p">
+          <div class="col-sm-5"></div>
+          <div class="col-sm-1 ml-5p">
+            <button class="success btn btn-primary " mat-raised-button (click)="BatchQtyCheck()">Ok</button>
+          </div>
+          <div class="col-sm-6"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--/* Serial Popup */-->
+<div class="modal" role="dialog" [ngStyle]="{'display':SerialModels}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="SerialModelClose()">&times;</button>
+        <h5 class="modal-title text-center">
+          <strong>Available Serial List</strong>
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="row border-blue border-radius Padding-5px">
+          <div class="col-sm-4">
+            <div class="col-sm-4">
+              <label><strong>Brand :</strong></label>
+            </div>
+            <div class="col-sm-6">
+              <p>{{PopBrand}}</p>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Requested Qty :</strong></label>
+            <p class="col-sm-6">{{PopReqqty}}</p>
+          </div>
+          <div class="col-sm-4">
+            <label class="col-sm-6"><strong>Selected Qty :</strong></label>
+            <p class="col-sm-6">{{PopSelectedQty}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 mt-2p">
+            <div>
+              <mat-label>Available Serial Numbers:</mat-label>
+            </div>
+            <div class="heightAuto-200px">
+              <mat-selection-list #Serialinfo class="CM-Inputblue opacity-3" [(ngModel)]="selectedOptions" name="selectedOptions" (selectionChange)="onSelection($event)" (ngModelChange)="SerialLis($event,Serialinfo)">
+                <mat-list-option *ngFor="let serials of SerialLists" [value]="serials">
+                  {{serials.SerialNo}}
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
+          </div>
+          <div class="col-sm-4 mt-26p">
+            <div class="col-sm-1">
+              <button class="success btn btn-primary " mat-raised-button (click)="QtyCheck()">Ok</button>
+            </div>
+            <div class="col-sm-1 ml-20p">
+              <button class="success" mat-raised-button (click)="Serialinfo.deselectAll()" style="margin-right:12px;font-size:15px;color:orange;background-color:white">Clear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

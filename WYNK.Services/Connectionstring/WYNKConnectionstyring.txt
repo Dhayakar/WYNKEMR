@@ -1,0 +1,1 @@
+Server=DESKTOP-O30V6FC;Database=WYNKLiveTest;multipleActiveResultSets=true;Trusted_Connection=True;Integrated Security=true;

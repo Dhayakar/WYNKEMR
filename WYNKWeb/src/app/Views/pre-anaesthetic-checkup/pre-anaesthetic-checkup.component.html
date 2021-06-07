@@ -1,0 +1,3426 @@
+
+<div class="col-sm-12 dividebar">
+  <div class="row">
+    <h6>Pre-Anaesthetic Checkup</h6>
+  </div>
+  <div class="col-sm-12 mph-0 downmargin">
+    <div class="row mph-0">
+      <div class="col-sm-12 mph-0">
+        <div class="col-sm-4 mph-0 pb20">
+          <span class="uinborder">
+            <strong>{{UIN}} / {{Name}} / {{Age}} / {{Gender}}</strong>
+          </span>
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+          <button (click)="SearchPAC()" class="btn-text grab f-r">
+            <i class="fas fa-info-circle"> </i> Help
+          </button>
+        </div>
+        <div class="col-sm-2 mph-0 f-r content-right pb20">
+          <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 mph-0 downmargin">
+    <div class="row mph-0">
+      <div class="col-sm-12 mph-0">
+        <div class="col-sm-2 mph-0 pb20">
+          <mat-form-field appearance="outline">
+            <mat-label>Anaesthetist</mat-label>
+            <mat-select [(ngModel)]="M_Anaesthetist" name="Anaesthetist" required>
+              <mat-option *ngFor="let M_Anaesthetist of M_Anaesthetists" [value]="M_Anaesthetist.Value">{{M_Anaesthetist.Text}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+          <mat-form-field appearance="outline">
+            <mat-label>Date & HH:MM</mat-label>
+            <input matInput placeholder="Date & time" style="color:black" [(ngModel)]="checkdatetime" name="checkdatetime" disabled>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 mph-0 pb20">
+
+        </div>
+        <div class="col-sm-3 mph-0 pb20">
+          <mat-label>Surgery type :</mat-label> &nbsp;
+          <mat-label *ngFor="let stype of surgerytypes"> {{stype.surgerytype}}</mat-label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row col-sm-12">
+    <mat-tab-group animationDuration="0ms" class="tabsss">
+
+
+      <mat-tab label="SSC">
+        <mat-tab-group animationDuration="0ms" class="subtabs">
+          <mat-tab label="Before induction of anaesthesia">
+
+            <div class="row tableoverflowheight">
+              <table mat-table matSort [dataSource]="BeforeSkinIncisionSource" class="custom-table withoutbackgroung search-table table-bordered">
+
+                <ng-container matColumnDef="SNo">
+                  <th mat-header-cell *matHeaderCellDef>S.No</th>
+                  <td mat-cell *matCellDef="let id = index">{{id+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Questions">
+                  <th mat-header-cell *matHeaderCellDef>Question</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">{{element.Question}}</td>
+                </ng-container>
+                <ng-container matColumnDef="ToWhom">
+                  <th mat-header-cell *matHeaderCellDef>To Whom</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">{{element.Questiontowhom}}</td>
+                </ng-container>
+                <ng-container matColumnDef="Yes">
+                  <th mat-header-cell *matHeaderCellDef>Yes</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox #input name="Yes" (click)="onChangeYes(element,id,element.checkStatusYes, $event)" [(checked)]="element.Yess" [disabled]="element.chkYes"></mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="NO">
+                  <th mat-header-cell *matHeaderCellDef>No</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox name="No" (click)="onChangeNo(element,id, element.checkStatusNo, $event)" [(checked)]="element.Noo" [disabled]="element.chkNo"></mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="NA">
+                  <th mat-header-cell *matHeaderCellDef>N/A</th>
+                  <td mat-cell *matCellDef="let element;let id = index;">
+                    <mat-checkbox name="NA" (click)="onChangeNA(element,id, element.checkStatusNA, $event)" [(checked)]="element.NAA" [disabled]="element.chkNA"></mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef>Addl. information</th>
+                  <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true">{{element.Description}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="BeforeSkinIncisionColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let element;  columns: BeforeSkinIncisionColumns"></tr>
+              </table>
+            </div>
+
+
+
+            <div class="col-sm-12 pb25">
+              <div class="content-right sub-section btn-wrap">
+
+                <button class="btn btn-warning-default" (click)="cancel()" type="button">Cancel</button>
+
+                <button class="success btn btn-primary" mat-raised-button (click)="Beforeanasthesia()">Submit</button>
+              </div>
+            </div>
+
+          </mat-tab>
+
+        </mat-tab-group>
+      </mat-tab>
+
+      <mat-tab label="Pre anaesthetic checkup">
+        <mat-tab-group animationDuration="0ms" class="subtabs">
+
+
+
+          <mat-tab label="PAC History" class="preana">
+
+            <div class="col-sm-12 pgtop20-0">
+
+              <div class="col-sm-6">
+                <div class="col-sm-12 precolor">
+                  <div class="col-sm-8">
+                    <label style="font-weight: normal">Previous Operation / Anaesthesia </label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="PreOperAnesthesia" name="PreOperAnesthesia">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-8">
+                    <label>Cold / Cough / Fever</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="ColdFeverCough" name="ColdFeverCough">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12 precolor">
+                  <div class="col-sm-8">
+                    <label>Palpitations / Breathlessness</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="palpitationsbreathless" name="palpitationsbreathless">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-8">
+                    <label>Orthopnoea / PND</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="OrthopnoeaPND" name="OrthopnoeaPND">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12 precolor">
+                  <div class="col-sm-8">
+                    <label>COPD / Asthma</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="COPDAsthma" name="COPDAsthma">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-8">
+                    <label>Unconsiousness / Epilepsy / CVA</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="unconsiousnessEpilepsyCVA" name="unconsiousnessEpilepsyCVA">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12 precolor">
+                  <div class="col-sm-8">
+                    <label>Psychiatric illness</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="PyschiatricIllness" name="PyschiatricIllness">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-8">
+                    <label>Renel disorders / CRF</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="RenelDisOrders" name="RenelDisOrders">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12 precolor">
+                  <div class="col-sm-8">
+                    <label>Jaundice</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="Jaundice" name="Jaundice">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="col-sm-8">
+                    <label>HTN / IHD / CHD / DM</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="HTNIHDCHDDM" name="HTNIHDCHDDM">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-11">
+                    <textarea #message maxlength="100" class="pretext" matInput placeholder="Remarks" [(ngModel)]="PACH_Remarks" name="PACH_Remarks"></textarea>
+                    <mat-hint align="start">Max 100 Character</mat-hint>
+                    <mat-hint align="end">{{message.value.length}}/100</mat-hint>
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <label>Bleeding disorders</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="BleedingDisorders" name="BleedingDisorders">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <label>Exercise tolerance </label>
+                  </div>
+                  <div class="col-sm-8">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="ExerciseTolerance" name="ExerciseTolerance">
+                      <mat-radio-button value="Good">Good</mat-radio-button>
+                      &nbsp;<mat-radio-button color="primary" value="Fair">Fair</mat-radio-button>
+                      &nbsp;<mat-radio-button color="warn" value="Poor">Poor</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div class="col-sm-6" style="border-left: 1px solid black;">
+
+
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <label>Menstrual H/o, LMP </label>
+                  </div>
+                  <div class="col-sm-8">
+                    <textarea #Menstrual maxlength="250" matInput class="pretext" placeholder="Menstrual H/o, LMP" [(ngModel)]="MenstrualHoLMP" name="MenstrualHoLMP" [disabled]="disableMenstrulHoLMP"></textarea>
+                    <mat-hint align="start">Max 250 Character</mat-hint>
+                    <mat-hint align="end">{{Menstrual.value.length}}/250</mat-hint>
+                    <!--</mat-form-field>-->
+
+                  </div>
+
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <label>Family H/o </label>
+                  </div>
+                  <div class="col-sm-8">
+
+                    <textarea #familyHO maxlength="250" class="pretext" matInput placeholder="Family H/o" [(ngModel)]="FamilyHo" name="FamilyHo" disabled></textarea>
+                    <mat-hint align="start">Max 250 Character</mat-hint>
+                    <mat-hint align="end">{{familyHO.value.length}}/250</mat-hint>
+
+
+                  </div>
+
+
+
+
+
+
+
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <label>Last meal time </label>
+                  </div>
+                  <div class="col-sm-3">
+
+                    <input matInput maxlength="2" style="width:33%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="HH" [(ngModel)]="hours" name="hours" (keypress)="numberOnly($event)" (keyup)="restricthrs()">
+                    &#58;
+                    <input matInput maxlength="2" style="width:33%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="MM" [(ngModel)]="Mins" name="Mins" (keypress)="numberOnly($event)" (keyup)="restrictmins()">
+                  </div>
+
+                  <div *ngIf="hidetimelabel">
+                    <label> Time since last meal - {{LMealTime}} hrs</label>
+                  </div>
+
+
+
+
+
+                </div>
+
+                <div class="col-sm-12" style="margin-top:2%">
+                  <div class="col-sm-4">
+                    <label>Smoking / Tobacco chewing</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="SmokingTobacco" name="SmokingTobacco">
+                      <mat-radio-button color="warn" value="true" (click)="showsoketext()">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false" (click)="hidesmoketext()">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-sm-2" [hidden]="!hidesmokeSince">
+                    <input matInput maxlength="3" style="width:100%;border:2px solid #8f8c8c;border-radius:6px;margin-left:-75%;height:32px;box-shadow: 0px 0px 3px 0px;" placeholder="Since" [(ngModel)]="SNOFYR" name="SNOFYR" (keypress)="numberOnlywithDot($event)" (keyup)="checkmonths($event)">
+                  </div>
+                  <div class="col-sm-2" [hidden]="!hidesmokeSince">
+                    <mat-form-field appearance="outline" style="width: 200%;margin-left: -102%;margin-top: -17%">
+                      <mat-label style="color: #0c3e8f">Months/Years </mat-label>
+                      <input type="text" style="color: #0c3e8f" [(ngModel)]="smokeYears" name="smokeYears" maxlength="100" matInput placeholder="Months/Years" disabled>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-7"></div>
+                  <div class="col-sm-5" style="font-size: 75%;margin-top: -5%;margin-left: 25%;" [hidden]="!hidesmokeSince">
+                    <label> Enter month as (0.1, 0.2), year as (1, 2)</label>
+                  </div>
+
+                </div>
+
+
+
+
+                <div class="col-sm-12" style="height:71px">
+                  <div class="col-sm-4">
+                    <label>Alcohol habituation</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="Alcoholhabituation" name="Alcoholhabituation">
+                      <mat-radio-button color="warn" value="true" (click)="showaltext()">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false" (click)="hidealtext()">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-sm-2" [hidden]="!hideAlcoholSince">
+                    <input matInput maxlength="3" style="width:100%;border:2px solid #8f8c8c;border-radius:6px;margin-left:-75%;height:32px;box-shadow: 0px 0px 3px 0px;" placeholder="Since" [(ngModel)]="ANOFYR" name="ANOFYR" (keypress)="numberOnlywithDot($event)" (keyup)="checkmonths1($event)">
+
+                  </div>
+
+                  <div class="col-sm-2" [hidden]="!hideAlcoholSince">
+                    <mat-form-field appearance="outline" style="width: 200%;margin-left: -102%;margin-top: -17%">
+                      <mat-label style="color: #0c3e8f">Months/Years </mat-label>
+                      <input type="text" style="color: #0c3e8f" [(ngModel)]="AlcoholYears" name="AlcoholYears" maxlength="100" matInput placeholder="Months/Years" disabled>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-7"></div>
+                  <div class="col-sm-5" style="font-size: 75%;margin-top: -5%;" [hidden]="!hideAlcoholSince">
+                    <label> Enter month as (0.1, 0.2), year as (1, 2)</label>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <label>Drug addictions</label>
+                  </div>
+                  <div class="col-sm-8">
+
+                    <textarea #drugaddict maxlength="250" class="pretext" matInput placeholder="Drug addictions" [(ngModel)]="DrugAddictions" name="DrugAddictions"></textarea>
+                    <mat-hint align="start">Max 250 Character</mat-hint>
+                    <mat-hint align="end">{{drugaddict.value.length}}/250</mat-hint>
+
+
+                  </div>
+
+                </div>
+                <div class="col-sm-12">
+
+                  <div class="col-sm-4">
+                    <label>Known allergies (include drugs)</label>
+                  </div>
+                  <div class="col-sm-8">
+
+                    <textarea #knownallergies maxlength="100" class="pretext" matInput placeholder="Known allergies (include drugs)" [(ngModel)]="KnownAllergies" name="KnownAllergies" disabled></textarea>
+                    <mat-hint align="start">Max 100 Character</mat-hint>
+                    <mat-hint align="end">{{knownallergies.value.length}}/100</mat-hint>
+
+                  </div>
+                </div>
+
+
+
+              </div>
+
+            </div>
+
+            <div class="col-sm-12 dividebar">
+              <div class="row">
+
+                <div class="col-sm-12">
+
+
+                  <h5 class="card-header bg-success text-white schleft-0">
+                    Present Drug Therapy
+
+                    <label class="labelfloat">
+                      <button accesskey="a" (click)="AddTable();" matTooltip="Add" class="btn btn-primary-default btn-Pdf mlr10 buttonsfloat">Add Items</button>
+                    </label>
+                  </h5>
+
+                </div>
+              </div>
+
+              <div class="row heightAuto-250px">
+
+                <table mat-table [dataSource]="dataSource1" class="custom-table withoutbackgroung search-table table-bordered">
+
+                  <ng-container matColumnDef="Drug">
+                    <th mat-header-cell *matHeaderCellDef> Brand </th>
+                    <td mat-cell *matCellDef="let element;let id = index;" contenteditable="true">
+                      <input id="c" type="text" matInput value="{{element.DrugName}}" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="GetRelated($event, id,element)">
+                        <mat-option *ngFor="let element of Details" [value]="element">
+                          {{element.DrugName}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="GenericName">
+                    <th mat-header-cell *matHeaderCellDef> Generic name </th>
+                    <td mat-cell *matCellDef="let element" contenteditable="true"> {{element.GenericName}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Dosage">
+                    <th mat-header-cell *matHeaderCellDef> Dossage </th>
+                    <td mat-cell *matCellDef="let element;let id= index" maxlength="10" contenteditable="true" (keyup)="updatedossage(id,'Dosage',$event)"> {{element.Dosage}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+
+
+                  <ng-container matColumnDef="Frequency">
+                    <th mat-header-cell *matHeaderCellDef> Frequency </th>
+                    <td mat-cell *matCellDef="let element;let id= index" maxlength="10" contenteditable="true" (keyup)="updatefrequency(id,'frequency',$event)">{{element.frequency}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="DrugDescription">
+                    <th mat-header-cell *matHeaderCellDef>Description </th>
+                    <td mat-cell *matCellDef="let element; let id= index" contenteditable="true" (keyup)="updatedesc(id,'DrugDescription',$event)">
+                      {{element.DrugDescription}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>Action </th>
+                    <td mat-cell *matCellDef="let element; let id = index" contenteditable="false">
+                      <mat-icon (click)="removeTableDet(id)" data-toggle="tooltip" title="Remove">delete_forever</mat-icon>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <ng-container matColumnDef="dsd">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Description </th>
+                    <td mat-cell *matCellDef="let element; let id= index" contenteditable="true" (keyup)="updatedesc(id,'DrugDescription',$event)">
+                      {{element.DrugID}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                  <tr mat-footer-row *matFooterRowDef="displayedColumns1; sticky: true"></tr>
+                </table>
+
+
+
+
+              </div>
+            </div>
+            
+
+            <div class="col-sm-12 pb25">
+              <div class="content-right sub-section btn-wrap">
+
+                <button class="btn btn-warning-default" (click)="cancel()" type="button">Cancel</button>
+                <div class="col-sm-1" *ngIf="hideH_submit">
+                  <button class="success btn btn-primary" mat-raised-button [disabled]="HistorySubmitdis" (click)="HistorySubmit()">Submit</button>
+                </div>
+                <div class="col-sm-1" *ngIf="hideH_update">
+                  <button class="success btn btn-primary" mat-raised-button [disabled]="HistoryUpdatedis" (click)="HistoryUpdate()">Update</button>
+                </div>
+              </div>
+              </div>
+
+          </mat-tab>
+
+          <mat-tab label="PAC Examination" style="line-height:2.15;overflow:auto;height:300px">
+
+
+            <!--<div class="col-sm-12 pgtop20-0">
+    <div>
+
+      <h5 class="card-header bg-success text-white">
+        Vital Signs
+      </h5>
+    </div>
+  </div>-->
+
+            <div class="col-sm-12">
+              <div class="col-sm-4 row">
+                <h6>Vital Signs </h6>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="col-sm-12" style="border:2px solid #67babf; border-radius:8px;margin-top:-1%">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 border-rightblack mb-1p mt-1p">
+                  <div class="col-sm-12">
+                    <div class="col-sm-6">
+                      <label>Pulse / Heart Rate</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <input matInput maxlength="9" class="width-50p border-black border-radius border-ShadowBlue" [(ngModel)]="PulseHeartRate" name="PulseHeartRate" (keypress)="restrictsymbols($event)" placeholder="">
+                      <!--</mat-form-field>-->
+                      &nbsp; <label>&#47; per minute</label>
+
+                    </div>
+
+
+
+                  </div>
+                  <div class="col-sm-12 mt-1p">
+                    <div class="col-sm-6">
+                      <label>Respiration</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <input matInput placeholder="" maxlength="12" class="width-50p border-black border-radius border-ShadowBlue" [(ngModel)]="PAE_Respiration" name="PAE_Respiration" [required]="Respirationrequired" (keyup)="checkrespiration($event);" (keypress)="restrictsymbols($event);">
+                      &nbsp;<label>&#47; per minute</label>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-5 mb-1p mt-1p">
+                  <div class="col-sm-12">
+                    <div class="col-sm-6">
+                      <label>Blood Pressure</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <input matInput maxlength="3" class="width-25p border-black border-radius border-ShadowBlue" placeholder="" [(ngModel)]="BP1" name="BP1">
+                      <!--</mat-form-field>-->
+                      &nbsp;<label>&#47;</label>
+                      &nbsp; <input matInput maxlength="3" class="width-25p border-black border-radius border-ShadowBlue" placeholder="" [(ngModel)]="BP2" name="BP2">
+                      &nbsp;<label>mm of Hg</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 mt-1p">
+                    <div class="col-sm-6">
+                      <label>Temperature</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <label>Afebrile /</label>
+                      &nbsp; <input matInput maxlength="3" class="width-25p border-black border-radius border-ShadowBlue" placeholder="" [(ngModel)]="Temperature" name="Temperature" (keypress)="numberOnlywithDot($event)">
+                      <!--</mat-form-field>-->
+                      &nbsp;  <label>&#47; &nbsp;&#8451; &nbsp;&#47; &nbsp;&#8457;</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="col-sm-4 row">
+                <h6>General Physical Examination </h6>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="col-sm-12" style="border:2px solid #67babf; border-radius:8px;margin-top:-1%">
+                <!--<div class="col-sm-2"></div>-->
+                <div class="col-sm-4" style="border-right: 1px solid black;margin-top:1%;margin-bottom:1%">
+                  <div>
+                    <div class="col-sm-7">
+                      <label>Spine</label>
+                    </div>
+                    <div class="col-sm-5">
+                      <input matInput maxlength="25" style="width:100%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="Spine" name="Spine">
+                    </div>
+
+                  </div>
+
+                  <div>
+                    <div class="col-sm-7" style="margin-top:2%">
+                      <label>Weight</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <input matInput style="width:30%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" placeholder="" [(ngModel)]="PAEWeight" name="PAEWeight" (keypress)="numberOnlywithDot($event)" (keyup)="CalculateBMI($event)" [disabled]="disableweight">
+                      &nbsp;
+                      <mat-select style="width:61%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;font-family:'Proxima Nova Semibold'" [(ngModel)]="WeightType" name="WeightType">
+                        <mat-option value="kg" style="font-family:'Proxima Nova Semibold'" (click)="showweight()">kg</mat-option>
+                        <mat-option value="pounds" style="font-family:'Proxima Nova Semibold'" (click)="showweight()">Pounds</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="col-sm-7" style="margin-top:2%">
+                      <label>Height</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <input matInput style="width:30%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" placeholder="" [(ngModel)]="PAEHeight" name="PAEHeight" (keyup)="CalculateBMI($event)" (keypress)="numberOnlywithDot($event)" [disabled]="disableHeight">
+                      &nbsp;
+                      <mat-select style="width:61%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;font-family:'Proxima Nova Semibold'" [(ngModel)]="HeightType" name="HeightType">
+                        <mat-option value="cms" style="font-family:'Proxima Nova Semibold'" (click)="showHeight()">cms</mat-option>
+                        <mat-option value="inches" style="font-family:'Proxima Nova Semibold'" (click)="showHeight()">inches</mat-option>
+                      </mat-select>
+                    </div>
+
+                  </div>
+
+                  <div>
+                    <div class="col-sm-7" style="margin-top: 2%;">
+                      <label>Body Mass Index (BMI)</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top: 2%;">
+                      <input matInput style="width:100%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="PAEBMI" name="PAEBMI" disabled>
+                      <!--</mat-form-field>-->
+                      <label> {{BMIRange}}</label>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="col-sm-7" style="margin-top: 2%;">
+                      <label>Nutrition status</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top: 2%;">
+                      <!--<mat-form-field style="width:100%;font-size: 47%;" appearance="outline">-->
+                      <mat-select style="width:100%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;font-family:'Proxima Nova Semibold'" [(ngModel)]="NStatus" name="NStatus">
+                        <mat-option value="Obese" style="font-family:'Proxima Nova Semibold'">Obese</mat-option>
+                        <mat-option value="Normal" style="font-family:'Proxima Nova Semibold'">Normal</mat-option>
+                        <mat-option value="Malnourished" style="font-family:'Proxima Nova Semibold'">Malnourished</mat-option>
+                      </mat-select>
+                      <!--</mat-form-field>-->
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="col-sm-4" style="border-right: 1px solid black;margin-top:1%;margin-bottom:1%">
+                  <div class="col-sm-7">
+                    <label>Icterus</label>
+                  </div>
+                  <div class="col-sm-5">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="Icterus" name="Icterus">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                  <div class="col-sm-7" style="margin-top:2%">
+                    <label>Cyanosis</label>
+                  </div>
+                  <div class="col-sm-5" style="margin-top:2%">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="Cyanosis" name="Cyanosis">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                  <div class="col-sm-7" style="margin-top:2%">
+                    <label>Clubbing</label>
+                  </div>
+                  <div class="col-sm-5" style="margin-top:2%">
+                    <mat-select style="width:100%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;font-family:'Proxima Nova Semibold'" [(ngModel)]="Clubbing" name="Clubbing">
+                      <mat-option value="No Clubbing" style="font-family:'Proxima Nova Semibold'">Zero</mat-option>
+                      <mat-option value="Grade I" style="font-family:'Proxima Nova Semibold'">Grade I</mat-option>
+                      <mat-option value="Grade II" style="font-family:'Proxima Nova Semibold'">Grade II</mat-option>
+                      <mat-option value="Grade III" style="font-family:'Proxima Nova Semibold'">Grade III</mat-option>
+                      <mat-option value="Grade IV" style="font-family:'Proxima Nova Semibold'">Grade IV</mat-option>
+                    </mat-select>
+                    <!--</mat-form-field>-->
+                  </div>
+
+                  <div class="col-sm-7" style="margin-top:2%">
+                    <label> Lymphadenopathy (LAP)</label>
+                  </div>
+                  <div class="col-sm-5" style="margin-top:2%">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="LAP" name="LAP">
+                      <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-sm-7" style="margin-top:2%">
+                    <label>Breath Holding Time</label>
+                  </div>
+                  <div class="col-sm-5" style="margin-top:2%">
+                    <input matInput maxlength="4" style="width:48%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="BHT" name="BHT" (keypress)="numberOnlywithifantval($event)" (keyup)="checkBHT()">
+
+                    &nbsp; <label>seconds</label>
+
+                    <label *ngIf="calcmins1 > 1"> {{calcmins}} </label>
+                  </div>
+
+                </div>
+                <div class="col-sm-4" style="margin-top:1%;margin-bottom:1%">
+                  <div class="col-sm-12">
+                    <div class="col-sm-4">
+                      <label>Oedema</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="Oedema" name="Oedema">
+                        <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                        &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="col-sm-4">
+                      <label>JVP</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="JVP" name="JVP">
+                        <mat-radio-button value="D">&#8595;</mat-radio-button>
+                        &nbsp;<mat-radio-button value="N">N</mat-radio-button>
+                        &nbsp;<mat-radio-button value="U">&#8593;</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="col-sm-4">
+                      <label>Veins</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="Veins" name="Veins">
+                        <mat-radio-button value="Good">Good</mat-radio-button>
+                        &nbsp;<mat-radio-button color="primary" value="Fair">Fair</mat-radio-button>
+                        &nbsp;<mat-radio-button color="warn" value="Poor">Poor</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+
+                    <div class="col-sm-4">
+                      <label>General Condition (GC)</label>
+                    </div>
+                    <div class="col-sm-8" style="margin-top: 8%;">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="GC" name="GC">
+                        <mat-radio-button value="Good">Good</mat-radio-button>
+                        &nbsp;<mat-radio-button color="primary" value="Fair">Fair</mat-radio-button>
+                        &nbsp;<mat-radio-button color="warn" value="Poor">Poor</mat-radio-button>
+                      </mat-radio-group>
+
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="col-sm-4">
+                      <label>Pallor</label>
+                    </div>
+                    <div class="col-sm-5">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="Pallor" name="Pallor">
+                        <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                        &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="col-sm-12">
+              <div class="col-sm-4 row">
+                <h6>Airway Assesment </h6>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="col-sm-12" style="border:2px solid #67babf; border-radius:8px;margin-top:-1% ">
+                <div class="col-sm-4" style="margin-top:1%;margin-bottom:1%">
+                  <div class="col-sm-12">
+                    <div class="col-sm-7" style="margin-top:2%">
+                      <label>Thyromental dist</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <input matInput maxlength="5" style="width:57%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="Thromentaldist" name="Thromentaldist" (keypress)="numberOnlywithDot($event)">
+                      <!--</mat-form-field>-->
+                      &nbsp;<label>cms</label>
+                    </div>
+
+                  </div>
+                  <div class="col-sm-12" style="margin-top: 1%;">
+                    <div class="col-sm-7" style="margin-top:2%">
+                      <label>Mouth opening</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <input matInput maxlength="7" style="width:59%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="MouthOpening" name="MouthOpening" (keypress)="numberOnlywithifantandDotval($event)">
+                      <!--</mat-form-field>-->
+                      &nbsp;<label>cms</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="col-sm-7" style="margin-top:2%">
+                      <label>Loose / Missing teeth</label>
+                    </div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="LooseMissingTeeth" name="LooseMissingTeeth">
+                        <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                        &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-4" style="border-right: 1px solid black;border-left: 1px solid black;margin-top:1%;margin-bottom:1%">
+                  <div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <label>Mallampatti class</label>
+                    </div> <div class="col-sm-7" style="margin-top:2%">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="MallampattiClass" name="MallampattiClass">
+                        <mat-radio-button value="I">I</mat-radio-button>
+                        &nbsp;<mat-radio-button value="II">II</mat-radio-button>
+                        &nbsp;<mat-radio-button value="III">III</mat-radio-button>
+                        &nbsp;<mat-radio-button value="IV">IV</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div>
+
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <label>Nasal patency</label>
+                    </div>
+                    <div class="col-sm-7" style="margin-top:2%">
+                      <label>Rt</label>
+
+                      &nbsp; <input matInput maxlength="5" style="width:31%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="NP1" name="NP1" (keypress)="numberOnlywithDot($event)">
+                      <!--</mat-form-field>-->
+                      &nbsp; <label>/ Lt</label>
+                      &nbsp;  <input matInput maxlength="5" style="width:31%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="NP2" name="NP2" (keypress)="numberOnlywithDot($event)">
+                      <!--</mat-form-field>-->
+                    </div>
+                  </div>
+                  <div>
+                    <div class="col-sm-5" style="margin-top:2%">
+                      <label>Artificial teeth</label>
+                    </div>
+                    <div class="col-sm-6" style="margin-top:2%">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="ArtificialTeeth" name="ArtificialTeeth">
+                        <mat-radio-button color="warn" value="true">Yes</mat-radio-button>
+                        &nbsp;&nbsp;<mat-radio-button value="false">No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-4" style="margin-top:1%;margin-bottom:1%">
+                  <div>
+                    <div class="col-sm-4" style="margin-top:2%">
+                      <label>Oral hygiene</label>
+                    </div>
+                    <div class="col-sm-8" style="margin-top:2%">
+                      <mat-radio-group aria-label="Select an option" [(ngModel)]="OralHygiene" name="OralHygiene">
+                        <mat-radio-button value="Good">Good</mat-radio-button>
+                        &nbsp;<mat-radio-button color="primary" value="Fair">Fair</mat-radio-button>
+                        &nbsp;<mat-radio-button color="warn" value="Poor">Poor</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div>
+
+                    <div class="col-sm-4" style="margin-top:2%">
+                      <label>T.M.Joint</label>
+                    </div>
+                    <div class="col-sm-6" style="margin-top:2%">
+                      <input matInput maxlength="7" style="width:100%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="" [(ngModel)]="TMJoint" name="TMJoint" (keypress)="numberOnlywithifantandDotval($event)">
+                      <!--</mat-form-field>-->
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
+
+                  <div class="col-sm-12">
+
+                    <div class="col-sm-4" style="margin-left:-13px;margin-top:2%">
+                      <label>Neck</label>
+                    </div>
+                    <div class="col-sm-6" style="margin-left:7px;margin-top:2%">
+
+                      <input matInput maxlength="12" style="width:100%;border: 1px solid;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" [(ngModel)]="Neck" name="Neck" placeholder="">
+                      <!--</mat-form-field>-->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+
+              <div class="col-sm-12" style="margin-top:1%">
+                <div class="col-sm-6">
+                  <textarea #UPT maxlength="100" matInput class="pretext" placeholder="Upper respiratory Tract" [(ngModel)]="URT" name="URT"></textarea>
+                  <mat-hint align="start">Max 100 Character</mat-hint>
+                  <mat-hint align="end">{{UPT.value.length}}/100</mat-hint>
+                  <!--</mat-form-field>-->
+                </div>
+
+
+                <div class="col-sm-6">
+                  <textarea #LPT maxlength="100" matInput class="pretext" placeholder="Lower respiratory Tract" [(ngModel)]="LRT" name="LRT"></textarea>
+                  <mat-hint align="start">Max 100 Character</mat-hint>
+                  <mat-hint align="end">{{LPT.value.length}}/100</mat-hint>
+                  <!--</mat-form-field>-->
+                </div>
+              </div>
+              <div class="col-sm-12">
+
+                <div class="col-sm-6">
+                  <textarea #CVS1 maxlength="250" class="pretext" matInput placeholder="Cardio Vascular System (CVS)" [(ngModel)]="CVS" name="CVS"></textarea>
+                  <mat-hint align="start">Max 250 Character</mat-hint>
+                  <mat-hint align="end">{{CVS1.value.length}}/250</mat-hint>
+                  <!--</mat-form-field>-->
+                </div>
+                <div class="col-sm-6">
+                  <textarea #CNS1 maxlength="250" matInput class="pretext" placeholder="Central Nervous System (CNS)" [(ngModel)]="CNS" name="CNS"></textarea>
+                  <mat-hint align="start">Max 250 Character</mat-hint>
+                  <mat-hint align="end">{{CNS1.value.length}}/250</mat-hint>
+                  <!--</mat-form-field>-->
+                </div>
+
+              </div>
+              <div class="col-sm-12">
+
+                <div class="col-sm-6">
+                  <textarea #PA1 maxlength="250" matInput class="pretext" placeholder="Per abdomen (P / A)" [(ngModel)]="perabdomen" name="perabdomen"></textarea>
+                  <mat-hint align="start">Max 250 Character</mat-hint>
+                  <mat-hint align="end">{{PA1.value.length}}/250</mat-hint>
+                  <!--</mat-form-field>-->
+                </div>
+
+              </div>
+
+
+
+            </div>
+
+            <!--<div class="col-sm-12">
+              <div class="col-sm-12" style="margin-top: 1%; margin-bottom: 1%;">
+                <div class="col-sm-5"> </div>
+
+
+                <div class="col-sm-1" *ngIf="hideE_submit">
+                  <button class="success" (click)="ExamSubmit()" [disabled]="ExamSubmitdis" mat-raised-button style="font-family:'Proxima Nova Semibold'">Submit</button>
+                </div>
+                <div class="col-sm-1" *ngIf="hideE_update">
+                  <button class="success" (click)="ExamUpdate()" [disabled]="ExamUpdatedis" mat-raised-button style="font-family:'Proxima Nova Semibold'">Submit</button>
+                </div>
+                <div class="col-sm-1">
+                  <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;font-family:'Proxima Nova Semibold'" (click)="cancel()"><strong>Cancel</strong></button>
+                </div>
+
+              </div>
+            </div>-->
+
+            <div class="col-sm-12 pb25">
+              <div class="content-right sub-section btn-wrap">
+
+                <button class="btn btn-warning-default" (click)="cancel()" type="button">Cancel</button>
+                <div class="col-sm-1" *ngIf="hideE_submit">
+                  <button class="success btn btn-primary" mat-raised-button [disabled]="ExamSubmitdis" (click)="ExamSubmit()">Submit</button>
+                </div>
+                <div class="col-sm-1" *ngIf="hideE_update">
+                  <button class="success btn btn-primary" mat-raised-button [disabled]="ExamUpdatedis" (click)="ExamUpdate()">Update</button>
+                </div>
+              </div>
+            </div>
+
+
+          </mat-tab>
+
+          <mat-tab label="PAC Investigation" style="line-height:2;overflow:auto;height:300px">
+
+
+            <div class="col-sm-12" style="margin-top:1%">
+              <div class="col-sm-4" style="border-right: 1px solid black;">
+                <div class="col-sm-12">
+                  <div class="col-sm-5">
+                    <label>Hb / PCV</label>
+                    <label>(gm%) (%) </label>
+                  </div>
+                  <div class="col-sm-6">
+
+                    <input matInput style="width:42%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="7" [(ngModel)]="HbPCV1" name="HbPCV1" (keypress)="numberOnly($event)" placeholder="">
+                    <!--</mat-form-field>-->
+                    &#47;
+
+                    <input matInput style="width:42%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="8" [(ngModel)]="HbPCV2" name="HbPCV2" (keypress)="numberOnly($event)" placeholder="">
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="col-sm-4" style="border-right: 1px solid black;">
+                <div class="col-sm-12">
+                  <div class="col-sm-5">
+                    <label>TLC</label>
+                    &nbsp;<label>(cells / mm3) </label>
+                  </div>
+                  <div class="col-sm-6">
+                    <input matInput style="width:81%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="25" [(ngModel)]="TLC" name="TLC" placeholder="">
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>S. Bil (mg%)</label>
+                  </div>
+                  <div class="col-sm-7">
+                    <label>Total</label>
+                    &nbsp;  <input matInput style="width:23%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="SBilTotal" name="SBilTotal" placeholder="">
+                    &#44;
+                    &nbsp; <label>Direct</label>
+                    &nbsp; <input matInput style="width:23%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="SBilDirect" name="SBilDirect" placeholder="">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-sm-12" style="margin-top:1%">
+              <!-- 1stcolumn -->
+              <div class="col-sm-4" style="border-right: 1px solid black;">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <label>Pl. Count </label>
+                    <label>(lacs / mm<sup>3</sup>)</label>
+                  </div>
+                  <div class="col-sm-6" style="margin-top:2%">
+
+                    <input matInput style="width:81%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="6" (keypress)="numberOnly($event)" [(ngModel)]="PlCount" name="PlCount" placeholder="">
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:2%">
+                  <div class="col-sm-4">
+                    <label>Bl. Glu (mg%) </label>
+                  </div>
+                  <div class="col-sm-8">
+                    <label>F</label>
+
+                    &nbsp;<input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="BLGlu_F" name="BLGlu_F" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                    <!--</mat-form-field>-->
+                    &#44;
+                    &nbsp;   <label>PP</label>
+
+                    &nbsp;   <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="BLGlu_PP" name="BLGlu_PP" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                    <!--</mat-form-field>--> &#44;
+                    &nbsp; <label>R</label>
+
+                    &nbsp;  <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="BLGlu_R" name="BLGlu_PR" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                    <!--</mat-form-field>-->
+
+                  </div>
+                </div>
+                <!--</div>-->
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>S. Uric acid </label>
+                  </div>
+                  <div class="col-sm-6">
+                    <input matInput style="width:50%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="4" [(ngModel)]="SUricAcid" name="SUricAcid" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                    <!--</mat-form-field>-->
+                    &nbsp;<label>mg%</label>
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>T<sub>3</sub></label>
+                  </div>
+                  <div class="col-sm-6" style="margin-top: 1%;">
+
+                    <input matInput style="width:100%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="10" [(ngModel)]="T3" name="T3" placeholder="">
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>T<sub>4</sub></label>
+                  </div>
+                  <div class="col-sm-6" style="margin-top: 1%;">
+                    <input matInput style="width:100%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="10" [(ngModel)]="T4" name="T4" placeholder="">
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>TSH</label>
+                  </div>
+                  <div class="col-sm-6" style="margin-top: 1%;">
+                    <input matInput style="width:100%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="10" [(ngModel)]="TSH" name="TSH" maxlength="10" placeholder="">
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 2nd column -->
+              <div class="col-sm-4" style="border-right: 1px solid black;">
+
+                <div class="col-sm-12">
+                  <div class="col-sm-5">
+                    <label>Bl. Group </label>
+                  </div>
+                  <div class="col-sm-5">
+                    <!--<mat-form-field style="width:100%;font-size: 47%;" appearance="outline">-->
+                    <mat-select style=" width:100%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;font-family:'Proxima Nova Semibold'" [(ngModel)]="BlGroup" name="BlGroup">
+                      <mat-option value="A+ve" style="font-family:'Proxima Nova Semibold'">A+</mat-option>
+                      <mat-option value="A-ve I" style="font-family:'Proxima Nova Semibold'">A-</mat-option>
+                      <mat-option value="B+ve" style="font-family:'Proxima Nova Semibold'">B+</mat-option>
+                      <mat-option value="B-ve" style="font-family:'Proxima Nova Semibold'">B-</mat-option>
+                      <mat-option value="AB+ve" style="font-family:'Proxima Nova Semibold'">AB+</mat-option>
+                      <mat-option value="AB-ve" style="font-family:'Proxima Nova Semibold'">AB-</mat-option>
+                      <mat-option value="O+ve" style="font-family:'Proxima Nova Semibold'">O+</mat-option>
+                      <mat-option value="O-ve" style="font-family:'Proxima Nova Semibold'">O-</mat-option>
+                    </mat-select>
+                    <!--</mat-form-field>-->
+                  </div>
+                </div>
+
+                <div class="col-sm-12" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>B. Urea </label>
+                  </div>
+                  <div class="col-sm-6">
+
+                    <input matInput style=" width:47%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" [(ngModel)]="BUrea" name="BUrea" maxlength="8" (keypress)="numberOnlywithDotandpercent($event)" placeholder="">
+                    <!--</mat-form-field>-->
+                    &nbsp;<label>mg%</label>
+                  </div>
+                </div>
+                <div class="col-sm-12" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>S. Creat </label>
+                  </div>
+                  <div class="col-sm-6">
+
+                    <input matInput style=" width:50%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" [(ngModel)]="Screat" name="Screat" maxlength="8" (keypress)="numberOnlywithDotandpercent($event)" placeholder="">
+                    <!--</mat-form-field>-->
+                    &nbsp;<label>mg%</label>
+                  </div>
+                </div>
+                <div class="col-sm-12" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>HbsAg</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="HbsAg" name="HbsAg">
+                      <mat-radio-button color="warn" value="+ve">+ve</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="-ve">-ve</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>HIV- I & II</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="HIV" name="HIV">
+                      <mat-radio-button color="warn" value="+ve">+ve</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="-ve">-ve</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                <div class="col-sm-12" style="margin-top: 2%;">
+                  <div class="col-sm-5">
+                    <label>Anti-HcV</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="AntiHCV" name="AntiHCV">
+                      <mat-radio-button color="warn" value="+ve">+ve</mat-radio-button>
+                      &nbsp;&nbsp;<mat-radio-button value="-ve">-ve</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+
+
+
+
+
+              </div>
+
+
+              <div class="col-sm-4">
+
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>PT (sec)</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <label>T</label>
+
+                    &nbsp; <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="PT_T" name="PT_T" placeholder="">
+                    <!--</mat-form-field>-->
+                    &nbsp;  <label>C</label>
+
+                    &nbsp;  <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="PT_C" name="PT_C" placeholder="">
+                    &nbsp; <label>INR</label>
+
+                    &nbsp;   <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="PT_NR" name="PT_NR" placeholder="">
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-sm-4">
+                    <label>PTTK (sec)</label>
+                  </div>
+                  <div class="col-sm-7">
+                    <label>T</label>
+
+                    &nbsp;  <input matInput style="width:23%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="PTTK_T" name="PTTK_T" placeholder="">
+                    &nbsp;  <label>C</label>
+
+                    &nbsp;  <input matInput style="width:23%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="PTTK_C" name="PTTK_C" placeholder="">
+
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-sm-4">
+                    <label>SGOT / SGPT</label>
+                    <label>(IU / L)</label>
+                  </div>
+                  <div class="col-sm-7" style="margin-top:4%;margin-left: 4%;">
+                    <input matInput style="width:42%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="SGOT" name="SGOT" placeholder="">
+
+                    &#47;
+
+                    <input matInput style="width:42%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="SGPT" name="SGPT" placeholder="">
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>AlkPO<sub>4</sub> / GGT</label>
+                    <label>(IU / L)</label>
+                  </div>
+                  <div class="col-sm-7" style="margin-top:4%;margin-left: 4%;">
+                    <!--<mat-form-field style="width:42%;font-size: 47%;" appearance="outline">
+            <input matInput style="font-size: 14px;" placeholder="">
+          </mat-form-field>-->
+                    <input matInput style="width:42%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="AlkPO" name="AlkPO" placeholder="">
+                    &#47;
+                    <!--<mat-form-field style="width:42%;font-size: 47%;" appearance="outline">
+            <input matInput style="font-size: 14px;" placeholder="">
+          </mat-form-field>-->
+                    <input matInput style="width:42%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="GGT" name="GGT" placeholder="">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>S. Protein (gm%)</label>
+                  </div>
+                  <div class="col-sm-8" style="margin-top:4%">
+                    <label>T</label>
+                    <!--<mat-form-field style="width:20%;font-size: 47%;" appearance="outline">
+            <input matInput style="font-size: 14px;" placeholder="">
+          </mat-form-field>-->
+                    &nbsp; <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="3" [(ngModel)]="SProtein_T" name="SProtein_T" placeholder="">
+                    &nbsp; <label>Alb</label>
+                    <!--<mat-form-field style="width:20%;font-size: 47%;" appearance="outline">
+            <input matInput style="font-size: 14px;" placeholder="">
+          </mat-form-field>-->
+                    &nbsp; <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="3" [(ngModel)]="SProtein_Alb" name="SProtein_Alb" placeholder="">
+
+                    &nbsp; <label>IG</label>
+                    <!--<mat-form-field style="width:20%;font-size: 47%;" appearance="outline">
+            <input matInput style="font-size: 14px;" placeholder="">
+          </mat-form-field>-->
+                    &nbsp; <input matInput style="width:20%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="3" [(ngModel)]="SProtein_IG" name="SProtein_IG" placeholder="">
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="col-sm-12" style="margin-top:1%">
+              <div class="col-sm-12">
+
+                <div class="col-sm-12">
+                  <!-- S.ELect -->
+                  <!--   <div class="col-sm-2"></div>-->
+                  <div class="col-sm-3">
+                    <div class="col-sm-12" style="border:2px solid #67babf; border-radius:8px">
+                      <div style="margin-top:-20px">
+                        <h3 style="border-radius:6px;text-align:center;background-color: #67babf;">S.Elect</h3>
+                      </div>
+                      <div>
+                        <div class="col-sm-12">
+                          <label>Na<sup>+</sup></label>
+                          <!--<mat-form-field style="width:25%;font-size: 47%;" appearance="outline">
+                <input matInput style="font-size: 14px;" placeholder="">-->
+                          &nbsp; <input matInput style="width:51%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="3" [(ngModel)]="SElect_NA" name="SElect_NA" placeholder="" (keypress)="numberOnly($event)">
+                          <!--</mat-form-field>-->
+                          &nbsp; <label>meq/L</label>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 2%;">
+                          <label>K<sup>+</sup></label>
+                          <!--<mat-form-field style="width:26%;font-size: 47%;" appearance="outline">-->
+                          <input matInput style="width:51%;border: 1px solid #8f8c8c;border-radius: 6px;margin-left: 9%;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="10" [(ngModel)]="SElect_K" name="SElect_K" placeholder="" (keypress)="numberOnlywithifantandDotval($event)">
+                          <!--</mat-form-field>-->
+                          &nbsp;<label>meq/L</label>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: 2%;margin-bottom:1%">
+                          <label>Ca<sup>+</sup></label>
+                          <!--<mat-form-field style="width:26%;font-size: 47%;" appearance="outline">
+                <input matInput style="font-size: 14px;" placeholder="">-->
+                          &nbsp;  <input matInput style="width:51%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="10" [(ngModel)]="SElect_CA" name="SElect_CA" placeholder="" (keypress)="numberOnlywithifantandDotval($event)">
+                          <!--</mat-form-field>-->
+                          &nbsp; <label>mg/L</label>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                  <!-- Urine -->
+                  <div class="col-sm-1"></div>
+                  <div class="col-sm-4">
+                    <div class="col-sm-12" style="border:2px solid #67babf; border-radius:8px">
+                      <div style="margin-top:-20px">
+                        <h3 style="border-radius:6px;text-align:center;background-color: #67babf;"> Urine R/ ME </h3>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="col-sm-5">
+                          <label>Alb</label>
+                        </div>
+                        <div class="col-sm-6">
+                          <mat-radio-group aria-label="Select an option" [(ngModel)]="UrineRMEAlb" name="UrineRMEAlb">
+                            <mat-radio-button color="warn" value="+ve">+ve</mat-radio-button>
+                            &nbsp;&nbsp;<mat-radio-button value="-ve">-ve</mat-radio-button>
+                          </mat-radio-group>
+
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="col-sm-5">
+                          <label>Sugar</label>
+                        </div>
+                        <div class="col-sm-6">
+                          <mat-radio-group aria-label="Select an option" [(ngModel)]="UrineRMESugar" name="UrineRMESugar">
+                            <mat-radio-button color="warn" value="+ve">+ve</mat-radio-button>
+                            &nbsp;&nbsp;<mat-radio-button value="-ve">-ve</mat-radio-button>
+                          </mat-radio-group>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="col-sm-5">
+                          <label>Ket</label>
+                        </div>
+                        <div class="col-sm-6">
+                          <mat-radio-group aria-label="Select an option" [(ngModel)]="UrineRMEKet" name="UrineRMEKet">
+                            <mat-radio-button color="warn" value="+ve">+ve</mat-radio-button>
+                            &nbsp;&nbsp;<mat-radio-button value="-ve">-ve</mat-radio-button>
+                          </mat-radio-group>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="col-sm-5">
+                          <!--<label>Pus cells/WBC</label>-->
+                          <label>WBC</label>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <!--<mat-form-field style="width:13%;font-size: 47%;" appearance="outline">
+                <input matInput style="font-size: 14px;" placeholder="">-->
+                          <input matInput style="width:68%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="puscellWBC" name="puscellWBC" placeholder="" (keypress)="numberOnly($event)">
+                          &#47;
+                          <label>hpf</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-12" style="margin-top:2%;margin-bottom:1%">
+                        <div class="col-sm-5">
+                          <label> RBC</label>
+                        </div>
+                        <div class="col-sm-6">
+                          <!--<mat-form-field style="width:13%;font-size: 47%;" appearance="outline">
+                <input matInput style="font-size: 14px;" placeholder="">-->
+                          <input matInput style="width:68%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="5" [(ngModel)]="hpfRBC" name="hpfRBC" placeholder="" (keypress)="numberOnly($event)">
+                          &#47;
+                          <label>hpf</label>
+                          <!--</mat-form-field>-->
+                          <!--
+                <label>hpf</label>-->
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="col-sm-1"></div>
+                  <!-- DLC -->
+                  <div class="col-sm-3">
+                    <div class="col-sm-12" style="border:2px solid #67babf; border-radius:8px">
+                      <div style="margin-top:-20px">
+                        <h3 style="border-radius:6px;text-align:center;background-color: #67babf;">DLC (%)</h3>
+                      </div>
+
+                      <div class="col-sm-12">
+                        <div class="col-sm-12">
+                          <div class="col-sm-3">
+                            <label>P</label>
+                          </div>
+                          <div class="col-sm-9">
+                            <input matInput style="width:100%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="6" [(ngModel)]="DLC1" name="DLC1" placeholder="" (keypress)="numberOnly($event)">
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12" style="margin-top:3%">
+                          <div class="col-sm-3">
+                            <label>L</label>
+                          </div>
+                          <div class="col-sm-9">
+                            <input matInput style="width:66%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="3" [(ngModel)]="DLC2" name="DLC2" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                          </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top:3%">
+                          <div class="col-sm-3">
+                            <label>E</label>
+                          </div>
+                          <div class="col-sm-9">
+                            <input matInput style="width:66%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="4" [(ngModel)]="DLC3" name="DLC3" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                          </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top:3%">
+                          <div class="col-sm-3">
+                            <label>M</label>
+                          </div>
+                          <div class="col-sm-9">
+                            <input matInput style="width:66%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="4" [(ngModel)]="DLC4" name="DLC4" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                          </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top:3%">
+                          <div class="col-sm-3">
+                            <label>B</label>
+                          </div>
+                          <div class="col-sm-9">
+                            <input matInput style="width:66%;border: 1px solid #8f8c8c;border-radius: 6px;box-shadow: 0px 0px 3px 0px #67babf;" maxlength="4" [(ngModel)]="DLC5" name="DLC5" placeholder="" (keypress)="numberOnlywithDotandpercent($event)">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+
+
+                  <div class="col-sm-12" style="margin-top:1%">
+                    <div class="col-sm-6">
+
+                      <textarea #xray maxlength="250" class="pretext" [(ngModel)]="Xray" name="Xray" matInput placeholder="X Ray Chest"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{xray.value.length}}/250</mat-hint>
+                      <!--<input style="font-family:'Proxima Nova Semibold'" matInput placeholder="X Ray Chest">-->
+                      <!--</mat-form-field>-->
+                    </div>
+                    <div class="col-sm-6">
+
+                      <textarea #ECG1 maxlength="250" matInput placeholder="ECG" class="pretext" [(ngModel)]="ECG" name="ECG"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{ECG1.value.length}}/250</mat-hint>
+                      <!--<input style="font-family:'Proxima Nova Semibold'" matInput placeholder="ECG">-->
+                      <!--</mat-form-field>-->
+                    </div>
+                    <div class="col-sm-6">
+
+                      <textarea #ECHO1 maxlength="250" class="pretext" [(ngModel)]="ECHO" name="ECHO" matInput placeholder="ECHO"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{ECHO1.value.length}}/250</mat-hint>
+                      <!--<input style="font-family:'Proxima Nova Semibold'" matInput placeholder="ECHO">-->
+                      <!--</mat-form-field>-->
+                    </div>
+                    <div class="col-sm-6">
+
+                      <textarea #ABG1 maxlength="250" class="pretext" [(ngModel)]="ABG" name="ABG" matInput placeholder="ABG"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{ABG1.value.length}}/250</mat-hint>
+                      <!--<input style="font-family:'Proxima Nova Semibold'" matInput placeholder="ABG">-->
+                      <!--</mat-form-field>-->
+                    </div>
+                    <div class="col-sm-6">
+                      <!--<mat-form-field appearance="outline" style="width:100%">
+            <mat-label style="font-family:'Proxima Nova Semibold'">Special Inv</mat-label>-->
+                      <textarea #spcInv1 maxlength="250" matInput class="pretext" [(ngModel)]="SPCInv" name="SPCInv" placeholder="Special Inv"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{spcInv1.value.length}}/250</mat-hint>
+                      <!--<input style="font-family:'Proxima Nova Semibold'" matInput placeholder="Special InV">-->
+                      <!--</mat-form-field>-->
+                    </div>
+                  </div>
+
+
+                  <div class="col-sm-12">
+                    <div class="col-sm-12">
+                      <div class="col-sm-6">
+                        <mat-checkbox #unfitcheck [disabled]="Unfitdisable" (change)="changecheck1($event)">Temporarily unfit for Anaesthesia, to be reviewed</mat-checkbox>
+                      </div>
+                      <div class="col-sm-6">
+                        <mat-checkbox #acceptcheck [disabled]="Acceptdisable" (change)="changecheck2($event)">Accepted for Anaesthesia</mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12" *ngIf="hideunfitreveiw">
+                    <div class="col-sm-6">
+                      <!--<mat-form-field appearance="outline" style="width:100%">
+            <mat-label style="font-family:'Proxima Nova Semibold'">Review</mat-label>-->
+                      <!--<textarea #review maxlength="250" matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" [(ngModel)]="Review" name="Review" placeholder="Review"></textarea>-->
+                      <textarea #unfitreasons maxlength="250" matInput class="pretext" placeholder="Unfit reasons" [(ngModel)]="Unfitresons" name="Unfitresons"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{unfitreasons.value.length}}/250</mat-hint>
+                      <!--</mat-form-field>-->
+                    </div>
+
+                    <div class="col-sm-6">
+                      <textarea #plangaa maxlength="250" matInput class="pretext" placeholder="Plan GA" [(ngModel)]="PlanGA" name="PlanGA"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{plangaa.value.length}}/250</mat-hint>
+
+                    </div>
+
+
+                  </div>
+
+                  <div class="col-sm-12" *ngIf="hideunfitreveiw">
+                    <div class="col-sm-3" style="margin-top:1%">
+
+                      <textarea #reviewby maxlength="100" matInput class="pretext" placeholder="Reviewed by" [(ngModel)]="Reviewedby1" name="Reviewedby1"></textarea>
+                      <mat-hint align="start">Max 100 Character</mat-hint>
+                      <mat-hint align="end">{{reviewby.value.length}}/100</mat-hint>
+                      <!--</mat-form-field>-->
+                      <!--<input matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" maxlength="100" placeholder="Reviewed by">-->
+
+                    </div>
+
+                    <div class="col-sm-2">
+                      <mat-form-field appearance="outline" style="width:100%">
+                        <mat-label>Reviewed on</mat-label>
+                        <input matInput [matDatepicker]="picker1" [max]="maxDate()" [(ngModel)]="reviewDate1" name="reviewDate1" (dateChange)="CheckToDate()">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-5">
+                      <textarea #remarkss maxlength="250" matInput class="pretext" placeholder="Remarks" [(ngModel)]="remarks1" name="remarks1"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{remarkss.value.length}}/250</mat-hint>
+                      <!--</mat-form-field>-->
+                    </div>
+
+
+                  </div>
+
+                  <div class="col-sm-12" *ngIf="hideunfitreveiw">
+                    <div class="col-sm-3" style="margin-top:1%">
+                      <!--<mat-form-field appearance="outline" style="width:100%">
+            <mat-label style="font-family:'Proxima Nova Semibold'">Review</mat-label>-->
+                      <!--<textarea #review maxlength="250" matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" [(ngModel)]="Review" name="Review" placeholder="Review"></textarea>-->
+                      <textarea #reviewbyy2 maxlength="100" matInput class="pretext" placeholder="Reviewed by" [(ngModel)]="Reviewedby2" name="Reviewedby2"></textarea>
+                      <mat-hint align="start">Max 100 Character</mat-hint>
+                      <mat-hint align="end">{{reviewbyy2.value.length}}/100</mat-hint>
+                      <!--<input matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" placeholder=" Reviewed by">-->
+                      <!--</mat-form-field>-->
+                    </div>
+
+                    <div class="col-sm-2">
+                      <mat-form-field appearance="outline" style="width:100%">
+                        <mat-label>Reviewed on</mat-label>
+                        <input matInput [matDatepicker]="picker2" [min]="minToDate" [max]="maxDate()" [(ngModel)]="reviewDate2" name="reviewDate2" (dateChange)="CheckToDate2()">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-5">
+                      <!--<mat-form-field appearance="outline" style="width:100%">
+            <mat-label style="font-family:'Proxima Nova Semibold'">Review</mat-label>-->
+                      <!--<textarea #review maxlength="250" matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" [(ngModel)]="Review" name="Review" placeholder="Review"></textarea>-->
+                      <textarea #remarkss2 maxlength="250" matInput class="pretext" placeholder="Remarks" [(ngModel)]="remarks2" name="remarks2"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{remarkss2.value.length}}/250</mat-hint>
+                      <!--</mat-form-field>-->
+
+                    </div>
+
+
+                  </div>
+                  <div class="col-sm-12" *ngIf="hideunfitreveiw">
+                    <div class="col-sm-3" style="margin-top:1%">
+                      <!--<mat-form-field appearance="outline" style="width:100%">
+            <mat-label style="font-family:'Proxima Nova Semibold'">Review</mat-label>-->
+                      <!--<textarea #review maxlength="250" matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" [(ngModel)]="Review" name="Review" placeholder="Review"></textarea>-->
+                      <textarea #reviewbyy3 maxlength="100" matInput class="pretext" placeholder="Reviewed by" [(ngModel)]="Reviewedby3" name="Reviewedby3"></textarea>
+                      <mat-hint align="start">Max 100 Character</mat-hint>
+                      <mat-hint align="end">{{reviewbyy3.value.length}}/100</mat-hint>
+                      <!--<input matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" placeholder=" Reviewed by">-->
+                      <!--</mat-form-field>-->
+                    </div>
+
+                    <div class="col-sm-2">
+                      <mat-form-field appearance="outline" style="width:100%">
+                        <mat-label>Reviewed on</mat-label>
+                        <input matInput [matDatepicker]="picker3" [min]="minToDate2" [max]="maxDate()" [(ngModel)]="reviewDate3" name="reviewDate3">
+                        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                        <mat-datepicker #picker3></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-5">
+                      <!--<mat-form-field appearance="outline" style="width:100%">
+            <mat-label style="font-family:'Proxima Nova Semibold'">Review</mat-label>-->
+                      <!--<textarea #review maxlength="250" matInput style="width:100%;border: 2px solid #8f8c8c;border-radius: 6px;" [(ngModel)]="Review" name="Review" placeholder="Review"></textarea>-->
+                      <textarea #remarkss3 maxlength="250" matInput class="pretext" placeholder="Remarks" [(ngModel)]="remarks3" name="remarks3"></textarea>
+                      <mat-hint align="start">Max 250 Character</mat-hint>
+                      <mat-hint align="end">{{remarkss3.value.length}}/250</mat-hint>
+                      <!--</mat-form-field>-->
+                    </div>
+
+
+                  </div>
+                </div>
+
+
+              </div>
+
+
+            </div>
+
+            <!--<div class="col-sm-12">
+              <div class="col-sm-12" style="margin-top: 1%; margin-bottom: 1%;">
+                <div class="col-sm-5"> </div>
+
+
+                <div class="col-sm-1" *ngIf="hideI_submit">
+                  <button class="success" (click)="InvSubmit()" [disabled]="InvSubmitdis" mat-raised-button style="font-family:'Proxima Nova Semibold'">Submit</button>
+                </div>
+                <div class="col-sm-1" *ngIf="hideI_update">
+                  <button class="success" (click)="InvUpdate()" [disabled]="InvUpdatedis" mat-raised-button style="font-family:'Proxima Nova Semibold'">Submit</button>
+                </div>
+                <div class="col-sm-1">
+                  <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;font-family:'Proxima Nova Semibold'" (click)="cancel()"><strong>Cancel</strong></button>
+                </div>
+
+              </div>
+            </div>-->
+
+            <div class="col-sm-12 pb25">
+              <div class="content-right sub-section btn-wrap">
+
+                <button class="btn btn-warning-default" (click)="cancel()" type="button">Cancel</button>
+                <div class="col-sm-1" *ngIf="hideI_submit">
+                  <button class="success btn btn-primary" mat-raised-button [disabled]="InvSubmitdis" (click)="InvSubmit()">Submit</button>
+                </div>
+                <div class="col-sm-1" *ngIf="hideI_update">
+                  <button class="success btn btn-primary" mat-raised-button [disabled]="InvUpdatedis" (click)="InvUpdate()">Update</button>
+                </div>
+              </div>
+            </div>
+
+
+          </mat-tab>
+
+
+          <mat-tab label="Pre-Operative Instructions" style="line-height:2;overflow:auto;height:300px">
+
+            <div class="col-sm-12">
+
+              <div class="col-sm-12" style="margin-top:1%">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2"> <label> Nil orally after </label></div>
+                <div class="col-sm-3">
+                  <input matInput maxlength="2" style="width:13%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="HH" [(ngModel)]="PO_hours" name="PO_hours" (keypress)="numberOnly($event)" (keyup)="restrictPOhours()">
+                  &#58;
+                  <input matInput maxlength="2" style="width:13%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="MM" [(ngModel)]="PO_Mins" name="PO_Mins" (keypress)="numberOnly($event)" (keyup)="restrictPOMins()">
+
+                  <!--<label>on </label>-->
+                </div>
+                <div class="col-sm-2">
+                  <mat-form-field appearance="outline" style="width:92%">
+                    <mat-label>Nil Date</mat-label>
+                    <input matInput [matDatepicker]="picker6" [max]="maxDate()" placeholder="Nil Date" [(ngModel)]="nildate" name="nildate">
+                    <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                    <mat-datepicker #picker6></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2"> <label> Arrange for </label></div>
+
+                <div class="col-sm-2">
+                  <input matInput maxlength="10" style="width:70%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" [(ngModel)]="ArrangerFor" name="ArrangerFor" placeholder="Units of blood">
+
+                </div>
+
+              </div>
+
+              <div class="col-sm-12" style="margin-top:1%">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2"> <label>Blood product </label></div>
+
+                <div class="col-sm-2">
+                  <input matInput maxlength="15" style="width:70%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" [(ngModel)]="BloodProduct" name="BloodProduct" placeholder="">
+
+                </div>
+
+              </div>
+
+              <div class="col-sm-12" style="margin-top:1%">
+                <div class="col-sm-1"></div>
+
+                <div class="col-sm-2">
+                  <div class="sample"><label> To be shifted to the operation theatre at</label></div>
+                </div>
+                <div class="col-sm-3" style="margin-top: 2%;">
+                  <input matInput maxlength="2" style="width:13%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="HH" [(ngModel)]="POO_hours" name="POO_hours" (keypress)="numberOnly($event)" (keyup)="restrictPOOhours()">
+                  &#58;
+                  <input matInput maxlength="2" style="width:13%;border:1px solid #8f8c8c;border-radius:6px;height:32px;box-shadow: 0px 0px 3px 0px #67babf;" placeholder="MM" [(ngModel)]="POO_mins" name="POO_mins" (keypress)="numberOnly($event)" (keyup)="restrictPOOmins()">
+                  <!--<label>on </label>-->
+                </div>
+
+                <div class="col-sm-2">
+                  <mat-form-field appearance="outline" style="width:92%">
+                    <mat-label> Shift date</mat-label>
+                    <input matInput [matDatepicker]="picker8" [max]="maxDate()" placeholder="Shift date" [(ngModel)]="ShiftDate" name="ShiftDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                    <mat-datepicker #picker8></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+              <div class="col-sm-12">
+                <div class="col-sm-6">
+                  <textarea #specins maxlength="250" [(ngModel)]="SpecialInstruction" name="SpecialInstruction" matInput class="pretext" placeholder="Special instructions"></textarea>
+                  <mat-hint align="start">Max 250 Character</mat-hint>
+                  <mat-hint align="end">{{specins.value.length}}/250</mat-hint>
+                </div>
+
+                <div class="col-sm-6">
+                  <textarea #premedic maxlength="250" [(ngModel)]="Premedications" name="Premedications" matInput class="pretext" placeholder="Pre-medications"></textarea>
+                  <mat-hint align="start">Max 250 Character</mat-hint>
+                  <mat-hint align="end">{{premedic.value.length}}/250</mat-hint>
+                </div>
+              </div>
+
+
+              <div class="col-sm-12">
+                <div class="col-sm-12">
+                  <div class="col-sm-6">
+                    <h6 class="col-sm-6">General Consent</h6>
+                  </div>
+                  <div class="col-sm-6"></div>
+
+                </div>
+
+                <div class="col-sm-12">
+                  <table style="margin-left:2%">
+                    <tr *ngFor="let lines of totallinesdata">
+                      <td><strong>{{lines}}</strong></td>
+                    </tr>
+                    <tr style="float:right;margin-right:42px">
+                      <td style="color:blue;">
+                        <mat-checkbox [(ngModel)]="disablechecked" name="disablechecked" (change)="disableSubmitt($event.checked)">I agree terms and conditions</mat-checkbox>
+                      </td>
+                    </tr>
+                  </table>
+
+                </div>
+              </div>
+
+
+              <!--<div class="col-sm-12">
+    <div class="col-sm-12" style="margin-top: 1%; margin-bottom: 1%;">
+      <div class="col-sm-5"> </div>
+
+      <div class="col-sm-1" *ngIf="hidePO_submit">
+        <button class="success" (click)="PreOPSubmit()" mat-raised-button style="font-family:'Proxima Nova Semibold'" [disabled]="disablePreOSubmit">Submit</button>
+      </div>
+
+      <div class="col-sm-1" *ngIf="hidePO_update">
+        <button class="success" (click)="PreOPUpdate()" mat-raised-button style="font-family:'Proxima Nova Semibold'" [disabled]="disablePreOSubmit">Submit</button>
+      </div>
+
+      <div class="col-sm-1">
+        <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;font-family:'Proxima Nova Semibold'" (click)="cancel()"><strong>Cancel</strong></button>
+      </div>
+    </div>
+  </div>-->
+
+
+
+              <div class="col-sm-12 pb25">
+                <div class="content-right sub-section btn-wrap">
+
+                  <button class="btn btn-warning-default" (click)="cancel()" type="button">Cancel</button>
+                  <div class="col-sm-1" *ngIf="hidePO_submit">
+                    <button class="success btn btn-primary" mat-raised-button [disabled]="disablePreOSubmit" (click)="PreOPSubmit()">Submit</button>
+                  </div>
+                  <div class="col-sm-1" *ngIf="hidePO_update">
+                    <button class="success btn btn-primary" mat-raised-button [disabled]="disablePreOSubmit" (click)="PreOPUpdate()">Update</button>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+
+          </mat-tab>
+
+        </mat-tab-group>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Pop up-->
+<div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 400px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeEnd()">&times;</button>
+        <h4 class="modal-title">Pre Anaesthetic Checkup</h4>
+      </div>
+      <p align="center">Confirm to cancel</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="CloseNO()">No</button>
+        <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="CloseYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- PDT Table -->
+
+<div class="modal" role="dialog" style="top:18%;right:-30%" [ngStyle]="{'display':PDTBlock}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="width: 474px;">
+      <div class="modal-header" style="height: 44px;">
+        <button type="button" class="close" data-dismiss="modal" (click)="closePDT()">&times;</button>
+        <h3 class="modal-title" style="font-family:'Proxima Nova Semibold'">Patient Drug therapy</h3>
+      </div>
+      <div class="modal-body" style="height:200px;margin-top:-10px;overflow:auto">
+
+        <table mat-table [dataSource]="dataSource" style="width:100%;position:sticky;" class="table table-bordered">
+
+
+          <ng-container matColumnDef="Checked">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Action</th>
+            <td mat-cell *matCellDef="let element"> <mat-checkbox (click)="selecttype(element)"></mat-checkbox> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="GenericName">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Generic Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.GenericName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="DrugName">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px"> Brand</th>
+            <td mat-cell *matCellDef="let element"> {{element.DrugName}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--beforeana-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Beforeanaprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title" style="font-family:'Proxima Nova'">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to Print</strong></h1>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="print()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclose()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----------------------------------Print Screen anathes----------------------------------------------->
+<div id="Printt" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="font-size:15px;text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center">{{PAddress}},{{PAddress2}},{{PAddress3}}</div>
+        <div style="text-align:center">Tel-{{Pphone}} &nbsp;- &nbsp; {{Pweb}}</div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Patient ID &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{UIN}}</label>
+        </div>
+        <div class="row">
+          <label>Patient Name &nbsp;: &nbsp;{{Name}}</label>
+        </div>
+        <div class="row">
+          <label>Age / Gender &nbsp;: &nbsp;{{Age}}/{{Gender}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="position:sticky;margin-top:2%">
+
+    <div class="row">
+
+
+      <table align="center" class="table table-bordered">
+
+        <thead>
+
+          <tr>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Question</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">To Whom</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Yes</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">No</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">N/A</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Addl. information</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let sp1 of beforeprint; index as i">
+            <td style="text-align:center">{{i+1}}</td>
+            <td style="text-align:center">{{sp1.Question}}</td>
+            <td style="text-align:center">{{sp1.Questiontowhom}}</td>
+            <td style="text-align:center">{{sp1.Yesprint}}</td>
+            <td style="text-align:center">{{sp1.Noprint}}</td>
+            <td style="text-align:center">{{sp1.NAprint}}</td>
+            <td style="text-align:center">{{sp1.Description}}</td>
+          </tr>
+        </tbody>
+
+
+
+      </table>
+
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Date  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{CreateUTC | date:"dd-MMM-y"}}</label>
+        </div>
+        <div class="row">
+          <label>Anaesthetist Name &nbsp;: &nbsp;{{Docname}}</label>
+        </div>
+        <div class="row">
+          <mat-label>Surgery type &nbsp; &nbsp;:</mat-label> &nbsp;
+          <mat-label *ngFor="let stype of surgerytypes"> {{stype.surgerytype}}</mat-label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!--PAC HISTORY-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Pachistoryprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title" style="font-family:'Proxima Nova'">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to Print</strong></h1>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printpac()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosepac()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----------------------------------Print Screen PACHIS----------------------------------------------->
+<div id="PacPrintID" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="font-size:15px;text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center">{{PAddress}},{{PAddress2}},{{PAddress3}}</div>
+        <div style="text-align:center">Tel-{{Pphone}} &nbsp;- &nbsp; {{Pweb}}</div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Patient ID &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{UIN}}</label>
+        </div>
+        <div class="row">
+          <label>Patient Name &nbsp;: &nbsp;{{Name}}</label>
+        </div>
+        <div class="row">
+          <label>Age / Gender &nbsp;: &nbsp;{{Age}}/{{Gender}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top: 3%;">
+
+    <div class="col-sm-6">
+      <div class="col-sm-12" style="background:#80808042">
+        <div class="col-sm-8">
+          <label style="font-weight: normal">Previous Operation / Anaesthesia &nbsp;: &nbsp;{{Previous_Operation}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+          <label>Cold / Cough / Fever &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{ColdCoughFever}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="background:#80808042">
+        <div class="col-sm-8">
+          <label>Palpitations / Breathlessness &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{PalpitationsBreathless}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+          <label>Orthopnoea / PND &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Orthopnoea_PND}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="background:#80808042">
+        <div class="col-sm-8">
+          <label>COPD / Asthma &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{CPD_Asthma}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+          <label>Unconsiousness / Epilepsy / CVA : &nbsp;{{Unconsciousness}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="background:#80808042">
+        <div class="col-sm-8">
+          <label>Psychiatric illness &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Psychiatric_illness}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+          <label>Renel disorders / CRF &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Renal_Disorders}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12" style="background:#80808042">
+        <div class="col-sm-8">
+          <label>Jaundice &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Jaundices}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-8">
+          <label>HTN / IHD / CHD / DM &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{HTN_IHD_CHD_DM}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-11">
+          <label>Remarks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{rem}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Bleeding disorders &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Bleeding_Disorders}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Exercise tolerance &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Exercise_Tolerance}}</label>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="col-sm-6">
+
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Menstrual H/o, LMP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Menstruals}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Family H/o &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Family_Ho}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Last meal time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Last_Meal_Time}}/{{Last_Meal_Time1}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Smoking / Tobacco chewing &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Smoking_Tobacco}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Alcohol habituation &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Alcohol_habituation}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Drug addictions &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{Drug_Addictions}}</label>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="col-sm-4">
+          <label>Known allergies (include drugs) &nbsp;&nbsp;&nbsp;: &nbsp;{{Knownallergies}}</label>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:3%;position:sticky">
+
+    <div class="row">
+
+      <table class="table table-bordered">
+
+        <thead>
+
+          <tr>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">S.No</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Brand</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Generic Name</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Dossage</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Frequency</th>
+            <th style="background-color:#F0F3F5;color:#8FA3B0;font-family:'Proxima Nova Semibold';font-size:14px;height:40px" rowspan="2">Description</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let PHT of PACHistoryTranDetprint; index as i">
+            <td style="text-align:center">{{i+1}}</td>
+            <td style="text-align:center">{{PHT.DrugName}}</td>
+            <td style="text-align:center">{{PHT.GenericName}}</td>
+            <td style="text-align:center">{{PHT.Dosage}}</td>
+            <td style="text-align:center">{{PHT.frequency}}</td>
+            <td style="text-align:center">{{PHT.DrugDescription}}</td>
+          </tr>
+        </tbody>
+
+
+
+      </table>
+
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:3%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Date  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{pt | date:"dd-MMM-y"}}</label>
+        </div>
+        <div class="row">
+          <label>Anaesthetist Name &nbsp;: &nbsp;{{doc}}</label>
+        </div>
+        <div class="row">
+          <mat-label>Surgery type &nbsp; &nbsp;:</mat-label> &nbsp;
+          <mat-label *ngFor="let stype of surgerytypes"> {{stype.surgerytype}}</mat-label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!--Pre-Operative Instructions-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Pacpreopinprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title" style="font-family:'Proxima Nova'">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to Print</strong></h1>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printpreopin()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosepreopin()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="Printpreoperative" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="font-size:15px;text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center">{{PAddress}},{{PAddress2}},{{PAddress3}}</div>
+        <div style="text-align:center">Tel-{{Pphone}} &nbsp;- &nbsp; {{Pweb}}</div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Patient ID &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{puin}}</label>
+        </div>
+        <div class="row">
+          <label>Patient Name &nbsp;: &nbsp;{{pName}}</label>
+        </div>
+        <div class="row">
+          <label>Age / Gender &nbsp;: &nbsp;{{pAge}}/{{pGender}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+
+
+      <div class="col-sm-4">
+        <label>Nil orally after &nbsp;: &nbsp;{{PO_hoursprint}}/{{PO_Minsprint}}</label>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center;margin-top:-20px">
+        <label>Nil Date &nbsp;: &nbsp;{{NilOralyAfterDate | date:"dd-MMM-y"}}</label>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%;">
+
+    <div class="col-sm-6">
+      <label>Arrange for &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{{ArrangeForprint}}</label>
+    </div>
+
+    <div class="col-sm-6">
+      <label>Blood product &nbsp;: &nbsp;{{BloodProductprint}}</label>
+    </div>
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <div class="col-sm-8">
+      <label>To be shifted to the operation theatre at &nbsp;: &nbsp;{{POO_hours}}/{{POO_mins}}</label>
+    </div>
+
+    <div class="col-sm-8">
+      <label>Shift Date &nbsp;: &nbsp;{{ShiftedOTDate | date:"dd-MMM-y"}}</label>
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%;">
+
+    <div class="col-sm-8">
+      <label>Special instructions &nbsp;: &nbsp;{{SpecialInstructionprint}}</label>
+    </div>
+
+
+    <div class="col-sm-8">
+      <label>Pre-medications &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;: &nbsp;{{PreMedications}}</label>
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Date  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{utc | date:"dd-MMM-y"}}</label>
+        </div>
+        <div class="row">
+          <label>Anaesthetist Name &nbsp;: &nbsp;{{DC}}</label>
+        </div>
+        <div class="row">
+          <mat-label>Surgery type :</mat-label> &nbsp;
+          <mat-label *ngFor="let stypess of stypes"> {{stypess.surgerytype}}</mat-label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--PACEXAM-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Pacexamprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title" style="font-family:'Proxima Nova'">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to Print</strong></h1>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printexam()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosepacexam()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="PacexamPrintID" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="font-size:15px;text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center">{{PAddress}},{{PAddress2}},{{PAddress3}}</div>
+        <div style="text-align:center">Tel-{{Pphone}} &nbsp;- &nbsp; {{Pweb}}</div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Patient ID &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{UIN}}</label>
+        </div>
+        <div class="row">
+          <label>Patient Name &nbsp;: &nbsp;{{Name}}</label>
+        </div>
+        <div class="row">
+          <label>Age / Gender &nbsp;: &nbsp;{{Age}}/{{Gender}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>Vital Signs: &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Pulse / Heart Rate &nbsp;: &nbsp;</mat-label>
+          {{PulseHeartRatep}}/ per minute
+        </div>
+
+      </div>
+
+      <div class="col-sm-4" style="text-align:center;margin-left:-13px">
+        <mat-label>Blood Pressure &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{BP1p}}/{{BP2p}} mm of Hg
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Respiration &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+          {{PAE_Respirationp}}/ per minute
+        </div>
+
+      </div>
+
+      <div class="col-sm-4" style="text-align:center;margin-left:7px">
+        <mat-label>Temperature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        Afebrile / {{Temperaturep}} /  ℃  /  ℉
+      </div>
+
+
+
+    </div>
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>General Physical Examination (GPE): &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Spine &nbsp;: &nbsp;</mat-label>
+          {{Spinep}}
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Icterus &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{Icterusp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>Oedema &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{Oedemap}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Weight &nbsp;: &nbsp;</mat-label>
+          {{PAEWeightp}}
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Cyanosis &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{Cyanosisp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>JVP &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{JVPp}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Height &nbsp;: &nbsp;</mat-label>
+          {{PAEHeightp}}
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Clubbing &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{Clubbingp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>Veins &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{Veinsp}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Body Mass Index (BMI) &nbsp;: &nbsp;</mat-label>
+          {{PAEBMIp}}
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Lymphadenopathy (LAP) &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{LAPp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>General Condition (GC) &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{GCp}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Nutrition status &nbsp;: &nbsp;</mat-label>
+          {{NStatuspp}}
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Breath Holding Time &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{BHTp}} seconds
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>Pallor  &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;</mat-label>
+        {{Pallorp}}
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>Airway Assesment: &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Thyromental dist &nbsp;: &nbsp;</mat-label>
+          {{Thromentaldistp}} cms
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Mallampatti class &nbsp;: &nbsp;</mat-label>
+        {{MallampattiClassp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>Oral hygiene &nbsp;: &nbsp;</mat-label>
+        {{OralHygienep}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Mouth opening &nbsp;: &nbsp;</mat-label>
+          {{MouthOpeningp}} cms
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Nasal patency &nbsp;: &nbsp;</mat-label>
+        Rt {{NP1p}}/ Lt {{NP2p}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>T.M.Joint &nbsp;: &nbsp;</mat-label>
+        {{TMJointp}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4" style="text-align:left">
+        <div>
+          <mat-label>Loose / Missing teeth &nbsp;: &nbsp;</mat-label>
+          {{LooseMissingTeethp}}
+        </div>
+      </div>
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Artificial teeth &nbsp;: &nbsp;</mat-label>
+        {{ArtificialTeethp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>Neck &nbsp;: &nbsp;</mat-label>
+        {{Neckp}}
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Upper Respiratory Tract &nbsp;: &nbsp;</mat-label>
+          {{URTp}} cms
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <mat-label>Lower Respiratory Tract &nbsp;: &nbsp;</mat-label>
+        {{LRTp}}
+      </div>
+
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Cardio Vascular System (CVS) &nbsp;: &nbsp;</mat-label>
+          {{CVSp}} cms
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <mat-label>Central Nervous System (CNS) &nbsp;: &nbsp;</mat-label>
+        {{CNSp}}
+      </div>
+
+
+    </div>
+
+
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Per-abdomen(P/A) &nbsp;: &nbsp;</mat-label>
+          {{perabdomenp}} cms
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Date  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{cr | date:"dd-MMM-y"}}</label>
+        </div>
+        <div class="row">
+          <label>Anaesthetist Name &nbsp;: &nbsp;{{did}}</label>
+        </div>
+        <div class="row">
+          <mat-label>Surgery type &nbsp; &nbsp;:</mat-label> &nbsp;
+          <mat-label *ngFor="let stype of surgerytypes"> {{stype.surgerytype}}</mat-label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+<!--PACINV-->
+
+<div class="modal" role="dialog" [ngStyle]="{'display':Pacinvprint}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg" style="width:20%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title" style="font-family:'Proxima Nova'">Information</h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-1">
+              </div>
+              <div class="col-sm-10">
+                <h1 style="text-align:center;font-size:14px;background-color:white;color:black"><strong>Do you want to Print</strong></h1>
+              </div>
+              <div class="col-sm-1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+
+          <button (click)="printinv()" class="btn btn-primary">Yes</button>
+          <button type="button" id="theButton" class="btn btn-success" data-dismiss="modal" (click)="printclosepacinv()" cdkFocusInitial>No</button>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="PacinvPrintID" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="font-size:15px;text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center">{{PAddress}},{{PAddress2}},{{PAddress3}}</div>
+        <div style="text-align:center">Tel-{{Pphone}} &nbsp;- &nbsp; {{Pweb}}</div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Patient ID &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{UIN}}</label>
+        </div>
+        <div class="row">
+          <label>Patient Name &nbsp;: &nbsp;{{Name}}</label>
+        </div>
+        <div class="row">
+          <label>Age / Gender &nbsp;: &nbsp;{{Age}}/{{Gender}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>Hb / PCV(gm%) (%) &nbsp;: &nbsp;</mat-label>
+        {{HbPCV1p}}/{{HbPCV2p}}
+      </div>
+
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>TLC  (cells / mm3) &nbsp;: &nbsp;</mat-label>
+        {{TLCp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>S. Bil (mg%) &nbsp;: &nbsp;</mat-label>
+        Total {{SBilTotalp}},Direct {{SBilDirectp}}
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>Pl. Count(lacs / mm3) &nbsp;: &nbsp;</mat-label>
+        {{PlCountp}}
+      </div>
+
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>Bl. Group &nbsp;: &nbsp;</mat-label>
+        {{BlGroupp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>PT (sec) &nbsp;: &nbsp;</mat-label>
+        T{{PT_Tp}}C{{PT_Cp}}INR{{PT_NRp}}
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>Bl. Glu (mg%) &nbsp;: &nbsp;</mat-label>
+        F {{BLGlu_Fp}},   PP{{BLGlu_PPp}},   R{{BLGlu_Rp}}
+      </div>
+
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>B. Urea &nbsp;: &nbsp;</mat-label>
+        {{BUreap}}mg%
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>PTTK (sec) &nbsp;: &nbsp;</mat-label>
+        T{{PTTK_Tp}}C{{PTTK_Cp}}
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>S. Uric acid &nbsp;: &nbsp;</mat-label>
+        {{SUricAcidp}}mg%
+      </div>
+
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>S. Creat &nbsp;: &nbsp;</mat-label>
+        {{Screatp}}mg%
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>SGOT / SGPT(IU / L) &nbsp;: &nbsp;</mat-label>
+        {{SGOTp}}/{{SGPTp}}
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>T3 &nbsp;: &nbsp;</mat-label>
+        {{T3p}}
+      </div>
+
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>HbsAg &nbsp;: &nbsp;</mat-label>
+        {{HbsAgp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>AlkPO4 / GGT(IU / L) &nbsp;: &nbsp;</mat-label>
+        {{AlkPOp}}/{{GGTp}}
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>T4 &nbsp;: &nbsp;</mat-label>
+        {{T4p}}
+      </div>
+
+
+      <div class="col-sm-4" style="text-align:center">
+        <mat-label>HIV- I & II &nbsp;: &nbsp;</mat-label>
+        {{HIVp}}
+      </div>
+
+      <div class="col-sm-4" style="text-align:right">
+        <mat-label>S. Protein (gm%) &nbsp;: &nbsp;</mat-label>
+        T {{SProtein_Tp}}Alb {{SProtein_Albp}} IG{{SProtein_IGp}}
+      </div>
+
+
+    </div>
+
+    <div class="row">
+
+
+      <div class="col-sm-4" style="text-align:left">
+        <mat-label>TSH &nbsp;: &nbsp;</mat-label>
+        {{TSHp}}
+      </div>
+
+
+
+
+    </div>
+
+
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>S.Elect: &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Na+ &nbsp;: &nbsp;</mat-label>
+          {{SElect_NAp}}meq/L
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>K+ &nbsp;: &nbsp;</mat-label>
+        {{SElect_Kp}}meq/L
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>Ca+ &nbsp;: &nbsp;</mat-label>
+        {{SElect_CAp}} mg/L
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>Urine R/ ME: &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Alb &nbsp;: &nbsp;</mat-label>
+          {{UrineRMEAlbp}}meq/L
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>Sugar &nbsp;: &nbsp;</mat-label>
+        {{UrineRMESugarp}}meq/L
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>Ket &nbsp;: &nbsp;</mat-label>
+        {{UrineRMEKetp}} mg/L
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>WBC &nbsp;: &nbsp;</mat-label>
+          {{puscellWBCp}}/ hpf
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>RBC &nbsp;: &nbsp;</mat-label>
+        {{hpfRBCp}}/ hpf
+      </div>
+
+
+
+    </div>
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>DLC (%): &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>p &nbsp;: &nbsp;</mat-label>
+          {{DLC1p}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>L &nbsp;: &nbsp;</mat-label>
+        {{DLC2p}}
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>E &nbsp;: &nbsp;</mat-label>
+        {{DLC3p}}
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>M &nbsp;: &nbsp;</mat-label>
+          {{DLC4p}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <mat-label>B &nbsp;: &nbsp;</mat-label>
+        {{DLC5p}}
+      </div>
+
+
+
+    </div>
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>X Ray Chest &nbsp;: &nbsp;</mat-label>
+          {{Xrayp}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-6">
+        <mat-label>ECG &nbsp;: &nbsp;</mat-label>
+        {{ECGp}}
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Echo &nbsp;: &nbsp;</mat-label>
+          {{ECHOp}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-6">
+        <mat-label>ABG &nbsp;: &nbsp;</mat-label>
+        {{ABGp}}
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Spe &nbsp;: &nbsp;</mat-label>
+          {{SPCInvp}}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <mat-label><strong>Temporarily unfit for Anaesthesia, to be reviewed: &nbsp;</strong></mat-label>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Unfit reasons &nbsp;: &nbsp;</mat-label>
+          {{Unfitresonsp}}
+        </div>
+
+      </div>
+
+
+      <div class="col-sm-6">
+        <div>
+          <mat-label>Plan GA &nbsp;: &nbsp;</mat-label>
+          {{PlanGAp}}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Reviewed by &nbsp;: &nbsp;</mat-label>
+          {{Reviewedby1p}}
+        </div>
+
+      </div>
+
+
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Reviewed on &nbsp;: &nbsp;</mat-label>
+          {{reviewDate1p}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Remarks &nbsp;: &nbsp;</mat-label>
+          {{remarks1p}}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Reviewed by &nbsp;: &nbsp;</mat-label>
+          {{Reviewedby2p}}
+        </div>
+
+      </div>
+
+
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Reviewed on &nbsp;: &nbsp;</mat-label>
+          {{reviewDate2p}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Remarks &nbsp;: &nbsp;</mat-label>
+          {{remarks2p}}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Reviewed by &nbsp;: &nbsp;</mat-label>
+          {{Reviewedby3p}}
+        </div>
+
+      </div>
+
+
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Reviewed on &nbsp;: &nbsp;</mat-label>
+          {{reviewDate3p}}
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <mat-label>Remarks &nbsp;: &nbsp;</mat-label>
+          {{remarks3p}}
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="col-sm-12" style="margin-top:2%">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <label>Date  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;{{docid | date:"dd-MMM-y"}}</label>
+        </div>
+        <div class="row">
+          <label>Anaesthetist Name &nbsp;: &nbsp;{{doccreate}}</label>
+        </div>
+        <div class="row">
+          <mat-label>Surgery type &nbsp; &nbsp;:</mat-label> &nbsp;
+          <mat-label *ngFor="let stype of surgerytypes"> {{stype.surgerytype}}</mat-label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+

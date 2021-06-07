@@ -1,0 +1,412 @@
+
+  <div class="col-sm-12 dividebar">
+    <div class="col-sm-12 mph-0">
+      <div class="row mph-0">
+        <div class="col-sm-12 mph-0">
+          <div class="col-sm-6 mph-0 pb20">
+          </div>
+          <div class="col-sm-2 mph-0 pb20">
+          </div>
+          <div class="col-sm-4 mph-0 f-r content-right pb20">
+            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="background-color:white;border:1px solid gray;border-radius:3px;">
+      <div class="col-sm-12">
+        <div class="row" style="margin-bottom:1%">
+          <mat-toolbar style="height:40px">
+            <span class="textfont">Create Appointment</span>
+          </mat-toolbar>
+        </div>
+        <div class="row">
+
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Doctor</mat-label>
+              <mat-select required [(ngModel)]="M_EyeDoctor" name="EyeDoctor">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let Engage of EyeDoctor" [value]="Engage">{{Engage.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field appearance="outline" style="width:203px">
+              <mat-label>Appointment Date</mat-label>
+              <input required [(ngModel)]="M_DatePicker1" name="DatePicker1" [min]="maxDate1" matInput [matDatepicker]="picker1" placeholder="Date" (dateChange)="QRegistrationDateChange()">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row" style="text-align:center;color:blue" *ngIf="Hideslots">
+          <label>First Session</label>
+        </div>
+        <div class="row">
+          <ng-container *ngFor="let data of savetimeslotsarry">
+            <button type="button" style="margin:1%" class="btn btn-{{data.color}}" [disabled]="data.dis" (click)="getpatientdetails(data.Time)">{{data.Time}}</button>
+          </ng-container>
+        </div>
+        <div class="row" style="text-align:center;color:blue" *ngIf="Hideslots">
+          <label>Second Session</label>
+        </div>
+        <div class="row">
+          <ng-container *ngFor="let data of secondsavetimeslt">
+            <button type="button" style="margin:1%" class="btn btn-{{data.color}}" [disabled]="data.dis" (click)="getpatientdetails(data.Time)">{{data.Time}}</button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!--<div class="col-sm-12 pb25">
+      <div class="content-right sub-section btn-wrap">
+        <button type="button" class="btn btn-warning-default" (click)="Cancel()">Cancel</button>
+        <button class="success btn btn-primary" [disabled]="disSubmit" (click)="onSubmit(AppointmentForm)">Submit</button>
+        <button class="success btn btn-primary" (click)="showdoctorconsulting()">View Doctor Timings</button>
+      <button class="success btn btn-primary" (click)="Payamount()">Pay Online</button>
+      </div>
+    </div>-->
+  </div>
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':Patientsblock}" style="z-index:auto">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-12">
+                <button class="close" style="color:white" (click)="noandclose()">&times;</button>
+                <h4 class="modal-title">
+                  Patient Demography Information
+
+                </h4>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-body">
+          <form #AppointmentForm="ngForm" name="AppointmentForm" (keydown.enter)="$event.preventDefault()" novalidate>
+            <div class="row" style="text-align:center">
+              <label style="font-size:16px;color:blue">Date & Time : {{datetslot}} ( {{timeslotavailable}} )</label>
+            </div>
+            <div class="row" style="margin-top:2%">
+              <div class="col-sm-4">
+                <label>Appointment Fees : &nbsp;</label>
+                <label>&#x20B9;{{M_appfess}}</label>
+              </div>
+              <div class="col-sm-4"></div>
+              <div class="col-sm-4"></div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Patient Name</mat-label>
+                  <input #testInput autocomplete="off" [(ngModel)]="M_Patiwntname" name="pname" matInput placeholder="Name" required>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Mobile</mat-label>
+                  <input [(ngModel)]="M_mobile" autocomplete="off" name="pname" matInput placeholder="Mobile" required (keypress)="numberOnly($event)">
+                </mat-form-field>
+              </div>
+              <!--<div class="col-sm-3">
+    <mat-form-field appearance="outline">
+      <mat-label>E-Mail</mat-label>
+      <input [(ngModel)]="M_Email" autocomplete="off" name="pname" matInput placeholder="E-Mail" required>
+    </mat-form-field>
+  </div>-->
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width:90%">
+                  <mat-label>Gender</mat-label>
+                  <mat-select required [(ngModel)]="M_gender" name="Gender">
+                    <mat-option value="Male">Male</mat-option>
+                    <mat-option value="Female">Female</mat-option>
+                    <mat-option value="Transgender">Transgender</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-1">
+                <mat-form-field appearance="outline" style="width:112%">
+                  <mat-label>Age</mat-label>
+                  <input [(ngModel)]="M_age" autocomplete="off" name="M_ageaa" matInput placeholder="Age" required (keypress)="numberOnly($event)">
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Address1</mat-label>
+                  <textarea [(ngModel)]="M_Address1" name="Address1" placeholder="Address" matInput #message1 maxlength="100"></textarea>
+                  <mat-hint align="start"><strong>Max 100 characters</strong> </mat-hint>
+                  <mat-hint align="end"><strong>{{message1.value.length}} /100</strong></mat-hint>
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline">
+                  <mat-label><strong>Purpose</strong></mat-label>
+                  <mat-select [(ngModel)]="M_Appointmentreasons" name="Purpose">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let Engage of Complainrdetsil" [value]="Engage.Text">{{Engage.Text}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4"></div>
+              <div class="col-sm-4"></div>
+
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button (click)="coopen(AppointmentForm)" class="btn btn-primary">Book Appointment</button>
+          <button type="button" class="btn btn-red" (click)="noandclose()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':successblock}">
+  <div class="example-box" cdkDrag>
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-11">
+                <h4 class="modal-title">Appointment Created Successfully</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+              <label>Appointment ID : &nbsp;</label>
+              <label style="color:darkblue">{{appoinytmenti}}</label>
+            </div>
+            <div class="col-sm-4"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-red" (click)="noclose()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--////////////////pop-up//////////-->
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':invdepPopUp}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" (click)="invdepPopUpClose()">&times;</button>
+        <h5 class="modal-title">
+          <strong>Appointment master</strong>
+        </h5>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <input #OLMID [hidden]="hiddenM_OLMID" [(ngModel)]="M_OLMID" name="OLMID" matInput placeholder="">
+          <div class="col-sm-6">
+            <div class="row">
+              <div class="col-sm-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>Purpose Description</mat-label>
+                  <input required [(ngModel)]="M_Slitlamp" name="Slitlamp" matInput placeholder="" maxlength="100">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-1">
+                <button class="grab" type="reset" mat-icon-button (click)="Help()" matTooltip="Help">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+              <div class="col-sm-2" *ngIf="hiddenisActive">
+                <mat-form-field appearance="outline">
+                  <mat-label>Is Active</mat-label>
+                  <mat-select [(ngModel)]="M_IsActive" name="Active">
+                    <mat-option>Select</mat-option>
+                    <mat-option value="true">Yes</mat-option>
+                    <mat-option value="false">No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 pb25">
+              <div class="content-right sub-section btn-wrap">
+                <button type="button" class="btn btn-warning-default" (click)="CancelINV()">Cancel</button>
+                <button *ngIf="hiddenSubmit" class="success btn btn-primary" [disabled]="DisableonSubmit" (click)="onSubmitINV()">Submit</button>
+                <button *ngIf="hiddenUpdate" class="success btn btn-primary" [disabled]="DisableonUpdate" (click)="UpdateclkINV()">Update</button>
+                <button *ngIf="hiddenDelete" [disabled]="DisableonDelete" type="button" class="btn-danger btn-" (click)="DeleteclkINV()">Delete</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="row" [hidden]="OLMhidden">
+              <div class="row">
+                <mat-form-field>
+                  <mat-label>Search</mat-label>
+                  <input (keyup)="applyFilter($event.target.value)" matInput placeholder="">
+                </mat-form-field>
+              </div>
+              <h6 align="center">{{MasterName}}</h6>
+              <div class="row">
+                <table mat-table matSort [dataSource]="dataSourceinvdep" class="custom-table withoutbackgroung search-table table-bordered">
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element"><input type="checkbox" (click)="selectTypeOLM(element)" /></td>
+                  </ng-container>
+                  <ng-container matColumnDef="OLMID" *ngIf="hiddenOLMID">
+                    <th mat-header-cell *matHeaderCellDef>S.No</th>
+                    <td mat-cell *matCellDef="let i = index">{{i+1}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="Description">
+                    <th mat-header-cell *matHeaderCellDef>{{MasterName}} Description</th>
+                    <td mat-cell *matCellDef="let element">{{element.PDescription}} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsinvdep;sticky: true"></tr>
+                  <tr mat-row *matRowDef="let element; columns: displayedColumnsinvdep"></tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>-->
+
+
+
+<!--<div class="modal" role="dialog" [ngStyle]="{'display':ModalDatedoctorbreakup}" style="z-index: 999 !important;">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="ModalDatecheckdoctorbreakupClosesss()">&times;</button>
+        <h4 class="modal-title">Doctor Consulting Hours</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label><strong>Preferred Doctor</strong></mat-label>
+              <mat-select [(ngModel)]="M_EyesDoctor" name="EyeDoctors">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let Engage of EyeDoctor" [value]="Engage">{{Engage.Text}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn-md btn-primary" (click)="viewdet()">View</button>
+          </div>
+        </div>
+
+        <table class="custom-table withoutbackgroung search-table table-bordered">
+          <caption class="appointmentcaption">Doctor Consulting Hrs</caption>
+          <thead>
+            <tr>
+              <th rowspan="2">Sno</th>
+              <th rowspan="2">Day</th>
+              <th rowspan="2">First Session</th>
+              <th rowspan="2">Second Session</th>
+              <th colspan="2">Max Patients</th>
+            </tr>
+            <tr>
+              <th>First</th>
+              <th>Second</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of doctorbeakwise; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{data.Days}}</td>
+              <td>{{data.firstsessionstart}} hrs - {{data.firstsessionend}} hrs</td>
+              <td>{{data.Secondsessionstart}} hrs - {{data.fsecondsessionend}} hrs</td>
+              <td>{{data.Maxpatientsmorning}}</td>
+              <td>{{data.Maxpatientecening}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button autofocus class="btn btn-danger" data-dismiss="modal" (click)="ModalDatecheckdoctorbreakupClosesss()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>-->
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':accesspopup}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalcloseAccessOk()">&times;</button>
+        <h4 class="modal-title text-left">Appointment - View Access</h4>
+      </div>
+      <div class="modal-body">
+        <table align="center" class="table custom-table">
+          <thead>
+            <tr>
+              <th>Add</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Export</th>
+              <th>Print</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+
+            <tr *ngFor="let x of accessdata; index as i">
+              <td>
+                <mat-checkbox [(checked)]="x.Add" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Edit" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Delete" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Export" disabled></mat-checkbox>
+              </td>
+              <td>
+                <mat-checkbox [(checked)]="x.Print" disabled></mat-checkbox>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" data-dismiss="modal" autofocus (click)="modalcloseAccessOk()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

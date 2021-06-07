@@ -1,0 +1,1 @@
+Server=DESKTOP-N5GUNRD;Database=OPTICAL;user Id = sa;password=cmpslive;multipleActiveResultSets=true;

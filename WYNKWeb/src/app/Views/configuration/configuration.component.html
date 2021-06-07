@@ -1,0 +1,385 @@
+
+
+
+<form #ConfigurationForm="ngForm">
+  <div class="row">
+    <h6>Configuration</h6>
+  </div>
+  <div class="col-sm-12 mph-0">
+    <div class="row mph-0">
+      <div class="col-sm-12 mph-0">
+        <div class="col-sm-6 mph-0 pb20">
+          <!--<span class="uinborder">
+            <strong>{{Getuin}} / {{Getname}} / {{Getage}} / {{Getgender}}</strong>
+          </span>-->
+        </div>
+        <div class="col-sm-2 mph-0 pb20">
+          <!--<label>Allergy&nbsp;:<span class="uinborder">{{allergys}}</span></label>-->
+        </div>
+        <div class="col-sm-4 mph-0 f-r content-right pb20">
+          <!--<button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <input #Configureid name="M_id" [(ngModel)]="M_ID" type="hidden">
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <mat-select required [(ngModel)]="M_Review" name="Review" placeholder="Description" [disabled]="descdisable" (ngModelChange)="TemplateConfirmation()">
+              <mat-option value="Appointment Confirmation">Appointment Confirmation</mat-option>
+              <mat-option value="Appointment Re-scheduled">Appointment Re-scheduled</mat-option>
+              <mat-option value="Appointment Cancelled">Appointment Cancelled</mat-option>
+              <mat-option value="New">New Patients</mat-option>
+              <mat-option value="Review Patients">Review Patients</mat-option>
+              <mat-option value="Surgery-Review Patients">Surgery-Review Patients</mat-option>
+              <mat-option value="Patient Birthday Template">Patient Birthday Template</mat-option>
+              <mat-option value="Doctor Birthday Template">Doctor Birthday Template</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-1">
+          <mat-icon (click)="SearchClick()" class="grab" style="font-size:30px" data-toggle="tooltip" title="Search">search</mat-icon>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Reminder adv days</mat-label>
+            <input [(ngModel)]="M_Days" matInput name="Days" (keyup)="RestrictDays($event)" [disabled]="advdysdisable" (keypress)="numberOnly($event)" autocomplete="off" required>
+          </mat-form-field>
+          <!--[disabled]="advdysdisable"-->
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Frequency per day</mat-label>
+            <input [(ngModel)]="M_Times" matInput name="Times" (keyup)="RestrictPerday($event)" (keypress)="numberOnly($event)" autocomplete="off">
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-2">
+
+          <div class='input-group date'>
+            <input [hidden]="!hidemainowltime" [owlDateTime]="dt4" style="padding: 8px;margin-top: 6px;border-radius: 6px;" placeholder="Select Time" [(ngModel)]="selected2" name="selected2" (keypress)="notext($event)">
+            <input [hidden]="!hideowltime" style="padding: 8px;margin-top: 6px;border-radius: 6px;" placeholder="Select Time" [(ngModel)]="selected2" name="selectedr">
+            <span class="input-group-addon" [owlDateTimeTrigger]="dt4" style="border-radius: 22px;" (click)="change()">
+              <span class="fa fa-calendar grab"></span>
+            </span>
+            <owl-date-time [pickerType]="'timer'" #dt4></owl-date-time>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>Host Email</mat-label>
+            <input [(ngModel)]="P_Email1" autocomplete="off" matInput name="Email" placeholder="Email" [formControl]="emailFormControl" (keyup)="Restrict($event)">
+            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+              Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-3">
+          <mat-form-field appearance="outline" style="width:100%">
+            <mat-label>Password</mat-label>
+            <input [(ngModel)]="P_Password1" autocomplete="new-password" name="Pass" #input minlength="8" maxlength="15" matInput placeholder="Password" [type]="hide ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </div>
+    <!-- 2nd ROW -->
+    <!-- update Existing Row -->
+
+    <div class="col-sm-12">
+      <div class="row">
+
+        <div *ngIf="Hidepatient" class="col-sm-6">
+          <h6>patient</h6>
+          <div class="col-sm-12">
+
+            <table id="myTable" class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>SMS</th>
+                  <th>E-Mail</th>
+                  <th>Whatsapp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> <mat-checkbox #PSMScheck (change)="P_changeNTSMS($event)"> Notify thru SMS</mat-checkbox> </td>
+                  <td> <mat-checkbox #PEmailcheck (change)="P_changeNTEMail($event)"> Notify thru E-Mail </mat-checkbox> </td>
+                  <td> <mat-checkbox #Pwhatsappcheck (change)="P_changeNTwhatsapp($event)"> Notify thru Whatsapp </mat-checkbox> </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-sm-6" *ngIf="HideDcotor">
+          <h6>Doctor</h6>
+          <div class="col-sm-12">
+
+            <table id="myTable" class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>SMS</th>
+                  <th>E-Mail</th>
+                  <th>Whatsapp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> <mat-checkbox #DSMScheck (change)="D_changeNTSMS($event)"> Notify thru SMS</mat-checkbox> </td>
+                  <td> <mat-checkbox #DEmailcheck (change)="D_changeNTEMail($event)"> Notify thru E-Mail </mat-checkbox> </td>
+                  <td> <mat-checkbox #DEwhatsappcheck (change)="D_changeNTEwhatsapp($event)"> Notify thru Whatsapp </mat-checkbox> </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!--<div class="col-sm-1"></div>-->
+
+
+        <div class="col-sm-1">
+          <button type="button" class="success btn btn-primary" (click)="Adddata($event)">Add </button>
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <!-- Table Row -->
+    <div class="row" *ngIf="hidetableDet">
+      <div class="col-sm-12">
+
+        <div class="col-sm-10">
+          <table mat-table [dataSource]="dataSourceforData" class="custom-table withoutbackgroung search-table table-bordered">
+            <ng-container matColumnDef="View">
+              <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> No.</th>
+              <td mat-cell *matCellDef="let element;let i = index;" style="text-align:center">
+                {{i + 1}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Views">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> No. </th>
+            </ng-container>
+
+            <ng-container matColumnDef="RRDescription">
+              <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Description</th>
+              <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.RRDescription}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="RRDescriptions">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Description </th>
+            </ng-container>
+            <ng-container matColumnDef="Frequencytime">
+              <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Frequency time</th>
+              <td mat-cell *matCellDef="let element" style="text-align:center"> {{element.Frequencytime }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Frequencytimes">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Frequency time </th>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="P_Email">
+              <th mat-header-cell *matHeaderCellDef> E-Mail </th>
+              <td mat-cell *matCellDef="let element">  <mat-checkbox disabled="true" [(checked)]="element.NotifyPatient_Mail"></mat-checkbox></td>
+            </ng-container>
+
+            <ng-container matColumnDef="P_SMS">
+              <th mat-header-cell *matHeaderCellDef> SMS </th>
+              <td mat-cell *matCellDef="let element">  <mat-checkbox disabled="true" [(checked)]="element.NotifyPatient_SMS"></mat-checkbox></td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="P_WHatsapp">
+              <th mat-header-cell *matHeaderCellDef> Whatsapp </th>
+              <td mat-cell *matCellDef="let element" style="text-align:center">  <mat-checkbox disabled="true" [(checked)]="element.NotifyPatient_Whatsapp"></mat-checkbox></td>
+            </ng-container>
+
+            <ng-container matColumnDef="D_Email">
+              <th mat-header-cell *matHeaderCellDef> E-Mail </th>
+              <td mat-cell *matCellDef="let element" style="text-align:center">  <mat-checkbox disabled="true" [(checked)]="element.NotifyDoctor_Mail"></mat-checkbox></td>
+            </ng-container>
+
+            <ng-container matColumnDef="D_SMS">
+              <th mat-header-cell *matHeaderCellDef> SMS </th>
+              <td mat-cell *matCellDef="let element" style="text-align:center"> <mat-checkbox disabled="true" [(checked)]="element.NotifyDoctor_SMS"></mat-checkbox></td>
+            </ng-container>
+
+            <ng-container matColumnDef="D_Whatsapp">
+              <th mat-header-cell *matHeaderCellDef> Whatsapp </th>
+              <td mat-cell *matCellDef="let element" style="text-align:center"> <mat-checkbox disabled="true" [(checked)]="element.NotifyDoctor_Whatsapp"></mat-checkbox></td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Action</th>
+              <td mat-cell *matCellDef="let element;let i = index;">
+                <mat-icon style="color:red;font-size:20px;cursor:pointer;" (click)="removeDet(i)" data-toggle="tooltip" title="Remove">delete_forever</mat-icon>
+                &nbsp;&nbsp;
+                <mat-icon style="color:#83aac0;font-size:20px;cursor:pointer;" data-toggle="tooltip" (click)="ViewDet(element,i)" title="Edit">create</mat-icon>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Actions">
+              <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Action </th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Patient </th>
+            </ng-container>
+
+
+            <ng-container matColumnDef="header-row-second-group">
+              <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Doctor </th>
+            </ng-container>
+
+
+
+            <tr mat-header-row *matHeaderRowDef="['Views','RRDescriptions','Frequencytimes','header-row-group','header-row-second-group','Actions']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsforData;"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumnsforData;"></tr>
+          </table>
+
+
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-1"></div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="col-sm-12 pb25" *ngIf="hidetableDet">
+      <div class="content-right sub-section btn-wrap">
+        <div class="col-sm-1" *ngIf="Configureid.value!=0;else notShow">
+          <button  (click)="onUpdate(ConfigurationForm)" class="success btn btn-primary">Submit </button>
+        </div>
+        <ng-template #notShow>
+          <div class="col-sm-1">
+            <button type="submit" class="success btn btn-primary" (click)="onSubmitConfigure(ConfigurationForm)">Submit</button>
+          </div>
+        </ng-template>
+        <div class="col-sm-1">
+          <button class="btn btn-warning-default" type="button"  (click)="CancelClk()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+  <!--Pop up-->
+  <div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClose()">&times;</button>
+          <h4 class="modal-title">Configuration</h4>
+        </div>
+        <p align="center">Do you want to cancel</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
+          <button type="reset" class="btn btn-success" data-dismiss="modal" (click)="modalSuccessOk()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+<!-- Pop up table -->
+<div class="modal" role="dialog" [ngStyle]="{'display':modalS}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" type="reset" data-dismiss="modal" (click)="modalSuccess()">&times;</button>
+        <h6>
+          <strong>Configuration Details</strong>
+        </h6>
+      </div>
+      <div class="modal-body">
+
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="outline" style="color:blue">
+                <input [(ngModel)]="Filter" name="Filter" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6"></div>
+            <div class="col-sm-2" style="margin-left:-32px; align-content: flex-end">
+              <button mat-icon-button matTooltip="Export to PDF" (click)="getPdf2()"><img style="height:35px;width:35px;" src="assets/pdf.png" /></button>
+              &nbsp;&nbsp;<button mat-icon-button matTooltip="Export to Excel" (click)="getExcel2()"><img style="height:35px;width:45px;" src="assets/excel.svg" /></button>
+            </div>
+          </div>
+          <div class="col-sm-12" style="height:300px;overflow:auto;box-shadow: 0px 10px 8px 1px #888888;" #table1>
+            <div class="row">
+              <table mat-table matSort [dataSource]="dataSource" id="config_table" class="mat-elevation-z8" style="width:100%;" #config_table>
+                <ng-container matColumnDef="tapp">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element">
+                    <i class="material-icons">touch_app</i>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                  <td mat-cell *matCellDef="let element"> {{element.RRDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="AdvDays">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>AdvDays</th>
+                  <td mat-cell *matCellDef="let element"> {{element.RRAdvdays}} </td>
+                </ng-container>
+                <ng-container matColumnDef="TimesDay">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>TimesDay</th>
+                  <td mat-cell *matCellDef="let element"> {{element.FrequencyperDay}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Email">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                  <td mat-cell *matCellDef="let element"> {{element.HostEmailID}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Phone">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+                  <td mat-cell *matCellDef="let element"> {{element.Phonenumber}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+                <tr mat-row *matRowDef="let element;  let even = even;  columns: displayedColumns;" [ngClass]="{gray: even}" (click)="selecttype(element)" class="grab"></tr>      <!--[ngClass]="{gray: even}"-->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

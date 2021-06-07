@@ -1,0 +1,430 @@
+
+<div class="row">
+  <div class="col-sm-5">
+    <h2 class="h2style"><b> Patients Population on <span style="color:blue">{{Fdate| date : "dd-MMM-yyyy"}}</span> </b></h2>
+  </div>
+  <div class="col-sm-7">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-8">
+        <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+        <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+
+</div>
+<div class="row">
+  <div class="tableFixHead">
+    <table id="customers" class="custom-table withoutbackgroung search-table table-bordered">
+      <thead>
+        <tr>
+          <th rowspan="3">SNo</th>
+          <th rowspan="3" style="width:7%">Branch</th>
+          <th colspan="4">New Patients</th>
+          <th rowspan="3">Total</th>
+          <th rowspan="3">Revenue Total (New)</th>
+          <th colspan="4">Review Patients</th>
+          <th rowspan="3">Total</th>
+          <th rowspan="3">Revenue Total (Review)</th>
+          <th colspan="4">Surgery-Review Patients</th>
+          <th rowspan="3">Total</th>
+          <th rowspan="3">Revenue Total (Surgery-Review)</th>
+          <th rowspan="3">Cumulative Total Patients</th>
+          <th rowspan="3" style="width:8%">Cumulative Total Revenue</th>
+        </tr>
+        <tr>
+          <th colspan="2">General</th>
+          <th colspan="2">Pediatric</th>
+          <th colspan="2">General</th>
+          <th colspan="2">Pediatric</th>
+          <th colspan="2">General</th>
+          <th colspan="2">Pediatric</th>
+        </tr>
+        <tr>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of branchtabledata; let i = index">
+          <td>{{i + 1}}</td>
+          <td style="width:7%">
+            {{data.Companybranch}}
+          </td>
+
+          <td data-toggle="tooltip" title="New General Normal">
+            <a class="cursor" (click)="GetnewgeneralNormal(data.Datess,data.NewGeneralNormal,data.CompanyName,data.Companybranch)">{{data.NewGeneralNormal}}</a>
+
+          </td>
+
+          <td data-toggle="tooltip" title="New General Ocular">
+            <a class="cursor" (click)="Getnewgeneralocular(data.Datess,data.NewGeneralOcular,data.CompanyName,data.Companybranch)">{{data.NewGeneralOcular}}</a>
+          </td>
+
+          <td data-toggle="tooltip" title="New Pediatric Normal">
+            <a class="cursor" (click)="GetnewpediatricNormal(data.Datess,data.NewPediatricNormal,data.CompanyName,data.Companybranch)">
+              {{data.NewPediatricNormal}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="New Pediatric Ocular">
+            <a class="cursor" (click)="GetnewpediatricOCular(data.Datess,data.NewPediatricOcular,data.CompanyName,data.Companybranch)">
+              {{data.NewPediatricOcular}}
+            </a>
+          </td>
+
+
+          <td data-toggle="tooltip" title="New Visits Total">
+            <a class="cursor" (click)="GetTotalnewcount(data.Datess,data.NewPatients,data.CompanyName,data.Companybranch)">
+              {{data.NewPatients}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="New Visits Total">
+            <a class="cursor" (click)="GetTotalnewcount(data.Datess,data.NewPatients,data.CompanyName,data.Companybranch)">
+
+              <!--{{data.RevenueNewPatients}}.00-->
+              {{data.RevenueNewPatients | currency:Country2}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="Review General Normal">
+            <a class="cursor" (click)="GetReviewGeneralNormal(data.Datess,data.ReviewGeneralNormal,data.CompanyName,data.Companybranch)">
+              {{data.ReviewGeneralNormal}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review General OCular">
+            <a class="cursor" (click)="GetReviewocularNormal(data.Datess,data.ReviewGeneralOcular,data.CompanyName,data.Companybranch)">
+              {{data.ReviewGeneralOcular}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review Pediatric Normal">
+            <a class="cursor" (click)="GetReviewpediatricNormal(data.Datess,data.ReviewPediatricNormal,data.CompanyName,data.Companybranch)">
+              {{data.ReviewPediatricNormal}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review Pediatric Ocular">
+            <a class="cursor" (click)="GetReviewocularpediatric(data.Datess,data.ReviewPediatricOcular,data.CompanyName,data.Companybranch)">
+              {{data.ReviewPediatricOcular}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="Review Visits Total">
+            <a class="cursor" (click)="GetTotalReviewCount(data.Datess,data.ReviewPatients,data.CompanyName,data.Companybranch)">
+              {{data.ReviewPatients}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review Revenue Total">
+            <a class="cursor" (click)="GetTotalReviewCount(data.Datess,data.revenueReviewPatients,data.CompanyName,data.Companybranch)">
+              {{data.revenueReviewPatients | currency:Country2}}
+            </a>
+          </td>
+          <td>{{data.SReviewGeneralNormal}}</td>
+          <td>{{data.SReviewGeneralOcular}}</td>
+          <td>{{data.SReviewPediatricNormal}}</td>
+          <td>{{data.SReviewPediatricOcular}}</td>
+
+          <td>{{data.Surgeryreviewpatients}}</td>
+          <td>0.00</td>
+
+          <td>
+            <a class="cursor" (click)="GetTotalcumulativecount(data.Datess,data.Cumulativetotal,data.CompanyName,data.Companybranch)">
+              {{data.Cumulativetotal}}
+            </a>
+          </td>
+
+          <td style="width:8%">
+            <a class="cursor" (click)="GetTotalcumulativecount(data.Datess,data.RevenueCumulativetotal,data.CompanyName,data.Companybranch)">
+              {{data.RevenueCumulativetotal | currency:Country2}}
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td style="width:11%" colspan="2"><b>Total</b></td>
+
+          <td><b>{{newgeneralnormal}}</b></td>
+          <td><b>{{newgeneralocular}}</b></td>
+          <td><b>{{newediatricnormal}}</b></td>
+          <td><b>{{newpediatricocular}}</b></td>
+          <td><b>{{Tnewgeneralnormal}}</b></td>
+          <td><b> {{NewTotalRevenue | currency:Country2}}</b></td>
+
+
+          <td><b>{{Reviewgeneralnormal}}</b></td>
+          <td><b>{{Reviewgeneralocular}}</b></td>
+          <td><b>{{Reviewediatricnormal}}</b></td>
+          <td><b>{{Reviewpediatricocular}}</b></td>
+          <td><b>{{TReviewgeneralnormal}}</b></td>
+          <td><b> {{ReviewTotalRevenue | currency:Country2}}</b></td>
+
+          <td><b>{{SReviewgeneralnormal}}</b></td>
+          <td><b>{{SReviewgeneralocular}}</b></td>
+          <td><b>{{SReviewpedatricnormal}}</b></td>
+          <td><b>{{SReviewpediatricocular}}</b></td>
+          <td><b>{{TSReviewgeneralnormal}}</b></td>
+          <td><b>0.00</b></td>
+          <td><b>{{cumtotal}}</b></td>
+          <td style="width:8%"><b> {{TotalRevenue | currency:Country2}}</b></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+
+<div class="row" style="display:none;">
+  <div class="tableFixHead">
+    <table id="customerstwo" class="custom-table withoutbackgroung search-table table-bordered">
+      <thead>
+        <tr>
+          <th rowspan="3">SNo</th>
+          <th rowspan="3" style="width:7%">Branch</th>
+          <th colspan="4">New Patients</th>
+          <th rowspan="3">Total</th>
+          <th rowspan="3">Revenue Total (New)</th>
+          <th colspan="4">Review Patients</th>
+          <th rowspan="3">Total</th>
+          <th rowspan="3">Revenue Total (Review)</th>
+          <th colspan="4">Surgery-Review Patients</th>
+          <th rowspan="3">Total</th>
+          <th rowspan="3">Revenue Total (Surgery-Review)</th>
+          <th rowspan="3">Cumulative Total Patients</th>
+          <th rowspan="3" style="width:8%">Cumulative Total Revenue</th>
+        </tr>
+        <tr>
+          <th colspan="2">General</th>
+          <th colspan="2">Pediatric</th>
+          <th colspan="2">General</th>
+          <th colspan="2">Pediatric</th>
+          <th colspan="2">General</th>
+          <th colspan="2">Pediatric</th>
+        </tr>
+        <tr>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+          <th>Normal</th>
+          <th>Ocular</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of branchtabledata; let i = index">
+          <td>{{i + 1}}</td>
+          <td style="width:7%">
+            {{data.Companybranch}}
+          </td>
+
+          <td data-toggle="tooltip" title="New General Normal">
+            <a class="cursor" (click)="GetnewgeneralNormal(data.Datess,data.NewGeneralNormal,data.CompanyName,data.Companybranch)">{{data.NewGeneralNormal}}</a>
+
+          </td>
+
+          <td data-toggle="tooltip" title="New General Ocular">
+            <a class="cursor" (click)="Getnewgeneralocular(data.Datess,data.NewGeneralOcular,data.CompanyName,data.Companybranch)">{{data.NewGeneralOcular}}</a>
+          </td>
+
+          <td data-toggle="tooltip" title="New Pediatric Normal">
+            <a class="cursor" (click)="GetnewpediatricNormal(data.Datess,data.NewPediatricNormal,data.CompanyName,data.Companybranch)">
+              {{data.NewPediatricNormal}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="New Pediatric Ocular">
+            <a class="cursor" (click)="GetnewpediatricOCular(data.Datess,data.NewPediatricOcular,data.CompanyName,data.Companybranch)">
+              {{data.NewPediatricOcular}}
+            </a>
+          </td>
+
+
+          <td data-toggle="tooltip" title="New Visits Total">
+            <a class="cursor" (click)="GetTotalnewcount(data.Datess,data.NewPatients,data.CompanyName,data.Companybranch)">
+              {{data.NewPatients}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="New Visits Total">
+            <a class="cursor" (click)="GetTotalnewcount(data.Datess,data.NewPatients,data.CompanyName,data.Companybranch)">
+
+              <!--{{data.RevenueNewPatients}}.00-->
+              {{data.RevenueNewPatients | currency:Country2}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="Review General Normal">
+            <a class="cursor" (click)="GetReviewGeneralNormal(data.Datess,data.ReviewGeneralNormal,data.CompanyName,data.Companybranch)">
+              {{data.ReviewGeneralNormal}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review General OCular">
+            <a class="cursor" (click)="GetReviewocularNormal(data.Datess,data.ReviewGeneralOcular,data.CompanyName,data.Companybranch)">
+              {{data.ReviewGeneralOcular}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review Pediatric Normal">
+            <a class="cursor" (click)="GetReviewpediatricNormal(data.Datess,data.ReviewPediatricNormal,data.CompanyName,data.Companybranch)">
+              {{data.ReviewPediatricNormal}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review Pediatric Ocular">
+            <a class="cursor" (click)="GetReviewocularpediatric(data.Datess,data.ReviewPediatricOcular,data.CompanyName,data.Companybranch)">
+              {{data.ReviewPediatricOcular}}
+            </a>
+          </td>
+
+          <td data-toggle="tooltip" title="Review Visits Total">
+            <a class="cursor" (click)="GetTotalReviewCount(data.Datess,data.ReviewPatients,data.CompanyName,data.Companybranch)">
+              {{data.ReviewPatients}}
+            </a>
+          </td>
+          <td data-toggle="tooltip" title="Review Revenue Total">
+            <a class="cursor" (click)="GetTotalReviewCount(data.Datess,data.revenueReviewPatients,data.CompanyName,data.Companybranch)">
+              {{data.revenueReviewPatients | currency:Country2}}
+            </a>
+          </td>
+          <td>{{data.SReviewGeneralNormal}}</td>
+          <td>{{data.SReviewGeneralOcular}}</td>
+          <td>{{data.SReviewPediatricNormal}}</td>
+          <td>{{data.SReviewPediatricOcular}}</td>
+
+          <td>{{data.Surgeryreviewpatients}}</td>
+          <td>0.00</td>
+
+          <td>
+            <a class="cursor" (click)="GetTotalcumulativecount(data.Datess,data.Cumulativetotal,data.CompanyName,data.Companybranch)">
+              {{data.Cumulativetotal}}
+            </a>
+          </td>
+
+          <td style="width:8%">
+            <a class="cursor" (click)="GetTotalcumulativecount(data.Datess,data.RevenueCumulativetotal,data.CompanyName,data.Companybranch)">
+              {{data.RevenueCumulativetotal | currency:Country2}}
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td style="width:11%" colspan="2"><b>Total</b></td>
+
+          <td><b>{{newgeneralnormal}}</b></td>
+          <td><b>{{newgeneralocular}}</b></td>
+          <td><b>{{newediatricnormal}}</b></td>
+          <td><b>{{newpediatricocular}}</b></td>
+          <td><b>{{Tnewgeneralnormal}}</b></td>
+          <td><b> {{NewTotalRevenue | currency:Country2}}</b></td>
+
+
+          <td><b>{{Reviewgeneralnormal}}</b></td>
+          <td><b>{{Reviewgeneralocular}}</b></td>
+          <td><b>{{Reviewediatricnormal}}</b></td>
+          <td><b>{{Reviewpediatricocular}}</b></td>
+          <td><b>{{TReviewgeneralnormal}}</b></td>
+          <td><b> {{ReviewTotalRevenue | currency:Country2}}</b></td>
+
+          <td><b>{{SReviewgeneralnormal}}</b></td>
+          <td><b>{{SReviewgeneralocular}}</b></td>
+          <td><b>{{SReviewpedatricnormal}}</b></td>
+          <td><b>{{SReviewpediatricocular}}</b></td>
+          <td><b>{{TSReviewgeneralnormal}}</b></td>
+          <td><b>0.00</b></td>
+          <td><b>{{cumtotal}}</b></td>
+          <td style="width:8%"><b> {{TotalRevenue | currency:Country2}}</b></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<div mat-dialog-actions style="float:right;">
+  <button style="background-color: red;color: aliceblue;" mat-button mat-dialog-close>Close</button>
+</div>
+
+
+
+
+
+<div class="modal cust-model" role="dialog" [ngStyle]="{'display':secificperiodTotalDetails}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="width: -webkit-fill-available;">
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-7">
+            <h2 class="h2style"><b> Patients Population on <span style="color:blue">{{tdate| date : "dd-MMM-yyyy"}}</span> </b></h2>
+          </div>
+          <div class="col-sm-5">
+            <div class="row">
+              <div class="col-sm-4"></div>
+              <!--<div class="col-sm-8">
+                <button (click)="ConvertSubPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+                <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+              </div>-->
+              <div class="col-sm-4"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="tableFixHead">
+            <table id="customers" class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>SNo</th>
+                  <th>UIN</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th *ngIf="HideType">Patient Type</th>
+                  <th *ngIf="Hideeye">Eye</th>
+                  <th *ngIf="Hideeye">Registration Fee</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let datas of datalistvalues;let i = index">
+                  <td>{{i + 1}}</td>
+                  <td>{{datas.UIN}}</td>
+                  <td>{{datas.Name}}</td>
+                  <td>{{datas.Age}}</td>
+                  <td>{{datas.Gender}}</td>
+                  <td>{{datas.Address}}</td>
+                  <td>{{datas.Phone}}</td>
+                  <td *ngIf="HideType">{{datas.PatientType}}</td>
+                  <td *ngIf="Hideeye">{{datas.EYE}}</td>
+                  <td *ngIf="Hideeye"> {{datas.ConsultationAmount | currency:Country2}} </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss="modal" autofocus (click)="secificperiodTotalDetailsClose()">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
