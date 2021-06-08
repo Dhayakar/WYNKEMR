@@ -101,8 +101,7 @@ export class AppComponent {
         console.log(this.idleState);
       }
       });
-      //keepalive.interval(15);
-      //keepalive.onPing.subscribe(() => this.lastPing = new Date());
+//YES
       this.reset();
   }
   reset() {
