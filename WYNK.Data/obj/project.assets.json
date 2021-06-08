@@ -3937,23 +3937,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\mjbha\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\LAZY_NEW_CMPS\\WYNK.Data\\WYNK.Data.csproj",
+      "projectUniqueName": "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\WYNK.Data\\WYNK.Data.csproj",
       "projectName": "WYNK.Data",
-      "projectPath": "D:\\LAZY_NEW_CMPS\\WYNK.Data\\WYNK.Data.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\LAZY_NEW_CMPS\\WYNK.Data\\obj\\",
+      "projectPath": "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\WYNK.Data\\WYNK.Data.csproj",
+      "packagesPath": "C:\\Users\\mjbha\\.nuget\\packages\\",
+      "outputPath": "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\WYNK.Data\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mjbha\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3966,11 +3962,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\LAZY_NEW_CMPS\\SMSand EMAILService.cs\\SMSand EMAILService.cs.csproj": {
-              "projectPath": "D:\\LAZY_NEW_CMPS\\SMSand EMAILService.cs\\SMSand EMAILService.cs.csproj"
+            "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\SMSand EMAILService.cs\\SMSand EMAILService.cs.csproj": {
+              "projectPath": "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\SMSand EMAILService.cs\\SMSand EMAILService.cs.csproj"
             },
-            "D:\\LAZY_NEW_CMPS\\WYNK.Helpers\\WYNK.Helpers.csproj": {
-              "projectPath": "D:\\LAZY_NEW_CMPS\\WYNK.Helpers\\WYNK.Helpers.csproj"
+            "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\WYNK.Helpers\\WYNK.Helpers.csproj": {
+              "projectPath": "Q:\\Backup\\GITHUB_WYNKEMR\\WYNKEMR\\WYNK.Helpers\\WYNK.Helpers.csproj"
             }
           }
         }
@@ -4028,10 +4024,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   },
@@ -4040,7 +4042,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Razorpay 3.0.0' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "message": "Package 'Razorpay 3.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
       "libraryId": "Razorpay",
       "targetGraphs": [
         ".NETCoreApp,Version=v2.1"

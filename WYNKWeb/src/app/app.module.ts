@@ -98,8 +98,7 @@ const shortcutConfig: NgShortcutConfig[] = [
     DashboardnewregisteredvaluesComponent,
     AccessprivilegesComponent,
     MouseEnterLeaveDebounceDirective,
-    //CampmasterComponent,
-    //CamporganizationComponent
+
   ],
   imports: [
     NgShortcutModule.forRoot(shortcutConfig),
