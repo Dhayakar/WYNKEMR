@@ -49,7 +49,7 @@ export class AppComponent {
     private idle: Idle, private keepalive: Keepalive,
     private change: ChangeDetectorRef,
       private _sanitizer: DomSanitizer,
-    // private idle: Idle, private keepalive: Keepalive
+    // dayakar
   ) {
     
     this.myForm = this.formBuilder.group({
