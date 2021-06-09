@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WYNKWeb",
+    "\\WYNKWeb\\src",
+    "\\WYNKWeb\\src\\app"
   ],
-  "SelectedNode": "\\obj",
+  "SelectedNode": "\\WYNKWeb\\src\\app\\app.component.html",
   "PreviewInSolutionExplorer": false
 }
