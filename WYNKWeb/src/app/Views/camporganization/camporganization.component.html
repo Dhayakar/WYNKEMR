@@ -291,22 +291,25 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-sm-4">
-
-          </div>
-          <div class="col-sm-4"></div>
-          <div class="col-sm-4">
             <mat-form-field appearance="outline">
               <mat-label>Search..</mat-label>
               <input matInput [(ngModel)]="searchvalue" name="svalues" (keyup)="applyFilter($event)" placeholder="Search">
             </mat-form-field>
           </div>
+          <div class="col-sm-4"></div>
 
+          <div class="col-sm-4">
+            <label style="left:1%">
+              <button (click)="ConvertPDF()" class="btn btn-primary-default btn-Pdf mlr10"><i class="far fa-file-pdf"></i> Export to PDF</button>
+              <button (click)="ConvertEXCEL()" class="btn btn-primary-default btn-Excel"><i class="far fa-file-excel"></i> Export to Excel</button>
+            </label>
+          </div>
         </div>
         <div class="row">
-          <table mat-table matSort [dataSource]="dataSourceorg" class="custom-table withoutbackgroung search-table table-bordered">
+          <table mat-table matSort [dataSource]="dataSourceorg" class="custom-table withoutbackgroung search-table table-bordered" id="customersone">
             <ng-container matColumnDef="SNo">
-              <th mat-header-cell *matHeaderCellDef class="width-7p pr10">Action</th>
-              <td mat-cell *matCellDef="let element">
+              <th mat-header-cell *matHeaderCellDef class="width-7p pr10 remove-this">Action</th>
+              <td mat-cell *matCellDef="let element" class="remove-this">
                 <mat-checkbox (click)="selectparticularorganization(element)"></mat-checkbox>
               </td>
             </ng-container>

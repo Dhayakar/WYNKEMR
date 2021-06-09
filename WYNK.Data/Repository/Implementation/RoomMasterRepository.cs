@@ -2,6 +2,7 @@
 using SMSand_EMAILService.cs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using WYNK.Data.Common;
@@ -23,7 +24,38 @@ namespace WYNK.Data.Repository.Implementation
 
         }
 
+        public dynamic getConcerntextfile(int CompanyID)
+        {
+            var Registrationmaster = new ConcentUploadingViewModel();
 
+            string[] lines;
+            var list = new List<string>();
+            var osfi = CompanyID;
+            var osfn = "RoomMaster.text";
+            var currentDir = Directory.GetCurrentDirectory();
+            string path = currentDir + "/ConcernPages/" + osfi + '/' + osfn;
+
+            if (File.Exists(path))
+            {
+                var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+                {
+                    string line;
+                    while ((line = streamReader.ReadLine()) != null)
+                    {
+                        list.Add(line);
+                    }
+                }
+                lines = list.ToArray();
+                Registrationmaster.TOtalLines = lines;
+            }
+            else
+            {
+                Registrationmaster.ErrorMessaGE = "No Concern";
+            }
+
+            return Registrationmaster;
+        }
         public dynamic insertdata(RoomMasterViewM roomMaster)
         {
             using (var dbContextTransaction = WYNKContext.Database.BeginTransaction())
@@ -44,8 +76,6 @@ namespace WYNK.Data.Repository.Implementation
                     M_RoomMaster.IsActive = true;
 
                     // M_RoomMaster.NoofBed = roomMaster.getRoomDet.Count(x=> x.NoofBeds);
-
-
                     //  M_RoomMaster.RoomMaster.NoofBed = roomMaster.RoomMaster.NoofRooms;
                     WYNKContext.Room.Add(M_RoomMaster);
                     WYNKContext.SaveChanges();
@@ -53,36 +83,47 @@ namespace WYNK.Data.Repository.Implementation
 
                     foreach (var arr in roomMaster.getRoomDet.ToList())
                     {
-
-                        var M_RoomDetail = new RoomDetails();
-                        M_RoomDetail.RoomID = M_RoomMaster.ID;
-                        M_RoomDetail.RoomNumber = arr.No;
-
-                        if (arr.ToiletType == "IndianToilet")
-                        {
-                            M_RoomDetail.RestRoomType = 1;
-                        }
-
-                        if (arr.ToiletType == "WesternToilet")
-                        {
-                            M_RoomDetail.RestRoomType = 2;
-                        }
-                        M_RoomDetail.BedNo = arr.BedNo;
-                        M_RoomDetail.IsActive = arr.IsActive;
-
-                        // M_RoomDetail.NoofBeds = arr.NoofBeds;
-
-                        M_RoomDetail.CreatedUTC = DateTime.UtcNow;
-                        M_RoomDetail.CreatedBy = M_RoomMaster.CreatedBy;
-
-                        WYNKContext.RoomDetails.Add(M_RoomDetail);
+                        var RoomDetails = new RoomDetails();
+                        RoomDetails.RoomID = M_RoomMaster.ID;
+                        RoomDetails.RoomNumber = arr.No;
+                        RoomDetails.BedNo = arr.BedNo;
+                        RoomDetails.IsActive = true;
+                        RoomDetails.CreatedUTC = DateTime.UtcNow;
+                        RoomDetails.CreatedBy = RoomDetails.CreatedBy;
+                        WYNKContext.RoomDetails.Add(RoomDetails);
                         WYNKContext.SaveChanges();
-
-                        // M_RoomMaster.NoofBed = arr.NoofBeds;
-                        // WYNKContext.Room.Add(M_RoomMaster);
-                        // WYNKContext.SaveChanges();
                     }
+                    foreach (var arrr in roomMaster.ToiletType.ToList())
+                    {
+                        var RoomDetailsExtension = new RoomDetailsExtension();
+                        RoomDetailsExtension.RoomDetailsID = WYNKContext.RoomDetails.Where(x => x.RoomID == M_RoomMaster.ID && x.RoomNumber == arrr.RoomNo).Select(c => c.ID).LastOrDefault();
+                        RoomDetailsExtension.RestRoomType = arrr.RestRoomType;
+                        RoomDetailsExtension.CreatedUTC = DateTime.UtcNow;
+                        RoomDetailsExtension.CreatedBy = roomMaster.RoomMaster.CreatedBy;
+                        WYNKContext.RoomDetailsExtension.Add(RoomDetailsExtension);
+                        WYNKContext.SaveChanges();
+                    }
+                    //var RoomNo = (from RM in roomMaster.getRoomDet.GroupBy(x => x.No)
+                    //              select new
+                    //              {
+                    //                  RoomNO = RM.Key,
+                    //                  RestRoomType= RM.Select(x=>x.ToiletType).FirstOrDefault(),
+                    //              }).ToList();
 
+                    //foreach (var arr in RoomNo)
+                    //{
+
+                    //    foreach (var arrr in RoomNo.Select(x=>x.RestRoomType))
+                    //    {
+                    //        var RoomDetailsExtension = new RoomDetailsExtension();
+                    //        RoomDetailsExtension.RoomDetailsID = WYNKContext.RoomDetails.Where(x => x.RoomID == M_RoomMaster.ID && x.RoomNumber == arr.RoomNO).Select(c => c.ID).LastOrDefault();
+                    //        //RoomDetailsExtension.RestRoomType = arr.RestRoomType. 
+                    //        WYNKContext.RoomDetailsExtension.Add(RoomDetailsExtension);
+                    //        WYNKContext.SaveChanges();
+                    //    }
+
+
+                    //}
                     WYNKContext.SaveChanges();
                     dbContextTransaction.Commit();
                     try
@@ -117,28 +158,13 @@ namespace WYNK.Data.Repository.Implementation
 
         }
 
-        public String getIsactive(string value)
-        {
-            var status = "";
-           
 
-            if (value == "True")
-            {
-                status = "Active";
-               
-            }
-            else
-            {
-                status = "InActive";
-            }
-            return status;
-        }
 
         public RoomMasterViewM getRoomDet(int CompanyID, int roomID)
         {
-            var M_Room = WYNKContext.Room.ToList();
+            var M_Room = WYNKContext.Room.Where(x=>x.CMPID== CompanyID).AsNoTracking().ToList();
             var M_RoomDetail = WYNKContext.RoomDetails.ToList();
-
+            var oneline = CMPSContext.OneLineMaster.AsNoTracking().Where(x => x.ParentTag == "RoomType").ToList();
             var getRoomDet = new RoomMasterViewM();
 
             getRoomDet.RoomDetails1 = (from Room in M_Room.Where(x => x.CMPID == CompanyID)
@@ -147,13 +173,12 @@ namespace WYNK.Data.Repository.Implementation
 
                                        select new RoomDetails1
                                        {
-
+                                           RoomType = oneline.Where(x => x.OLMID == Convert.ToInt32(Room.RoomType)).Select(x => x.ParentDescription).FirstOrDefault(),
+                                           RoomDescription = Room.RoomDescription,
+                                           Roomcost = Room.RoomCost,
                                            No = RoomDet.RoomNumber,
-                                           ToiletType = Enum.GetName(typeof(RestRoomType), RoomDet.RestRoomType),
-                                           BedNo = RoomDet.BedNo,
-                                           value =  getIsactive(Convert.ToString(RoomDet.IsActive)),                                    
-                                          // value =  Convert.ToString(RoomDet.IsActive),                                    
-                                           //IsActive =  RoomDet.IsActive,                                    
+                                           BedNo = RoomDet.BedNo,                                           
+                                           IsActive = Enum.GetName(typeof(ISactive), RoomDet.IsActive),
                                            RoomDetID = RoomDet.ID
                                        }).ToList();
 
@@ -164,61 +189,29 @@ namespace WYNK.Data.Repository.Implementation
 
 
 
-        public dynamic Updatedata(RoomMasterViewM roomMaster, int ID)
+        public dynamic Updatedata(RoomMasterViewM roomMaster)
         {
             using (var dbContextTransaction = WYNKContext.Database.BeginTransaction())
             {
                 try
                 {
-                    var M_roomMaster = new Room();
-
-                    M_roomMaster = WYNKContext.Room.Where(x => x.ID == ID).FirstOrDefault();
-
-                    M_roomMaster.CMPID = roomMaster.RoomMaster.CMPID;
-                    M_roomMaster.RoomType = roomMaster.RoomMaster.RoomType;
-                    M_roomMaster.RoomDescription = roomMaster.RoomMaster.RoomDescription;
-                    M_roomMaster.RoomCost = roomMaster.RoomMaster.RoomCost;
-                    M_roomMaster.NoofRooms = roomMaster.RoomMaster.NoofRooms;
-                    M_roomMaster.NoofBed = roomMaster.RoomMaster.NoofBed;
-                    M_roomMaster.IsActive = roomMaster.RoomMaster.IsActive;
-                    M_roomMaster.UpdatedUTC = DateTime.UtcNow;
-                    M_roomMaster.UpdatedBy = roomMaster.RoomMaster.UpdatedBy;
-
-                    WYNKContext.Room.UpdateRange(M_roomMaster);
-                    WYNKContext.SaveChanges();
-
-
-                    var M_rmv = WYNKContext.RoomDetails.Where(x => x.RoomID == ID);
-                    if (M_rmv != null)
+          
+                    foreach (var arr in roomMaster.RoomDetails2.ToList())
                     {
+                        var RoomDetails = new RoomDetails();
 
-                        WYNKContext.RoomDetails.RemoveRange(WYNKContext.RoomDetails.Where(x => x.RoomID == ID).ToList());
-                        WYNKContext.SaveChanges();
-                    }
-
-                    foreach (var updatearr in roomMaster.RoomDetails2.ToList())
-                    {
-
-                        var M_RoomDetail = new RoomDetails();
-                      //  M_RoomDetail = WYNKContext.RoomDetails.Where(x => x.ID == updatearr.RoomDetID).FirstOrDefault();
-                        M_RoomDetail.RoomID = ID;
-                        M_RoomDetail.RoomNumber = updatearr.No;
-                        if (updatearr.ToiletType == "IndianToilet")
+                        RoomDetails = WYNKContext.RoomDetails.Where(x => x.ID == arr.RoomDetID).FirstOrDefault();
+                        if (arr.IsActive == "Yes")
                         {
-                            M_RoomDetail.RestRoomType = 1;
+                            RoomDetails.IsActive = true;
                         }
-
-                        if (updatearr.ToiletType == "WesternToilet")
+                        else 
                         {
-                            M_RoomDetail.RestRoomType = 2;
+                            RoomDetails.IsActive = false;
                         }
-                        M_RoomDetail.IsActive = updatearr.IsActive;
-                        M_RoomDetail.BedNo = updatearr.BedNo;
-
-                        M_RoomDetail.CreatedUTC = DateTime.UtcNow;
-                        M_RoomDetail.CreatedBy = M_roomMaster.CreatedBy;
-
-                        WYNKContext.RoomDetails.AddRange(M_RoomDetail);
+                        RoomDetails.UpdatedUTC = DateTime.UtcNow;
+                        RoomDetails.UpdatedBy = RoomDetails.UpdatedBy;
+                        WYNKContext.RoomDetails.UpdateRange(RoomDetails);
                         WYNKContext.SaveChanges();
                     }
                     WYNKContext.SaveChanges();
@@ -251,6 +244,36 @@ namespace WYNK.Data.Repository.Implementation
                 Message = CommonMessage.Missing,
             };
         }
+
+
+
+        public RoomMasterViewM getRoomTariff(int CmpID)
+        {
+            var Room = WYNKContext.Room.AsNoTracking().ToList();
+            var RoomDetail = WYNKContext.RoomDetails.AsNoTracking().ToList();
+            var oneline = CMPSContext.OneLineMaster.AsNoTracking().Where(x => x.ParentTag == "RoomType").ToList();
+            var getRoomDet = new RoomMasterViewM();
+
+            getRoomDet.RoomTariff = (from R in Room.Where(x => x.CMPID == CmpID)
+                                   select new RoomTariff
+                                     {
+
+                                         RoomType = oneline.Where(x => x.OLMID == Convert.ToInt32(R.RoomType)).Select(x => x.ParentDescription).FirstOrDefault(),
+                                         RoomDescription = R.RoomDescription,
+                                         Roomcost= R.RoomCost,
+                                       PAddress = CMPSContext.Company.Where(x => x.CmpID == CmpID).Select(x => x.Address1).FirstOrDefault(),
+                                       PAddress2 = CMPSContext.Company.Where(x => x.CmpID == CmpID).Select(x => x.Address2).FirstOrDefault(),
+                                       PAddress3 = CMPSContext.Company.Where(x => x.CmpID == CmpID).Select(x => x.Address3).FirstOrDefault(),
+                                       Pphone = CMPSContext.Company.Where(x => x.CmpID == CmpID).Select(x => x.Phone1).FirstOrDefault(),
+                                       Pweb = CMPSContext.Company.Where(x => x.CmpID == CmpID).Select(x => x.Website).FirstOrDefault(),
+                                       PCompnayname = CMPSContext.Company.Where(x => x.CmpID == CmpID).Select(x => x.CompanyName).FirstOrDefault(),
+
+                                   }).ToList();
+
+
+            return getRoomDet;
+        }
+
 
     }
 }

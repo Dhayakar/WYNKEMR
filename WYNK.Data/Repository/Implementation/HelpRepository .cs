@@ -2538,7 +2538,7 @@ namespace WYNK.Data.Repository.Implementation
         public Help RoomSearch(int CompanyID)
         {
             var M_Room = WYNKContext.Room.ToList();
-            //var M_RoomDetail = WYNKContext.RoomDetails.ToList();
+            var oneline = CMPSContext.OneLineMaster.AsNoTracking().Where(x => x.ParentTag == "RoomType").ToList();
 
             var Help = new Help();
 
@@ -2546,7 +2546,7 @@ namespace WYNK.Data.Repository.Implementation
                              select new helpRoom
                              {
                                  ID = Room.ID,
-                                 RoomType = Room.RoomType,
+                                 RoomType = oneline.Where(x => x.OLMID == Convert.ToInt32(Room.RoomType)).Select(x => x.ParentDescription).FirstOrDefault(),
                                  RoomDescription = Room.RoomDescription,
                                  RoomCost = Room.RoomCost,
                                  NoofRooms = Room.NoofRooms,

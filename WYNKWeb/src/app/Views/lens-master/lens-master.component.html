@@ -11,18 +11,18 @@
         </div>
 
 
-        <div class="row">
+        <div class="row mt-1p">
           <div class="col-sm-2">
-            <button class="btn-text cursor" (click)="AddFrameShape()"><i class="fas fa-plus"></i> Add Frame Shape</button>
+            <button type="button" (click)="AddFrameShape()" matTooltip="Frame Shape Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Frame Shape</button>
           </div>
           <div class="col-sm-2">
-            <button class="btn-text cursor" (click)="AddFrameType()"><i class="fas fa-plus"></i> Add Frame Type</button>
+            <button type="button" (click)="AddFrameType()" matTooltip="Frame Type Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Frame Type</button>
           </div>
           <div class="col-sm-2">
-            <button class="btn-text cursor" (click)="AddFrameStyle()"><i class="fas fa-plus"></i> Add Frame Style</button>
+            <button type="button" (click)="AddFrameStyle()" matTooltip="Frame Style Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Frame Style</button>
           </div>
           <div class="col-sm-2">
-            <button class="btn-text cursor" (click)="AddFrameWidth()"><i class="fas fa-plus"></i> Add Frame Width</button>
+            <button type="button" (click)="AddFrameWidth()" matTooltip="Frame Width Master" class="btn btn-primary-default btn-Excel buttonsfloat"> Frame Width</button>
           </div>
           <div class="col-sm-2">
           </div>
@@ -242,7 +242,7 @@
           </div>
 
           <div class="col-sm-2 mt10">
-            <button class="btn-text cursor" (click)="AddRows()"><i class="fas fa-plus "></i> Add</button>
+            <button type="button" (click)="AddRows()" data-toggle="tooltip" title="Add Item" class="btn btn-primary-default btn-Excel buttonsfloat cursor">Add Item </button>
           </div>
 
 
@@ -255,24 +255,14 @@
 
           </div>
 
-          <div class="col-sm-2 mt10">
+          <div class="col-sm-3 mt10">
 
           </div>
 
-          <div class="col-sm-2 mt10">
-
+          <div class="col-sm-3 mt10">
           </div>
 
-          <div class="col-sm-2 mt10">
-
-          </div>
-
-          <div class="col-sm-1 mt10">
-
-          </div>
-
-
-          <div class="col-sm-2 mt10">
+          <div class="col-sm-3 mt10">
 
             <div *ngIf="orginaltablefilter">
               <mat-form-field appearance="outline">
@@ -679,25 +669,24 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
         <h4 class="modal-title">Do you want to cancel?</h4>
       </div>
 
-
-
       <div class="modal-footer">
         <button class="btn btn-danger cursor" data-dismiss="modal" autofocus (click)="modalcloseOk()">No</button>
         <button type="reset" class="btn btn-success cursor" data-dismiss="modal" (click)="modalSuccesssOk()">Yes</button>
       </div>
+
     </div>
   </div>
 </div>
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalframeshape}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessframeshape()">&times;</button>
         <h5 class="modal-title">
@@ -721,6 +710,7 @@
             </button>
           </div>
 
+
           <div class="col-sm-2" *ngIf="Activeisd">
             <mat-form-field appearance="outline">
               <mat-label> IsActive </mat-label>
@@ -737,12 +727,11 @@
 
         <div class="row">
 
+          <div class="col-sm-5" *ngIf="tableFrameShape">
 
-          <div class="col-sm-7" *ngIf="tableFrameShape">
-
-            <mat-form-field>
-              <mat-label>Filter</mat-label>
-              <input matInput (keyup)="applyFilterFrameShape($event)">
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilterFrameShape($event)" placeholder="Search">
             </mat-form-field>
 
             <div class="row heightAuto-300px">
@@ -750,7 +739,7 @@
 
                 <ng-container matColumnDef="Action">
                   <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <td mat-cell *matCellDef="let element;let id = index">
                     <mat-checkbox (click)="selecttyped(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -777,7 +766,7 @@
 
 
         <div class="row pb25">
-          <div class="col-sm-4  sub-section btn-wrap f-r">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
             <button class="btn btn-warning-default ml-2p cursor" (click)="oncancelFrameShape()">Cancel</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenUpdated" id="update" (click)="onupdateFrameShape()">Submit</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenSubmitd" id="submit" (click)="onSubmitFrameShape()">Submit</button>
@@ -793,7 +782,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalframetype}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessframetype()">&times;</button>
         <h5 class="modal-title">
@@ -817,6 +806,7 @@
             </button>
           </div>
 
+
           <div class="col-sm-2" *ngIf="Activeist">
             <mat-form-field appearance="outline">
               <mat-label> IsActive </mat-label>
@@ -832,11 +822,11 @@
 
         <div class="row">
 
-          <div class="col-sm-7" *ngIf="tableFrameType">
+          <div class="col-sm-5" *ngIf="tableFrameType">
 
-            <mat-form-field>
-              <mat-label>Filter</mat-label>
-              <input matInput (keyup)="applyFilterFrameType($event)">
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilterFrameType($event)" placeholder="Search">
             </mat-form-field>
 
             <div class="row heightAuto-300px">
@@ -844,7 +834,7 @@
 
                 <ng-container matColumnDef="Action">
                   <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <td mat-cell *matCellDef="let element;let id = index">
                     <mat-checkbox (click)="selecttypet(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -867,10 +857,11 @@
 
           </div>
 
+
         </div>
 
         <div class="row pb25">
-          <div class="col-sm-4  sub-section btn-wrap f-r">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
             <button class="btn btn-warning-default ml-2p cursor" (click)="oncancelFrameType()">Cancel</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenUpdatet" id="update" (click)="onupdateFrameType()">Submit</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenSubmitt" id="submit" (click)="onSubmitFrameType()">Submit</button>
@@ -886,7 +877,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalframestyle}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessframestyle()">&times;</button>
         <h5 class="modal-title">
@@ -925,11 +916,11 @@
 
         <div class="row">
 
-          <div class="col-sm-7" *ngIf="tableFrameStyle">
+          <div class="col-sm-5" *ngIf="tableFrameStyle">
 
-            <mat-form-field>
-              <mat-label>Filter</mat-label>
-              <input matInput (keyup)="applyFilterFrameStyle($event)">
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilterFrameStyle($event)" placeholder="Search">
             </mat-form-field>
 
             <div class="row heightAuto-300px">
@@ -938,7 +929,7 @@
 
                 <ng-container matColumnDef="Action">
                   <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <td mat-cell *matCellDef="let element;let id = index">
                     <mat-checkbox (click)="selecttypes(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -961,10 +952,11 @@
 
           </div>
 
+
         </div>
 
         <div class="row pb25">
-          <div class="col-sm-4  sub-section btn-wrap f-r">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
             <button class="btn btn-warning-default ml-2p cursor" (click)="oncancelFrameStyle()">Cancel</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenUpdates" id="update" (click)="onupdateFrameStyle()">Submit</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenSubmits" id="submit" (click)="onSubmitFrameStyle()">Submit</button>
@@ -980,7 +972,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalframewidth}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessframewidth()">&times;</button>
         <h5 class="modal-title">
@@ -1004,6 +996,7 @@
             </button>
           </div>
 
+
           <div class="col-sm-2" *ngIf="Activeisw">
             <mat-form-field appearance="outline">
               <mat-label> IsActive </mat-label>
@@ -1019,12 +1012,11 @@
 
         <div class="row">
 
+          <div class="col-sm-5" *ngIf="tableFrameWidth">
 
-          <div class="col-sm-7" *ngIf="tableFrameWidth">
-
-            <mat-form-field>
-              <mat-label>Filter</mat-label>
-              <input matInput (keyup)="applyFilterFrameWidth($event)">
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilterFrameWidth($event)" placeholder="Search">
             </mat-form-field>
 
             <div class="row heightAuto-300px">
@@ -1033,8 +1025,8 @@
 
                 <ng-container matColumnDef="Action">
                   <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
-                    <mat-checkbox (click)="selecttypew(element)"></mat-checkbox>
+                  <td mat-cell *matCellDef="let element;let id = index">
+                    <mat-checkbox (click)="selecttypew(element)" [disabled]="disablefw"></mat-checkbox>
                   </td>
                 </ng-container>
 
@@ -1056,10 +1048,11 @@
 
           </div>
 
+
         </div>
 
         <div class="row pb25">
-          <div class="col-sm-4  sub-section btn-wrap f-r">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
             <button class="btn btn-warning-default ml-2p cursor" (click)="oncancelFrameWidth()">Cancel</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenUpdatew" id="update" (click)="onupdateFrameWidth()">Submit</button>
             <button type="submit" class="success btn btn-primary  ml-2p cursor" *ngIf="hiddenSubmitw" id="submit" (click)="onSubmitFrameWidth()">Submit</button>
@@ -1074,7 +1067,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <h4 class="modal-title">Lens / Frame Master - View Access</h4>
       </div>
@@ -1109,4 +1102,6 @@
     </div>
   </div>
 </div>
+
+
 

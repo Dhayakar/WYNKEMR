@@ -3,7 +3,7 @@
   <form #CustomerMaster="ngForm" name="CustomerMaster" (keydown.enter)="$event.preventDefault()" novalidate>
     <div class="col-sm-12">
       <div class="row">
-        <h5 align="center" class="card-header bg-success text-white rounded-top">
+        <h5 align="center" class="card-header">
           <b>Customer &nbsp; Master</b>
         </h5>
       </div>
@@ -142,7 +142,7 @@
     </div>
     <div class="col-sm-12 m-3">
       <div class="col-sm-12 pb25">
-        <div class="col-sm-4  sub-section btn-wrap f-r">
+        <div class="col-sm-5  sub-section btn-wrap f-r">
           <button type="button" class="btn btn-warning-default" (click)="CancelClk()"><strong>Cancel</strong></button>
           <button type="button" *ngIf="CustomerID.value != '' " class="btn btn-warning-default"  [disabled]="isNextDelete" (click)="Deleteclk(CustomerID.value)"><strong>Delete</strong></button>
           <button [disabled]="CustomerID.value == '' ? isNextButton:isNextupdate" (click)="CustomerID.value == '' ? Submit(CustomerMaster):Update(CustomerMaster,CustomerID.value)" class="success btn btn-primary">Submit</button>

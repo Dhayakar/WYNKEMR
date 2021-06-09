@@ -4,7 +4,7 @@
   <form #DrugForm="ngForm" name="DrugForm" (keydown.enter)="$event.preventDefault()" novalidate>
     <div class="col-sm-12 mt-1p">
       <div class="row">
-        <h5 align="center" class="card-header bg-success text-white rounded-top">
+        <h5 align="center" class="card-header">
           Drug Master
         </h5>
       </div>
@@ -79,7 +79,7 @@
           </mat-form-field>
         </div>
         <div class="col-sm-3 ml-4p width-20p">
-          <div class="col-sm-11 ml-n5p">
+          <div class="col-sm-10 ml-n5p">
             <mat-form-field appearance="outline">
               <mat-label>U.O.M</mat-label>
               <mat-select [(ngModel)]="M_Uom" name="Uom" required>
@@ -88,7 +88,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-sm-1 ml-n4p">
+          <div class="col-sm-1 ml-n14p">
             <button mat-icon-button type="button">
               <mat-icon class="grab" matTooltip="Add Unit Of Measurement" (click)="ClickUom()">add</mat-icon>
             </button>
@@ -298,7 +298,7 @@
       </div>
       <div class="col-sm-12 m-3">
         <div class="col-sm-12 pb25">
-          <div class="col-sm-4 f-r  sub-section btn-wrap">
+          <div class="content-right sub-section btn-wrap">
             <button type="button" class="btn btn-warning-default" (click)="cancel()"><strong>Cancel</strong></button>
             <button *ngIf="drugid.value!=0" type="button" mat-raised-button class="danger btn-danger-default " (click)="deleteclk(DrugForm,drugid.value)"><strong>Delete</strong></button>
             <button type="button" *ngIf="drugid.value!=0" class="success btn btn-primary" [disabled]="isNextupdate" (click)="Updateclk(DrugForm,drugid.value)" mat-raised-button >Submit</button>

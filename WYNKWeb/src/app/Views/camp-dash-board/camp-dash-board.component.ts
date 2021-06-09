@@ -43,7 +43,7 @@ export class CampDashBoardComponent implements OnInit {
   CampSurgeryDoctorbreakupColumns = ['DoctorName', 'SurgeryDescription'];
   CampSurgeryDoctorbreakupSource = new MatTableDataSource();
 
-  PatientbreakupColumns = ['PatientName', 'Age','SurgeryDate'];
+  PatientbreakupColumns = ['PatientName', 'Age', 'CampVisitDate','ClinicVisitDate','SurgeryDate'];
   PatientbreakupSource = new MatTableDataSource();
 
   ngOnInit() {

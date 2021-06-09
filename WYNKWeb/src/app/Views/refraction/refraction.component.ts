@@ -30,8 +30,8 @@ import { OneLine_Master } from '../../Models/OneLineMaster';
 import { MatSort, MatTableDataSource, MatPaginator, MatDialogConfig, MatInput, MatCheckbox, MatSelect } from '@angular/material'
 import * as _ from 'lodash';
 import { MatOption } from '@angular/material/core';
-
-
+declare var jQuery: any;
+import * as XLSX from 'xlsx';
 declare var $: any;
 
 export const MY_FORMATS = {
@@ -517,23 +517,44 @@ export class RefractionComponent implements OnInit {
     let A = this.Amsler.filter(c => this.Amsletlength.every((b) => b.A_n_OD !== c.A_n_OD || b.A_abn_OD !== c.A_abn_OD || b.Desc_Text !== c.Desc_Text || b.A_n_OS !== c.A_n_OS || b.A_abn_OS !== c.A_abn_OS || b.Desc_TextOS !== c.Desc_TextOS));
     let Pva = this.paediatricvisualacuity.filter(c => this.pvalength.every((b) => b.Central !== c.Central || b.Steady !== c.Steady || b.Maintained !== c.Maintained || b.Uncentral !== c.Uncentral || b.Unsteady !== c.Unsteady || b.Unmaintained !== c.Unmaintained || b.CentralOS !== c.CentralOS || b.SteadyOS !== c.SteadyOS || b.MaintainedOS !== c.MaintainedOS || b.UncentralOS !== c.UncentralOS || b.UnsteadyOS !== c.UnsteadyOS || b.UnmaintainedOS !== c.UnmaintainedOS || b.ChartType !== c.ChartType || b.Remarks !== c.Remarks));
 
-
-    if (Va.length == 0 && p.length == 0 && Rn.length == 0 && Ac.length == 0 && Fp.length == 0 && Cv.length == 0 && A.length == 0 && Pva.length == 0) {
-      Swal.fire({
-        type: 'warning',
-        title: 'warning',
-        text: 'Enter the Details',
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 1500,
-        customClass: {
-          popup: 'alert-warp',
-          container: 'alert-container',
-        },
-      });
-      return;
+    if (this.RefractionUIN == null && this.RefractionRID == 0) {
+      if (Va.length == 0 && p.length == 0 && Rn.length == 0 && Ac.length == 0 && Fp.length == 0 && Cv.length == 0 && A.length == 0 && Pva.length == 0) {
+        Swal.fire({
+          type: 'warning',
+          title: 'warning',
+          text: 'Enter the Details',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            popup: 'alert-warp',
+            container: 'alert-container',
+          },
+        });
+        return;
+      }
     }
+    else {
+      if (this.RefractionUIN != null && this.RefractionRID != 0) {
+        if (Va.length == 0 && p.length == 0 && Rn.length == 0 && Ac.length == 0 && Fp.length == 0 && Cv.length == 0 && A.length == 0 && Pva.length == 0) {
+          Swal.fire({
+            type: 'warning',
+            title: 'warning',
+            text: 'Data already exists',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'alert-warp',
+              container: 'alert-container',
+            },
+          });
+          return;
+        }
+      }
 
+    }
+    
 
         if (this.Getname == null && this.Getgender == null && this.Getage == null && this.Getuin == null) {
           Swal.fire({
@@ -625,9 +646,8 @@ export class RefractionComponent implements OnInit {
             });
             return;
           }
-        }
+    }
 
-    debugger;
 
         console.log(this.commonService.data);
 
@@ -1040,7 +1060,8 @@ export class RefractionComponent implements OnInit {
 
 
 
-
+  RefractionUIN;
+  RefractionRID;
   getRefactiondetails() {
     debugger;
     this.commonService.getListOfData('refraction/GetrefractionDetails/' + this.Getuin + '/' + parseInt(localStorage.getItem('CompanyID')))
@@ -1049,8 +1070,9 @@ export class RefractionComponent implements OnInit {
         if (data.SquintTraninfo.length > 0 || data.VISUALACUITY.length > 0
           || data.PGP.length >= 0 || data.Amsler.length >= 0 || data.REFRACTIONEXT.length > 0
           || data.ACCEPTANCE.length >= 0 || data.FINALPRESCRIPTION.length >= 0 || data.ColorVision.length >= 0 || data.visualacuitypaediatric.length >= 0) {
-
-
+          debugger;
+          this.RefractionUIN = data.UIN;
+          this.RefractionRID = data.TransID;
           this.squintitem = data.SquintTraninfo;
           this.commonService.data.SquintTran = this.squintitem;
           this.dataSourcesquint.data = this.commonService.data.SquintTran;
@@ -1577,8 +1599,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelstrabismus() {
     this.masterstrabismus = '';
-    this.modalstrabismus = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmitstrabismus = true;
     this.hiddenUpdatestrabismus = false;
     this.hiddenDeletestrabismus = false;
@@ -1799,12 +1819,6 @@ export class RefractionComponent implements OnInit {
 
   }
 
-
-
-
-
-
-
   Addcategory() {
     this.modalcategory = 'block';
     this.backdrop = 'block';
@@ -1822,8 +1836,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelcategory() {
     this.mastercategory = '';
-    this.modalcategory = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmit = true;
     this.hiddenUpdate = false;
     this.hiddenDelete = false;
@@ -2089,8 +2101,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelinstrutment() {
     this.masterinstrutment = '';
-    this.modalinstrutment = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmiti = true;
     this.hiddenUpdatei = false;
     this.hiddenDeletei = false;
@@ -2328,8 +2338,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelNear() {
     this.masterNear = '';
-    this.modalNear = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmitn = true;
     this.hiddenUpdaten = false;
     this.hiddenDeleten = false;
@@ -2386,7 +2394,7 @@ export class RefractionComponent implements OnInit {
               container: 'alert-container',
             },
           });
-          this.oncancelDistance();
+          this.oncancelNear();
           this.hiddenUpdaten = false;
           this.hiddenSubmitn = true;
           this.commonService.getListOfData('Common/GetNVvalues').subscribe(data => {
@@ -2575,8 +2583,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelpinhole() {
     this.masterPinhole = '';
-    this.modalPinhole = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmitp = true;
     this.hiddenUpdatep = false;
     this.hiddenDeletep = false;
@@ -2810,8 +2816,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelDistance() {
     this.masterDistance = '';
-    this.modaldistance = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmitd = true;
     this.hiddenUpdated = false;
     this.hiddenDeleted = false;
@@ -7910,6 +7914,8 @@ export class RefractionComponent implements OnInit {
     pva.OcularOS = 'OS';
     pva.Remarks = "";
     pva.SubCategory = 0;
+    pva.OD = false;
+    pva.OS = false;
     pva.CreatedBy = this.docotorid;
     this.paediatricvisualacuity.push(pva);
     let p = this.Refraction.concat(this.paediatricvisualacuity);
@@ -8243,7 +8249,7 @@ export class RefractionComponent implements OnInit {
 
 
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////// Chart type /////////////////////////////////////
   modalcharttype;
   mastercharttype;
   tablecharttype = false;
@@ -8252,8 +8258,6 @@ export class RefractionComponent implements OnInit {
   hiddenSubmitc = true;
   hiddenUpdatec = false;
   hiddenDeletec = false;
-
-
   Addcharttype() {
     this.modalcharttype = 'block';
     this.backdrop = 'block';
@@ -8271,8 +8275,6 @@ export class RefractionComponent implements OnInit {
   }
   oncancelcharttype() {
     this.mastercharttype = '';
-    this.modalcharttype = 'none';
-    this.backdrop = 'none';
     this.hiddenSubmitc = true;
     this.hiddenUpdatec = false;
     this.hiddenDeletec = false;
@@ -8353,7 +8355,6 @@ export class RefractionComponent implements OnInit {
     });
 
   }
-
   selecttypec(item) {
     debugger;
     this.mastercharttype = item.Description;
@@ -8491,6 +8492,32 @@ export class RefractionComponent implements OnInit {
     });
 
   }
+
+  /////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

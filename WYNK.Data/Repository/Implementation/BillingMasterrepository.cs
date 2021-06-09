@@ -36,7 +36,7 @@ namespace WYNK.Data.Repository.Implementation
             TimeSpan ts = TimeSpan.Parse(GMT);
 
             List<MedicalPrescription> res;
-             
+
             if (Status == "Open")
             {
                  res = medicalpres.Where(x => (x.PrescribedDate + ts).Date == Convert.ToDateTime(SelectedDate.ToString("yyyy-MM-dd")).Date && x.CmpID == CmpID && x.Status != "Closed").ToList();
@@ -55,12 +55,12 @@ namespace WYNK.Data.Repository.Implementation
                                                                       UIN = med.UIN,
                                                                       RegistrationTranID = med.RegistrationTranID,
                                                                       MedicalPrescriptionNo = med.MedicalPrescriptionNo,
-                                                                      PatientName = reg.Where(x => x.UIN == med.UIN).FirstOrDefault().Name + reg.Where(x => x.UIN == med.UIN).FirstOrDefault().MiddleName + reg.Where(x => x.UIN == med.UIN).FirstOrDefault().LastName,
+                                                                      PatientName = reg.Where(x => x.UIN == med.UIN).Select(x => String.Concat(x.Name + " " + (x.MiddleName != null ? x.MiddleName : " ") + " " + x.LastName)).FirstOrDefault(),
                                                                       PrescribedDoctor = med.PrescribedByName,
                                                                       Status = med.Status,
                                                                       PrescribedDate = med.PrescribedDate,
                                                                       Gender = reg.Where(x => x.UIN == med.UIN).Select(x => x.Gender).FirstOrDefault(),
-                                                                      Age = DateTime.Now.Date.Year - (reg.Where(x => x.UIN == med.UIN).Select(x => x.DateofBirth).FirstOrDefault()).Year,
+                                                                      Age = PasswordEncodeandDecode.ToAgeString(reg.Where(x => x.CMPID == CmpID && x.UIN == med.UIN).Select(x => x.DateofBirth).FirstOrDefault()),
                                                                   }).ToList();
 
             return currentmedicalprescription;
@@ -96,12 +96,12 @@ namespace WYNK.Data.Repository.Implementation
                                                                       UIN = med.UIN,
                                                                       RegistrationTranID = med.RegistrationTranID,
                                                                       MedicalPrescriptionNo = med.MedicalPrescriptionNo,
-                                                                      PatientName = reg.Where(x => x.UIN == med.UIN).FirstOrDefault().Name + reg.Where(x => x.UIN == med.UIN).FirstOrDefault().MiddleName + reg.Where(x => x.UIN == med.UIN).FirstOrDefault().LastName,
+                                                                      PatientName = reg.Where(x => x.UIN == med.UIN).Select(x => String.Concat(x.Name + " " + (x.MiddleName != null ? x.MiddleName : " ") + " " + x.LastName)).FirstOrDefault(),
                                                                       PrescribedDoctor = med.PrescribedByName,
                                                                       Status = med.Status,
                                                                       PrescribedDate = med.PrescribedDate,
                                                                       Gender = reg.Where(x => x.UIN == med.UIN).Select(x => x.Gender).FirstOrDefault(),
-                                                                      Age = DateTime.Now.Date.Year - (reg.Where(x => x.UIN == med.UIN).Select(x => x.DateofBirth).FirstOrDefault()).Year,
+                                                                      Age = PasswordEncodeandDecode.ToAgeString(reg.Where(x => x.CMPID == CmpID && x.UIN == med.UIN).Select(x => x.DateofBirth).FirstOrDefault()),
                                                                   }).ToList();
 
 

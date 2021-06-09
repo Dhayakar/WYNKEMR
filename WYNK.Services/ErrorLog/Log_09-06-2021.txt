@@ -1,0 +1,51 @@
+
+09-06-2021 05:22:22 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 05:22:22 	Message : 	Successfully Logged-In
+
+09-06-2021 05:28:43 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 05:28:43 	Message : 	Successfully Logged-In
+
+09-06-2021 05:32:16 	Centris Mobility Project Services 	Findings 	User name : 	N   Steve 	User ID : 	24 	Mode : Submit
+09-06-2021 05:32:16 	Findings 	{"ID":-2147482647,"RandomUniqueID":"d47e54b7-cbc3-491a-b72e-9d0cb3930dfc","CmpID":1062,"RegistrationTranID":36242,"UIN":"CMPS-165-CLINIC","SlitLampODImagePath":"test","SlitLampOSImagePath":"test","IOLNCTOD":null,"IOLNCTOS":null,"IOLATOD":null,"IOLATOS":null,"FundusODImagePath":null,"FundusOSImagePath":null,"DiagnosisOthers":null,"ProposedSurgeryPeriod":null,"TreatmentAdvice":null,"IsSurgeryAdviced":false,"ReviewDate":null,"CreatedUTC":"2021-06-09T05:32:16.1131101Z","UpdatedUTC":null,"CreatedBy":32246,"UpdatedBy":null,"FilePath":null,"Category":null,"DistSphod":null,"NearCylod":null,"N_V_DESCod":null,"PinAxisod":null,"DistSphos":null,"NearCylos":null,"N_V_DESCos":null,"PinAxisos":null,"IOLNCTbdOD":null,"IOLNCTbdOS":null,"IOLATbdOD":null,"IOLATbdOS":null,"PgDtls":null,"PgSphOD":null,"PgCylOD":null,"PgAxisOD":null,"PgAddOD":null,"PgSphOS":null,"PgCylOS":null,"PgAxisOS":null,"PgAddOS":null,"Instrument":null,"RDySphOD":null,"RDyCylOD":null,"RDyAxisOD":null,"RDySphOS":null,"RDyCylOS":null,"RDyAxisOS":null,"RWtSphOD":null,"RWtCylOD":null,"RWtAxisOD":null,"RWtSphOS":null,"RWtCylOS":null,"RWtAxisOS":null,"PGlassOD":null,"PGlassOS":null,"TimeNCT":null,"TimeAT":null,"Consultation":null,"Categoryos":null,"IsBilled":false}
+09-06-2021 05:32:16 	SlitlampExtn 	{"ID":-2147482647,"FindingsID":"d47e54b7-cbc3-491a-b72e-9d0cb3930dfc","HorMeasurementod1":"","VerMeasurementod1":"","OcularMovementod1":null,"HorMeasurementod2":"","VerMeasurementod2":"","OcularMovementod2":null,"HorMeasurementod3":"","VerMeasurementod3":"","OcularMovementod3":null,"HorMeasurementod4":"","VerMeasurementod4":"","OcularMovementod4":null,"HorMeasurementod5":"","VerMeasurementod5":"","OcularMovementod5":null,"HorMeasurementod6":"","VerMeasurementod6":"","OcularMovementod6":null,"OcularMovementod7":null,"OcularMovementod8":null,"HorMeasurementos1":"","VerMeasurementos1":"","OcularMovementos1":null,"HorMeasurementos2":"","VerMeasurementos2":"","OcularMovementos2":null,"HorMeasurementos3":"","VerMeasurementos3":"","OcularMovementos3":null,"HorMeasurementos4":"","VerMeasurementos4":"","OcularMovementos4":null,"HorMeasurementos5":"","VerMeasurementos5":"","OcularMovementos5":null,"HorMeasurementos6":"","VerMeasurementos6":"","OcularMovementos6":null,"OcularMovementos7":null,"OcularMovementos8":null,"CreatedBy":32246,"CreatedUTC":"2021-06-09T05:32:16.6500656Z","UpdatedBy":null,"UpdatedUTC":null}
+09-06-2021 05:32:16 	Glaucoma 	{"ID":-2147482647,"FindingsId":"d47e54b7-cbc3-491a-b72e-9d0cb3930dfc","CmpId":1062,"GaunioscopyODG1":null,"GaunioscopyODG2":null,"GaunioscopyODG3":null,"GaunioscopyODG4":null,"GaunioscopyOSG1":null,"GaunioscopyOSG2":null,"GaunioscopyOSG3":null,"GaunioscopyOSG4":null,"pachymetryod":null,"pachymetryos":null,"Impression":null,"CreatedBy":32246,"CreatedUTC":"2021-06-09T05:32:16.6806583Z","UpdatedBy":null,"UpdatedUTC":null,"GaunioscopyODD1":null,"GaunioscopyODD2":null,"GaunioscopyODD3":null,"GaunioscopyODD4":null,"GaunioscopyOSD1":null,"GaunioscopyOSD2":null,"GaunioscopyOSD3":null,"GaunioscopyOSD4":null}
+09-06-2021 05:32:16 	Diagnosis 	{"ID":-2147482647,"FindingsID":"d47e54b7-cbc3-491a-b72e-9d0cb3930dfc","DiagnosisId":45483,"IsOD":false,"IsOS":true,"IsOU":false,"CreatedUTC":"2021-06-09T05:32:16.7222625Z","UpdatedUTC":null,"CreatedBy":32246,"UpdatedBy":null,"Description":null}
+09-06-2021 05:32:16 	Diagnosis 	{"ID":-2147482646,"FindingsID":"d47e54b7-cbc3-491a-b72e-9d0cb3930dfc","DiagnosisId":45484,"IsOD":true,"IsOS":false,"IsOU":false,"CreatedUTC":"2021-06-09T05:32:16.729789Z","UpdatedUTC":null,"CreatedBy":32246,"UpdatedBy":null,"Description":null}
+09-06-2021 05:32:18 	Information : 	Saved Successfully
+
+09-06-2021 05:36:05 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 05:36:05 	Message : 	Successfully Logged-In
+
+09-06-2021 05:49:01 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 05:49:02 	Message : 	Successfully Logged-In
+
+09-06-2021 06:09:23 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 06:09:23 	Message : 	Successfully Logged-In
+
+09-06-2021 06:28:18 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 06:28:18 	Message : 	Successfully Logged-In
+
+09-06-2021 06:33:05 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 06:33:05 	Message : 	Successfully Logged-In
+
+09-06-2021 06:36:18 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 06:36:18 	Message : 	Successfully Logged-In
+
+09-06-2021 06:49:23 	Centris Mobility Project Services 	Login Component 	User name : 	N Steve 	User ID : 	32246 	Mode : Submit
+09-06-2021 06:49:23 	Message : 	Successfully Logged-In
+
+09-06-2021 06:50:22 	Centris Mobility Project Services 	Registration 	User name : 	N Steve 	User ID : 	32246 	Mode : Add
+09-06-2021 06:50:23 	RegistrationTran 	{"UIN":"CMPS-169-CLINIC","CMPID":1062,"DateofRegistration":"2021-06-09T06:49:37.502Z","Name":"M","MiddleName":null,"LastName":"Dayakar","AlternatePhoneNumber":null,"AlternateMailID":null,"DateofBirth":"1996-06-10T00:00:00","Gender":"Male","Address1":"Chennai","Address2":null,"Address3":null,"LocationID":0,"FatherHusbandName":null,"Occupation":null,"Phone":"7659886071","AadharNumber":null,"TransactionID":2,"PanCardNo":null,"DrivingLicenseNo":null,"PassportNo":null,"IsForeignNational":null,"EmailID":null,"SourceofReferralID":0,"ReferralName":null,"IsDeleted":false,"CreatedUTC":"2021-06-09T06:50:22.8266872Z","UpdatedUTC":null,"CreatedBy":32246,"UpdatedBy":0,"PhotoPath":null,"BiometricPath":null,"PreferredLanguage":"Select","MaritalStatus":null,"Insurance":false,"Videoconsent":null,"VoiceConsent":null,"RegType":"Normal"}
+09-06-2021 06:50:23 	PatientFootfall 	{"ID":-2147482647,"Date":"2021-06-09T00:00:00","NewPatients":1,"ReviewPatients":0,"ConsultationNew":0.0,"ConsultationReview":0.0,"NewGeneralNormal":1,"NewGeneralOcular":0,"NewPediatricNormal":0,"NewPediatricOcular":0,"ReviewGeneralNormal":0,"ReviewGeneralOcular":0,"ReviewPediatricNormal":0,"ReviewPediatricOcular":0,"SurgeryReviewPatient":0,"CreatedBy":32246,"UpdatedBy":null,"CmpID":1062}
+09-06-2021 06:50:23 	NumberControl 	{"VCID":9485,"TransactionID":1035,"DepartmentID":0,"CmpID":1062,"Prefix":"Rec","Suffix":"pt","Description":"Receipt","Autonumber":true,"RunningNumber":64,"EffectiveFrom":"2020-09-14T18:30:00","EffectiveTo":null,"IsActive":true,"IsDeleted":false,"CreatedUTC":"2020-09-14T10:06:40.063","UpdatedUTC":null,"CreatedBy":24,"UpdatedBy":null}
+09-06-2021 06:50:23 	NumberControl 	{"VCID":9051,"TransactionID":2,"DepartmentID":0,"CmpID":1062,"Prefix":"CMPS-","Suffix":"-CLINIC","Description":"Registration","Autonumber":true,"RunningNumber":169,"EffectiveFrom":"2020-04-23T18:30:00","EffectiveTo":null,"IsActive":true,"IsDeleted":false,"CreatedUTC":"2020-04-23T07:54:51.193","UpdatedUTC":null,"CreatedBy":0,"UpdatedBy":null}
+09-06-2021 06:50:23 	Information : 	Saved Successfully
+09-06-2021 06:50:24 	NumberControl 	{"VCID":11213,"TransactionID":1043,"DepartmentID":0,"CmpID":1062,"Prefix":"Con","Suffix":"BILL","Description":"Consultation Billing","Autonumber":true,"RunningNumber":3,"EffectiveFrom":"2021-05-16T18:30:00","EffectiveTo":null,"IsActive":true,"IsDeleted":false,"CreatedUTC":"2021-05-17T11:29:46.073","UpdatedUTC":null,"CreatedBy":24,"UpdatedBy":null}
+09-06-2021 06:50:24 	Information : 	Saved Successfully
+
+09-06-2021 06:54:14 	Centris Mobility Project Services 	Registration 	User name : 	N Steve 	User ID : 	32246 	Mode : Add
+09-06-2021 06:54:14 	RegistrationTran 	{"UIN":"CMPS-170-CLINIC","CMPID":1062,"DateofRegistration":"2021-06-09T06:52:45.02Z","Name":"M","MiddleName":null,"LastName":"Akhil","AlternatePhoneNumber":null,"AlternateMailID":null,"DateofBirth":"1996-06-10T00:00:00","Gender":"Male","Address1":"Chennai","Address2":null,"Address3":null,"LocationID":0,"FatherHusbandName":null,"Occupation":null,"Phone":"765886588","AadharNumber":null,"TransactionID":2,"PanCardNo":null,"DrivingLicenseNo":null,"PassportNo":null,"IsForeignNational":null,"EmailID":null,"SourceofReferralID":0,"ReferralName":null,"IsDeleted":false,"CreatedUTC":"2021-06-09T06:54:14.5304278Z","UpdatedUTC":null,"CreatedBy":32246,"UpdatedBy":0,"PhotoPath":null,"BiometricPath":null,"PreferredLanguage":"Select","MaritalStatus":null,"Insurance":false,"Videoconsent":null,"VoiceConsent":null,"RegType":"Normal"}
+09-06-2021 06:54:15 	PatientFootfall 	{"ID":1403,"Date":"2021-06-09T00:00:00","NewPatients":2,"ReviewPatients":0,"ConsultationNew":0.00,"ConsultationReview":0.00,"NewGeneralNormal":2,"NewGeneralOcular":0,"NewPediatricNormal":0,"NewPediatricOcular":0,"ReviewGeneralNormal":0,"ReviewGeneralOcular":0,"ReviewPediatricNormal":0,"ReviewPediatricOcular":0,"SurgeryReviewPatient":0,"CreatedBy":32246,"UpdatedBy":32246,"CmpID":1062}
+09-06-2021 06:54:15 	NumberControl 	{"VCID":9485,"TransactionID":1035,"DepartmentID":0,"CmpID":1062,"Prefix":"Rec","Suffix":"pt","Description":"Receipt","Autonumber":true,"RunningNumber":65,"EffectiveFrom":"2020-09-14T18:30:00","EffectiveTo":null,"IsActive":true,"IsDeleted":false,"CreatedUTC":"2020-09-14T10:06:40.063","UpdatedUTC":null,"CreatedBy":24,"UpdatedBy":null}
+09-06-2021 06:54:15 	NumberControl 	{"VCID":9051,"TransactionID":2,"DepartmentID":0,"CmpID":1062,"Prefix":"CMPS-","Suffix":"-CLINIC","Description":"Registration","Autonumber":true,"RunningNumber":170,"EffectiveFrom":"2020-04-23T18:30:00","EffectiveTo":null,"IsActive":true,"IsDeleted":false,"CreatedUTC":"2020-04-23T07:54:51.193","UpdatedUTC":null,"CreatedBy":0,"UpdatedBy":null}
+09-06-2021 06:54:15 	Information : 	Saved Successfully

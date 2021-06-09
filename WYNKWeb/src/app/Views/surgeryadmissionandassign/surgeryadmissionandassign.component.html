@@ -33,7 +33,7 @@
 
         <div class="col-sm-12 mt-2p">
           <div class="card mb-3">
-            <h5 class="card-header bg-success text-white">
+            <h5 class="card-header">
               Admission
               <label class="labelfloat">
                 <button type="button" (click)="patientview()" data-toggle="tooltip" title="View Surgery patient" class="btn btn-primary-default btn-Excel buttonsfloat">Surgery patient </button>
@@ -116,7 +116,7 @@
 
                           <div class="col-sm-10">
                             <div class="card mb-3">
-                              <h5 class="card-header bg-success text-white">
+                              <h5 class="card-header">
                                 Counselling
                               </h5>
 
@@ -170,7 +170,7 @@
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="card mb-3">
-                                  <h5 class="card-header bg-success text-white">
+                                  <h5 class="card-header">
                                     Surgery
                                   </h5>
 
@@ -231,7 +231,7 @@
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="card mb-3">
-                                  <h5 class="card-header bg-success text-white">
+                                  <h5 class="card-header">
                                     Room
                                     <label class="labelfloat">
                                       <button type="button" (click)="Search()" [disabled]="roomsearch" matTooltip="View Room" class="btn btn-primary-default btn-Excel buttonsfloat">View Room</button>
@@ -318,7 +318,7 @@
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="card mb-3">
-                                  <h5 class="card-header bg-success text-white">
+                                  <h5 class="card-header">
                                     Surgery Cost
                                   </h5>
 
@@ -364,7 +364,7 @@
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="card mb-3">
-                                  <h5 class="card-header bg-success text-white">
+                                  <h5 class="card-header">
                                     Surgeon and Medical Staff
                                   </h5>
 
@@ -434,7 +434,7 @@
 
                 <div class="col-sm-12 mt-1p">
                   <div class="card mb-12">
-                    <h5 class="card-header bg-success text-white">
+                    <h5 class="card-header">
                       Payment details
                       <label class="labelfloat">
                         <button type="button" (click)="AddPaymentDetailsNewgrid()" matTooltip="Add Payment Details" class="btn btn-primary-default btn-Excel buttonsfloat">Add Payment</button>
@@ -540,7 +540,7 @@
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="card mb-3">
-                                  <h5 class="card-header bg-success text-white">
+                                  <h5 class="card-header">
                                     Vehicle Pass
                                     <label class="labelfloat">
                                       <button type="button" (click)="AddVehicle()" matTooltip="Add Vehicle" class="btn btn-primary-default btn-Excel buttonsfloat">Add Vehicle</button>
@@ -621,7 +621,7 @@
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="card mb-3">
-                                  <h5 class="card-header bg-success text-white">
+                                  <h5 class="card-header">
                                     Attender  Pass
                                   </h5>
 
@@ -717,7 +717,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalpreview}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreview()">&times;</button>
         <h5 class="modal-title">
@@ -730,7 +730,7 @@
         <div class="row">
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <mat-label>Filter</mat-label>
+              <mat-label>Search</mat-label>
               <input id="myInput" type="text" matInput placeholder="Search">
             </mat-form-field>
           </div>
@@ -788,7 +788,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewsearch}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewsearch()">&times;</button>
         <h5 class="modal-title">
@@ -800,7 +800,7 @@
         <div class="row">
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <mat-label>Filter</mat-label>
+              <mat-label>Search</mat-label>
               <input id="myInput1" type="text" matInput placeholder="Search">
             </mat-form-field>
           </div>
@@ -850,7 +850,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
         <h4>Do you want to cancel?</h4>
@@ -869,7 +869,7 @@
 <div class="modal" role="dialog" [ngStyle]="{'display':admissioncardprint}">
   <div class="example-box" cdkDrag>
     <div class="modal-dialog modal-md">
-      <div class="modal-content">
+      <div class="modal-content" cdkDrag>
         <div class="modal-header">
           <div class="col-sm-12">
             <div class="row">
@@ -905,10 +905,9 @@
   </div>
 </div>
 
-
 <div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewsurgery}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewsurgery()">&times;</button>
         <h5 class="modal-title">
@@ -921,7 +920,7 @@
         <div class="row">
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <mat-label>Filter</mat-label>
+              <mat-label>Search</mat-label>
               <input id="myInputsurgery" type="text" matInput placeholder="Search">
             </mat-form-field>
           </div>
@@ -973,13 +972,9 @@
   </div>
 </div>
 
-
-
-
-
 <div class="modal" role="dialog" [ngStyle]="{'display':modalpreviewdetails}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreviewdetails()">&times;</button>
         <h5 class="modal-title">
@@ -993,10 +988,22 @@
           <div class="col-sm-12 mph-0 downmargin">
             <div class="row mph-0">
               <div class="col-sm-12 mph-0">
-                <div class="col-sm-4 mph-0 pb20">
+                <div class="col-sm-8 mph-0 pb20">
                   <span class="uinborder">
                     <strong>{{AdmUin}} / {{AdmName}} / {{AdmAge}} / {{AdmGender}}</strong>
                   </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row  ml-3p">
+          <div class="col-sm-12 mph-0 downmargin">
+            <div class="row mph-0">
+              <div class="col-sm-12 mph-0">
+                <div class="col-sm-4 mph-0 pb20">
+
                 </div>
                 <div class="col-sm-2">
                   <button type="button" class="btn btn-primary" (click)="AdmitcardPrint()">Admit card Print</button>
@@ -1028,7 +1035,7 @@
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="card mb-3">
-                          <h5 class="card-header bg-success text-white">
+                          <h5 class="card-header">
                             Admission
                           </h5>
                           <div class="card-body">
@@ -1084,7 +1091,7 @@
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="card mb-3">
-                          <h5 class="card-header bg-success text-white">
+                          <h5 class="card-header">
                             Counselling
                           </h5>
                           <div class="card-body">
@@ -1142,7 +1149,7 @@
                           <div class="row">
                             <div class="col-sm-12">
                               <div class="card mb-3">
-                                <h5 class="card-header bg-success text-white ml-2p">
+                                <h5 class="card-header  ml-2p">
                                   Surgery
                                 </h5>
                                 <div class="card-body">
@@ -1203,7 +1210,7 @@
                           <div class="row">
                             <div class="col-sm-12">
                               <div class="card mb-3">
-                                <h5 class="card-header bg-success text-white">
+                                <h5 class="card-header">
                                   Room
                                 </h5>
                                 <div class="card-body">
@@ -1262,7 +1269,7 @@
                           <div class="row">
                             <div class="col-sm-12">
                               <div class="card mb-3">
-                                <h5 class="card-header bg-success text-white ml-2p">
+                                <h5 class="card-header  ml-2p">
                                   Surgery Cost
                                 </h5>
                                 <div class="card-body">
@@ -1310,7 +1317,7 @@
                           <div class="row">
                             <div class="col-sm-12">
                               <div class="card mb-3">
-                                <h5 class="card-header bg-success text-white">
+                                <h5 class="card-header">
                                   Surgeon and Medical Staff
                                 </h5>
                                 <div class="card-body">
@@ -1361,7 +1368,7 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="card mb-3">
-                              <h5 class="card-header bg-success text-white">
+                              <h5 class="card-header">
                                 Payment details
                               </h5>
                               <div class="card-body">
@@ -1433,7 +1440,7 @@
                         <div class="row">
                           <div class="col-sm-6">
                             <div class="card mb-3">
-                              <h5 class="card-header bg-success text-white">
+                              <h5 class="card-header">
                                 Vehicle Pass
                               </h5>
                               <div class="card-body">
@@ -1469,7 +1476,7 @@
 
                           <div class="col-sm-5 ml-n4p">
                             <div class="card mb-3">
-                              <h5 class="card-header bg-success text-white">
+                              <h5 class="card-header">
                                 Attender Pass
                               </h5>
                               <div class="card-body">
@@ -1523,9 +1530,6 @@
     </div>
   </div>
 </div>
-
-
-
 
 
 <!---------------------------------- print----------------------------------------------->
@@ -2026,7 +2030,7 @@
 <div class="modal" role="dialog" [ngStyle]="{'display':admissioncardreprint}">
   <div class="example-box" cdkDrag>
     <div class="modal-dialog modal-md">
-      <div class="modal-content">
+      <div class="modal-content" cdkDrag>
         <div class="modal-header">
           <div class="col-sm-12">
             <div class="row">
@@ -2062,12 +2066,10 @@
   </div>
 </div>
 
-
-
 <div class="modal" role="dialog" [ngStyle]="{'display':advancereprint}">
   <div class="example-box" cdkDrag>
     <div class="modal-dialog modal-md">
-      <div class="modal-content">
+      <div class="modal-content" cdkDrag>
         <div class="modal-header">
           <div class="col-sm-12">
             <div class="row">
@@ -2106,7 +2108,7 @@
 <div class="modal" role="dialog" [ngStyle]="{'display':vehiclereprint}">
   <div class="example-box" cdkDrag>
     <div class="modal-dialog modal-md">
-      <div class="modal-content">
+      <div class="modal-content" cdkDrag>
         <div class="modal-header">
           <div class="col-sm-12">
             <div class="row">
@@ -2145,7 +2147,7 @@
 <div class="modal" role="dialog" [ngStyle]="{'display':Attenderreprint}">
   <div class="example-box" cdkDrag>
     <div class="modal-dialog modal-md">
-      <div class="modal-content">
+      <div class="modal-content" cdkDrag>
         <div class="modal-header">
           <div class="col-sm-12">
             <div class="row">
@@ -2181,11 +2183,9 @@
   </div>
 </div>
 
-
-
 <div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <h4 class="modal-title">Surgery Admission and Assign - View Access</h4>
       </div>

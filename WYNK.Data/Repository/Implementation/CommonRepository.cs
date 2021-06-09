@@ -289,26 +289,26 @@ namespace WYNK.Data.Repository.Implementation
 
         public IEnumerable<Dropdown> Desc()
         {
-            return CMPSContext.OneLineMaster.OrderBy(x => x.ParentDescription).Where(x => x.ParentTag == "OcularComplaints" && x.IsActive == true && x.IsDeleted == false).Select(x => new Dropdown { Text = x.ParentDescription, Value = x.OLMID.ToString() }).OrderBy(x => x.Value).ToList();
+            return CMPSContext.OneLineMaster.Where(x => x.ParentTag == "OcularComplaints" && x.IsActive == true && x.IsDeleted == false && x.ParentDescription != " ").Select(x => new Dropdown { Text = x.ParentDescription, Value = x.OLMID.ToString() }).OrderBy(x => x.Text).ToList();
 
         }
         public IEnumerable<Dropdown> Descc()
         {
-            return CMPSContext.OneLineMaster.OrderBy(x => x.ParentDescription).Where(x => x.ParentTag == "SystemicCondition" && x.IsActive == true && x.IsDeleted == false).Select(x => new Dropdown { Text = x.ParentDescription, Value = x.OLMID.ToString() }).OrderBy(x => x.Value).ToList();
+            return CMPSContext.OneLineMaster.Where(x => x.ParentTag == "SystemicCondition" && x.IsActive == true && x.IsDeleted == false && x.ParentDescription != " ").Select(x => new Dropdown { Text = x.ParentDescription, Value = x.OLMID.ToString()}).OrderBy(x => x.Text).ToList();
 
         }
         public dynamic Getocularvalues()
         {
             var getData = new RefractionMasterss();
 
-            getData.categoryhis = (from details in CMPSContext.OneLineMaster.Where(x => x.ParentTag == "OcularComplaints" && x.IsDeleted == false)
+            getData.categoryhis = (from details in CMPSContext.OneLineMaster.Where(x => x.ParentTag == "OcularComplaints" && x.IsDeleted == false && x.ParentDescription != " ")
                                    select new categoryhis
                                    {
                                        ID = details.OLMID,
                                        Description = details.ParentDescription,
                                        IsActive = details.IsActive == true ? "Active" : "InActive",
                                        Active = details.IsActive,
-                                   }).ToList();
+                                   }).OrderBy(x=>x.Description).ToList();
 
             return getData;
 
@@ -317,14 +317,14 @@ namespace WYNK.Data.Repository.Implementation
         {
             var getData = new RefractionMasterss();
 
-            getData.categoryhis = (from details in CMPSContext.OneLineMaster.Where(x => x.ParentTag == "SystemicCondition" && x.IsDeleted == false)
+            getData.categoryhis = (from details in CMPSContext.OneLineMaster.Where(x => x.ParentTag == "SystemicCondition" && x.ParentDescription != " " && x.IsDeleted == false)
                                    select new categoryhis
                                    {
                                        ID = details.OLMID,
                                        Description = details.ParentDescription,
                                        IsActive = details.IsActive == true ? "Active" : "InActive",
                                        Active = details.IsActive,
-                                   }).ToList();
+                                   }).OrderBy(x =>x.Description).ToList();
 
             return getData;
 

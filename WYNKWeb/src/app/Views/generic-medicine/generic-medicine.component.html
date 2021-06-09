@@ -1,6 +1,6 @@
   <div class="col-sm-12">
     <div class="row">
-      <h5 align="center" class="card-header bg-success text-white rounded-top">
+      <h5 align="center" class="card-header">
         <b> Generic Medicine Master</b>
       </h5>
     </div>
@@ -99,7 +99,7 @@
           </tbody>
         </table>
       </div>
-      <div class="row">
+      <!--<div class="row">
         <div class="col-sm-12" style="margin-top:1%">
           <div class="col-sm-4"></div>
           <div class="col-sm-1" *ngIf="hideSubmit">
@@ -115,7 +115,19 @@
             <button [disabled]="disableDelete" class="danger" (click)="Deleteclk(GenericForm,id.value)" mat-raised-button>Delete</button>
           </div>
         </div>
+      </div>-->
+
+      <div class="col-sm-12 m-3">
+        <div class="col-sm-12 pb25">
+          <div class="content-right sub-section btn-wrap">
+            <button type="button" class="btn btn-warning" style="font-size:15px;color:orange;background-color:white;font-family:'Proxima Nova Semibold'" (click)="Cancel()"><strong>Cancel</strong></button>
+            <button *ngIf="hiddenDelete" [disabled]="disableDelete" class="danger" (click)="Deleteclk(GenericForm,id.value)" mat-raised-button>Delete</button>
+            <button *ngIf="hideSubmit" [disabled]="disableSubmit" class="success" style=" font-family:'Proxima Nova Semibold'" (click)="AddDrugGroup(GenericForm)" mat-raised-button>Submit</button>
+            <button *ngIf="hideupdate" [disabled]="disableupdate" class="success" style=" font-family:'Proxima Nova Semibold'" (click)="UpdateDrugGroup(GenericForm,id.value)" mat-raised-button>Submit</button>
+          </div>
+        </div>
       </div>
+
     </div>
   </form>
 

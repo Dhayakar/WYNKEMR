@@ -1,6 +1,6 @@
 <div class="col-sm-12">
   <div class="row">
-    <h5 align="center" class="card-header bg-success text-white rounded-top">
+    <h5 align="center" class="card-header">
       <b> Generic Medicine Master</b>
     </h5>
   </div>
@@ -102,8 +102,8 @@
   <div class="row pb25">
     <div class="col-sm-3 mt-1p f-r">
       <div class="content-right sub-section btn-wrap">
-        <button *ngIf="!hideSubmit" [disabled]="isNextDelete" type="button" class="danger btn-danger-default " (click)="Delete(id.value)"><strong>Delete</strong></button>
         <button type="button" class="btn btn-warning-default" (click)="Cancel()"><strong>Cancel</strong></button>
+        <button *ngIf="!hideSubmit" [disabled]="isNextDelete" type="button" class="danger btn-danger-default " (click)="Delete(id.value)"><strong>Delete</strong></button>
         <button *ngIf="!hideSubmit" class="success btn btn-primary" [disabled]="isNextupdate" (click)="UpdateDrugGroup(DrugGroupForm,id.value)">Submit</button>
         <button *ngIf="hideSubmit" class="success btn btn-primary" [disabled]="isNextButton" (click)="AddDrugGroup(DrugGroupForm)"> Submit </button>
       </div>

@@ -40,6 +40,8 @@ namespace WYNK.Data.Model
 
         public DbSet<Diagnosis> Diagnosis { get; set; }
         public DbSet<Squint_ExtnMaster> SquintExtnMaster { get; set; }
+
+        public DbSet<OpticalPrescriptionmaster> OpticalPrescriptionmaster { get; set; }
         public DbSet<Finding> Findings { get; set; }
         public DbSet<Icd_Master> ICDMaster { get; set; }
         public DbSet<InvestigationTran> InvestigationTran { get; set; }

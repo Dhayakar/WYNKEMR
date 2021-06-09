@@ -233,9 +233,9 @@ export class SearchComponent implements OnInit {
     //}
     if (this.helpname == 'Customer Master') {
       this.CustomerMasterDetails();
-      this.displayedColumns = ['checked', 'UIN', 'Name', 'MIDNAME', 'LNAME', 'Address1', 'Address2', 'Address3', 'C_LocationName', 'C_GSTNo', 'vMobileNo', 'vPhoneNo', 'ContactPerson'];
-      this.displayedColumnsA = ['UIN', 'Name', 'MIDNAME', 'LNAME', 'Address1', 'Address2', 'Address3', 'C_LocationName', 'C_GSTNo', 'vMobileNo', 'vPhoneNo', 'ContactPerson'];
-      this.displayedColumnsB = ['checked', 'UIN', 'Name', 'MIDNAME', 'LNAME', 'Address1', 'Address2', 'Address3', 'C_LocationName', 'C_GSTNo', 'vMobileNo', 'vPhoneNo', 'ContactPerson'];
+      this.displayedColumns = ['checked', 'UIN', 'Name', 'MIDNAME', 'LNAME', 'Address1', 'Address2', 'Address3', 'C_LocationName',  'vMobileNo', 'vPhoneNo', 'ContactPerson'];
+      this.displayedColumnsA = ['UIN', 'Name', 'MIDNAME', 'LNAME', 'Address1', 'Address2', 'Address3', 'C_LocationName', 'vMobileNo', 'vPhoneNo', 'ContactPerson'];
+      this.displayedColumnsB = ['checked', 'UIN', 'Name', 'MIDNAME', 'LNAME', 'Address1', 'Address2', 'Address3', 'C_LocationName',  'vMobileNo', 'vPhoneNo', 'ContactPerson'];
       this.dataSource = new MatTableDataSource();
     }
 
@@ -544,7 +544,9 @@ export class SearchComponent implements OnInit {
   }
 
   ConvertEXCEL() {
-    debugger;
+    if (this.dataSource.data.length == 0) {
+      return
+    }
     let element = document.getElementById('excel-table');
     var cloneTable = element.cloneNode(true);
     jQuery(cloneTable).find('.remove-this').remove();
@@ -559,8 +561,39 @@ export class SearchComponent implements OnInit {
     ];
     ws['!cols'] = wscols;
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Module Master');
-    XLSX.writeFile(wb, "Module Master.xlsx");
+    if (this.helpname == "ModuleMaster") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Module Master');
+      XLSX.writeFile(wb, "Module Master.xlsx");
+    }
+    else if (this.helpname == "doctormaster") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Doctor Master');
+      XLSX.writeFile(wb, "Doctor Master.xlsx");
+    }
+    else if (this.helpname == "Customer Master") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Customer Master');
+      XLSX.writeFile(wb, "Customer Master.xlsx");
+    }
+    else if (this.helpname == "SurgeryDischarge") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Surgery Discharge');
+      XLSX.writeFile(wb, "Surgery Discharge.xlsx");
+    }
+    else if (this.helpname == "DischargedPatientDetails") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Discharged Patients');
+      XLSX.writeFile(wb, "Discharged Patients.xlsx");
+    }
+    else if (this.helpname == "IOProcedureTemplate") {
+      XLSX.utils.book_append_sheet(wb, ws, 'IO Procedure Template');
+      XLSX.writeFile(wb, "IO Procedure Template.xlsx");
+    }
+    else if (this.helpname == "Drugmaster") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Drug Master');
+      XLSX.writeFile(wb, "Drug Master.xlsx");
+    }
+    else if (this.helpname == "DrugGroup") {
+      XLSX.utils.book_append_sheet(wb, ws, 'Generic Medicine Master');
+      XLSX.writeFile(wb, "Generic Medicine Master.xlsx");
+    }
+    
   }
 
 
@@ -653,22 +686,25 @@ export class SearchComponent implements OnInit {
       pdfMake.createPdf(documentDefinition).download('Module Master.pdf');
     }
     else if (Modulename == "doctormaster") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
         var companyname = localStorage.getItem("Companyname");
         var Stringfydfata = JSON.stringify(this.dataSource.data);
         var objdata = JSON.parse(Stringfydfata);
         var DoctorName = jQuery.map(objdata, function (n, i) { return n.DoctorName; });
         var Address1 = jQuery.map(objdata, function (n, i) { return n.Address1; });
-        var Address2 = jQuery.map(objdata, function (n, i) { return n.Address2; });
-        var Address3 = jQuery.map(objdata, function (n, i) { return n.Address3; });
+        var Address2 = objdata.map((n, i) => { return n.Address2 != null ? n.Address2 : " "; });
+        var Address3 = jQuery.map(objdata, function (n, i) { return n.Address3 != null ? n.Address3 : " ";});
         var RegistrationNumber = jQuery.map(objdata, function (n, i) { return n.RegistrationNumber; });
-        var EngagementType = jQuery.map(objdata, function (n, i) { return n.EngagementType; });
+        var EngagementType = jQuery.map(objdata, function (n, i) { return n.EngagementType != null ? n.EngagementType : " "; });
         var Phone1 = jQuery.map(objdata, function (n, i) { return n.Phone1; });
-        var Phone2 = jQuery.map(objdata, function (n, i) { return n.Phone2; });
+        var Phone2 = jQuery.map(objdata, function (n, i) { return n.Phone2 != null ? n.Phone2 : " "; });
         var EmailID = jQuery.map(objdata, function (n, i) { return n.EmailID; });
         var Speciality = jQuery.map(objdata, function (n, i) {
-            //return n.Speciality.toString();
-            return n.Speciality;
-        });
+          var myArray = n.Speciality.toString();
+          return myArray.toString();
+         });
         var documentDefinition = {
             info: {
                 title: 'Doctor Master',
@@ -680,13 +716,13 @@ export class SearchComponent implements OnInit {
             pageOrientation: 'landscape',
             pageMargins: [10, 10, 10, 10],
             content: [
-                { text: 'Organization : ' + companyname, fontSize: 18, background: 'lightgray', color: 'blue', decoration: 'underline' },
+              { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
                 { text: 'Doctor Master', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
                 {
                     style: 'tableExample',
                     table: {
                         headerRows: 1,
-                        widths: [150, 100, 100, 100, 100, 100, 100, 100, 150, 200],
+                        widths: [150, 100, 100, 100, 100, 100, 120, 120, 170, 200],
                         body: [
                             [{ text: 'Doctor Name', style: 'tableHeader' },
                             { text: 'Address1', style: 'tableHeader' },
@@ -757,7 +793,7 @@ export class SearchComponent implements OnInit {
                 }
             },
         };
-        pdfMake.createPdf(documentDefinition).download('Doctor Master.pdf');
+       pdfMake.createPdf(documentDefinition).download('Doctor Master.pdf');
     }
     else if (Modulename == "CompanyMaster") {
       var companyname = localStorage.getItem("Companyname");
@@ -853,7 +889,572 @@ export class SearchComponent implements OnInit {
       };
       pdfMake.createPdf(documentDefinition).download('Organization Master.pdf');
     }
-
+    else if (Modulename == "Customer Master") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
+      var companyname = localStorage.getItem("Companyname");
+      var Stringfydfata = JSON.stringify(this.dataSource.data);
+      var objdata = JSON.parse(Stringfydfata);
+      var UIN = objdata.map((n, i) => { return n.UIN != null ? n.UIN : " "; });
+      var Name = jQuery.map(objdata, function (n, i) { return n.Name; });
+      var MiddleName = jQuery.map(objdata, function (n, i) { return n.MidleName != null ? n.MidleName : " ";});
+      var LastName = objdata.map((n, i) => { return n.LastName != null ? n.LastName : " "; });
+      var Address1 = jQuery.map(objdata, function (n, i) { return n.Address1 != null ? n.Address1 : " "; });
+      var Address2 = jQuery.map(objdata, function (n, i) { return n.Address2 != null ? n.Address2 : " "; });
+      var Address3 = jQuery.map(objdata, function (n, i) { return n.Address3 != null ? n.Address3 : " "; });
+      var Location = jQuery.map(objdata, function (n, i) { return n.LocationName != null ? n.LocationName : " "; });
+      var MobileNo = jQuery.map(objdata, function (n, i) { return n.MobileNo != null ? n.MobileNo : " "; });
+      var PhoneNo = jQuery.map(objdata, function (n, i) { return n.PhoneNo != null ? n.PhoneNo : " "; });
+      var ContactPerson = jQuery.map(objdata, function (n, i) { return n.ContactPerson != null ? n.ContactPerson : " ";  });
+      var documentDefinition = {
+        info: {
+          title: 'Customer Master',
+        },
+        pageSize: {
+          width: 1350,
+          height: 1300
+        },
+        pageOrientation: 'landscape',
+        pageMargins: [10, 10, 10, 10],
+        content: [
+          { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          { text: 'Doctor Master', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          {
+            style: 'tableExample',
+            table: {
+              headerRows: 1,
+              widths: [100, 100, 100, 100, 100, 100, 100, 140, 120, 120, 120],
+              body: [
+                [{ text: 'UIN', style: 'tableHeader' },
+                  { text: 'Name', style: 'tableHeader' },
+                  { text: 'Middle Name', style: 'tableHeader' },
+                  { text: 'Last Name', style: 'tableHeader' },
+                  { text: 'Address1', style: 'tableHeader' },
+                  { text: 'Address2', style: 'tableHeader' },
+                  { text: 'Address3', style: 'tableHeader' },
+                  { text: 'Location', style: 'tableHeader' },
+                  { text: 'Mobile No', style: 'tableHeader' },
+                  { text: ' Phone No', style: 'tableHeader' },
+                  { text: 'Contact Person', style: 'tableHeader' },
+                ],
+                [UIN,
+                  Name,
+                  MiddleName,
+                  LastName,
+                  Address1,
+                  Address2,
+                  Address3,
+                  Location,
+                  MobileNo,
+                  PhoneNo,
+                  ContactPerson,
+                ]
+              ]
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+              fillColor: function (rowIndex, node, columnIndex) {
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+              }
+            }
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOpacityExample: {
+            margin: [0, 5, 0, 15],
+            fillColor: 'blue',
+            fillOpacity: 0.3
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+      };
+      pdfMake.createPdf(documentDefinition).download('Customer Master.pdf');
+    }
+    else if (Modulename == "SurgeryDischarge") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
+      var companyname = localStorage.getItem("Companyname");
+      var Stringfydfata = JSON.stringify(this.dataSource.data);
+      var objdata = JSON.parse(Stringfydfata);
+      var UIN = objdata.map((n, i) => { return n.UIN != null ? n.UIN : " "; });
+      var Name = jQuery.map(objdata, function (n, i) { return n.Name; });
+      var Age = jQuery.map(objdata, function (n, i) { return n.Age != null ? n.Age : " "; });
+      var ocular = objdata.map((n, i) => { return n.ocular != null ? n.ocular : " "; });
+      var Gender = jQuery.map(objdata, function (n, i) { return n.Gender != null ? n.Gender : " "; });
+      var documentDefinition = {
+        info: {
+          title: 'Surgery Discharge',
+        },
+        pageSize: {
+          width: 1350,
+          height: 1300
+        },
+        pageOrientation: 'landscape',
+        pageMargins: [10, 10, 10, 10],
+        content: [
+          { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          { text: 'Surgery Discharge', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          {
+            style: 'tableExample',
+            table: {
+              headerRows: 1,
+              widths: [100, 100, 100, 100, 100],
+              body: [
+                [{ text: 'UIN', style: 'tableHeader' },
+                { text: 'Name', style: 'tableHeader' },
+                { text: 'Age', style: 'tableHeader' },
+                { text: 'Ocular', style: 'tableHeader' },
+                { text: 'Gender', style: 'tableHeader' },
+                ],
+                [UIN,
+                  Name,
+                  Age,
+                  ocular,
+                  Gender
+                ]
+              ]
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+              fillColor: function (rowIndex, node, columnIndex) {
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+              }
+            }
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOpacityExample: {
+            margin: [0, 5, 0, 15],
+            fillColor: 'blue',
+            fillOpacity: 0.3
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+      };
+      pdfMake.createPdf(documentDefinition).download('Surgery Discharge.pdf');
+    }
+    else if (Modulename == "DischargedPatientDetails") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
+      var companyname = localStorage.getItem("Companyname");
+      var Stringfydfata = JSON.stringify(this.dataSource.data);
+      var objdata = JSON.parse(Stringfydfata);
+      var UIN = objdata.map((n, i) => { return n.UIN != null ? n.UIN : " "; });
+      var Name = jQuery.map(objdata, function (n, i) { return n.Name; });
+      var Age = jQuery.map(objdata, function (n, i) { return n.Age != null ? n.Age : " "; });
+      var Gender = jQuery.map(objdata, function (n, i) { return n.Gender != null ? n.Gender : " "; });
+      var SurgeryDate = objdata.map((n, i) => { return n.SurgeryDate != null ? n.SurgeryDate : " "; });
+      var DischargeDate = objdata.map((n, i) => { return n.DischargeDate != null ? n.DischargeDate : " "; });
+      var documentDefinition = {
+        info: {
+          title: 'Discharged Patients',
+        },
+        pageSize: {
+          width: 1350,
+          height: 1300
+        },
+        pageOrientation: 'landscape',
+        pageMargins: [10, 10, 10, 10],
+        content: [
+          { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          { text: 'Discharged Patients', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          {
+            style: 'tableExample',
+            table: {
+              headerRows: 1,
+              widths: [100, 100, 100, 100, 100],
+              body: [
+                [{ text: 'UIN', style: 'tableHeader' },
+                { text: 'Name', style: 'tableHeader' },
+                { text: 'Age', style: 'tableHeader' },
+                { text: 'Gender', style: 'tableHeader' },
+                { text: 'SurgeryDate', style: 'tableHeader' },
+                { text: 'DischargeDate', style: 'tableHeader' },
+                ],
+                [UIN,
+                  Name,
+                  Age,
+                  Gender,
+                  SurgeryDate,
+                  DischargeDate,
+                ]
+              ]
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+              fillColor: function (rowIndex, node, columnIndex) {
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+              }
+            }
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOpacityExample: {
+            margin: [0, 5, 0, 15],
+            fillColor: 'blue',
+            fillOpacity: 0.3
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+      };
+      pdfMake.createPdf(documentDefinition).download('Discharged Patients.pdf');
+    }
+    else if (Modulename == "IOProcedureTemplate") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
+      var companyname = localStorage.getItem("Companyname");
+      var Stringfydfata = JSON.stringify(this.dataSource.data);
+      var objdata = JSON.parse(Stringfydfata);
+      var IcdSpeciality = objdata.map((n, i) => { return n.icdspeciality != null ? n.icdspeciality : " "; });
+      var SurgeryDescription = objdata.map((n, i) => { return n.SurgeryDescription != null ? n.SurgeryDescription : " "; });
+      var documentDefinition = {
+        info: {
+          title: 'IO Procedure Template',
+        },
+        pageSize: {
+          width: 1350,
+          height: 1300
+        },
+        pageOrientation: 'landscape',
+        pageMargins: [10, 10, 10, 10],
+        content: [
+          { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          { text: 'IO Procedure Template', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          {
+            style: 'tableExample',
+            table: {
+              headerRows: 1,
+              widths: [150, 150],
+              body: [
+                [{ text: 'Icd Speciality', style: 'tableHeader' },
+                  { text: 'Surgery Description', style: 'tableHeader' },
+                ],
+                [IcdSpeciality,
+                  SurgeryDescription,
+                ]
+              ]
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+              fillColor: function (rowIndex, node, columnIndex) {
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+              }
+            }
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOpacityExample: {
+            margin: [0, 5, 0, 15],
+            fillColor: 'blue',
+            fillOpacity: 0.3
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+      };
+      pdfMake.createPdf(documentDefinition).download('IOProcedureTemplate.pdf');
+    }
+    else if (Modulename == "Drugmaster") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
+      var companyname = localStorage.getItem("Companyname");
+      var Stringfydfata = JSON.stringify(this.dataSource.data);
+      var objdata = JSON.parse(Stringfydfata);
+      var Brand = objdata.map((n, i) => { return n.Brand != null ? n.Brand : " "; });
+      var Generic = objdata.map((n, i) => { return n.MedicineName != null ? n.MedicineName : " "; });
+      var DrugGroup = objdata.map((n, i) => { return n.DrugGroup != null ? n.DrugGroup : " "; });
+      var Manufacturer = objdata.map((n, i) => { return n.Manufacturer != null ? n.Manufacturer : " "; });
+      var UOM = objdata.map((n, i) => { return n.UOM != null ? n.UOM : " "; });
+      var Rate = objdata.map((n, i) => { return n.Rate != null ? n.Rate : " "; });
+      var GST = objdata.map((n, i) => { return n.GST != null ? n.GST : " "; });
+      var CESSPercentage = objdata.map((n, i) => { return n.CESSPercentage != null ? n.CESSPercentage : " "; });
+      var AdditionalCESSPercentage = objdata.map((n, i) => { return n.AdditionalCESSPercentage != null ? n.AdditionalCESSPercentage : " "; });
+      var documentDefinition = {
+        info: {
+          title: 'Drug Master',
+        },
+        pageSize: {
+          width: 1350,
+          height: 1300
+        },
+        pageOrientation: 'landscape',
+        pageMargins: [10, 10, 10, 10],
+        content: [
+          { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          { text: 'Drug Master', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          {
+            style: 'tableExample',
+            table: {
+              headerRows: 1,
+              widths: [170, 170,100,170,80,100,40,40,40],
+              body: [
+                [{ text: 'Brand', style: 'tableHeader' },
+                  { text: 'Generic', style: 'tableHeader' },
+                  { text: 'Drug Group', style: 'tableHeader' },
+                  { text: 'Manufacturer', style: 'tableHeader' },
+                  { text: 'UOM', style: 'tableHeader' },
+                  { text: 'Rate', style: 'tableHeader' },
+                  { text: 'Tax %', style: 'tableHeader' },
+                  { text: 'Tax 1 %', style: 'tableHeader' },
+                  { text: 'Tax 2 %', style: 'tableHeader' },
+                ],
+                [Brand,Generic,DrugGroup, Manufacturer, UOM, Rate, GST, CESSPercentage, AdditionalCESSPercentage]
+              ]
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+              fillColor: function (rowIndex, node, columnIndex) {
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+              }
+            }
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOpacityExample: {
+            margin: [0, 5, 0, 15],
+            fillColor: 'blue',
+            fillOpacity: 0.3
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+      };
+      pdfMake.createPdf(documentDefinition).download('Drug Master.pdf');
+    }
+    else if (Modulename == "DrugGroup") {
+      if (this.dataSource.data.length == 0) {
+        return
+      }
+      var companyname = localStorage.getItem("Companyname");
+      var Stringfydfata = JSON.stringify(this.dataSource.data);
+      var objdata = JSON.parse(Stringfydfata);
+      var Description = objdata.map((n, i) => { return n.Description != null ? n.Description : " "; });
+      var DrugFormName = objdata.map((n, i) => { return n.DrugFormName != null ? n.DrugFormName : " "; });
+      var RetestInterval = objdata.map((n, i) => { return n.RetestInterval != null ? n.RetestInterval : " "; });
+      var RetestCriticalInterval = objdata.map((n, i) => { return n.RetestCriticalInterval != null ? n.RetestCriticalInterval : " "; });
+      var SideEffects = objdata.map((n, i) => { return n.SideEffects != null ? n.SideEffects : " "; });
+      var Precautions = objdata.map((n, i) => { return n.Precautions != null ? n.Precautions : " "; });
+      var Overdose = objdata.map((n, i) => { return n.Overdose != null ? n.Overdose : " "; });
+      var documentDefinition = {
+        info: {
+          title: 'Generic Medicine Master',
+        },
+        pageSize: {
+          width: 1350,
+          height: 1300
+        },
+        pageOrientation: 'landscape',
+        pageMargins: [10, 10, 10, 10],
+        content: [
+          { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          { text: 'Generic Medicine Master', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
+          {
+            style: 'tableExample',
+            table: {
+              headerRows: 1,
+              widths: [250, 100, 70, 70, 250, 100, 100],
+              body: [
+                [{ text: 'Description', style: 'tableHeader' },
+                  { text: 'Drug Form', style: 'tableHeader' },
+                  { text: 'Retest Interval', style: 'tableHeader' },
+                  { text: 'Retest Critical Interval', style: 'tableHeader' },
+                  { text: 'SideEffects', style: 'tableHeader' },
+                  { text: 'Precautions', style: 'tableHeader' },
+                  { text: 'Overdose', style: 'tableHeader' },
+                ],
+                [Description, DrugFormName, RetestInterval, RetestCriticalInterval, SideEffects, Precautions, Overdose]
+              ]
+            },
+            layout: {
+              hLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+              fillColor: function (rowIndex, node, columnIndex) {
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+              }
+            }
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 10]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5]
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15]
+          },
+          tableOpacityExample: {
+            margin: [0, 5, 0, 15],
+            fillColor: 'blue',
+            fillOpacity: 0.3
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 13,
+            color: 'black'
+          }
+        },
+      };
+      pdfMake.createPdf(documentDefinition).download('Generic Medicine Master.pdf');
+    }
   }
 
 

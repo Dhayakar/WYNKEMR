@@ -6353,8 +6353,8 @@ button.close {
 
 .modal-header {
   padding: 15px;
-  background-color: darkgray;
-  color: white;
+  background-color: white;
+  color: black;
 }
 
   .modal-header .close {

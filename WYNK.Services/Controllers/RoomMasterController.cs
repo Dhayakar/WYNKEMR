@@ -22,7 +22,11 @@ namespace WYNK.Services.Controllers
         {
             _repoWrapper = repoWrapper;
         }
-
+        [HttpGet("getConcerntextfile/{CompanyID}")]
+        public dynamic getConcerntextfile(int CompanyID)
+        {
+            return _repoWrapper.RoomMasterViewM.getConcerntextfile(CompanyID);
+        }
         [HttpPost("insertdata")]
         public dynamic insertdata([FromBody]RoomMasterViewM roomMaster)
         {
@@ -35,13 +39,17 @@ namespace WYNK.Services.Controllers
             return _repoWrapper.RoomMasterViewM.getRoomDet(CompanyID, roomID);
         }
 
-        [HttpPost("Updatedata/{ID}")]
-        public dynamic Updatedata([FromBody] RoomMasterViewM roomMaster, int ID)
+        [HttpPost("Updatedata")]
+        public dynamic Updatedata([FromBody] RoomMasterViewM roomMaster)
         {
-            return _repoWrapper.RoomMasterViewM.Updatedata(roomMaster, ID);
+            return _repoWrapper.RoomMasterViewM.Updatedata(roomMaster);
         }
-
-
+        [HttpGet("getRoomTariff/{CmpID}")]
+        public RoomMasterViewM getRoomTariff(int CmpID)
+        {
+            return _repoWrapper.RoomMasterViewM.getRoomTariff(CmpID);
+        }
+     
 
     }
 }

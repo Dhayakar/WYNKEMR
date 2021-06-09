@@ -27,7 +27,7 @@ namespace WYNK.Data.Repository.Implementation
         }
 
 
-        public dynamic GetfinalopDetails(string UIN, int id)
+        public dynamic GetfinalopDetails(string Search, int id)
         {
 
             var registration = WYNKContext.Registration.ToList();
@@ -40,52 +40,30 @@ namespace WYNK.Data.Repository.Implementation
 
 
 
-
-            var groups = (from REF in WYNKContext.OpticalPrescription.Where(u => u.UIN.Equals(Convert.ToString(UIN), StringComparison.OrdinalIgnoreCase) && u.CMPID == id)
-                          join us in user on
-                          REF.CreatedBy equals us.Userid
-                          join doc in docmas on
-                          us.Username equals doc.EmailID
-                          join usr in userrole on
-                          us.Username equals usr.UserName
-
-
-                          select new
-                          {
-                              RID = REF.RegistrationTranID,
-                              Pdate = REF.CreatedUTC,
-                              DName = doc.Firstname + " " + doc.MiddleName + " " + doc.LastName,
-                              Role = usr.RoleDescription,
-                              uin = registration.Where(x => x.UIN.Equals(Convert.ToString(UIN), StringComparison.OrdinalIgnoreCase)).Select(x => x.UIN).FirstOrDefault(),
-                              name = registration.Where(x => x.UIN.Equals(Convert.ToString(UIN), StringComparison.OrdinalIgnoreCase)).Select(x => x.Name + " " + x.MiddleName + " " + x.LastName).FirstOrDefault(),
-                              Gender = registration.Where(x => x.UIN.Equals(Convert.ToString(UIN), StringComparison.OrdinalIgnoreCase)).Select(x => x.Gender).FirstOrDefault(),
-                              DateofBirth = PasswordEncodeandDecode.ToAgeString(registration.Where(x => x.UIN.Equals(Convert.ToString(UIN), StringComparison.OrdinalIgnoreCase)).Select(x => x.DateofBirth).FirstOrDefault()),
-
-                          }).ToList();
-
-
-
-            final.opfinalprescri = (from REF in groups.GroupBy(x => x.RID)
-
+            final.opfinalprescri = (from REF in WYNKContext.OpticalPrescriptionmaster.Where(u => u.UIN.StartsWith(Convert.ToString(Search), StringComparison.OrdinalIgnoreCase)
+                                     || u.Phone.StartsWith(Convert.ToString(Search))
+                                     || u.Name.StartsWith(Convert.ToString(Search), StringComparison.OrdinalIgnoreCase) || u.LastName.StartsWith(Convert.ToString(Search), StringComparison.OrdinalIgnoreCase) && u.CMPID == id)
+                                    join us in user.Where(x => x.CMPID == id) on
+                                    REF.CreatedBy equals us.Userid
+                                    join doc in docmas.Where(x => x.CMPID == id) on
+                                    us.Username equals doc.EmailID
+                                    join usr in userrole.Where(x => x.CMPID == id) on
+                                    us.Username equals usr.UserName
                                     select new opfinalprescri
                                     {
 
-                                        UIN = REF.Select(x => x.uin).FirstOrDefault(),
-                                        Name = REF.Select(x => x.name).FirstOrDefault(),
-                                        Gender = REF.Select(x => x.Gender).FirstOrDefault(),
-                                        DateofBirth = REF.Select(x => x.DateofBirth).FirstOrDefault(),
-                                        Doctorname = REF.Select(x => x.DName).FirstOrDefault(),
-                                        PrescriptionDate = REF.Select(x => x.Pdate).FirstOrDefault(),
-                                        RegistrationTranID = REF.Select(x => x.RID).FirstOrDefault(),
-                                        Role = REF.Select(x => x.Role).FirstOrDefault(),
+                                        RegistrationTranID = REF.RegistrationID,
+                                        PrescriptionDate = REF.PrescriptionDate,
+                                        Doctorname = doc.Firstname + " " + doc.MiddleName + " " + doc.LastName,
+                                        Role = usr.RoleDescription,
+                                        UIN = REF.UIN,
+                                        Name = REF.Name + " " + REF.MiddleName + " " + REF.LastName,
+                                        Gender = REF.Gender,
+                                        DateofBirth = PasswordEncodeandDecode.ToAgeString(REF.DateofBirth),
                                     }).ToList();
 
 
             return final;
-
-
-
-
 
         }
 

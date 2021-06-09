@@ -148,6 +148,8 @@ namespace WYNK.Data.Repository
                            select new
                            {
                                PatientName = WYNKContext.Registration.Where(x => x.CMPID == Cmpid && x.UIN == SurgeryList.UIN).Select(x => String.Concat(x.Name + " " + (x.MiddleName != null ? x.MiddleName : " ") + " " + x.LastName)).FirstOrDefault(),
+                               ClinicVisitDate = WYNKContext.Registration.Where(x => x.CMPID == Cmpid && x.UIN == SurgeryList.UIN).Select(x => x.DateofRegistration).FirstOrDefault(),
+                               CampVisitDate = WYNKContext.CampRegistration.Where(x => x.CMPID == Cmpid && x.CampUIN == SurgeryList.UIN).Select(x => x.DateofRegistration).FirstOrDefault(),
                                SurgeryDate = SurgeryList.DateofSurgery,
                                Age = PasswordEncodeandDecode.ToAgeString(WYNKContext.Registration.Where(x => x.CMPID == Cmpid && x.UIN == SurgeryList.UIN).Select(x => x.DateofBirth).FirstOrDefault())
                            }).ToList();

@@ -727,7 +727,7 @@ namespace WYNK.Data.Repository.Implementation
                             {
                                 var PatCurMedication = new PatientCurrentMedication();
                                 PatCurMedication.GenericDrugDescription = item.GenericDescription;
-                                PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.Where(x => x.UIN == UIN).Select(x => x.RegistrationTranID).LastOrDefault();
+                                PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.OrderByDescending(x => x.UIN == UIN).Select(x => x.RegistrationTranID).FirstOrDefault();
                                 PatCurMedication.UIN = UIN;
                                 PatCurMedication.VisitDate = DateTime.Now;
                                 if (item.Eye == "OD")
@@ -738,16 +738,27 @@ namespace WYNK.Data.Repository.Implementation
                                 {
                                     PatCurMedication.IsOS = true;
                                 }
-                                else
+                                else if (item.Eye == "OU")
                                 {
                                     PatCurMedication.IsOU = true;
                                 }
-                                PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                                if (item.YearMonths == "")
+                                {
+                                    PatCurMedication.Since = item.YearMonths != "" ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                                }
+                                else if (item.YearMonths == " ")
+                                {
+                                    PatCurMedication.Since = item.YearMonths != " " ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                                }
+                                else
+                                {
+                                    PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                                }
                                 PatCurMedication.ProgressStatusID = Convert.ToInt32(item.Status);
-
                                 PatCurMedication.Frequency = item.FrequencyID;
                                 PatCurMedication.PrescribedByDoctorName = item.PrescribedDoctor;
-                                PatCurMedication.Cmpid = cmpid;
+                                PatCurMedication.Remarks = item.Remarks;
+                                PatCurMedication.Cmpid = cmpids;
                                 WYNKContext.PatientCurrentMedication.Add(PatCurMedication);
                             }
                             WYNKContext.SaveChanges();
@@ -971,7 +982,7 @@ namespace WYNK.Data.Repository.Implementation
                                 {
                                     var PatCurMedication = new PatientCurrentMedication();
                                     PatCurMedication.GenericDrugDescription = item.GenericDescription;
-                                    PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.Where(x => x.UIN == UIN).Select(x => x.RegistrationTranID).LastOrDefault();
+                                    PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.OrderByDescending(x => x.UIN == UIN).Select(x => x.RegistrationTranID).FirstOrDefault();
                                     PatCurMedication.UIN = UIN;
                                     PatCurMedication.VisitDate = DateTime.Now;
                                     if (item.Eye == "OD")
@@ -982,16 +993,27 @@ namespace WYNK.Data.Repository.Implementation
                                     {
                                         PatCurMedication.IsOS = true;
                                     }
-                                    else
+                                    else if (item.Eye == "OU")
                                     {
                                         PatCurMedication.IsOU = true;
                                     }
-                                    PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                                    if (item.YearMonths == "")
+                                    {
+                                        PatCurMedication.Since = item.YearMonths != "" ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                                    }
+                                    else if (item.YearMonths == " ")
+                                    {
+                                        PatCurMedication.Since = item.YearMonths != " " ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                                    }
+                                    else
+                                    {
+                                        PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                                    }
                                     PatCurMedication.ProgressStatusID = Convert.ToInt32(item.Status);
-
                                     PatCurMedication.Frequency = item.FrequencyID;
                                     PatCurMedication.PrescribedByDoctorName = item.PrescribedDoctor;
-                                    PatCurMedication.Cmpid = cmpid;
+                                    PatCurMedication.Remarks = item.Remarks;
+                                    PatCurMedication.Cmpid = cmpids;
                                     WYNKContext.PatientCurrentMedication.Add(PatCurMedication);
                                 }
                                 WYNKContext.SaveChanges();
@@ -1227,7 +1249,7 @@ namespace WYNK.Data.Repository.Implementation
                             {
                                 var PatCurMedication = new PatientCurrentMedication();
                                 PatCurMedication.GenericDrugDescription = item.GenericDescription;
-                                PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.Where(x => x.UIN == UIN).Select(x => x.RegistrationTranID).LastOrDefault();
+                                PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.OrderByDescending(x => x.UIN == UIN).Select(x => x.RegistrationTranID).FirstOrDefault();
                                 PatCurMedication.UIN = UIN;
                                 PatCurMedication.VisitDate = DateTime.Now;
                                 if (item.Eye == "OD")
@@ -1238,16 +1260,27 @@ namespace WYNK.Data.Repository.Implementation
                                 {
                                     PatCurMedication.IsOS = true;
                                 }
-                                else
+                                else if (item.Eye == "OU")
                                 {
                                     PatCurMedication.IsOU = true;
                                 }
-                                PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                                if (item.YearMonths == "")
+                                {
+                                    PatCurMedication.Since = item.YearMonths != "" ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                                }
+                                else if (item.YearMonths == " ")
+                                {
+                                    PatCurMedication.Since = item.YearMonths != " " ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                                }
+                                else
+                                {
+                                    PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                                }
                                 PatCurMedication.ProgressStatusID = Convert.ToInt32(item.Status);
-
                                 PatCurMedication.Frequency = item.FrequencyID;
                                 PatCurMedication.PrescribedByDoctorName = item.PrescribedDoctor;
-                                PatCurMedication.Cmpid = cmpid;
+                                PatCurMedication.Remarks = item.Remarks;
+                                PatCurMedication.Cmpid = cmpids;
                                 WYNKContext.PatientCurrentMedication.Add(PatCurMedication);
                             }
                             WYNKContext.SaveChanges();
@@ -1467,7 +1500,7 @@ namespace WYNK.Data.Repository.Implementation
                         {
                             var PatCurMedication = new PatientCurrentMedication();
                             PatCurMedication.GenericDrugDescription = item.GenericDescription;
-                            PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.Where(x => x.UIN == UIN).Select(x => x.RegistrationTranID).LastOrDefault();
+                            PatCurMedication.RegistrationTranID = WYNKContext.RegistrationTran.OrderByDescending(x => x.UIN == UIN).Select(x => x.RegistrationTranID).FirstOrDefault();
                             PatCurMedication.UIN = UIN;
                             PatCurMedication.VisitDate = DateTime.Now;
                             if (item.Eye == "OD")
@@ -1478,16 +1511,27 @@ namespace WYNK.Data.Repository.Implementation
                             {
                                 PatCurMedication.IsOS = true;
                             }
-                            else
+                            else if (item.Eye == "OU")
                             {
                                 PatCurMedication.IsOU = true;
                             }
-                            PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                            if (item.YearMonths == "")
+                            {
+                                PatCurMedication.Since = item.YearMonths != "" ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                            }
+                            else if (item.YearMonths == " ")
+                            {
+                                PatCurMedication.Since = item.YearMonths != " " ? Convert.ToDateTime(item.YearMonths) : (DateTime?)null;
+                            }
+                            else
+                            {
+                                PatCurMedication.Since = Convert.ToDateTime(item.YearMonths);
+                            }
                             PatCurMedication.ProgressStatusID = Convert.ToInt32(item.Status);
-
                             PatCurMedication.Frequency = item.FrequencyID;
                             PatCurMedication.PrescribedByDoctorName = item.PrescribedDoctor;
-                            PatCurMedication.Cmpid = cmpid;
+                            PatCurMedication.Remarks = item.Remarks;
+                            PatCurMedication.Cmpid = cmpids;
                             WYNKContext.PatientCurrentMedication.Add(PatCurMedication);
                         }
                         WYNKContext.SaveChanges();

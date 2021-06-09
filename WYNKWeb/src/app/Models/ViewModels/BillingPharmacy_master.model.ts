@@ -97,8 +97,8 @@ export class UINSearchDetails {
 
 export class DateMedicalPrescription {
   PatientName: string;
-  // Age: number;
-  // Gender: string;
+  Age: string;
+  Gender: string;
   PrescribedDoctor: string;
   PrescribedDate: Date;
   RegistrationTranID: number;

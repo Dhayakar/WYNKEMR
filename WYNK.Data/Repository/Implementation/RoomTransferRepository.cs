@@ -46,7 +46,7 @@ namespace WYNK.Data.Repository.Implementation
                                                      RoomNo = RD.RoomNumber,
                                                      BedNo = RD.BedNo,
                                                      RoomType = ROO.RoomType,
-                                                     RestRoomType = Enum.GetName(typeof(RestRoomType), RD.RestRoomType),
+                                                   //  RestRoomType = Enum.GetName(typeof(RestRoomType), RD.RestRoomType),
                                                      Status = ON.ParentDescription,
                                                      FromRoomDate = ROC.RoomOccupationFromDate,
                                                      FromRoomTime = ROC.RoomOccupationFromTime,
@@ -103,7 +103,7 @@ namespace WYNK.Data.Repository.Implementation
                                                          RoomNo = RD.RoomNumber,
                                                          BedNo = RD.BedNo,
                                                          RoomType = RO.RoomType,
-                                                         RestRoomType = Enum.GetName(typeof(RestRoomType), RD.RestRoomType),
+                                                    //     RestRoomType = Enum.GetName(typeof(RestRoomType), RD.RestRoomType),
                                                          Status = On.ParentDescription,
                                                          
 

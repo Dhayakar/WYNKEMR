@@ -8,6 +8,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TableModule } from 'primeng/table';
+//import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatNativeDateModule } from '@angular/material';
 import { MatInputModule } from '@angular/material/input';
@@ -69,12 +70,15 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DashboardnewregisteredvaluesComponent} from './Views/dashboardnewregisteredvalues/dashboardnewregisteredvalues.component';
 import { AccessprivilegesComponent } from './Views/accessprivileges/accessprivileges.component';
+//import { IcdGroup, IcdSpeciality } from './Views/icdmaster/icdmaster.component';
 import { MomentModule } from 'angular2-moment';
 import { SelectAutocompleteModule } from 'mat-select-autocomplete';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { MouseEnterLeaveDebounceDirective } from './mouse-enter-leave-debounce.directive';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgShortcutModule, NgShortcutConfig } from 'ng-shortcut';
+//import { CampmasterComponent } from './Views/campmaster/campmaster.component';
+//import { CamporganizationComponent } from './Views/camporganization/camporganization.component';
 
 
 
@@ -98,7 +102,8 @@ const shortcutConfig: NgShortcutConfig[] = [
     DashboardnewregisteredvaluesComponent,
     AccessprivilegesComponent,
     MouseEnterLeaveDebounceDirective,
-
+    //CampmasterComponent,
+    //CamporganizationComponent
   ],
   imports: [
     NgShortcutModule.forRoot(shortcutConfig),

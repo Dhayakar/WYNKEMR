@@ -58,7 +58,7 @@ export class OpticalComponent implements OnInit {
   constructor(public commonService: CommonService<OpticalPrescription>,
     public datepipe: DatePipe, public el: ElementRef,
     public appComponent: AppComponent,
-    private formBuilder: FormBuilder, public dialog: MatDialog, private router: Router, ) {
+    private formBuilder: FormBuilder, public dialog: MatDialog, private router: Router,) {
   }
 
   accessdata;

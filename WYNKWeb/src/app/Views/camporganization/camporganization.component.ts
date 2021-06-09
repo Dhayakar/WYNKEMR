@@ -5,6 +5,12 @@ import { FormControl, Validators, NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material';
 import { Router } from '@angular/router';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+declare var $: any;
+declare var jQuery: any;
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-camporganization',
@@ -13,7 +19,121 @@ import { Router } from '@angular/router';
 })
 export class CamporganizationComponent implements OnInit {
 
-  constructor(public commonService: CommonService<campmasterViewModel>, private router: Router ) { }
+  constructor(public commonService: CommonService<campmasterViewModel>, private router: Router) { }
+
+
+  ConvertPDF() {
+    debugger;
+    var companyname = localStorage.getItem("Companyname");
+    var Stringfydfata = JSON.stringify(this.dataSourceorg.data);
+    var objdata = JSON.parse(Stringfydfata);
+    var Campname = jQuery.map(objdata, function (n, i) { return n.OrganizationName; });
+    var orgtype = jQuery.map(objdata, function (n, i) { return n.OrganizationType; });
+    var addredd = jQuery.map(objdata, function (n, i) { return n.Address1; });
+    var city = jQuery.map(objdata, function (n, i) { return n.City; });
+    var state = jQuery.map(objdata, function (n, i) { return n.State; });
+    var country = jQuery.map(objdata, function (n, i) { return n.Country; });
+    var phone = jQuery.map(objdata, function (n, i) { return n.Phone; });
+    var documentDefinition = {
+      info: {
+        title: 'Camp Organization Details',
+      },
+      pageSize: {
+        width: 800,
+        height: 900
+      },
+      pageOrientation: 'landscape',
+      pageMargins: [10, 10, 10, 10],
+      content: [
+        { text: 'Organization : ' + companyname, fontSize: 18, background: 'lightgray', color: 'blue', decoration: 'underline' },
+        {
+          style: 'tableExample',
+          table: {
+            headerRows: 1,
+            widths: [120, 100, 100, 100, 100, 100, 150],
+            body: [
+              [{ text: 'Camp Organization', style: 'tableHeader' },
+              { text: 'Organization Type', style: 'tableHeader' },
+              { text: 'Address', style: 'tableHeader' },              
+              { text: 'City', style: 'tableHeader' },
+              { text: 'State', style: 'tableHeader' },
+                { text: 'Country', style: 'tableHeader' },
+              { text: 'Phone', style: 'tableHeader' }],
+              [Campname,
+                orgtype,
+                addredd,                
+                city,
+                state,
+                country,
+                phone,
+              ]
+            ]
+          },
+          layout: {
+            hLineWidth: function (i, node) {
+              return (i === 0 || i === node.table.body.length) ? 2 : 1;
+            },
+            vLineWidth: function (i, node) {
+              return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+            },
+            hLineColor: function (i, node) {
+              return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+            },
+            vLineColor: function (i, node) {
+              return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+            },
+            fillColor: function (rowIndex, node, columnIndex) {
+              return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+            }
+          }
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 10]
+        },
+        subheader: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 10, 0, 5]
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15]
+        },
+        tableOpacityExample: {
+          margin: [0, 5, 0, 15],
+          fillColor: 'blue',
+          fillOpacity: 0.3
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 13,
+          color: 'black'
+        }
+      },
+    };
+    pdfMake.createPdf(documentDefinition).download('Camp Organization.pdf');
+  }
+  ConvertEXCEL() {
+    let element = document.getElementById('customersone');
+    var cloneTable = element.cloneNode(true);
+    jQuery(cloneTable).find('.remove-this').remove();
+
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(cloneTable);
+    var wscols = [
+      { wch: 10 },
+      { wch: 12 },
+      { wch: 30 },
+      { wch: 10 }
+    ];
+    ws['!cols'] = wscols;
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Camp Organization');
+    XLSX.writeFile(wb, "Camp Organization.xlsx");
+  }
+
   accessdata;
   backdrop;
   accesspopup;

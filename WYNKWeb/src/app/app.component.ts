@@ -49,7 +49,7 @@ export class AppComponent {
     private idle: Idle, private keepalive: Keepalive,
     private change: ChangeDetectorRef,
       private _sanitizer: DomSanitizer,
-    // dayakar
+    // private idle: Idle, private keepalive: Keepalive
   ) {
     
     this.myForm = this.formBuilder.group({
@@ -101,7 +101,8 @@ export class AppComponent {
         console.log(this.idleState);
       }
       });
-//YES
+      //keepalive.interval(15);
+      //keepalive.onPing.subscribe(() => this.lastPing = new Date());
       this.reset();
   }
   reset() {

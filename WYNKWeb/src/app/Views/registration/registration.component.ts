@@ -1111,14 +1111,14 @@ export class RegistrationComponent implements OnInit {
       }
     });
   }
-  webcamImageHidetrue: boolean = false;
+  webcamImageHidetrue: boolean = false; 
 
   triggerSnapshot() {
     debugger;
     this.webcamImageHidetrue = true;
     this.trigger.next();
     this.showWebcam = !this.showWebcam;
-   
+
   }
   Clearimage() {
     this.hidewebcamtrue = true;
@@ -3889,10 +3889,10 @@ export class RegistrationComponent implements OnInit {
       .then(this.successCallback.bind(this), this.errorCallback.bind(this));
   }
 
-  webcamopen() {
-      this.trigger.next();
-      this.showWebcam = !this.showWebcam;    
-  }
+  //webcamopen() {
+  //    this.trigger.next();
+  //    this.showWebcam = !this.showWebcam;    
+  //}
   Closevideorecording() {
     this.Hidevideoclip = false;
   }

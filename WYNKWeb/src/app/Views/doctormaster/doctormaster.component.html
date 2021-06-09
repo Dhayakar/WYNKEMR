@@ -1,7 +1,7 @@
 <form #DoctorForm="ngForm" name="DoctorForm" (keydown.enter)="$event.preventDefault()" novalidate>
   <div class="col-sm-12">
     <div class="row">
-      <h5 align="center" class="card-header bg-success text-white rounded-top">
+      <h5 align="center" class="card-header">
         <b>Doctor &nbsp; Master</b>
       </h5>
     </div>
@@ -153,7 +153,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-sm-1  ml-15p">
+            <div class="col-sm-1  ml-7p">
               <button mat-icon-button [disabled]="SpecialityAccess" type="button">
                 <mat-icon class="grab" matTooltip="Add Speciality" (click)="SpecialityAccess !=true ? ClickCode():AccessDenied()">add</mat-icon>
               </button>
@@ -171,7 +171,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-sm-1 ml-15p">
+            <div class="col-sm-1 ml-7p">
               <button mat-icon-button [disabled]="EngageAccess" type="button">
                 <mat-icon class="grab" matTooltip="Add Engagement" (click)="EngageAccess !=true ? EngageClickPop():AccessDenied()">add</mat-icon>
               </button>
@@ -236,7 +236,7 @@
   </div>
   <div class="col-sm-12 m-3">
     <div class="col-sm-12 pb25">
-      <div class="col-sm-4  sub-section btn-wrap f-r">
+      <div class="col-sm-5  sub-section btn-wrap f-r">
         <button type="button" class="btn btn-warning-default" (click)="CancelClk()"><strong>Cancel</strong></button>
         <button type="button" *ngIf="doctorid.value!=0" class="btn btn-warning-default" [disabled]="isNextDelete" (click)="deleteclk(doctorid.value)"><strong>Delete</strong></button>
         <button type="submit" [disabled]="isNextupdate" *ngIf="doctorid.value != 0" (click)="Updateclk(DoctorForm,doctorid.value)" class="success btn btn-primary">Submit</button>

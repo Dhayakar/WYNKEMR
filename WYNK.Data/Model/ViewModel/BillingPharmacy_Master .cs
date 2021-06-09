@@ -299,7 +299,7 @@ namespace WYNK.Data.Model.ViewModel
     public class UINSearchDetails
     {
         public string PatientName { get; set; }
-        public int Age { get; set; }
+        public string Age { get; set; }
         public string Gender { get; set; }
         public string PrescribedDoctor { get; set; }
         public DateTime PrescribedDate { get; set; }
@@ -315,7 +315,7 @@ namespace WYNK.Data.Model.ViewModel
 
         public string MedicalPrescriptionNo { get; set; }
         public string PatientName { get; set; }
-        public int Age { get; set; }
+        public string Age { get; set; }
         public string Gender { get; set; }
         public string PrescribedDoctor { get; set; }
         public DateTime? PrescribedDate { get; set; }

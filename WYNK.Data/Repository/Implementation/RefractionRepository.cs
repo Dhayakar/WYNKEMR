@@ -2331,7 +2331,8 @@ namespace WYNK.Data.Repository.Implementation
                     var pdate = WYNKContext.Refraction.Where(x => x.UIN == Addrefraction.UIN).Select(x => x.RegistrationTranID).LastOrDefault();
                     var pdatee = WYNKContext.Refraction.Where(x => x.RegistrationTranID == pdate).Select(x => x.CreatedUTC).LastOrDefault();
                     var refid = WYNKContext.Refraction.Where(x => x.UIN == Addrefraction.UIN).Select(x => x.RegistrationTranID).LastOrDefault();
-
+                    var masteroptical = WYNKContext.Registration.Where(x => x.UIN == Addrefraction.UIN && x.IsDeleted == false).ToList();
+     
 
                     if (Addrefraction.FINALPRESCRIPTION != null)
                     {
@@ -2359,6 +2360,38 @@ namespace WYNK.Data.Repository.Implementation
                                 var finod = Addrefraction.FINALPRESCRIPTION.Where(x => x.Description == "Final Prescription").ToList();
                                 var finos = Addrefraction.FINALPRESCRIPTION.Where(x => x.Description == "Final Prescription").ToList();
                                 var one = CMPSContext.OneLineMaster.ToList();
+
+                                var opm = WYNKContext.OpticalPrescriptionmaster.Where(x => x.RegistrationID == refid).ToList();
+
+                                if (opm.Count == 0) {
+                                    if (masteroptical.Count() > 0)
+                                    {
+                                        foreach (var item in masteroptical.ToList())
+                                        {
+                                            var Ref = new OpticalPrescriptionmaster();
+
+                                            Ref.UIN = item.UIN;
+                                            Ref.RegistrationID = refid;
+                                            Ref.Name = item.Name;
+                                            Ref.MiddleName = item.MiddleName;
+                                            Ref.LastName = item.LastName;
+                                            Ref.DateofBirth = item.DateofBirth;
+                                            Ref.Gender = item.Gender;
+                                            Ref.Phone = item.Phone;
+                                            Ref.PrescriptionDate = pdatee;
+                                            Ref.CMPID = Addrefraction.cmpid;
+                                            Ref.CreatedUTC = DateTime.UtcNow;
+                                            Ref.CreatedBy = Addrefraction.Createdby;
+                                            WYNKContext.OpticalPrescriptionmaster.AddRange(Ref);
+                                            ErrorLog oErrorLogstran = new ErrorLog();
+                                            object namestr = Ref;
+                                            oErrorLogstran.WriteErrorLogArray("OpticalPrescription", namestr);
+
+                                        }
+
+                                    }
+                                }
+                              
 
                                 if (finod.Count() > 0)
                                 {
@@ -3751,6 +3784,8 @@ namespace WYNK.Data.Repository.Implementation
                                                 select new SquintTraninfo
                                                 {
 
+
+
                                                     IsDVOD = sq.IsDVOD,
                                                     IsDVOS = sq.IsDVOS,
                                                     IsDVOU = sq.IsDVOU,
@@ -3763,6 +3798,9 @@ namespace WYNK.Data.Repository.Implementation
                                                     ID = sq.ID,
                                                     IsActive = sq.IsActive
                                                 }).ToList();
+
+            refractionDetails.UIN = WYNKContext.Refraction.Where(x => x.UIN == UIN).Select(x => x.UIN).LastOrDefault();
+            refractionDetails.TransID = refractionDetails.UIN != null ? WYNKContext.Refraction.Where(x => x.RegistrationTranID == WYNKContext.RegistrationTran.Where(f => f.UIN == refractionDetails.UIN).Select(h => h.RegistrationTranID).LastOrDefault()).Select(d => d.RegistrationTranID).LastOrDefault()  : 0;
 
             return refractionDetails;
         }

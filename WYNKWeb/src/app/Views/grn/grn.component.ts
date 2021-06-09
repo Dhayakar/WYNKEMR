@@ -1334,18 +1334,31 @@ export class GRNComponent implements OnInit {
           this.dataSourcem.data.splice(id, 1);
           this.dataSourcem._updateChangeSubscription();
           this.disableBa = false;
-          Swal.fire(
-            'Deleted!',
-            'Deleted Successfully.',
-            'success'
-          )
+          Swal.fire({
+            type: 'warning',
+            title: 'Deleted Successfully',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'alert-warp',
+              container: 'alert-container',
+            },
+          });
         }
       }
       else {
-        Swal.fire(
-          'Cancelled',
-          'Item Details has not been deleted'
-        )
+        Swal.fire({
+          type: 'warning',
+          title: 'Item Details has not been deleted',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            popup: 'alert-warp',
+            container: 'alert-container',
+          },
+        });
       }
     })
   }
@@ -1367,18 +1380,31 @@ export class GRNComponent implements OnInit {
         if (id !== -1) {
           this.dataSources.data.splice(id, 1);
           this.dataSources._updateChangeSubscription();
-          Swal.fire(
-            'Deleted!',
-            'Deleted Successfully.',
-            'success'
-          )
+          Swal.fire({
+            type: 'warning',
+            title: 'Deleted Successfully',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              popup: 'alert-warp',
+              container: 'alert-container',
+            },
+          });
         }
       }
       else {
-        Swal.fire(
-          'Cancelled',
-          'Item Details has not been deleted'
-        )
+        Swal.fire({
+          type: 'warning',
+          title: 'Item Details has not been deleted',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            popup: 'alert-warp',
+            container: 'alert-container',
+          },
+        });
       }
     })
   }

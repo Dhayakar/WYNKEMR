@@ -899,7 +899,7 @@ export class DashboardnewregisteredvaluesComponent implements OnInit {
   }
   PeriodSearch(FromDate, ToDate) {
     if (FromDate != undefined && ToDate != undefined) {
-      if (FromDate >= ToDate) {
+      if (FromDate > ToDate) {
         Swal.fire({
           type: 'warning',
           title: 'warning',

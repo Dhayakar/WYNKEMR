@@ -312,14 +312,7 @@
                     <ng-container matColumnDef="Quantity">
                       <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Po Qty </th>
                       <td mat-cell *matCellDef="let element;let id = index;">
-                        <input [disabled]="element.PORecd != 0 || element.POCancel != 0"
-                               (keypress)="RestrictNegativeValues($event)" (keyup)="changeValue(id,'ItemQty',$event);changeValueAmount(id,element,'ItemRate')
-                               ;changeItemValue(id,element,'ItemValue');changeValueGrossAmount(id,element,'GrossAmount');changeValueDiscountAmount(id,element,'DiscountAmount')
-                               ;changeGStAmount(id,element,'GSTTaxValue');changeCESSAmount(id,element,'CESSAmount');changeAdditionalCESSAmount(id,element,'AddCESSAmount');
-                               changeValueTotal(id,element,'TotalAmount')" matInput value="{{element.ItemQty}}" type="text" class="form-control tableinputheight"
-                               (keyup.ArrowLeft)="arrowleftamount(id,$event,element)" (keyup.arrowright)="arrowrightamount(id,$event,element)"
-                               (keyup.ArrowDown)="arrowdownamount(id,$event,element)" (keyup.ArrowUp)="arrowupamount(id,$event,element)"
-                               (keyup.enter)="Enteramount(id,$event,element)" autocomplete="off" #Quantityamount>
+                        <input [disabled]="element.PORecd != 0 || element.POCancel != 0" (keypress)="RestrictNegativeValues($event)" (keyup)="changeValue(id,'ItemQty',$event);changeValueAmount(id,element,'ItemRate');changeItemValue(id,element,'ItemValue');changeValueGrossAmount(id,element,'GrossAmount');changeValueDiscountAmount(id,element,'DiscountAmount');changeGStAmount(id,element,'GSTTaxValue');changeCESSAmount(id,element,'CESSAmount');changeAdditionalCESSAmount(id,element,'AddCESSAmount');changeValueTotal(id,element,'TotalAmount')" matInput value="{{element.ItemQty}}" type="text" class="form-control tableinputheight" (keyup.ArrowLeft)="arrowleftamount(id,$event,element)" (keyup.arrowright)="arrowrightamount(id,$event,element)" (keyup.ArrowDown)="arrowdownamount(id,$event,element)" (keyup.ArrowUp)="arrowupamount(id,$event,element)" (keyup.enter)="Enteramount(id,$event,element)" autocomplete="off" #Quantityamount>
                       </td>
                       <td mat-footer-cell *matFooterCellDef> </td>
                     </ng-container>
@@ -517,7 +510,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessClosessss()">&times;</button>
         <h4 class="modal-title">Do you want to cancel?</h4>
@@ -534,7 +527,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalpurchase}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <div class="col-sm-12">
           <div class="row">
@@ -562,9 +555,9 @@
 </div>
 
 <div class="modal" role="dialog" [ngStyle]="{'display':purchaseprint}">
-  <div class="example-box" cdkDrag>
+  <div class="example-box">
     <div class="modal-dialog modal-md">
-      <div class="modal-content">
+      <div class="modal-content" cdkDrag>
         <div class="modal-header">
           <div class="col-sm-12">
             <div class="row">
@@ -605,7 +598,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalpreview}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="modalSuccesspreview()">&times;</button>
         <h5 class="modal-title">
@@ -1115,7 +1108,7 @@
 
 <div class="modal" role="dialog" [ngStyle]="{'display':accesspopup}">
   <div class="modal-dialog modal-md">
-    <div class="modal-content">
+    <div class="modal-content" cdkDrag>
       <div class="modal-header">
         <h6 class="modal-title">PurchaseOrder - View Access</h6>
       </div>

@@ -378,7 +378,7 @@ export class PatientmedicinelistComponent implements OnInit {
       },
       pageOrientation: 'landscape',
       content: [
-        { text: 'Organization : ' + companyname, fontSize: 18, background: 'lightgray', color: 'blue', decoration: 'underline' },
+        { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
         { text: 'Drug Expiry List :- Batch based', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
         {
           style: 'tableExample',
@@ -458,7 +458,7 @@ export class PatientmedicinelistComponent implements OnInit {
       },
       pageOrientation: 'landscape',
       content: [
-        { text: 'Organization : ' + companyname, fontSize: 18, background: 'lightgray', color: 'blue', decoration: 'underline' },
+        { text: companyname, fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
         { text: 'Drug Expiry List :- Serial based', fontSize: 18, background: 'white', color: 'black', decoration: 'underline' },
         {
           style: 'tableExample',

@@ -11,7 +11,7 @@ namespace WYNK.Data.Model
         [Key]
         public int ID { get; set; }
         public int RoomDetailsID { get; set; }
-        public int RestRoomType { get; set; }
+        public string RestRoomType { get; set; }
         public DateTime CreatedUTC { get; set; }
         public DateTime? UpdatedUTC { get; set; }
         public int CreatedBy { get; set; }

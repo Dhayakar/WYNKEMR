@@ -2575,6 +2575,18 @@ export class DummyPatientHistoryOrginalComponent implements OnInit {
     })
   }
 
+  alphaNumeric(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (!(charCode > 47 && charCode < 58) && // numeric (0-9)
+      !(charCode > 64 && charCode < 91) && // upper alpha (A-Z)
+      !(charCode > 96 && charCode < 123)) // lower alpha (a-z)
+    {
+    return false;
+    }
+      return true;
+  }
+
+
   nameField(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32 || charCode == 46 || charCode == 9 || (charCode > 34 && charCode < 41) || charCode == 8) {

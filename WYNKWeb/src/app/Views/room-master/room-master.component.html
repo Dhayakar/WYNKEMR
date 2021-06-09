@@ -1,4 +1,4 @@
-<div class="col-sm-12">
+<div class="col-sm-12 mt10">
   <form #RoomMasterForm="ngForm">
 
 
@@ -23,7 +23,7 @@
         <div class="col-sm-2">
           <mat-form-field appearance="outline">
             <mat-label>Room Type</mat-label>
-            <mat-select [(ngModel)]="R_RoomCode" name="R_RoomCode" required >
+            <mat-select [(ngModel)]="R_RoomCode" name="R_RoomCode" required>
               <mat-option *ngFor="let RT of RoomType" [value]="RT">{{RT.Text}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -46,7 +46,7 @@
         <div class="col-sm-2">
           <mat-form-field appearance="outline">
             <mat-label>No of Rooms</mat-label>
-            <input matInput placeholder="No of Rooms" maxlength="4" [(ngModel)]="R_NoofRooms" name="R_NoofRooms" (keypress)="Numberonly($event)" (focusout)="showRoomDetails()" #NoofRooms="matInput" [disabled]="disableNoR">
+            <input matInput placeholder="No of Rooms" maxlength="4" [(ngModel)]="R_NoofRooms" name="R_NoofRooms" (keypress)="Numberonly($event)" (focusout)="showRoomDetails()"  [disabled]="disableNoR">
           </mat-form-field>
         </div>
 
@@ -59,81 +59,56 @@
 
       </div>
 
-      <!--<div class="row">
-        <div class="col-sm-12" *ngIf="hideIsActive">
+
+      <div class="col-sm-12" *ngIf="!RoomDetails1">
+        <div class="clearfix ">
+          <mat-panel-title class="text-title d-inblock">
+            Generate Room Details
+          </mat-panel-title>
+        </div>
+
+        <div class="row">
+
+
           <div class="col-sm-2">
             <mat-form-field appearance="outline">
-              <mat-label>Status</mat-label>
-              <mat-select [(ngModel)]="R_IsActive" name="R_IsActive" [disabled]="disableIsActive">
-                <mat-option value="true">Active</mat-option>
-                <mat-option value="false">InActive</mat-option>
+              <mat-label>Starting Room No</mat-label>
+              <input matInput placeholder="Enter Room No " maxlength="4" [(ngModel)]="R_RoomNo" name="R_RoomNo" (keypress)="Numberonly($event)" [required]="hiderequireRoomNO" (focusout)="RequiredRoomNo()">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>No of Rooms</mat-label>
+              <input matInput placeholder="No of Rooms" maxlength="4" [(ngModel)]="R_NoofRooms1" name="R_NoofRooms1" (keypress)="Numberonly($event)" (keyup)="NOR1()" [required]="hiderequireNOofRooms1">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Starting Bed No</mat-label>
+              <input matInput placeholder="Enter Bed No " maxlength="50" [(ngModel)]="R_BedNo" name="R_BedNo" (focusout)="bednosplit()" (keypress)="restrictsplchar($event)" [required]="hiderequireBedNO">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Rest Room Type</mat-label>
+              <mat-select [(ngModel)]="R_RestRoomType" name="Gender" [required]="hiderequireRRType" multiple>
+                <mat-option value="IndianToilet">Indian Toilet</mat-option>
+                <mat-option value="WesternToilet"> Western Toilet</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-        </div>
-      </div>-->
-
-      <div class="clearfix ">
-        <mat-panel-title class="text-title d-inblock">
-          Generate Room Details
-        </mat-panel-title>
-      </div>
-
-      <div class="row">
-
-        <div class="col-sm-12 mb5">
-
+          <div class="col-sm-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Remaining Rooms</mat-label>
+              <input matInput placeholder="Remaining Room(s)" [(ngModel)]="R_RemainingRooms" name="R_RemainingRooms" (keypress)="Numberonly($event)" disabled>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <button mat-raised-button class="success btn btn-primary" (click)="GetRoomDet()">Generate Room Number</button>
+          </div>
 
           <div class="col-sm-12">
-            <div class="col-sm-5">
-              <div class="row">
-                <div class="col-sm-5">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Starting Room No</mat-label>
-                    <input matInput placeholder="Enter Room No " maxlength="4" [(ngModel)]="R_RoomNo" name="R_RoomNo" (keypress)="Numberonly($event)" [required]="hiderequireRoomNO" (focusout)="RequiredRoomNo()">
-                  </mat-form-field>
-                </div>
-
-                <div class="col-sm-5">
-                  <mat-form-field appearance="outline">
-                    <mat-label>No of Rooms</mat-label>
-                    <input matInput placeholder="No of Rooms" maxlength="4" [(ngModel)]="R_NoofRooms1" name="R_NoofRooms1" (keypress)="Numberonly($event)" (keyup)="NOR1()" [required]="hiderequireNOofRooms1">
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Starting Bed No</mat-label>
-                    <input matInput placeholder="Enter Bed No " maxlength="50" [(ngModel)]="R_BedNo" name="R_BedNo" (focusout)="bednosplit()" (keypress)="restrictsplchar($event)" [required]="hiderequireBedNO">
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-5">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Rest Room Type</mat-label>
-                    <mat-select [(ngModel)]="R_RestRoomType" name="Gender" [required]="hiderequireRRType" multiple>
-                      <mat-option value="IndianToilet">Indian Toilet</mat-option>
-                      <mat-option value="WesternToilet"> Western Toilet</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5" >
-                  <mat-form-field appearance="outline">
-                    <mat-label>Remaining Rooms</mat-label>
-                    <input matInput placeholder="Remaining Room(s)" [(ngModel)]="R_RemainingRooms" name="R_RemainingRooms" (keypress)="Numberonly($event)" disabled>
-                  </mat-form-field>
-                </div>
-
-                <div class="col-sm-5">
-                  <button mat-raised-button class="success btn btn-primary" (click)="GetRoomDet()">Generate Room Number</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-7 heightAuto-300px" *ngIf="hideRoomdet">
+            <div class="col-sm-12 heightAuto-300px" *ngIf="hideRoomdet">
               <table mat-table [dataSource]="dataSource" class="custom-table withoutbackgroung search-table table-bordered">
 
                 <ng-container matColumnDef="S.No">
@@ -144,7 +119,18 @@
                   <th mat-header-cell *matHeaderCellDef> Room No </th>
                   <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.No }} </td>
                 </ng-container>
-
+                <ng-container matColumnDef="RoomType">
+                  <th mat-header-cell *matHeaderCellDef> Room Type </th>
+                  <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.RoomType }} </td>
+                </ng-container>
+                <ng-container matColumnDef="RoomDescription">
+                  <th mat-header-cell *matHeaderCellDef> Room Description </th>
+                  <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.RoomDescription }} </td>
+                </ng-container>
+                <ng-container matColumnDef="RoomCost">
+                  <th mat-header-cell *matHeaderCellDef> Room Cost </th>
+                  <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.RoomCost|currency:Country2 }} </td>
+                </ng-container>
                 <ng-container matColumnDef="IndianWestern">
                   <th mat-header-cell *matHeaderCellDef>Rest Room Type</th>
                   <td mat-cell *matCellDef="let element;let id = index" contenteditable="false"> {{element.ToiletType}} </td>
@@ -156,21 +142,7 @@
                 </ng-container>
 
 
-                <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                  <td id="row1" mat-cell *matCellDef="let element;let id = index" contenteditable="true" (keypress)="restrictinput($event)">
 
-                    <input matInput value="{{element.IsActive}}" [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectchangeTT(id,'IsActive',$event)">
-                     
-                      <mat-option value="true">Active</mat-option>
-                      <mat-option value="false">InActive</mat-option>
-                    </mat-autocomplete>
-
-                   
-
-                  </td>
-                </ng-container>
 
                 <ng-container matColumnDef="Delete">
                   <th mat-header-cell *matHeaderCellDef> Action </th>
@@ -184,24 +156,105 @@
 
           </div>
 
+
+
+
         </div>
 
 
+        <div class="clearfix ">
+          <mat-panel-title class="text-title d-inblock">
+            NOTE :
+          </mat-panel-title>
+        </div>
+        <div class="col-sm-12 heightAuto-200px">
+
+          <ul class="terms">
+            <li [attr.data-number]="i" *ngFor="let lines of totallinesdata let i=index">{{lines}}</li>
+          </ul>
+          <p>
+            <mat-label>Room tariff is subject to change</mat-label>
+          </p>
+        </div>
       </div>
 
-    </div>
+
+
+        <!--/////////////////////////////////////////////////////////////////////update/////////////////////////////////////////////////////////////////////-->
+
+
+        <div class="col-sm-12" *ngIf="RoomDetails1">
+          <div class="col-sm-12 heightAuto-300px">
+            <table mat-table [dataSource]="dataSourceUpdate" class="custom-table withoutbackgroung search-table table-bordered">
+
+              <ng-container matColumnDef="S.No">
+                <th mat-header-cell *matHeaderCellDef> S.No </th>
+                <td mat-cell *matCellDef="let element; let i = index" contenteditable="false"> {{i + 1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Room_No">
+                <th mat-header-cell *matHeaderCellDef> Room No </th>
+                <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.No }} </td>
+              </ng-container>
+              <ng-container matColumnDef="RoomType">
+                <th mat-header-cell *matHeaderCellDef> Room Type </th>
+                <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.RoomType }} </td>
+              </ng-container>
+              <ng-container matColumnDef="RoomDescription">
+                <th mat-header-cell *matHeaderCellDef> Room Description </th>
+                <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.RoomDescription }} </td>
+              </ng-container>
+              <ng-container matColumnDef="RoomCost">
+                <th mat-header-cell *matHeaderCellDef> Room Cost </th>
+                <td mat-cell *matCellDef="let element" contenteditable="false"> {{element.Roomcost|currency:Country2 }} </td>
+              </ng-container>
+          
+
+              <ng-container matColumnDef="BedNo">
+                <th mat-header-cell *matHeaderCellDef> Bed Number </th>
+                <td mat-cell *matCellDef="let element;let id = index" contenteditable="false"> {{element.BedNo}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="IsActive">
+                <th mat-header-cell *matHeaderCellDef>IsActive</th>
+                <td mat-cell *matCellDef="let element;let i = index">
+                  <mat-form-field appearance="outline">
+                    <mat-label></mat-label>
+                    <mat-select (selectionChange)="ChangeIsActive(i,'EffectiveFrom',$event)" value="{{element.IsActive}}">
+                      <mat-option value="Yes">Yes</mat-option>
+                      <mat-option value="No">No</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsUpdate"></tr>
+              <tr mat-row *matRowDef="let element; columns: displayedColumnsUpdate;"></tr>
+            </table>
+          </div>
+
+        </div>
 
 
 
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+
+
+
+      </div>
       <div class="col-sm-12 m-3">
         <div class="col-sm-12 pb25">
-          <div class="col-sm-4  sub-section btn-wrap f-r">
+          <div class="col-sm-6  sub-section btn-wrap f-r">
+            <button type="button" class="success btn btn-primary" (click)="ViewRoomTariff()"><strong>View Room Tariff</strong></button>
             <button type="button" class="btn btn-warning-default" (click)="Cancel()"><strong>Cancel</strong></button>
 
             <button (click)="Roomid.value == '' ? onSubmit(RoomMasterForm):onUpdate(RoomMasterForm,Roomid.value)"
                     class="success btn btn-primary">
               Submit
             </button>
+
           </div>
         </div>
       </div>
@@ -226,6 +279,148 @@
 
 
 </form>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal height-700px" role="dialog" [ngStyle]="{'display':MSmodelmade}">
+  <div class="modal-dialog modal-lg width-60p">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="RoomTariffclose()">&times;</button>
+        <h5 class="modal-title">
+          <strong>Room Tariff Details</strong>
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row" style="overflow:auto; height:250px">
+          <h5 class="card-header text-white">
+            Category of room details
+          </h5>
+          <div class="col-sm-12" style="position: sticky;">
+            <table class="custom-table withoutbackgroung search-table table-bordered">
+              <thead>
+                <tr>
+                  <th>Room Type</th>
+                  <th>Room Description</th>
+                  <th>Room Tariff</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let RTF of RoomTariff; index as i">
+                  <td>{{RTF.RoomType}}</td>
+                  <td>{{RTF.RoomDescription}}</td>
+                  <td>{{RTF.Roomcost|currency:Country2}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="modal-footer">
+        <div class="row">
+          <div class="content-right sub-section btn-wrap">
+            <button class="success btn btn-primary" (click)="printRoomTariff()">print</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal" role="dialog" [ngStyle]="{'display':printpopup}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="printclose()">&times;</button>
+        <h4 class="modal-title"> Room Tariff  </h4>
+      </div><br />
+            <p align="center">Do you want print ?</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" autofocus (click)="printclose()">No</button>
+        <button type="reset" class="btn btn-success " data-dismiss="modal" (click)="printYes()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!----------------------------------Print Screen1----------------------------------------------->
+<div id="RoomTariff" style="display:none">
+
+
+  <div class="col-sm-12">
+    <div class="row" >
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        <div style="font-size:15px;text-align:center"><strong>{{PCompnayname}}</strong></div>
+        <div style="text-align:center">{{PAddress}},{{PAddress2}},{{PAddress3}}</div>
+        <div style="text-align:center">Tel-{{Pphone}} &nbsp;- &nbsp;{{Pweb}}</div>
+        <div style="text-align:center"><strong>Room Tariff Details</strong></div>
+      </div>
+      <div class="col-sm-3">
+
+      </div>
+    </div>
+  </div>
+  <hr>
+
+
+
+  <div class="row">
+    <div class="col-sm-12" style="position: sticky;">
+      <div style="text-align:center"><strong>Category of room details</strong></div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Room Type</th>
+            <th>Room Description</th>
+            <th>Room Tariff</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let RTF of RoomTariff; index as i">
+            <td>{{RTF.RoomType}}</td>
+            <td>{{RTF.RoomDescription}}</td>
+            <td>{{RTF.Roomcost|currency:Country2}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <br><br>
+  <div class="col-sm-12">
+    <div class="clearfix">
+      <mat-panel-title class="text-title d-inblock">
+        NOTE :
+      </mat-panel-title>
+    </div>
+    <div class="col-sm-12 heightAuto-200px">
+
+      <ul class="terms">
+        <li [attr.data-number]="i" *ngFor="let lines of totallinesdata let i=index">{{lines}}</li>
+      </ul>
+      <p>
+        <mat-label>Room tariff is subject to change</mat-label>
+      </p>
+    </div>
   </div>
 
 
@@ -233,5 +428,4 @@
 
 
 
-
-
+</div>

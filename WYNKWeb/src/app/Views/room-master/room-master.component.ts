@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatInput, MatTableDataSource, MatDialog } from '@angular/material';
 import { NgForm } from '@angular/forms';
 import { CommonService } from '../../shared/common.service';
-import { RoomMasterViewM, GetRoomDet, RoomNoArr, BedNoarr } from '../../Models/ViewModels/RoomMasterViewM';
+import { RoomMasterViewM, GetRoomDet, RoomNoArr, BedNoarr, ToiletType } from '../../Models/ViewModels/RoomMasterViewM';
 import Swal from 'sweetalert2';
 import * as _l from 'lodash';
 import * as _ from 'lodash';
@@ -17,7 +17,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   styleUrls: ['./room-master.component.less']
 })
 export class RoomMasterComponent implements OnInit {
-  @ViewChild('NoofRooms') nameInput: MatInput;
+
   @ViewChild('RoomMasterForm') Form: NgForm
   R_ID;
   R_RoomCode;
@@ -39,8 +39,8 @@ export class RoomMasterComponent implements OnInit {
   hiderequireNOofRooms1: boolean = false;
   hiderequireBedNO: boolean = false;
   hiderequireRRType: boolean = false;
-  hidesubmit: boolean = true;
-  hideupdate: boolean = false;
+  //hidesubmit: boolean = true;
+  //hideupdate: boolean = false;
   disableNoB: boolean = true;
   disableNoR: boolean = false;
   //hideRemainingRoom = false;
@@ -49,24 +49,66 @@ export class RoomMasterComponent implements OnInit {
   disableIsActive: boolean = false;
   disableupdatebtn: boolean = false;
   RoomType;
+  RoomTariff = [];
+  totallinesdata;
+  MSmodelmade;
+  printpopup;
+  Country1;
+  Country2;
+  Country3;
+  PCompnayname;
+ PAddress ;
+ PAddress2 ;
+ Pphone ;
+ Pweb ;
   values = ['Indian Toilet', 'Western Toilet'];
-  //values: object[] = {
-  //  [name: 'Indian Toilet', Id= 1],
-  //  [name: 'Western Toilet', Id=2],
-  //}
-  displayedColumns: string[] = ['S.No', 'Room_No', 'IndianWestern', 'BedNo', 'IsActive', 'Delete'];
+
+  displayedColumns: string[] = ['S.No', 'Room_No', 'RoomType', 'RoomDescription','RoomCost', 'IndianWestern', 'BedNo','Delete'];
   dataSource = new MatTableDataSource();
+
+
+  displayedColumnsUpdate: string[] = ['S.No', 'Room_No', 'RoomType', 'RoomDescription', 'RoomCost','BedNo', 'IsActive'];
+  dataSourceUpdate = new MatTableDataSource();
+  
+
+
   constructor(public commonService: CommonService<RoomMasterViewM>, public dialog: MatDialog) { }
 
   ngOnInit() {
 
     this.commonService.data = new RoomMasterViewM();
 
-    this.nameInput.focus();
-
+    
+    this.RoomDetails1 = false;
     this.CompanyID = localStorage.getItem("CompanyID");
     this.DoctorID = localStorage.getItem('userroleID');
     this.commonService.getListOfData('Common/GetRoomType').subscribe(data => { this.RoomType = data; });
+    this.commonService.getListOfData('RoomMaster/getConcerntextfile/' + localStorage.getItem("CompanyID")).subscribe(data => {
+      debugger;
+      if (data.TOtalLines != null) {
+        this.totallinesdata = data.TOtalLines;
+      }
+      else {
+        Swal.fire({
+          type: 'warning',
+          title: 'Warning',
+          text: 'Consent is Not Available, Please add New Consent',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            popup: 'alert-warp',
+            container: 'alert-container'
+          },
+        });
+      }
+    });
+    this.commonService.getListOfData('Common/GetCurrencyvalues/' + localStorage.getItem('CompanyID')).subscribe(data => {
+      debugger;
+      this.Country1 = data;
+      this.Country2 = this.Country1[0].Text;
+      this.Country3 = this.Country1[0].Value;
+    });
   }
 
 
@@ -217,31 +259,13 @@ export class RoomMasterComponent implements OnInit {
       this.hiderequireNOofRooms1 = false;
       this.TEMP = [];
     }
-    else {
-      //if (this.R_RateperRoom == null || this.R_RateperRoom =="") {
-      //  Swal.fire({
-      //    position: 'center',
-      //    type: 'warning',
-      //    title: 'Enter Room Rate!',
-      //  });
-      //  this.R_NoofRooms = '';
-      //  this.R_RoomCost = '';
-      //}
-      //else {
-      //  this.R_RoomCost = this.R_RateperRoom * this.R_NoofRooms;
-     // this.showhideRoomDetails = true;
-      this.disableNoB = false;
-      if (this.hideupdate == true) {
-        this.disableNoB = true;
-      }
-      //  }
-
-    }
+ 
   }
 
   //Room Table
   TEMP = [];
   TEMP2 = [];
+  restroomtemp = [];
   chck: boolean = false;
   GetRoomDet() {
     debugger;
@@ -313,6 +337,16 @@ export class RoomMasterComponent implements OnInit {
           }
 
           this.TEMP.push(RDet);
+          
+          for (var g = 0; g < this.R_RestRoomType.length; g++)
+          {
+            var restRT = new ToiletType();
+            restRT.RoomNo = RDet.RNo;
+            restRT.RestRoomType = this.R_RestRoomType[g];
+            this.restroomtemp.push(restRT);
+
+          }
+
           this.commonService.data.RoomNoArr = this.TEMP;
         } // loop end
 
@@ -331,11 +365,12 @@ export class RoomMasterComponent implements OnInit {
           for (var k = 0; k < bARR.length; k++) {
 
             var R_Det = new GetRoomDet();
-
             R_Det.No = RoomNo;
             R_Det.ToiletType = RestRoomType;
             R_Det.BedNo = bARR[k].BedNo;
-            R_Det.IsActive = true;
+            R_Det.RoomType = this.R_RoomCode.Text;
+            R_Det.RoomDescription = this.R_RoomDescription;
+            R_Det.RoomCost = this.R_RoomCost;
 
             this.TEMP2.push(R_Det);
 
@@ -458,72 +493,14 @@ export class RoomMasterComponent implements OnInit {
     }
   }
 
-  //changeValue(id, property: string,event) {
-  //  debugger;
-  //  let result: number = Number(event.target.textContent);   
-  //  this.dataSource.filteredData[id][property] = result;
-  //  this.dataSource._updateChangeSubscription();
-  //}
+  
 
-  selectchangeTT(id, property: string, event) {
-    debugger;
-    // if (event.value== "true") {
-    // let TT: number = 1;
-    if (event.option.value == "Active") {
-      let TT = true;
-      this.dataSource.filteredData[id][property] = TT;
-    }
-    if (event.option.value == "InActive") {
-      let TT = false;
-      this.dataSource.filteredData[id][property] = TT;
-    }
-    this.dataSource._updateChangeSubscription();
-    if (this.hidesubmit == true) {
-      this.TEMP2 = this.dataSource.data;
-    }
-    if (this.hideupdate == true) {
-      this.Temp1 = this.dataSource.data;
-    }
-
-
-    //  }
-    //if (event.value == "false") {
-    //  let TT: number = 0;
-    //  this.dataSource.filteredData[id][property] = TT;
-    //  this.dataSource._updateChangeSubscription();
-    //}
-    // let TT: number = event.option.viewValue;
-  }
+ 
 
 
   onSubmit(form: NgForm) {
     debugger;
     if (form.valid) {
-      let afr = this.commonService.data.GetRoomDet.map(x => x.IsActive);
-      var op = true;
-      for (var k = 0; k < afr.length; k++) {
-        let isactive = afr[k];
-
-        if (isactive == undefined) {
-          op = false;
-          break;
-        }
-      }
-      if (op == false) {
-    
-        Swal.fire({
-          type: 'warning',
-          title: 'warning',
-          text: 'Data Missing!',
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1500,
-          customClass: {
-            popup: 'alert-warp',
-            container: 'alert-container',
-          },
-        });
-      } else {
         this.commonService.data = new RoomMasterViewM();
         this.commonService.data.RoomMaster.CMPID = parseInt(this.CompanyID);
         this.commonService.data.RoomMaster.RoomType = this.R_RoomCode.Value;
@@ -532,7 +509,8 @@ export class RoomMasterComponent implements OnInit {
         this.commonService.data.RoomMaster.NoofBed = this.R_NoofBedsperroom;
         this.commonService.data.RoomMaster.RoomCost = this.R_RoomCost;
         this.commonService.data.RoomMaster.CreatedBy = parseInt(this.DoctorID);
-        this.commonService.data.GetRoomDet = this.TEMP2;
+      this.commonService.data.GetRoomDet = this.TEMP2;
+      this.commonService.data.ToiletType = this.restroomtemp;
         this.commonService.postData('RoomMaster/insertdata/', this.commonService.data).subscribe(data => {
           debugger;
           if (data.Success == true) {
@@ -569,16 +547,17 @@ export class RoomMasterComponent implements OnInit {
           this.Form.onReset();
           this.commonService.data.GetRoomDet = [];
           this.hideRoomdet = false;
-          //this.showhideRoomDetails = false;
           this.TEMP = [];
           this.TEMP2 = [];
+          this.RoomDetails1 = false;
         });
-      }
+      
     }
   }
 
   RoomDetID;
   Temp1 = [];
+  RoomDetails1: boolean;
   getRoomDetails() {
     localStorage.setItem('helpname', 'RoomMaster');
 
@@ -592,61 +571,30 @@ export class RoomMasterComponent implements OnInit {
       debugger;
       if (result.success) {
         let item = result.data;
-
-        this.R_RoomCode = item.RoomType.Value;
+        this.commonService.getListOfData('Common/GetRoomType').subscribe(data => {
+          this.RoomType = data;
+          this.R_RoomCode = this.RoomType.find(x => x.Text == item.RoomType)
+        });
         this.R_RoomDescription = item.RoomDescription;
         this.R_RoomCost = item.RoomCost;
         this.R_NoofRooms = item.NoofRooms;
         this.R_NoofBedsperroom = item.NoofBed;
-        this.R_IsActive = item.IsActive.toString();
-        if (this.R_IsActive == "false") {
-          this.disableIsActive = true;
-          this.disableupdatebtn = true;
-        }
-        else {
-          this.disableIsActive = false;
-          this.disableupdatebtn = false;
-        }
         this.R_ID = item.ID;
         let roomID = item.ID;
         this.commonService.getListOfData('RoomMaster/getRoomDet/' + parseInt(localStorage.getItem("CompanyID")) + '/' + roomID + '/')
           .subscribe(data => {
             debugger;
+           
             if (data.RoomDetails1.length > 0) {
               debugger;
-              this.commonService.data.GetRoomDet = data.RoomDetails1;
-              let arr = _l.orderBy(data.RoomDetails1, 'No', ['asc']);
-              this.dataSource.data = arr;
-              this.Temp1 = this.dataSource.data;
-              this.TEMP2 = this.Temp1;
-
+             
+              this.RoomDetails1 = true;
+              this.dataSourceUpdate.data = data.RoomDetails1;
+              this.Temp1 = this.dataSourceUpdate.data;
               debugger;
-              var result = _.chain(this.TEMP2).groupBy("No").map(function (v, i) {
-                return {
-
-                  No: _.map(v, 'No')
-                }
-              }).value();
-
-              let g = result;
-
-
-              // this.dataSource.sort = this.sort;
-              //this.RoomDetID = data.RoomDetails1.RoomDetID;
-
-              debugger;
-              this.R_RemainingRooms = this.R_NoofRooms - result.length;
-            //  this.hideRemainingRoom = true;
-              debugger;
-             // this.showhideRoomDetails = true;
               this.hideRoomdet = true;
-
-              this.hidesubmit = false;
-              this.hideupdate = true;
               this.disableNoB = true;
               this.disableNoR = true;
-              //this.hideIsActive = true;
-
             }
           });
 
@@ -659,27 +607,27 @@ export class RoomMasterComponent implements OnInit {
 
   }
 
-
+  ChangeIsActive(i, property: string, event) {
+    debugger;
+    this.Temp1[i].IsActive = event.value;
+    this.dataSourceUpdate.filteredData[i][property] = event.value;
+    this.dataSourceUpdate._updateChangeSubscription();
+  }
 
 
   onUpdate(form: NgForm, R_ID) {
     debugger;
     this.commonService.data = new RoomMasterViewM();
-
     this.commonService.data.RoomMaster.CMPID = parseInt(this.CompanyID);
     this.commonService.data.RoomMaster.RoomType = this.R_RoomCode.Value;
     this.commonService.data.RoomMaster.RoomDescription = this.R_RoomDescription;
     this.commonService.data.RoomMaster.NoofRooms = this.R_NoofRooms;
     this.commonService.data.RoomMaster.NoofBed = this.R_NoofBedsperroom;
     this.commonService.data.RoomMaster.RoomCost = this.R_RoomCost;
-    this.commonService.data.RoomMaster.IsActive = this.R_IsActive;
+   
     this.commonService.data.RoomMaster.UpdatedBy = parseInt(this.DoctorID);
-
     this.commonService.data.RoomDetails2 = this.Temp1;
-    //let arrid = this.commonService.data.RoomDetails2.map(x=> x.RoomDetID)
-
-
-    this.commonService.putData('RoomMaster/Updatedata/' + this.R_ID, this.commonService.data).subscribe(data => {
+    this.commonService.postData('RoomMaster/Updatedata/', this.commonService.data).subscribe(data => {
       debugger;
       if (data.Success == true) {
     
@@ -714,17 +662,12 @@ export class RoomMasterComponent implements OnInit {
       this.Form.onReset();
       this.commonService.data.GetRoomDet = [];
       this.hideRoomdet = false;
-      //this.showhideRoomDetails = false;
-      this.hideupdate = false;
-      this.hidesubmit = true;
       this.disableNoB = true;
       this.disableNoR = false;
-      //this.hideIsActive = false;
-    //  this.hideRemainingRoom = true;
       this.TEMP2 = [];
       this.commonService.data.BedNoarr = [];
       this.TEMP = [];
-     // this.hideRemainingRoom = false;
+      this.RoomDetails1 = false;
     });
 
 
@@ -738,7 +681,7 @@ export class RoomMasterComponent implements OnInit {
 
   Cancel() {
     debugger;
-    if (this.R_RoomCode.Value != null || this.R_RoomDescription != null || this.R_RoomCost != null ||
+    if (this.R_RoomDescription != null || this.R_RoomCost != null ||
       this.R_NoofRooms != null || this.R_NoofBedsperroom != null) {
 
       this.backdrop = 'block';
@@ -766,19 +709,12 @@ export class RoomMasterComponent implements OnInit {
     this.Form.onReset();
     this.backdrop = 'none';
     this.CancelBlock = 'none';
-
     this.TEMP = [];
     this.TEMP2 = [];
     this.commonService.data.RoomNoArr = [];
-
-    this.hidesubmit = true;
-    this.hideupdate = false;
-    //this.showhideRoomDetails = false;
+    this.RoomDetails1 = false;
     this.hideRoomdet = false;
     this.disableNoR = false;
-   // this.hideIsActive = false;
-   // this.hideRemainingRoom = false;
-
   }
 
   val;
@@ -867,5 +803,81 @@ export class RoomMasterComponent implements OnInit {
 
     }
   }
+  ViewRoomTariff()
+  {
+    this.commonService.getListOfData('RoomMaster/getRoomTariff/' + parseInt(localStorage.getItem("CompanyID")))
+      .subscribe(data =>
+      {
+        if (data.RoomTariff.length > 0) {
+          debugger;
+          this.RoomTariff = data.RoomTariff;
+          this.PCompnayname = data.RoomTariff[0].PCompnayname;
+          this.PAddress = data.RoomTariff[0].PAddress;
+          this.PAddress2 = data.RoomTariff[0].PAddress2;
+          this.Pphone = data.RoomTariff[0].Pphone;
+          this.Pweb = data.RoomTariff[0].Pweb;
 
+          this.backdrop = 'block';
+          this.MSmodelmade = 'block';
+        }
+        else {
+          Swal.fire({
+            type: 'warning',
+            title: 'warning',
+            text: 'Data Not Found',
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            customClass: {
+              popup: 'alert-warp',
+              container: 'alert-container'
+            },
+          });
+        }
+
+      });
+  }
+  RoomTariffclose()
+  {
+    this.backdrop = 'none';
+    this.MSmodelmade = 'none';
+    this.RoomTariff = [];
+  }
+  printRoomTariff()
+  {
+    this.backdrop = 'block';
+    this.printpopup = 'block';
+  }
+  printclose()
+  {
+    this.backdrop = 'none';
+    this.printpopup = 'none';
+    this.backdrop = 'none';
+    this.MSmodelmade = 'none';
+    this.RoomTariff = [];
+  }
+  printYes()
+  {
+    let printContents, popupWin;
+    printContents = document.getElementById('RoomTariff').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=auto,width=100%');
+    popupWin.document.open();
+    popupWin.document.write(`
+             <html>
+             <head>
+              <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            <title></title>
+            <style> 
+            //........Customized style.......
+            </style>
+          </head>
+      <body onload="window.print();window.close()">${printContents}</body>
+        </html>`);
+    popupWin.document.close();
+    this.backdrop = 'none';
+    this.printpopup = 'none';
+    this.RoomTariff = [];
+    this.backdrop = 'none';
+    this.MSmodelmade = 'none';
+  }
 }

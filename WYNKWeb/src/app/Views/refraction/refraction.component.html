@@ -2319,6 +2319,8 @@
             </button>
           </div>
 
+ 
+
           <div class="col-sm-2" *ngIf="Activeis">
             <mat-form-field appearance="outline">
               <mat-label> IsActive </mat-label>
@@ -2337,17 +2339,17 @@
 
           <div class="col-sm-5" *ngIf="tablecategory">
 
-            <mat-form-field>
-              <mat-label>Filter</mat-label>
-              <input matInput (keyup)="applyFilter($event)">
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Search" autocomplete="off">
             </mat-form-field>
 
             <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesqc" matSort class="custom-table withoutbackgroung search-table table-bordered">
+              <table mat-table [dataSource]="dataSourcesqc" matSort class="custom-table withoutbackgroung search-table table-bordered" id="excelCategory-table">
 
                 <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
                     <mat-checkbox (click)="selecttype(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -2358,8 +2360,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnssqc"></tr>
@@ -2429,7 +2431,7 @@
 
         <div class="row">
 
-          <div class="col-sm-3" *ngIf="tableDistance">
+          <div class="col-sm-5" *ngIf="tableDistance">
 
             <mat-form-field appearance="outline">
               <mat-label>Search</mat-label>
@@ -2437,11 +2439,11 @@
             </mat-form-field>
 
             <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesqd" class="custom-table withoutbackgroung search-table table-bordered">
+              <table mat-table [dataSource]="dataSourcesqd" class="custom-table withoutbackgroung search-table table-bordered" id="excelDistance-table">
 
                 <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <th mat-header-cell *matHeaderCellDef class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
                     <mat-checkbox (click)="selecttyped(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -2452,8 +2454,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                  <th mat-header-cell *matHeaderCellDef class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnssqd"></tr>
@@ -2476,8 +2478,6 @@
           </div>
         </div>
 
-
-
       </div>
     </div>
   </div>
@@ -2498,7 +2498,7 @@
 
           <div class="col-sm-4">
             <mat-form-field appearance="outline">
-              <mat-label>Distance</mat-label>
+              <mat-label>Near</mat-label>
               <input [(ngModel)]="masterNear" name="masterNear" matInput placeholder="Near" required>
             </mat-form-field>
           </div>
@@ -2508,6 +2508,7 @@
               <i class="fas fa-info-circle"> </i> Help
             </button>
           </div>
+
 
           <div class="col-sm-2" *ngIf="Activeisn">
             <mat-form-field appearance="outline">
@@ -2524,7 +2525,7 @@
 
         <div class="row">
 
-          <div class="col-sm-3" *ngIf="tableNear">
+          <div class="col-sm-5" *ngIf="tableNear">
 
             <mat-form-field appearance="outline">
               <mat-label>Search</mat-label>
@@ -2532,11 +2533,11 @@
             </mat-form-field>
 
             <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesqn" class="custom-table withoutbackgroung search-table table-bordered">
+              <table mat-table [dataSource]="dataSourcesqn" class="custom-table withoutbackgroung search-table table-bordered" id="excelNear-table">
 
                 <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <th mat-header-cell *matHeaderCellDef class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
                     <mat-checkbox (click)="selecttypen(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -2547,8 +2548,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                  <th mat-header-cell *matHeaderCellDef class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnssqn"></tr>
@@ -2591,7 +2592,7 @@
 
           <div class="col-sm-4">
             <mat-form-field appearance="outline">
-              <mat-label>Distance</mat-label>
+              <mat-label>Pinhole</mat-label>
               <input [(ngModel)]="masterPinhole" name="masterPinhole" matInput placeholder="Pinhole" required>
             </mat-form-field>
           </div>
@@ -2601,6 +2602,7 @@
               <i class="fas fa-info-circle"> </i> Help
             </button>
           </div>
+
 
           <div class="col-sm-2" *ngIf="Activeisp">
             <mat-form-field appearance="outline">
@@ -2625,11 +2627,11 @@
             </mat-form-field>
 
             <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesqp" class="custom-table withoutbackgroung search-table table-bordered">
+              <table mat-table [dataSource]="dataSourcesqp" class="custom-table withoutbackgroung search-table table-bordered" id="excelPinhole-table">
 
                 <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <th mat-header-cell *matHeaderCellDef class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
                     <mat-checkbox (click)="selecttypep(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -2640,8 +2642,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                  <th mat-header-cell *matHeaderCellDef class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnssqp"></tr>
@@ -2719,11 +2721,11 @@
             </mat-form-field>
 
             <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesqi" class="custom-table withoutbackgroung search-table table-bordered">
+              <table mat-table [dataSource]="dataSourcesqi" class="custom-table withoutbackgroung search-table table-bordered" id="excelInstrument-table">
 
                 <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <th mat-header-cell *matHeaderCellDef class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
                     <mat-checkbox (click)="selecttypei(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -2734,8 +2736,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                  <th mat-header-cell *matHeaderCellDef class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnssqi"></tr>
@@ -2762,7 +2764,6 @@
     </div>
   </div>
 </div>
-
 
 <div class="modal" role="dialog" [ngStyle]="{'display':modalcharttype}">
   <div class="modal-dialog modal-lg">
@@ -2791,6 +2792,7 @@
             </button>
           </div>
 
+
           <div class="col-sm-2" *ngIf="Activeisc">
             <mat-form-field appearance="outline">
               <mat-label> IsActive </mat-label>
@@ -2815,11 +2817,11 @@
             </mat-form-field>
 
             <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesqcc" matSort class="custom-table withoutbackgroung search-table table-bordered">
+              <table mat-table [dataSource]="dataSourcesqcc" matSort class="custom-table withoutbackgroung search-table table-bordered" id="excelcharttype-table">
 
                 <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
                     <mat-checkbox (click)="selecttypec(element)"></mat-checkbox>
                   </td>
                 </ng-container>
@@ -2830,8 +2832,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnssqcc"></tr>
@@ -2860,12 +2862,102 @@
   </div>
 </div>
 
+<div class="modal" role="dialog" [ngStyle]="{'display':modalstrabismus}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" cdkDrag>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessstrabismus()">&times;</button>
+        <h5 class="modal-title">
+          Strabismus
+        </h5>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline">
+              <mat-label>strabismus</mat-label>
+              <input [(ngModel)]="masterstrabismus" name="masterstrabismus" matInput placeholder="strabismus" required>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-1">
+            <button type="button" data-toggle="tooltip" title="strabismus" (click)="Clickstrabismus()" class="btn-text grab">
+              <i class="fas fa-info-circle"> </i> Help
+            </button>
+          </div>
+
+
+          <div class="col-sm-2" *ngIf="Activeisstrabismus">
+            <mat-form-field appearance="outline">
+              <mat-label> IsActive </mat-label>
+              <mat-select [(ngModel)]="IsActive" name="Active">
+                <mat-option>Select</mat-option>
+                <mat-option value="true">Active</mat-option>
+                <mat-option value="false">InActive</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-sm-5" *ngIf="tablestrabismus">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Search</mat-label>
+              <input matInput (keyup)="applyFilterstrabismus($event)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+
+            <div class="row heightAuto-300px">
+              <table mat-table [dataSource]="dataSourcesstrabismus" matSort class="custom-table withoutbackgroung search-table table-bordered" id="excelstrabismus-table">
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="remove-this">  Action </th>
+                  <td mat-cell *matCellDef="let element;let id = index" class="remove-this">
+                    <mat-checkbox (click)="selecttypestrabismus(element)"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Description </th>
+                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="IsActive">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="remove-this"> Status </th>
+                  <td mat-cell *matCellDef="let element" class="remove-this">{{element.IsActive}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsstrabismus"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsstrabismus"></tr>
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row pb25">
+          <div class="col-sm-5  sub-section btn-wrap f-r">
+            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelstrabismus()">Cancel</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatestrabismus" id="updatestrabismus" (click)="onupdatestrabismus()">Submit</button>
+            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitstrabismus" id="submitstrabismus" (click)="onSubmitstrabismus()">Submit</button>
+            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletestrabismus" (click)="onDeletestrabismus()">Delete</button>
+          </div>
+        </div>
 
 
 
-
-
-
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal" role="dialog" [ngStyle]="{'display':cancelblock}">
   <div class="modal-dialog modal-md">
@@ -2920,101 +3012,7 @@
   </div>
 </div>
 
-<div class="modal" role="dialog" [ngStyle]="{'display':modalstrabismus}">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content" cdkDrag>
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" (click)="modalSuccessstrabismus()">&times;</button>
-        <h5 class="modal-title">
-          Strabismus
-        </h5>
-      </div>
 
-      <div class="modal-body">
-
-        <div class="row">
-
-          <div class="col-sm-4">
-            <mat-form-field appearance="outline">
-              <mat-label>strabismus</mat-label>
-              <input [(ngModel)]="masterstrabismus" name="masterstrabismus" matInput placeholder="strabismus" required>
-            </mat-form-field>
-          </div>
-
-          <div class="col-sm-1">
-            <button type="button" data-toggle="tooltip" title="strabismus" (click)="Clickstrabismus()" class="btn-text grab">
-              <i class="fas fa-info-circle"> </i> Help
-            </button>
-          </div>
-
-          <div class="col-sm-2" *ngIf="Activeisstrabismus">
-            <mat-form-field appearance="outline">
-              <mat-label> IsActive </mat-label>
-              <mat-select [(ngModel)]="IsActive" name="Active">
-                <mat-option>Select</mat-option>
-                <mat-option value="true">Active</mat-option>
-                <mat-option value="false">InActive</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-        </div>
-
-        <div class="row">
-
-
-          <div class="col-sm-5" *ngIf="tablestrabismus">
-
-            <mat-form-field appearance="outline">
-              <mat-label>Search</mat-label>
-              <input matInput (keyup)="applyFilterstrabismus($event)" placeholder="Search" autocomplete="off">
-            </mat-form-field>
-
-            <div class="row heightAuto-300px">
-              <table mat-table [dataSource]="dataSourcesstrabismus" matSort class="custom-table withoutbackgroung search-table table-bordered">
-
-                <ng-container matColumnDef="Action">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Action </th>
-                  <td mat-cell *matCellDef="let element;let id = index;">
-                    <mat-checkbox (click)="selecttypestrabismus(element)"></mat-checkbox>
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="Description">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>  Description </th>
-                  <td mat-cell *matCellDef="let element">{{element.Description}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="IsActive">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                  <td mat-cell *matCellDef="let element">{{element.IsActive}}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumnsstrabismus"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsstrabismus"></tr>
-              </table>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="row pb25">
-          <div class="col-sm-5  sub-section btn-wrap f-r">
-            <button type="button" class="btn btn-warning-default ml-2p" (click)="oncancelstrabismus()">Cancel</button>
-            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenUpdatestrabismus" id="updatestrabismus" (click)="onupdatestrabismus()">Submit</button>
-            <button type="button" class="success btn btn-primary  ml-2p" *ngIf="hiddenSubmitstrabismus" id="submitstrabismus" (click)="onSubmitstrabismus()">Submit</button>
-            <button type="button" mat-raised-button color="warn" class="ml-2p" *ngIf="hiddenDeletestrabismus" (click)="onDeletestrabismus()">Delete</button>
-          </div>
-        </div>
-
-
-
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!---------------------------One eyed patient ------------------------------->

@@ -7,9 +7,11 @@ namespace WYNK.Data.Repository
 {
     public interface IRoomMasterRepository : IRepositoryBase<RoomMasterViewM>
     {
-
-           dynamic insertdata(RoomMasterViewM roomMaster);
-        dynamic Updatedata(RoomMasterViewM roomMaster, int ID);
+        dynamic getConcerntextfile(int CompanyID);
+        dynamic insertdata(RoomMasterViewM roomMaster);
+        dynamic Updatedata(RoomMasterViewM roomMaster);
         RoomMasterViewM getRoomDet(int CompanyID, int roomID);
+        RoomMasterViewM getRoomTariff(int CmpID);
+        
     }
 }

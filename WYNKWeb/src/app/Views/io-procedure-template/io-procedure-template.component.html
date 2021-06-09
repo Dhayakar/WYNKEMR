@@ -1,28 +1,18 @@
 <form #IOProcedureTemplateForm="ngForm" name="IOProcedureTemplateForm" (keydown.enter)="$event.preventDefault()" novalidate>
   <div class="col-sm-12 mt-1p">
     <div class="row">
-      <h5 align="center" class="card-header bg-success text-white rounded-top">
+      <h5 align="center" class="card-header">
         Intra-operative procedure template
       </h5>
     </div>
   </div>
   <div class="col-sm-12 dividebar">
-    <div class="col-sm-12 mph-0 downmargin">
-      <div class="row mph-0">
-        <div class="col-sm-12 mph-0">
-          <div class="col-sm-6 mph-0 pb20">
-
-          </div>
-          <div class="col-sm-2 mph-0 pb20">
-          </div>
-          <div class="col-sm-2 mph-0 f-r content-right pb20">
-            <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
-          </div>
-        </div>
+    <div class="row">
+      <div class="col-sm-2 mph-0 f-r content-right pb20">
+        <button class="btn-text" (click)="Getformaccess()"><i class="fas fa-eye"></i> View Access</button>
       </div>
     </div>
-    <div class="col-sm-12">
-      <div class="row">
+    <div class="row">
         <div class="col-sm-6 dividebar">
           <div class="row">
             <div class="col-sm-4">
@@ -135,20 +125,17 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
   <div class="col-sm-12 pb25 mt-2p">
     <div class="content-right sub-section btn-wrap">
       <button type="button" class="btn btn-warning-default" (click)="clear()"> Clear </button>
       <button type="button" class="btn btn-warning-default" (click)="cancel()"> Cancel </button>
-
       <div *ngIf="!DisableICD;else notShow">
         <button class="success btn btn-primary" [disabled]="DisableSubmit && isNextButton" (click)="Submit(IOProcedureTemplateForm)">Submit</button>
       </div>
       <ng-template #notShow>
         <div>
           <button class="success btn btn-primary" [disabled]="isNextupdate" (click)="onUpdate()">Submit</button>
-
         </div>
       </ng-template>
     </div>

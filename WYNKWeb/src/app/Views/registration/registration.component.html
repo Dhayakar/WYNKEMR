@@ -1,13 +1,38 @@
 
 <form #RegistrationMasterForm="ngForm">
 
-  <div class="col-sm-12">
-    <div class="row">
-      <h5 align="center" class="card-header bg-success text-white rounded-top">
-        Registration
-      </h5>
+  <div class="row">
+    <div class="col-sm-2">
+      <button class="btn btn-primary-default" (click)="triggerSnapshot();" data-toggle="tooltip" data-placement="top" title="Take Photo"><i class="fas fa-camera"></i> Capture Photo</button>
+
     </div>
+    <div class="col-sm-4">
+      <div class="row" style="height:133px">        
+        <div class="col-sm-8" *ngIf="hidewebcamtrue">
+          <div>
+            <webcam [width]="100" [height]="85" [trigger]="triggerObservable"
+                    (imageCapture)="handleImage($event)" *ngIf="showWebcam"></webcam>
+
+          </div>
+        </div>
+        <div class="col-sm-2" *ngIf="webcamImageHidetrue">
+          <div class="snapshot" *ngIf="webcamImage">
+            <img #patientImage style="height: 80px;border-radius: 12px" [src]="webcamImage.imageAsDataUrl" />
+          </div>
+          <div class="row" style="margin-left: 15%;margin-top: 15%;">
+            <button class="btn btn-primary-default" (click)="Clearimage();" data-toggle="tooltip" data-placement="top" title="Delete Photo">Remove</button>
+          </div>
+        </div>
+        <div class="col-sm-2" *ngIf="hiddenimageurl">
+          <img [src]="transform()" style="width:135px;border-radius:8px;border:2px solid gray">
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4"></div>
   </div>
+
+
+
   <div class="col-sm-12 border-blue border-radius ">
 
     <div class="col-sm-12">
@@ -48,7 +73,7 @@
                   <input [(ngModel)]="M_RegNO" name="RegNO" matInput placeholder="" [disabled]="Dname">
                 </mat-form-field>
               </div>
-              <div class="col-sm-2" *ngIf="hiddenimageurl">
+              <!--<div class="col-sm-2" *ngIf="hiddenimageurl">
                 <img [src]="transformThumb()" style="height:30%;width:30%;border-radius:8px;border:2px solid gray">
 
               </div>
@@ -64,7 +89,7 @@
               </div>
               <div class="col-sm-2" *ngIf="hiddenimageurl">
                 <img [src]="transform()" style="height:30%;width:30%;border-radius:8px;border:2px solid gray">
-              </div>
+              </div>-->
               <div class="col-sm-3 content-right pull-right">
                 <button type="button" class="btn-text" (click)="GetformaccessV()"><i class="fas fa-eye"></i> View Access</button>
                 <button *ngIf="M_RegistrationType=='Normal'" type="button" [disabled]="disableClicksch" (click)="Clicksch()" class="btn-text grab f-r">
@@ -1095,7 +1120,7 @@
         </mat-tab>
         <!--------------------------------------------------------------------------------------------------->
         <!--------------------------------------Video Consent Recording------------------------------------------------------------->
-        <mat-tab label="Video Consent Recording">
+        <!--<mat-tab label="Video Consent Recording">
 
           <div class="col-sm-12 heightAuto-200px">
             <div class="col-sm-12">
@@ -1121,7 +1146,7 @@
                     <button (click)="videostartRecording()" type="button">
                       <mat-icon matTooltip="Start Video Consent Recording">adjust</mat-icon>
                     </button>
-                    on>-->
+                    on>
                   </div>
                   <div class="col-sm-3">
                     <button matTooltip="Stop Video Consent Recording" (click)="videostopRecording()"
@@ -1138,7 +1163,7 @@
             </div>
 
           </div>
-        </mat-tab>
+        </mat-tab>-->
         <!--------------------------------------------------------------------------------------------------->
       </mat-tab-group>
     </div>

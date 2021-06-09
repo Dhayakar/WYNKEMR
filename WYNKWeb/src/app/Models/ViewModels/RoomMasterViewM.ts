@@ -10,6 +10,7 @@ export class RoomMasterViewM {
   RoomDetails2: Array<RoomDetails2> = [];
   RoomNoArr: Array<RoomNoArr> = [];
   BedNoarr: Array<BedNoarr> = [];
+  ToiletType: Array<ToiletType> = [];
 }
 
 
@@ -24,14 +25,21 @@ export class BedNoarr {
 }
 
 export class GetRoomDet {
+
   No: number;
   ToiletType: string;
   BedNo: string;
-  //value: boolean;
-  IsActive: boolean;
+  RoomType: string;
+  RoomDescription: string;
+  RoomCost:number;
+  
+}
+export class ToiletType
+{
+  RoomNo: number;
+  RestRoomType: string;
 
 }
-
 export class RoomDetails1 {
   No: number;
   NoofBeds: number;
@@ -45,4 +53,7 @@ export class RoomDetails2 {
   ToiletType: string;
   RoomDetID: number;
   IsActive: string;
+  RoomType: string;
+  RoomDescription: string;
+  Roomcost: number;
 }

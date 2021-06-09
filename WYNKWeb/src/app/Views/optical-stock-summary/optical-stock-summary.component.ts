@@ -21,7 +21,7 @@ import { Moment } from 'moment';
 const moment = (_moment as any).default ? (_moment as any).default : _moment;
 import { MatSort } from '@angular/material/sort';
 import { Sort } from '@angular/material/sort';
-
+declare var jQuery: any;
 
 
 @Component({
@@ -523,12 +523,25 @@ export class OpticalStockSummaryComponent implements OnInit {
 
 
   ////Excel
-  @ViewChild('contentToConvert') contentToConvert: ElementRef;
-  @ViewChild('table') table: ElementRef;
   fireEvent() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    debugger;
+    let element = document.getElementById('contentToConvert');
+    var cloneTable = element.cloneNode(true);
+    jQuery(cloneTable).find('.remove-this').remove();
+
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(cloneTable);
+
+    var wscols = [
+      { wch: 50 },
+      { wch: 12 },
+      { wch: 30 },
+      { wch: 10 }
+    ];
+    ws['!cols'] = wscols;
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'OpticalStockSummary.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'OpticalStockSummary');
+    XLSX.writeFile(wb, "OpticalStockSummary.xlsx");
   }
+
+
 }
